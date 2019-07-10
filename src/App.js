@@ -11,12 +11,16 @@ import { CLIENT_ID, API_KEY, DISCOVERY_DOCS, SCOPES } from './lib/constants';
 
 import './App.css';
 
-
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isSignedIn: false };
+        this.state = {
+            isSignedIn: false,
+            toFile: false,
+        };
     }
+
+    setToFile = toFile => this.setState({ toFile });
 
     onFailure = error => {
         console.log(JSON.stringify(error, null, 2));
@@ -65,25 +69,35 @@ class App extends React.Component {
                         </Nav>
                     </header>
                     <main className="App-main">
-                        { this.state.isSignedIn && <aside className="App-sidebar">
-                          <Sidebar />
-                        </aside>}
+                        {this.state.isSignedIn && (
+                            <aside className="App-sidebar">
+                                <Sidebar
+                                    toFile={this.state.toFile}
+                                    setToFile={this.setToFile}
+                                />
+                            </aside>
+                        )}
                         <Route
                             exact
                             path="/"
                             render={props => (
                                 <Home
                                     {...props}
-                                    isSignedIn={this.state.isSignedIn}
+                                    isSignedIn={this.state.isSignedIn} setToFile={this.setToFile}
                                 />
                             )}
                         />
-                        <Route exact path="/page/:id" render={props => (
+                        <Route
+                            exact
+                            path="/page/:id"
+                            render={props => (
                                 <Page
                                     {...props}
                                     isSignedIn={this.state.isSignedIn}
+                                    setToFile={this.setToFile}
                                 />
-                            )} />
+                            )}
+                        />
                     </main>
                 </div>
             </Router>
