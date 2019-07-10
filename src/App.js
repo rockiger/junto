@@ -1,26 +1,94 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
+import Nav from './components/nav';
+import GoogleLogin from './components/googleLogin';
+import Sidebar from './components/sidebar';
+import Home from './components/home';
+import Page from './components/page';
+
+import { CLIENT_ID, API_KEY, DISCOVERY_DOCS, SCOPES } from './lib/constants';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { isSignedIn: false };
+    }
+
+    onFailure = error => {
+        console.log(JSON.stringify(error, null, 2));
+    };
+
+    onSuccess = () => {
+        this.setState({ isSignedIn: true });
+        // Listen for sign-in state changes.
+        window.gapi.auth2
+            .getAuthInstance()
+            .isSignedIn.listen(isSignedIn => this.setState({ isSignedIn }));
+        // Handle the initial sign-in state.
+        this.updateSigninStatus(
+            window.gapi.auth2.getAuthInstance().isSignedIn.get(),
+        );
+    };
+
+    onLogout = response => {
+        this.setState({ isSignedIn: false });
+    };
+
+    /**
+     *  Called when the signed in status changes, to update the UI
+     *  appropriately. After a sign-in, the API is called.
+     */
+    updateSigninStatus = isSignedIn => {
+        this.setState({ isSignedIn });
+    };
+    render() {
+        return (
+            <Router>
+                <div className="App">
+                    <header className="App-header">
+                        <Nav isSignedIn={this.state.isSignedIn}>
+                            <GoogleLogin
+                                clientId={CLIENT_ID}
+                                apiKey={API_KEY}
+                                discoveryDocs={DISCOVERY_DOCS}
+                                scope={SCOPES}
+                                buttonText="Login"
+                                onSuccess={this.onSuccess}
+                                onFailure={this.onFailure}
+                                onLogout={this.onLogout}
+                                isSignedIn={this.state.isSignedIn}
+                            />
+                        </Nav>
+                    </header>
+                    <main className="App-main">
+                        { this.state.isSignedIn && <aside className="App-sidebar">
+                          <Sidebar />
+                        </aside>}
+                        <Route
+                            exact
+                            path="/"
+                            render={props => (
+                                <Home
+                                    {...props}
+                                    isSignedIn={this.state.isSignedIn}
+                                />
+                            )}
+                        />
+                        <Route exact path="/page/:id" render={props => (
+                                <Page
+                                    {...props}
+                                    isSignedIn={this.state.isSignedIn}
+                                />
+                            )} />
+                    </main>
+                </div>
+            </Router>
+        );
+    }
 }
 
 export default App;
