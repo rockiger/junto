@@ -156,6 +156,11 @@ export default class Page extends React.Component {
                         input:hover {
                             border-color: #dadce0;
                         }
+                        button:hover {
+                            background: unset;
+                            border: none;
+                        }
+                        
                     `}</style>
                     <Beforeunload onBeforeunload={() => this.save()} />
                 </div>

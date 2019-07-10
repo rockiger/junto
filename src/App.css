@@ -1,10 +1,20 @@
+:root {
+  --bg-color: #f1f3f4;
+  --border-color: #dadce0;
+  --border-radius: 8px;
+  --hover-bg-color: #e8f0fe;
+  --link-color: #3c4043;
+
+}
 .App-main {
   margin-top: 64px;
   display: flex;
 }
-
-
 .App-sidebar {
   min-width: 238px;
   padding: 1.5rem 0 1.5rem 1rem;
+}
+.App-main-content {
+  flex-grow: 1;
+  padding-right: 1rem;
 }

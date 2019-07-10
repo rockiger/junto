@@ -77,27 +77,29 @@ class App extends React.Component {
                                 />
                             </aside>
                         )}
-                        <Route
-                            exact
-                            path="/"
-                            render={props => (
-                                <Home
-                                    {...props}
-                                    isSignedIn={this.state.isSignedIn} setToFile={this.setToFile}
-                                />
-                            )}
-                        />
-                        <Route
-                            exact
-                            path="/page/:id"
-                            render={props => (
-                                <Page
-                                    {...props}
-                                    isSignedIn={this.state.isSignedIn}
-                                    setToFile={this.setToFile}
-                                />
-                            )}
-                        />
+                        <div className="App-main-content">
+                            <Route
+                                exact
+                                path="/"
+                                render={props => (
+                                    <Home
+                                        {...props}
+                                        isSignedIn={this.state.isSignedIn} setToFile={this.setToFile}
+                                    />
+                                )}
+                            />
+                            <Route
+                                exact
+                                path="/page/:id"
+                                render={props => (
+                                    <Page
+                                        {...props}
+                                        isSignedIn={this.state.isSignedIn}
+                                        setToFile={this.setToFile}
+                                    />
+                                )}
+                            />
+                        </div>
                     </main>
                 </div>
             </Router>
