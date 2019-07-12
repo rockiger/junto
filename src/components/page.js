@@ -6,8 +6,6 @@ import { Beforeunload } from 'react-beforeunload';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive';
 
-const gapi = window.gapi;
-
 export default class Page extends React.Component {
     constructor(props) {
         super(props);
@@ -27,17 +25,22 @@ export default class Page extends React.Component {
 
     componentDidMount() {
         this.props.setToFile(false);
-        this.loadEditorContent();
     }
 
     componentDidUpdate(prevProps) {
+        // load editor content when user is signed in and can use drive api
+        if (this.props.isSignedIn) {
+            this.loadEditorContent();
+        }
+
+        // when going from one page to the next, we check if the parmeter in the url changed
         if (prevProps.match.params.id !== this.props.match.params.id) {
             this.props.setToFile(false);
                 this.setState({ fileId: this.props.match.params.id, fileLoaded: false },
                 this.loadEditorContent
             )
-            console.log('Page shouldUpdate');
         }
+        console.log('Page shouldUpdate');
     }
 
     componentWillUnmount() {
@@ -132,6 +135,7 @@ export default class Page extends React.Component {
                         {this.state.fileLoaded && (
                             editor
                         )}
+                        {!this.state.fileLoaded && <div>Loading...</div>}
                     </div>
                     <style jsx>{`
                         .page {
@@ -166,7 +170,7 @@ export default class Page extends React.Component {
                 </div>
             );
         } else {
-            return <div>Please login</div>;
+            return <div className="page">Please login</div>;
         }
     }
 
