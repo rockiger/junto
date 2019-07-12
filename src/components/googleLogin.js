@@ -23,9 +23,10 @@ export default class GoogleLogin extends React.Component {
      *  On load, called to load the auth2 library and API client library.
      */
     handleClientLoad = () => {
+        this.props.setIsSigningIn(true)
         window.gapi.load('client:auth2', this.initClient);
     }
-    
+
     /**
      *  Initializes the API client library and sets up sign-in state
      *  listeners.
@@ -36,17 +37,35 @@ export default class GoogleLogin extends React.Component {
             apiKey,
             discoveryDocs,
             scope,
-          } = this.props
+        } = this.props
         window.gapi.client.init({
             apiKey,
             clientId,
             discoveryDocs,
             scope,
-        }).then( () => {
+        }).then(() => {
             this.props.onSuccess()
-        }, function(error) {
+        }, function (error) {
             this.props.onFailure(error)
         });
+    }
+
+
+    /**
+     *  Sign in the user upon button click.
+     */
+    handleAuthClick = (event) => {
+        this.props.setIsSigningIn(true)
+        window.gapi.auth2.getAuthInstance().signIn()
+        .then(
+            user => {
+                console.log(user)
+            },
+            err => {
+                // end signingIn because breakup of process
+                this.props.setIsSigningIn(false)
+            }
+        );
     }
 
     render() {
@@ -58,22 +77,16 @@ export default class GoogleLogin extends React.Component {
             );
         } else {
             return (
-		        <button id="authorize_button" className="action" onClick={handleAuthClick}>
+                <button id="authorize_button" className="action" onClick={this.handleAuthClick}>
                     {this.props.buttonText}
                 </button>
             );
         }
-    }    
+    }
 }
 
 
 
-/**
- *  Sign in the user upon button click.
- */
-function handleAuthClick(event) {
-    window.gapi.auth2.getAuthInstance().signIn();
-}
 
 /**
  *  Sign out the user upon button click.
@@ -90,12 +103,12 @@ GoogleLogin.propTypes = {
     apiKey: PropTypes.string.isRequired,
     scope: PropTypes.string,
     discoveryDocs: PropTypes.array,
-    
+
     buttonText: PropTypes.node,
     isSignedIn: PropTypes.bool,
-  }
-  
-  GoogleLogin.defaultProps = {
+}
+
+GoogleLogin.defaultProps = {
     isSignedIn: false,
     buttonText: 'Login with Google'
-  }
+}

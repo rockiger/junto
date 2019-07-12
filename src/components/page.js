@@ -3,8 +3,10 @@
 import React from 'react';
 import Editor from 'rich-markdown-editor';
 import { Beforeunload } from 'react-beforeunload';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive';
+
+import Spinner from './spinner'
 
 export default class Page extends React.Component {
     constructor(props) {
@@ -29,15 +31,18 @@ export default class Page extends React.Component {
 
     componentDidUpdate(prevProps) {
         // load editor content when user is signed in and can use drive api
-        if (this.props.isSignedIn) {
+        if (this.props.isSignedIn && !this.state.fileLoaded) {
             this.loadEditorContent();
         }
 
         // when going from one page to the next, we check if the parmeter in the url changed
         if (prevProps.match.params.id !== this.props.match.params.id) {
             this.props.setToFile(false);
-                this.setState({ fileId: this.props.match.params.id, fileLoaded: false },
-                this.loadEditorContent
+                this.setState({ 
+                    fileId: this.props.match.params.id, 
+                    fileLoaded: false 
+                    },
+                    this.loadEditorContent
             )
         }
         console.log('Page shouldUpdate');
@@ -113,7 +118,7 @@ export default class Page extends React.Component {
 
     render() {
         let editor = !this.state.fileLoaded ? null : <Editor
-        id={this.state.fileId}
+        id="editorArea"
         defaultValue={this.state.defaultValue}
         onChange={this.onChange}
         onSave={this.onSave}
@@ -123,8 +128,8 @@ export default class Page extends React.Component {
                 <div className="page">
                     <div className="editorContainer">
                         {this.state.fileLoaded && (
-                            <h1>
-                                <input
+                            <h1 className="editorHeader">
+                                <input className="editorInput"
                                     onBlur={this.onBlurInput}
                                     value={this.state.pageHead !== 'Untitled page' ? this.state.pageHead : ''}
                                     placeholder="Untitled page"
@@ -135,7 +140,7 @@ export default class Page extends React.Component {
                         {this.state.fileLoaded && (
                             editor
                         )}
-                        {!this.state.fileLoaded && <div>Loading...</div>}
+                        {!this.state.fileLoaded && <Spinner />}
                     </div>
                     <style jsx>{`
                         .page {
@@ -143,12 +148,14 @@ export default class Page extends React.Component {
                         }
 
                         .editorContainer {
-                            height: calc(100vh - 112px);
-                            overflow-y: auto;
-                            padding: 0.75rem 0 1.5rem;
+                            height: calc(100vh - 64px);
                             width: 100%;
+                            overflow-y: auto;
                         }
-                        input {
+                        .editorHeader {
+                            margin-top: 1.9rem;
+                        }
+                        .editorInput {
                             border: 1px solid transparent;
                             font: unset;
                             font-family: 'Open Sans', -apple-system,
@@ -157,10 +164,13 @@ export default class Page extends React.Component {
                             font-weight: lighter;
                             padding: 0;
                         }
-                        input:hover {
+                        .editorInput:hover {
                             border-color: #dadce0;
                         }
-                        button:hover {
+                        #editorArea {
+                            padding-bottom: 2rem;
+                        }
+                        .editorContainer button:hover {
                             background: unset;
                             border: none;
                         }
@@ -169,8 +179,10 @@ export default class Page extends React.Component {
                     <Beforeunload onBeforeunload={() => this.save()} />
                 </div>
             );
-        } else {
-            return <div className="page">Please login</div>;
+        } else if (!this.props.isSignedIn && this.props.isSigningIn)
+            return <Spinner />
+        else if (!this.props.isSignedIn && !this.props.isSigningIn) {
+            return <Redirect to="/" />;
         }
     }
 

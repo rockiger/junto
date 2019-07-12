@@ -16,22 +16,24 @@ class App extends React.Component {
         super(props);
         this.state = {
             isSignedIn: false,
+            isSigningIn: true,
             toFile: false,
         };
     }
 
     setToFile = toFile => this.setState({ toFile });
 
+    setIsSigningIn = isSigningIn => this.setState({ isSigningIn });
+
     onFailure = error => {
         console.log(JSON.stringify(error, null, 2));
     };
 
     onSuccess = () => {
-        this.setState({ isSignedIn: true });
         // Listen for sign-in state changes.
         window.gapi.auth2
             .getAuthInstance()
-            .isSignedIn.listen(isSignedIn => this.setState({ isSignedIn }));
+            .isSignedIn.listen(this.updateSigninStatus);
         // Handle the initial sign-in state.
         this.updateSigninStatus(
             window.gapi.auth2.getAuthInstance().isSignedIn.get(),
@@ -47,7 +49,7 @@ class App extends React.Component {
      *  appropriately. After a sign-in, the API is called.
      */
     updateSigninStatus = isSignedIn => {
-        this.setState({ isSignedIn });
+        this.setState({ isSignedIn, isSigningIn: false });
     };
     render() {
         return (
@@ -65,6 +67,7 @@ class App extends React.Component {
                                 onFailure={this.onFailure}
                                 onLogout={this.onLogout}
                                 isSignedIn={this.state.isSignedIn}
+                                setIsSigningIn={this.setIsSigningIn}
                             />
                         </Nav>
                     </header>
@@ -84,7 +87,9 @@ class App extends React.Component {
                                 render={props => (
                                     <Home
                                         {...props}
-                                        isSignedIn={this.state.isSignedIn} setToFile={this.setToFile}
+                                        isSignedIn={this.state.isSignedIn}
+                                        isSigningIn={this.state.isSigningIn}
+                                        setToFile={this.setToFile}
                                     />
                                 )}
                             />
@@ -95,6 +100,7 @@ class App extends React.Component {
                                     <Page
                                         {...props}
                                         isSignedIn={this.state.isSignedIn}
+                                        isSigningIn={this.state.isSigningIn}
                                         setToFile={this.setToFile}
                                     />
                                 )}
