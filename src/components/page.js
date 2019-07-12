@@ -170,7 +170,7 @@ export default class Page extends React.Component {
                         #editorArea {
                             padding-bottom: 2rem;
                         }
-                        .editorContainer button:hover {
+                        button:hover {
                             background: unset;
                             border: none;
                         }
