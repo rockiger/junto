@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
+import Spinner from './spinner'
 import { listFiles, createFile, updateFile } from '../lib/gdrive';
 
 export default class FileList extends React.Component {
@@ -8,6 +10,7 @@ export default class FileList extends React.Component {
         super(props);
         this.state = {
             files: [],
+            isLoading: true
         };
     }
 
@@ -21,7 +24,7 @@ export default class FileList extends React.Component {
         console.log('FolderId: ', folderId);
         if (folderId) {
             const files = await listFiles();
-            this.setState({ files });
+            this.setState({ files, isLoading: false });
         } else {
             const newFolderId = await this.createNewWiki();
             const newFileId = await this.createFile('Home.md', newFolderId);
@@ -88,7 +91,8 @@ export default class FileList extends React.Component {
             <div className="filelist">
                 <h1>Your work</h1>
                 <div className="filelist-tagline">Last edited</div>
-                <ul className="filelist-list">
+                {this.state.isLoading && <Spinner />}
+                {!this.state.isLoading && <ul className="filelist-list">
                     {this.state.files.map(file => {
                         const filename = file.name.substr(0, file.name.length - 3);
                         const ext = file.name.substr(file.name.length - 3);
@@ -104,7 +108,7 @@ export default class FileList extends React.Component {
                             );
                         }
                     })}
-                </ul>
+                </ul>}
                     <style jsx>{`
                         .filelist h1 {
                             border-bottom: 1px solid var(--border-color);
