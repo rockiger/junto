@@ -15,7 +15,7 @@ export default class Sidebar extends React.Component {
         })
         console.log('ButtonState', this.state);
         
-        this.props.setToFile(true);
+        this.props.setGoToNewFile(true);
     };
 
     componentWillUnmount() {
@@ -23,7 +23,7 @@ export default class Sidebar extends React.Component {
     }
 
     render() {
-        if (this.props.toFile && this.state.fileId ) {
+        if (this.props.goToNewFile && this.state.fileId ) {
             return <Redirect to={`/page/${this.state.fileId}`} />
         }
 

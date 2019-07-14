@@ -26,7 +26,7 @@ export default class Page extends React.Component {
     }
 
     componentDidMount() {
-        this.props.setToFile(false);
+        this.props.setGoToNewFile(false);
     }
 
     componentDidUpdate(prevProps) {
@@ -37,7 +37,7 @@ export default class Page extends React.Component {
 
         // when going from one page to the next, we check if the parmeter in the url changed
         if (prevProps.match.params.id !== this.props.match.params.id) {
-            this.props.setToFile(false);
+            this.props.setGoToNewFile(false);
                 this.setState({ 
                     fileId: this.props.match.params.id, 
                     fileLoaded: false 
