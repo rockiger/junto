@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect, Router } from 'react-router-dom'
 
+import { createFile, getFolderId } from '../lib/gdrive'
+
 export default class Sidebar extends React.Component {
     state = {
         fileId: '',
@@ -81,40 +83,5 @@ export default class Sidebar extends React.Component {
                 `}</style>
             </div>
         );
-    }
-}
-
-async function getFolderId() {
-    // duplicate of method in fileList.js
-    try {
-        const result = await window.gapi.client.drive.files.list({
-            q: 'name="Awiki Documents"',
-            pageSize: 10,
-            fields: 'nextPageToken, files(id, name)',
-        });
-        console.log(result);
-        const resultBody = JSON.parse(result.body);
-        if (resultBody.files.length > 0) return resultBody.files[0].id;
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function createFile(name, parentId) {
-    // duplicate of method in fileList.js
-    const fileMetadata = {
-        name: name,
-        mimeType: 'text/markdown',
-        parents: [parentId],
-    };
-    try {
-        const response = await window.gapi.client.drive.files.create({
-            resource: fileMetadata,
-        });
-        console.log(response);
-
-        return response.result.id;
-    } catch (err) {
-        console.log(err);
     }
 }

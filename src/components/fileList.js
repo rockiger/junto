@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 
 import Spinner from './spinner'
-import { listFiles, createFile, updateFile } from '../lib/gdrive';
+import { listFiles, createFile, updateFile, getFolderId, createNewWiki } from '../lib/gdrive';
 
 export default class FileList extends React.Component {
     constructor(props) {
@@ -19,70 +19,19 @@ export default class FileList extends React.Component {
         console.log('componentDidMount:');
     }
 
-    async listFiles() {
-        const folderId = await this.getFolderId();
+    listFiles = async () => {
+        const folderId = await getFolderId();
         console.log('FolderId: ', folderId);
         if (folderId) {
             const files = await listFiles();
             this.setState({ files, isLoading: false });
         } else {
-            const newFolderId = await this.createNewWiki();
-            const newFileId = await this.createFile('Home.md', newFolderId);
+            const newFolderId = await createNewWiki();
+            const newFileId = await createFile('Home.md', newFolderId);
             const newFileDesc = await updateFile(newFileId, defaultMessage());
             // this.setState({folderId: newFolderId})
             console.log('newFolderId:', newFolderId);
             this.listFiles();
-        }
-    }
-
-    async getFolderId() {
-        try {
-            const result = await window.gapi.client.drive.files.list({
-                q: 'name="Awiki Documents"',
-                pageSize: 10,
-                fields: 'nextPageToken, files(id, name)',
-            });
-            console.log(result);
-            const resultBody = JSON.parse(result.body);
-            if (resultBody.files.length > 0) return resultBody.files[0].id;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async createFile(name, parentId) {
-        const fileMetadata = {
-            name: name,
-            mimeType: 'text/markdown',
-            parents: [parentId],
-        };
-        try {
-            const response = await window.gapi.client.drive.files.create({
-                resource: fileMetadata,
-            });
-            console.log(response);
-
-            return response.result.id;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async createNewWiki() {
-        const name = 'Awiki Documents';
-        const fileMetadata = {
-            name: name,
-            mimeType: 'application/vnd.google-apps.folder',
-        };
-        try {
-            const result = await window.gapi.client.drive.files.create({
-                resource: fileMetadata,
-            });
-            console.log(result);
-
-            return JSON.parse(result.body).id;
-        } catch (err) {
-            console.log(err);
         }
     }
 

@@ -90,16 +90,70 @@ let clientLoaded = false;
 	}
 
 	/**
-	 * Creates file with name and uploads data. Never rejects
+	 * Creates file with name and a parentId. 
 	 *
 	 * @method createFile
+	 * @param {String} name Name of the new file on Google Drive
+	 * @param {String} parentId Id of the parent where the file should be
+	 * 							created, needs to be a folder
+	 * @return {String} An id of the created file 
+	 * a file description: {driveId, driveVersion, name, ifid}
+	 */
+	export async function createFile(name, parentId) {
+		const fileMetadata = {
+			name: name,
+			mimeType: 'text/markdown',
+			parents: [parentId],
+		};
+		try {
+			const response = await window.gapi.client.drive.files.create({
+				resource: fileMetadata,
+			});
+			console.log(response);
+	
+			return response.result.id;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Creates a new (wiki) folder in the base directory
+	 *
+	 * @method createFile
+	 * @param {String} name Name of the new wiki on Google Drive
+	 * @return {String} An id of the created file 
+	 * a file description: {driveId, driveVersion, name, ifid}
+	 */
+    export async function createNewWiki(name='Awiki Documents') {
+        const fileMetadata = {
+            name: name,
+            mimeType: 'application/vnd.google-apps.folder',
+        };
+        try {
+            const result = await window.gapi.client.drive.files.create({
+                resource: fileMetadata,
+            });
+            console.log(result);
+
+            return JSON.parse(result.body).id;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+	/**
+	 * Creates file with name and uploads data. Never rejects
+	 *
+	 * @method createFileWithContent
 	 * @param {String} name Name of the new file on Google Drive
 	 * @param {String} ifid Interactive Fiction Identifier. Internal id
 	 * @param {String} data Data to put into the file
 	 * @return {Promise|Object} A promise of the result that returns 
 	 * a file description: {driveId, driveVersion, name, ifid}
 	 */
-	export function createFile(name, ifid, data) {
+	export function createFileWithContent(name, ifid, data) {
+		// TODO get rid of ifid
 		// Current version of gapi.client.drive is not capable of 
 		// uploading the file so we'll do it with more generic
 		// interface. This will create file with given name and 
@@ -161,6 +215,29 @@ let clientLoaded = false;
 				(response) => resolve(formatFileDescription(response))
 			);
 		});
+	}
+
+	/**
+	 * Get the file description. Never rejects
+	 *
+	 * @method getFolderId 
+	 * @param {string} the name of the folder
+	 * @return {String} The driveId of the A promise of the result that returns 
+	 * a file'sid: {driveId, driveVersion, name, ifid}
+	 */
+	export async function getFolderId(name='Awiki Documents') {
+		try {
+			const result = await gapi.client.drive.files.list({
+				q: `name="${name}"`,
+				pageSize: 10,
+				fields: 'nextPageToken, files(id, name)',
+			});
+			console.log(result);
+			const resultBody = JSON.parse(result.body);
+			if (resultBody.files.length > 0) return resultBody.files[0].id;
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	/**
