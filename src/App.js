@@ -17,11 +17,11 @@ class App extends React.Component {
         this.state = {
             isSignedIn: false,
             isSigningIn: true,
-            toFile: false,
+            goToNewFile: false,
         };
     }
 
-    setToFile = toFile => this.setState({ toFile });
+    setGoToNewFile = goToNewFile => this.setState({ goToNewFile });
 
     setIsSigningIn = isSigningIn => this.setState({ isSigningIn });
 
@@ -51,6 +51,7 @@ class App extends React.Component {
     updateSigninStatus = isSignedIn => {
         this.setState({ isSignedIn, isSigningIn: false });
     };
+
     render() {
         return (
             <Router>
@@ -75,8 +76,8 @@ class App extends React.Component {
                         {this.state.isSignedIn && (
                             <aside className="App-sidebar">
                                 <Sidebar
-                                    toFile={this.state.toFile}
-                                    setToFile={this.setToFile}
+                                    goToNewFile={this.state.goToNewFile}
+                                    setGoToNewFile={this.setGoToNewFile}
                                 />
                             </aside>
                         )}
@@ -89,7 +90,7 @@ class App extends React.Component {
                                         {...props}
                                         isSignedIn={this.state.isSignedIn}
                                         isSigningIn={this.state.isSigningIn}
-                                        setToFile={this.setToFile}
+                                        setGoToNewFile={this.setGoToNewFile}
                                     />
                                 )}
                             />
@@ -101,7 +102,7 @@ class App extends React.Component {
                                         {...props}
                                         isSignedIn={this.state.isSignedIn}
                                         isSigningIn={this.state.isSigningIn}
-                                        setToFile={this.setToFile}
+                                        setGoToNewFile={this.setGoToNewFile}
                                     />
                                 )}
                             />
