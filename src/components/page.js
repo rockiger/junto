@@ -4,7 +4,7 @@ import React from 'react';
 import Editor from 'rich-markdown-editor';
 import { Beforeunload } from 'react-beforeunload';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
-import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive';
+import { renameFile, downloadFile, getFileDescription, updateFile } from '../lib/gdrive';
 
 import Spinner from './spinner'
 
@@ -96,9 +96,8 @@ export default class Page extends React.Component {
         this.setState({ pageHead: ev.target.value });
     };
 
-    async loadEditorContent() {
+    loadEditorContent = async ev => {
         if (this.state.fileId) {
-            //const fileContent = await this.loadFile(this.state.fileId)
             const fileContent = await downloadFile(this.state.fileId);
             const fileDescription = await getFileDescription(this.state.fileId);
             const pageHead = fileDescription.name.substr(0, fileDescription.name.length - 3);
@@ -114,6 +113,14 @@ export default class Page extends React.Component {
         } else {
             Router.push('/');
         }
+    }
+
+    updateFileContent = async (fileId, content) => {
+        try {
+            const response = await updateFile(fileId, content);
+            console.log(response.result);
+            return response.result.id;
+        } catch (err) {}
     }
 
     render() {
@@ -183,71 +190,6 @@ export default class Page extends React.Component {
             return <Spinner />
         else if (!this.props.isSignedIn && !this.props.isSigningIn) {
             return <Redirect to="/" />;
-        }
-    }
-
-    async getHomeId(folderId) {
-        try {
-            const result = await window.gapi.client.drive.files.list({
-                q: 'name="Home.md"',
-                pageSize: 10,
-                fields: 'nextPageToken, files(id, name, modifiedTime)',
-                parents: [folderId],
-            });
-            const resultBody = JSON.parse(result.body);
-            console.log('getHomeId: ', resultBody);
-            if (resultBody.files.length > 0) return resultBody.files[0].id;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async createFile(name, parentId) {
-        const fileMetadata = {
-            name: name,
-            mimeType: 'text/markdown',
-            parents: [parentId],
-        };
-        try {
-            const response = await window.gapi.client.drive.files.create({
-                resource: fileMetadata,
-            });
-            console.log(response);
-
-            return response.result.id;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async updateFileContent(fileId, content) {
-        try {
-            const response = await window.gapi.client.request({
-                path: '/upload/drive/v3/files/' + fileId,
-                method: 'PATCH',
-                params: {
-                    uploadType: 'media',
-                },
-                body: content,
-            });
-
-            console.log(response.result);
-            return response.result.id;
-        } catch (err) {}
-    }
-
-    async loadFile(fileId) {
-        try {
-            console.log('gapi:', gapi);
-            const result = await window.gapi.client.drive.files.get({
-                fileId: fileId,
-                alt: 'media',
-                fields: '*',
-            });
-            console.log('loadFile:', result);
-            return result.body;
-        } catch (err) {
-            console.log(err);
         }
     }
 }
