@@ -1,5 +1,3 @@
-/* global gapi */
-
 import React from 'react';
 import Editor from 'rich-markdown-editor';
 import { Beforeunload } from 'react-beforeunload';
@@ -149,7 +147,7 @@ export default class Page extends React.Component {
                         )}
                         {!this.state.fileLoaded && <Spinner />}
                     </div>
-                    <style jsx>{`
+                    <style>{`
                         .page {
                             display: flex;
                         }

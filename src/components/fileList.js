@@ -28,7 +28,7 @@ export default class FileList extends React.Component {
         } else {
             const newFolderId = await createNewWiki();
             const newFileId = await createFile('Home.md', newFolderId);
-            const newFileDesc = await updateFile(newFileId, defaultMessage());
+            await updateFile(newFileId, defaultMessage());
             // this.setState({folderId: newFolderId})
             console.log('newFolderId:', newFolderId);
             this.listFiles();
@@ -42,23 +42,25 @@ export default class FileList extends React.Component {
                 <div className="filelist-tagline">Last edited</div>
                 {this.state.isLoading && <Spinner />}
                 {!this.state.isLoading && <ul className="filelist-list">
-                    {this.state.files.map(file => {
-                        const filename = file.name.substr(0, file.name.length - 3);
-                        const ext = file.name.substr(file.name.length - 3);
-                        if (ext === '.md') {
+                    {this.state.files
+                        .filter(file => {
+                            const ext = file.name.substr(file.name.length - 3);
+                            return (ext === '.md')
+                        })
+                        .map(file => {
+                            const filename = file.name.substr(0, file.name.length - 3);
                             return (
                                 <li key={file.id}>
                                     <Link
                                         to={`/page/${file.id}`}
                                     >
-                                        <img src="https://drive-thirdparty.googleusercontent.com/32/type/text/markdown" /> <span>{filename}</span>
+                                        <img src="https://drive-thirdparty.googleusercontent.com/32/type/text/markdown" alt="Markdown file" /> <span>{filename}</span>
                                     </Link>
                                 </li>
                             );
-                        }
-                    })}
+                        })}
                 </ul>}
-                    <style jsx>{`
+                <style>{`
                         .filelist h1 {
                             border-bottom: 1px solid var(--border-color);
                             font-size: 1.5rem;
@@ -75,7 +77,7 @@ export default class FileList extends React.Component {
                             font-weight: 600;
                         }
                         .filelist-list a {
-                            border-radius: var(--border-radius)
+                            border-radius: var(--border-radius);
                             color: var(--link-color);
                             display: block;
                             font-size: 1rem;
