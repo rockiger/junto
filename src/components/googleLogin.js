@@ -5,15 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 
 
-const ButtonContent = ({ children, icon }) => (
-    <span style={{ paddingRight: 10, fontWeight: 500, paddingLeft: icon ? 0 : 10, paddingTop: 10, paddingBottom: 10 }}>{children}</span>
-)
-
-
 export default class GoogleLogin extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.handleClientLoad();
@@ -57,23 +49,23 @@ export default class GoogleLogin extends React.Component {
     handleAuthClick = (event) => {
         this.props.setIsSigningIn(true)
         window.gapi.auth2.getAuthInstance().signIn()
-        .then(
-            user => {
-                console.log(user)
-            },
-            err => {
-                // end signingIn because breakup of process
-                this.props.setIsSigningIn(false)
-            }
-        );
+            .then(
+                user => {
+                    console.log(user)
+                },
+                err => {
+                    // end signingIn because breakup of process
+                    this.props.setIsSigningIn(false)
+                }
+            );
     }
 
     render() {
         if (this.props.isSignedIn) {
             return (
-                <a id="signout_button" onClick={handleSignoutClick}>
+                <button id="signout_button" onClick={handleSignoutClick} style={{ fontWeight: 'normal' }}>
                     Logout
-                </a>
+                </button>
             );
         } else {
             return (
@@ -93,6 +85,7 @@ export default class GoogleLogin extends React.Component {
  */
 function handleSignoutClick(event) {
     window.gapi.auth2.getAuthInstance().signOut();
+    event.preventDefault();
 }
 
 GoogleLogin.propTypes = {

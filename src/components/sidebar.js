@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Router } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 import { createFile, getFolderId } from '../lib/gdrive'
 
@@ -45,7 +45,7 @@ export default class Sidebar extends React.Component {
                     </svg>
                     <span>New Page</span>
                 </div>
-                <style jsx>{`
+                <style>{`
                     .Sidebar-newButton {
                         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302),
                             0 1px 3px 1px rgba(60, 64, 67, 0.149);

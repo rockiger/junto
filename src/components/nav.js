@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import logo from '../static/logo.svg';
@@ -15,7 +15,7 @@ const Nav = props => (
             {props.isSignedIn && <div className="Nav-search-form"><input placeholder="Search Awiki (Mockup)" /></div>}
         </div>
         <div className="Nav-user">{props.children}</div>
-        <style jsx>{`
+        <style>{`
             :global(body) {
                 margin: 0;
                 font-family: 'Open Sans', -apple-system, BlinkMacSystemFont,

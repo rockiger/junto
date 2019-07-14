@@ -3,7 +3,7 @@ import React from 'react';
 export default function Spinner() {
     return (<div className="Spinner">
         <Svg />
-        <style jsx>{`
+        <style>{`
             .Spinner {
                 width: 100%;
                 height: 100%;

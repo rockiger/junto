@@ -21,7 +21,7 @@ export default function FrontPageHero() {
                 </div>
               </button>
             </div>
-            <style jsx>{`
+            <style>{`
             .hero {
                 width: 100%;
                 color: #333;
