@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GoogleLogin has a valid snapshot 1`] = `
+<button
+  className="action"
+  id="authorize_button"
+  onClick={[Function]}
+>
+  Login with Google
+</button>
+`;
