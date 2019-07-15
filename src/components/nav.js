@@ -97,6 +97,7 @@ const Nav = props => (
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
+                margin-left: 1rem;
             }
             .Nav ul {
                 display: flex;
