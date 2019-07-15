@@ -1,18 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import FrontPageHero from './frontPageHero';
-import FileList from './fileList'
-import Spinner from './spinner'
+import FileList from './fileList';
+import Spinner from './spinner';
 
 function Home(props) {
-    console.log(props)
     if (props.isSignedIn && !props.isSigningIn) {
-        return <FileList />
+        return <FileList />;
     } else if ( !props.isSignedIn && props.isSigningIn) {
-        return (<Spinner />)
+        return <Spinner />;
     } else {
-        return <FrontPageHero />
+        return <FrontPageHero />;
     }
 }
+Home.propTypes = {
+    isSignedIn: PropTypes.bool.isRequired,
+    isSigningIn: PropTypes.bool.isRequired,
+};
 
 export default Home

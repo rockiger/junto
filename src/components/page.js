@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Editor from 'rich-markdown-editor';
 import { Beforeunload } from 'react-beforeunload';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
@@ -7,20 +8,14 @@ import { renameFile, downloadFile, getFileDescription, updateFile } from '../lib
 import Spinner from './spinner'
 
 export default class Page extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.props = props;
-        this.state = {
+    
+    state = {
             defaultValue: '',
             value: undefined,
-            fileId: props.match.params.id,
+            fileId: this.props.match.params.id,
             fileName: 'Untitled page.md',
             pageHead: 'Untitled page',
             fileLoaded: false,
-        };
-
-        console.log('props:', props.match.params.id);
     }
 
     componentDidMount() {
@@ -190,6 +185,17 @@ export default class Page extends React.Component {
             return <Redirect to="/" />;
         }
     }
+}
+
+Page.propTypes = {
+    isSignedIn: PropTypes.bool.isRequired,
+    isSigningIn: PropTypes.bool.isRequired,
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+          id: PropTypes.string.isRequired
+        })
+      }),
+    setGoToNewFile: PropTypes.func.isRequired,
 }
 
 function debounce(func, wait, immediate) {

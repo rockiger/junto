@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import logo from '../static/logo.svg';
 
@@ -116,5 +117,8 @@ const Nav = props => (
         `}</style>
     </nav>
 );
+Nav.propTypes = {
+    isSignedIn: PropTypes.bool.isRequired,    
+}
 
 export default Nav;

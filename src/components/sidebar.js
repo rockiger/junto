@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 import { createFile, getFolderId } from '../lib/gdrive'
 
@@ -84,4 +85,9 @@ export default class Sidebar extends React.Component {
             </div>
         );
     }
+}
+
+Sidebar.propTypes = {
+    goToNewFile: PropTypes.bool.isRequired,
+    setGoToNewFile: PropTypes.func.isRequired,
 }

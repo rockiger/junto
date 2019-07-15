@@ -6,12 +6,10 @@ import Spinner from './spinner'
 import { listFiles, createFile, updateFile, getFolderId, createNewWiki } from '../lib/gdrive';
 
 export default class FileList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            files: [],
-            isLoading: true
-        };
+    
+    state = {
+        files: [],
+        isLoading: true
     }
 
     async componentDidMount() {
