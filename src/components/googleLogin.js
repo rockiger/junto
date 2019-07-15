@@ -1,9 +1,10 @@
 // look into https://github.com/anthonyjgrove/react-google-login for more information
 // and posibilitys with google authentication
+/* global gapi */
+
 
 import React from 'react';
 import PropTypes from 'prop-types'
-
 
 export default class GoogleLogin extends React.Component {
 
@@ -16,7 +17,7 @@ export default class GoogleLogin extends React.Component {
      */
     handleClientLoad = () => {
         this.props.setIsSigningIn(true)
-        window.gapi.load('client:auth2', this.initClient);
+        gapi.load('client:auth2', this.initClient);
     }
 
     /**
