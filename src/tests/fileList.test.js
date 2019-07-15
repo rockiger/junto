@@ -1,28 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import renderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
-import { MemoryRouter } from 'react-router-dom';
+import renderer from 'react-test-renderer';
 
-import Home from '../components/home';
+import FileList from '../components/fileList';
 
-describe('Home', () => {
+describe('FileList', () => {
+    const props = {
+        setIsSigningIn: (isSignedIn) => {},
+    };
+
     it('renders without crashing', () => {
         const div = document.createElement('div');
         ReactDOM.render(
-            <MemoryRouter>
-                <Home />
-            </MemoryRouter>, div);
+            <FileList />, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 
     test('has a valid snapshot', () => {
         const component = renderer.create(
-            <MemoryRouter>
-                <Home />
-            </MemoryRouter>
+            <FileList />
         );
         const tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
+
 });
