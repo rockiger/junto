@@ -1,3 +1,5 @@
+/* global gapi */
+/* global google */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Editor from 'rich-markdown-editor';
@@ -5,7 +7,9 @@ import { Beforeunload } from 'react-beforeunload';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { renameFile, downloadFile, getFileDescription, updateFile } from '../lib/gdrive';
 
-import Spinner from './spinner'
+import Spinner from './spinner';
+
+import { API_KEY } from '../lib/constants';
 
 export default class Page extends React.Component {
     
@@ -26,6 +30,7 @@ export default class Page extends React.Component {
         // load editor content when user is signed in and can use drive api
         if (this.props.isSignedIn && !this.state.fileLoaded) {
             this.loadEditorContent();
+            gapi.load('picker', {'callback': () => console.log('Picker loaded')})
         }
 
         // when going from one page to the next, we check if the parmeter in the url changed
@@ -38,7 +43,6 @@ export default class Page extends React.Component {
                     this.loadEditorContent
             )
         }
-        console.log('Page shouldUpdate');
     }
 
     componentWillUnmount() {
@@ -62,12 +66,10 @@ export default class Page extends React.Component {
     );
 
     onSave = options => {
-        console.log('onSave:', options);
         this.save();
     };
 
     onClickSave = () => {
-        console.log('onClickSave:', this.state.value());
         this.save();
     };
 
@@ -95,8 +97,6 @@ export default class Page extends React.Component {
             const fileDescription = await getFileDescription(this.state.fileId);
             const pageHead = fileDescription.name.substr(0, fileDescription.name.length - 3);
             window.pageHead = pageHead;
-            console.log('fileContent:', fileContent);
-            console.log('fileDescription:', fileDescription);
             this.setState({
                 defaultValue: fileContent,
                 fileLoaded: true,
@@ -108,10 +108,22 @@ export default class Page extends React.Component {
         }
     }
 
+    openPicker = () => {
+        const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+              .addView(google.picker.ViewId.DOCS)
+              .setOAuthToken(accessToken)
+              .setDeveloperKey(API_KEY)
+              .setCallback((data) => console.log('DATA:', data))
+              .build();
+        picker.setVisible(true);
+    }
+
     updateFileContent = async (fileId, content) => {
         try {
             const response = await updateFile(fileId, content);
-            console.log(response.result);
             return response.result.id;
         } catch (err) {}
     }
@@ -122,6 +134,8 @@ export default class Page extends React.Component {
         defaultValue={this.state.defaultValue}
         onChange={this.onChange}
         onSave={this.onSave}
+        //readOnly={true}
+        onClickLink={(ev) => console.log('onClickLink: ', ev)}
     />
         if (this.props.isSignedIn && this.props.match.params.id) {
             return (
@@ -176,6 +190,7 @@ export default class Page extends React.Component {
                         }
                         
                     `}</style>
+                    <button onClick={this.openPicker}>Open Picker</button>
                     <Beforeunload onBeforeunload={() => this.save()} />
                 </div>
             );
