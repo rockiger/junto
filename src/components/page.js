@@ -2,7 +2,8 @@
 /* global google */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Editor from 'rich-markdown-editor';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Beforeunload } from 'react-beforeunload';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { renameFile, downloadFile, getFileDescription, updateFile } from '../lib/gdrive';
@@ -14,8 +15,7 @@ import { API_KEY } from '../lib/constants';
 export default class Page extends React.Component {
     
     state = {
-            defaultValue: '',
-            value: undefined,
+            text: '',
             fileId: this.props.match.params.id,
             fileName: 'Untitled page.md',
             pageHead: 'Untitled page',
@@ -40,13 +40,17 @@ export default class Page extends React.Component {
                     fileId: this.props.match.params.id, 
                     fileLoaded: false 
                     },
-                    this.loadEditorContent
+                    this.loadEditorContentsnow
             )
         }
     }
 
     componentWillUnmount() {
         this.save();
+    }
+
+    handleChange = (value) => {
+        this.setState({ text: value })
     }
 
     onChange = debounce(
@@ -74,8 +78,7 @@ export default class Page extends React.Component {
     };
 
     save = () => {
-        if (this.state.value)
-            this.updateFileContent(this.state.fileId, this.state.value());
+        this.updateFileContent(this.state.fileId, this.state.text);
     };
 
     onBlurInput = ev => {
@@ -98,7 +101,7 @@ export default class Page extends React.Component {
             const pageHead = fileDescription.name.substr(0, fileDescription.name.length - 3);
             window.pageHead = pageHead;
             this.setState({
-                defaultValue: fileContent,
+                text: fileContent,
                 fileLoaded: true,
                 fileName: fileDescription.name,
                 pageHead,
@@ -129,14 +132,13 @@ export default class Page extends React.Component {
     }
 
     render() {
-        let editor = !this.state.fileLoaded ? null : <Editor
-        id="editorArea"
-        defaultValue={this.state.defaultValue}
-        onChange={this.onChange}
-        onSave={this.onSave}
-        //readOnly={true}
-        onClickLink={(ev) => console.log('onClickLink: ', ev)}
-    />
+        let editor = <ReactQuill 
+            bounds=".editorContainer"
+            onChange={this.handleChange} 
+            theme="snow"
+            // modules={ modules() }
+            value={this.state.text}  
+        />;
         if (this.props.isSignedIn && this.props.match.params.id) {
             return (
                 <div className="page">
@@ -164,10 +166,12 @@ export default class Page extends React.Component {
                         .editorContainer {
                             height: calc(100vh - 64px);
                             width: 100%;
-                            overflow-y: auto;
                         }
                         .editorHeader {
-                            margin-top: 1.9rem;
+                            font-size: 1.5rem;
+                            font-weight: 400;
+                            margin: 0;
+                            padding: .45rem .5rem .5rem;
                         }
                         .editorInput {
                             border: 1px solid transparent;
@@ -175,7 +179,7 @@ export default class Page extends React.Component {
                             font-family: 'Open Sans', -apple-system,
                                 BlinkMacSystemFont, Avenir Next, Avenir,
                                 Helvetica, sans-serif;
-                            font-weight: lighter;
+                            font-weight: 400;;
                             padding: 0;
                         }
                         .editorInput:hover {
@@ -188,9 +192,37 @@ export default class Page extends React.Component {
                             background: unset;
                             border: none;
                         }
+                        .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button {
+                            min-width: unset;
+                        }
+                        .ql-toolbar.ql-snow {
+                            -webkit-align-items: center;
+                            align-items: center;
+                            border: none;
+                            display: -webkit-inline-box;
+                            display: -webkit-inline-flex;
+                            display: inline-flex;
+                            height: 51px;
+                            margin: 0;
+                            padding: 8px 2px;
+                            position: fixed;
+                            right: 1rem;
+                            top: 64px;
+                            white-space: nowrap;
+                            z-index: 1;
+                        }
+                        .ql-container.ql-snow {
+                            border: none;                            
+                        }
+                        .ql-editor {
+                            border-top: 1px solid var(--border-color);
+                            height: calc(100vh - 64px - 50px);
+                            overflow-y: auto;
+                            padding: 1rem .5rem;
+                        }
                         
                     `}</style>
-                    <button onClick={this.openPicker}>Open Picker</button>
+                    {/* <button onClick={this.openPicker}>Open Picker</button>*/}
                     <Beforeunload onBeforeunload={() => this.save()} />
                 </div>
             );
@@ -227,4 +259,23 @@ function debounce(func, wait, immediate) {
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
     };
+}
+
+
+function modules() {
+    return (
+        {
+            'toolbar': [
+                [{ 'font': ['sofia', 'slabo', 'roboto', 'inconsolata', 'ubuntu'] }, { 'size': [] }],
+                [ 'bold', 'italic', 'underline', 'strike' ],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'script': 'super' }, { 'script': 'sub' }],
+                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block' ],
+                [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+                [ {'direction': 'rtl'}, { 'align': [] }],
+                [ 'link', 'image', 'video', 'formula' ],
+                [ 'clean' ]
+              ],
+        }
+    )
 }
