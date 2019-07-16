@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 import { createFile, getFolderId } from '../lib/gdrive'
+import { UNTITLEDFILE } from '../lib/constants';
 
 export default class Sidebar extends React.Component {
     state = {
@@ -11,7 +12,7 @@ export default class Sidebar extends React.Component {
 
     onClickNewButton = async ev => {
         const parentId = await getFolderId();
-        const fileId = await createFile('Untitled page.md', parentId);
+        const fileId = await createFile(UNTITLEDFILE, parentId);
         
         this.setState({
             fileId,
