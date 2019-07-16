@@ -10,15 +10,16 @@ import { renameFile, downloadFile, getFileDescription, updateFile } from '../lib
 
 import Spinner from './spinner';
 
-import { API_KEY } from '../lib/constants';
+import { API_KEY, UNTITLEDFILE, UNTITLEDNAME, EXT } from '../lib/constants';
+import { getTitleFromFileName } from '../lib/helper';
 
 export default class Page extends React.Component {
     
     state = {
             text: '',
             fileId: this.props.match.params.id,
-            fileName: 'Untitled page.md',
-            pageHead: 'Untitled page',
+            fileName: UNTITLEDFILE,
+            pageHead: UNTITLEDNAME,
             fileLoaded: false,
     }
 
@@ -84,9 +85,9 @@ export default class Page extends React.Component {
     onBlurInput = ev => {
         if (!this.state.pageHead) return;
 
-        if (this.state.fileName !== (this.state.pageHead + '.md')) {
+        if (this.state.fileName !== (this.state.pageHead + EXT)) {
             this.setState({ fileName: this.state.pageHead });
-            renameFile(this.state.fileId, this.state.pageHead + '.md');
+            renameFile(this.state.fileId, this.state.pageHead + EXT);
         }
     };
 
@@ -98,7 +99,7 @@ export default class Page extends React.Component {
         if (this.state.fileId) {
             const fileContent = await downloadFile(this.state.fileId);
             const fileDescription = await getFileDescription(this.state.fileId);
-            const pageHead = fileDescription.name.substr(0, fileDescription.name.length - 3);
+            const pageHead = getTitleFromFileName(fileDescription.name);
             window.pageHead = pageHead;
             this.setState({
                 text: fileContent,

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import Spinner from './spinner'
 import { listFiles, createFile, updateFile, getFolderId, createNewWiki } from '../lib/gdrive';
+import { EXT } from '../lib/constants';
+import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper';
 
 export default class FileList extends React.Component {
     
@@ -22,10 +24,11 @@ export default class FileList extends React.Component {
         console.log('FolderId: ', folderId);
         if (folderId) {
             const files = await listFiles();
+            console.log('listFiles:', files)
             this.setState({ files, isLoading: false });
         } else {
             const newFolderId = await createNewWiki();
-            const newFileId = await createFile('Home.md', newFolderId);
+            const newFileId = await createFile(`Home${EXT}`, newFolderId);
             await updateFile(newFileId, defaultMessage());
             // this.setState({folderId: newFolderId})
             console.log('newFolderId:', newFolderId);
@@ -42,11 +45,14 @@ export default class FileList extends React.Component {
                 {!this.state.isLoading && <ul className="filelist-list">
                     {this.state.files
                         .filter(file => {
-                            const ext = file.name.substr(file.name.length - 3);
-                            return (ext === '.md')
+                            console.log('file.name:', file.name)
+                            const ext = getExtFromFilenName(file.name);
+                            console.log('ext:', ext);
+                            
+                            return (ext === EXT)
                         })
                         .map(file => {
-                            const filename = file.name.substr(0, file.name.length - 3);
+                            const filename = getTitleFromFileName(file.name);
                             return (
                                 <li key={file.id}>
                                     <Link
@@ -101,5 +107,5 @@ export default class FileList extends React.Component {
 }
 
 function defaultMessage() {
-    return `# Welcome to Awiki`;
+    return `<h1>Welcome to Awiki</h1>`;
 }

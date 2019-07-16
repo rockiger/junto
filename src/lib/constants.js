@@ -8,3 +8,8 @@ export const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/dri
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
 export const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appfolder';
+
+export const EXT = '.gwiki';
+export const EXTLENGTH = EXT.length;
+export const UNTITLEDNAME = 'Untitled page';
+export const UNTITLEDFILE = UNTITLEDNAME + EXT;
