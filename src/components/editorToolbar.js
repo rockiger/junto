@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Link from '@material-ui/icons/Link'
 /*
  * Custom toolbar component including insertStar button and dropdowns
  */
@@ -11,6 +11,7 @@ const EditorToolbar = () => (
         </span>
         <span className="ql-formats">
             <button className="ql-link" />
+            <button className=""><Link /></button>
         </span>
         <span className="ql-formats">
       <button className="ql-bold" />
