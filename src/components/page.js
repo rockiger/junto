@@ -49,6 +49,7 @@ export default class Page extends React.Component {
                 const fileContent = await downloadFile(this.state.fileId);
                 const fileDescription = await getFileDescription(this.state.fileId);
                 const pageHead = getTitleFromFileName(fileDescription.name);
+                console.log('this.loadEditorContent:', JSON.parse(fileContent))
                 this.setState({
                     editorDelta: fileContent ? JSON.parse(fileContent) : {},
                     fileLoaded: true,
@@ -143,7 +144,7 @@ export default class Page extends React.Component {
                             border-color: #dadce0;
                         }                        
                     `}</style>
-                    {/* <button onClick={this.openPicker}>Open Picker</button>*/}
+                    <button style={{position: 'fixed', top: '75px', left: '400px'}} onClick={this.openPicker}>Open Picker</button>
                 </div>
             );
         } else if (!this.props.isSignedIn && this.props.isSigningIn)

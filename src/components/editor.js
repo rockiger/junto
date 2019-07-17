@@ -4,13 +4,18 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Beforeunload } from 'react-beforeunload';
 
+import EditorToolbar from './editorToolbar'
 import { updateFile } from '../lib/gdrive';
 
 export default class Editor extends React.Component {
 
+    state = {
+        editorDelta: this.props.editorDelta,
+    }
+
     onChange = (content, delta, source, editor) => {
         console.log('onEditorChange:', editor.getContents());
-        this.props.setEditorDelta(editor.getContents())
+        this.setState({editorDelta: editor.getContents()})
     }
 
     componentWillUnmount() {
@@ -20,23 +25,28 @@ export default class Editor extends React.Component {
     save = async () => {
         try {
             await updateFile(
-                this.prop.fileId, 
-                JSON.stringify(this.prop.editorDelta)
+                this.props.fileId, 
+                JSON.stringify(this.state.editorDelta)
             );
             console.log('save:', this.props.fileId);
         } catch (err) {
             console.log('save: Couldn\'t save file with id:', this.props.fileId);
+            console.log('Error:', err)
         }
     };
 
     render() {
         return (
             <div>
+                <EditorToolbar />
                 <ReactQuill 
                     bounds=".editorContainer"
+                    modules={Editor.modules}
+                    formats={Editor.format}
                     onChange={this.onChange}
+                    readOnly={false}
                     theme="snow"
-                    value={this.props.editorDelta}
+                    value={this.state.editorDelta}
                 />
                 <Beforeunload onBeforeunload={() => this.save()} />
                     <style>{`
@@ -84,6 +94,72 @@ Editor.propTypes = {
     setEditorDelta: PropTypes.func.isRequired,
 }
 
+/* 
+ * Quill modules to attach to editor
+ * See https://quilljs.com/docs/modules/ for complete options
+ */
+Editor.modules = {
+    toolbar: {
+      container: "#toolbar",
+      handlers: {
+        link: linkHandler,
+      }
+    },
+    clipboard: {
+      matchVisual: false,
+    }
+  };
+  
+  /* 
+   * Quill editor formats
+   * See https://quilljs.com/docs/formats/
+   */
+  Editor.formats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "color"
+  ];
+
+  /*
+ * Event handler to be attached using Quill toolbar module (see line 73)
+ * https://quilljs.com/docs/modules/toolbar/
+ */
+
+  function linkHandler(value) {
+    console.log("HANDLER", this)
+    const quill = this.quill;
+    const theme = quill.theme;
+    const bounds = quill.getBounds( quill.getSelection())
+    const tooltip = document.querySelector('.ql-tooltip')
+    console.log(bounds)
+    bounds.left = bounds.left - 240;
+
+    console.log(tooltip)
+    window.tooltip = tooltip
+    
+    theme.tooltip.position( bounds )
+    theme.tooltip.show()
+    tooltip.classList.add('ql-editing')
+    // add ql-editing to show input field
+
+ /*  if (value) {
+    var href = prompt('Enter the URL');
+    this.quill.format('link', href);
+  } else {
+    this.quill.format('link', false);
+  } */
+}
 
 function modules() {
     return (
