@@ -202,33 +202,3 @@ Editor.propTypes = {
     "image",
     "color"
   ];
-
-  /*
- * Event handler to be attached using Quill toolbar module (see line 73)
- * https://quilljs.com/docs/modules/toolbar/
- */
-
-  function linkHandler(value) {
-    console.log("HANDLER", this)
-    const quill = this.quill;
-    const theme = quill.theme;
-    const bounds = quill.getBounds( quill.getSelection())
-    const tooltip = document.querySelector('.ql-tooltip')
-    console.log(bounds)
-    bounds.left = bounds.left - 240;
-
-    console.log(tooltip)
-    window.tooltip = tooltip
-    
-    theme.tooltip.position( bounds )
-    theme.tooltip.show()
-    tooltip.classList.add('ql-editing')
-    // add ql-editing to show input field
-
- /*  if (value) {
-    var href = prompt('Enter the URL');
-    this.quill.format('link', href);
-  } else {
-    this.quill.format('link', false);
-  } */
-}
