@@ -3,25 +3,35 @@ import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Beforeunload } from 'react-beforeunload';
+import ReactModal from 'react-modal';
 
 import EditorToolbar from './editorToolbar'
 import { updateFile } from '../lib/gdrive';
 
 export default class Editor extends React.Component {
 
-    state = {
-        editorDelta: this.props.editorDelta,
+    constructor(props) {
+        super(props)
+        ReactModal.setAppElement('#root');
+        this.state = {
+            editorDelta: this.props.editorDelta,
+            isModalOpen: true,
+        }
+    }
+
+
+    componentWillUnmount() {
+        this.save();
     }
 
     onChange = (content, delta, source, editor) => {
         console.log('onEditorChange:', editor.getContents());
         this.setState({editorDelta: editor.getContents()})
     }
-
-    componentWillUnmount() {
-        this.save();
+    
+    onCloseModal = () => {
+        this.setState({ isModalOpen: false })
     }
-
     save = async () => {
         try {
             await updateFile(
@@ -41,7 +51,7 @@ export default class Editor extends React.Component {
                 <EditorToolbar />
                 <ReactQuill 
                     bounds=".editorContainer"
-                    modules={Editor.modules}
+                    modules={this.modules}
                     formats={Editor.format}
                     onChange={this.onChange}
                     readOnly={false}
@@ -49,6 +59,41 @@ export default class Editor extends React.Component {
                     value={this.state.editorDelta}
                 />
                 <Beforeunload onBeforeunload={() => this.save()} />
+                <ReactModal 
+                    isOpen={this.state.isModalOpen}
+                    onRequestClose={this.onCloseModal}
+                    style={{
+                        overlay: {
+                            zIndex: 1000,
+                        },
+                        content: {
+                            bottom: 0,
+                            height: '300px',
+                            left: 0,
+                            margin: 'auto',
+                            maxHeight: '80vh',
+                            maxWidth: '80vw',
+                            position: 'relative',
+                            right: 0,
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            width: '500px',
+
+                        }
+                    }}
+                >
+                    <div onClick={this.onCloseModal}
+                        style={{
+                            background: 'no-repeat url(//ssl.gstatic.com/docs/picker/images/onepick_sprite12.svg) 0 -146px',
+                            height: 20,
+                            width: 20,
+                            position: 'absolute',
+                            right: 20,
+                        }}
+                    />
+                    <h2 style={{marginTop: 0}}>Insert Link</h2>
+
+                </ReactModal>
                     <style>{`
                         button:hover {
                             background: unset;
@@ -87,6 +132,49 @@ export default class Editor extends React.Component {
             </div>
         )
     }
+
+    /* 
+    * Quill modules to attach to editor
+    * See https://quilljs.com/docs/modules/ for complete options
+    */
+    linkHandler = (value) => {
+        console.log("HANDLER", this)
+        /* const quill = this.quill;
+        const theme = quill.theme;
+        const bounds = quill.getBounds( quill.getSelection())
+        const tooltip = document.querySelector('.ql-tooltip')
+        console.log(bounds)
+        bounds.left = bounds.left - 240;
+    
+        console.log(tooltip)
+        window.tooltip = tooltip */
+
+        this.setState({ isModalOpen: true })
+        
+        /* theme.tooltip.position( bounds )
+        theme.tooltip.show()
+        tooltip.classList.add('ql-editing') */
+        // add ql-editing to show input field
+    
+     /*  if (value) {
+        var href = prompt('Enter the URL');
+        this.quill.format('link', href);
+      } else {
+        this.quill.format('link', false);
+      } */
+    }
+
+    modules = {
+        toolbar: {
+          container: "#toolbar",
+          handlers: {
+            link: this.linkHandler,
+          }
+        },
+        clipboard: {
+          matchVisual: false,
+        }
+      };
 }
 Editor.propTypes = {
     editorDelta: PropTypes.object.isRequired,
@@ -94,22 +182,6 @@ Editor.propTypes = {
     setEditorDelta: PropTypes.func.isRequired,
 }
 
-/* 
- * Quill modules to attach to editor
- * See https://quilljs.com/docs/modules/ for complete options
- */
-Editor.modules = {
-    toolbar: {
-      container: "#toolbar",
-      handlers: {
-        link: linkHandler,
-      }
-    },
-    clipboard: {
-      matchVisual: false,
-    }
-  };
-  
   /* 
    * Quill editor formats
    * See https://quilljs.com/docs/formats/
@@ -159,22 +231,4 @@ Editor.modules = {
   } else {
     this.quill.format('link', false);
   } */
-}
-
-function modules() {
-    return (
-        {
-            'toolbar': [
-                [{ 'font': ['sofia', 'slabo', 'roboto', 'inconsolata', 'ubuntu'] }, { 'size': [] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'super' }, { 'script': 'sub' }],
-                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                [{ 'direction': 'rtl' }, { 'align': [] }],
-                ['link', 'image', 'video', 'formula'],
-                ['clean']
-            ],
-        }
-    )
 }
