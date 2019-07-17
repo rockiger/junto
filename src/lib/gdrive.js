@@ -102,7 +102,7 @@ let clientLoaded = false;
 	export async function createFile(name, parentId) {
 		const fileMetadata = {
 			name: name,
-			mimeType: 'text/html',
+			mimeType: 'text/json',
 			parents: [parentId],
 		};
 		try {
@@ -165,7 +165,7 @@ let clientLoaded = false;
 		const close_delim = "\r\n--" + boundary + "--";
 
 		const metadata = {
-			'mimeType': 'Content-Type: text/html',
+			'mimeType': 'Content-Type: text/json',
 			'name': name,
 			'appProperties': {ifid: ifid}
 		}
