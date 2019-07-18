@@ -58,7 +58,7 @@ export default class FileList extends React.Component {
                                     <Link
                                         to={`/page/${file.id}`}
                                     >
-                                        <img src="https://drive-thirdparty.googleusercontent.com/32/type/text/markdown" alt="Markdown file" /> <span>{filename}</span>
+                                        <img src="https://drive-thirdparty.googleusercontent.com/16/type/application/json" alt="Markdown file" /> <span>{filename}</span>
                                     </Link>
                                 </li>
                             );
