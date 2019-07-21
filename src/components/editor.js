@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Beforeunload } from 'react-beforeunload';
 import ReactModal from 'react-modal';
@@ -67,7 +67,7 @@ export default class Editor extends React.Component {
     }
 
     onKeyDownInput = (e) => {
-        if(e.keyCode == 13){
+        if(e.keyCode === 13){
             console.log('value', e.target.value);
             this.onClickSelectButton();
          }
