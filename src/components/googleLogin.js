@@ -5,6 +5,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types'
+import Button from '@material-ui/core/Button';
 
 export default class GoogleLogin extends React.Component {
 
@@ -64,13 +65,14 @@ export default class GoogleLogin extends React.Component {
     render() {
         if (this.props.isSignedIn) {
             return (
-                <button id="signout_button" onClick={handleSignoutClick} style={{ fontWeight: 'normal' }}>
+                <Button variant="contained">
                     Logout
-                </button>
+                </Button>
             );
         } else {
             return (
-                <button id="authorize_button" className="action" onClick={this.handleAuthClick}>
+                <button
+                edge="end" id="authorize_button" className="action" onClick={this.handleAuthClick}>
                     {this.props.buttonText}
                 </button>
             );
