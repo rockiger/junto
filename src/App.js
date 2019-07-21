@@ -23,6 +23,11 @@ const theme = createMuiTheme({
       main: "#4285f4"
     }
   },
+  typography: {
+    h6: {
+        fontWeight: 400,
+    }
+  },
 });
 
 class App extends React.Component {
