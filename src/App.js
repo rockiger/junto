@@ -1,5 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core/styles'
 
 import Nav from './components/nav';
 import GoogleLogin from './components/googleLogin';
@@ -10,6 +13,17 @@ import Page from './components/page';
 import { CLIENT_ID, API_KEY, DISCOVERY_DOCS, SCOPES } from './lib/constants';
 
 import './App.css';
+
+const theme = createMuiTheme({
+  palette: {
+    secondary: {
+      main: "#ea4335"
+    },
+    primary: {
+      main: "#4285f4"
+    }
+  },
+});
 
 class App extends React.Component {
     constructor(props) {
@@ -54,7 +68,9 @@ class App extends React.Component {
 
     render() {
         return (
+            <ThemeProvider theme={theme}>
             <Router>
+                <CssBaseline />
                 <div className="App">
                     <header className="App-header">
                         <Nav isSignedIn={this.state.isSignedIn}>
@@ -110,6 +126,7 @@ class App extends React.Component {
                     </main>
                 </div>
             </Router>
+            </ThemeProvider>
         );
     }
 }
