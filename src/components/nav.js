@@ -50,6 +50,9 @@ const Nav = props => (
                 display: flex;
                 align-items: center;
             }
+            .Nav-logo img {
+                max-height: 48px;
+            }
             .Nav-logo-name {
                 display: inline-block;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
