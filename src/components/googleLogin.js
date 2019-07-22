@@ -65,7 +65,7 @@ export default class GoogleLogin extends React.Component {
     render() {
         if (this.props.isSignedIn) {
             return (
-                <Button>
+                <Button onClick={handleSignoutClick}>
                     Logout
                 </Button>
             );
