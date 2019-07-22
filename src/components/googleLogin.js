@@ -71,10 +71,10 @@ export default class GoogleLogin extends React.Component {
             );
         } else {
             return (
-                <button
+                <Button variant="contained" color="primary"
                 edge="end" id="authorize_button" className="action" onClick={this.handleAuthClick}>
                     {this.props.buttonText}
-                </button>
+                </Button>
             );
         }
     }

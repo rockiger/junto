@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import logo from '../static/logo.svg';
-import { fade, makeStyles } from '@material-ui/core/styles';
-import { AppBar, Card, Toolbar, IconButton, Typography, InputBase, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { AppBar, Toolbar, Typography, InputBase, Paper } from '@material-ui/core';
 import SearchIcon from 'mdi-react/SearchIcon'
 
 const Nav = props => {
@@ -19,7 +19,7 @@ const Nav = props => {
                                 <img className={classes.logo} src={logo} alt="App logo" />
                             </Link>
                             <Link className={classes.titleSignedIn} to="/">
-                                <Typography className={classes.title} color="textPrimary" variant="h6" noWrap>
+                                <Typography color="textPrimary" variant="h6" noWrap>
                                     Wiki
                                 </Typography>
                             </Link>
@@ -136,13 +136,11 @@ function useStyles() {
                 [theme.breakpoints.up('md')]: {
                     display: 'block',
                     textDecoration: 'none',
-                    fontWeight: 400,
                 },
             },
             title: {
                 display: 'block',
                 textDecoration: 'none',
-                fontWeight: 400,
             },
             search: {
                 [theme.breakpoints.up('md')]: {
