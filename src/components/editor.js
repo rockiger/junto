@@ -234,7 +234,7 @@ export default class Editor extends React.Component {
                         }
                         .ql-editor {
                             border-top: 1px solid var(--border-color);
-                            height: calc(100vh - 64px - 50px);
+                            height: calc(100vh - 65px - 50px);
                             overflow-y: auto;
                             padding: 1rem .5rem;
                         }
