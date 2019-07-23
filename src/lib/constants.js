@@ -13,3 +13,28 @@ export const EXT = '.gwiki';
 export const EXTLENGTH = EXT.length;
 export const UNTITLEDNAME = 'Untitled page';
 export const UNTITLEDFILE = UNTITLEDNAME + EXT;
+
+export const DEFAULTVALUE = {
+
+}
+
+export const EMPTYVALUE = {
+    'document': {
+      'nodes': [
+        {
+          'object': 'block',
+          'type': 'line',
+          'nodes': [
+            {
+              'object': 'text',
+              'leaves': [
+                {
+                  'text': ''
+                },
+              ]
+            }
+          ]
+        },
+      ]
+    }
+  }
