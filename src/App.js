@@ -16,12 +16,15 @@ import './App.css';
 
 const theme = createMuiTheme({
   palette: {
+      background: {
+          default: '#fff',
+      },
+      primary: {
+        main: "#4285f4"
+      },
     secondary: {
       main: "#ea4335"
     },
-    primary: {
-      main: "#4285f4"
-    }
   },
   typography: {
     h6: {
