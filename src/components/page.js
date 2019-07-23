@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive';
 
+import TextEditor from './texteditor'
 import Editor from './editor';
 import Spinner from './spinner';
 
-import { API_KEY, UNTITLEDFILE, UNTITLEDNAME, EXT } from '../lib/constants';
+import { API_KEY, EMPTYVALUE, UNTITLEDFILE, UNTITLEDNAME, EXT } from '../lib/constants';
 import { getTitleFromFileName } from '../lib/helper';
 
 export default class Page extends React.Component {
@@ -51,7 +52,7 @@ export default class Page extends React.Component {
                 const pageHead = getTitleFromFileName(fileDescription.name);
                 console.log('this.loadEditorContent:', JSON.parse(fileContent))
                 this.setState({
-                    editorDelta: fileContent ? JSON.parse(fileContent) : {},
+                    initialContent: fileContent ? fileContent : "",
                     fileLoaded: true,
                     fileName: fileDescription.name,
                     pageHead,
@@ -92,9 +93,9 @@ export default class Page extends React.Component {
     }
 
     render() {
-        let editor = <Editor
-            editorDelta={this.state.editorDelta}
+        let editor = <TextEditor
             fileId={this.state.fileId}
+            initialValue={this.state.initialContent}
             setEditorDelta={this.setEditorDelta}
         />;
         if (this.props.isSignedIn && this.props.match.params.id) {
@@ -112,7 +113,7 @@ export default class Page extends React.Component {
                             </h1>
                         )}
                         {this.state.fileLoaded && (
-                            editor
+                            editor 
                         )}
                         {!this.state.fileLoaded && <Spinner />}
                     </div>

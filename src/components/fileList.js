@@ -1,4 +1,5 @@
 import React from 'react';
+import { Value } from 'slate'
 
 import { listFiles, createFile, updateFile, getFolderId, createNewWiki } from '../lib/gdrive';
 import FileListRenderer from './fileListRenderer'
@@ -44,5 +45,5 @@ export default class FileList extends React.Component {
 }
 
 function defaultMessage() {
-    return `<h1>Welcome to Awiki</h1>`;
+    return ('{"object":"value","document":{"object":"document","data":{},"nodes":[{"object":"block","type":"paragraph","data":{},"nodes":[{"object":"text","text":"My first ","marks":[]},{"object":"inline","type":"link","data":{"href":"http://rockiger.com"},"nodes":[{"object":"text","text":"paragraph","marks":[]}]},{"object":"text","text":"!","marks":[]}]}]}}');
 }
