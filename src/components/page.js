@@ -122,7 +122,7 @@ export default class Page extends React.Component {
                         }
 
                         .editorContainer {
-                            height: calc(100vh - 64px);
+                            height: calc(100vh - 65px);
                             width: 100%;
                         }
                         .editorHeader {
