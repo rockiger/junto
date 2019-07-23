@@ -16,19 +16,10 @@ import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import FormatUnderlineIcon from 'mdi-react/FormatUnderlineIcon'
 import LinkIcon from 'mdi-react/LinkIcon'
 
-import Toolbar from './Toolbar';
+import Toolbar from './toolbar';
+import ToolbarButton from './toolbarButton'
+import DriveToolbarButton from './driveToolbarButton'
 import { updateFile } from '../../lib/gdrive'
-
-
-export const Button = React.forwardRef(
-    ({ className, active, reversed, ...props }, ref) => (
-      <span
-        {...props}
-        ref={ref}
-        className={active ? (className + ' active') : className}
-      />
-    )
-  )
 
 /**
  * Define the default node type.
@@ -144,6 +135,7 @@ export default class TextEditor extends Component {
                     {this.renderMarkButton('underlined', FormatUnderlineIcon)}
                     {this.renderMarkButton('code', CodeTagsIcon)}
                     {this.renderLinkButton('link', LinkIcon)}
+                    <DriveToolbarButton />
                     {this.renderBlockButton('heading-one', FormatHeader1Icon)}
                     {this.renderBlockButton('heading-two', FormatHeader2Icon)}
                     {this.renderBlockButton('block-quote', FormatQuoteCloseIcon)}
@@ -153,7 +145,7 @@ export default class TextEditor extends Component {
                 <Editor 
                     spellCheck
                     autoFocus
-                    readOnly={false}
+                    readOnly={true}
                     placeholder="Enter some rich text..."
                     ref={this.ref}
                     value={this.state.value}
@@ -163,6 +155,13 @@ export default class TextEditor extends Component {
                     renderBlock={this.renderBlock}
                     renderInline={this.renderInline}
                     renderMark={this.renderMark}
+                    style={{ 
+                      fontFamily: '"Open Sans", Helvetica, Arial, sans-serif',
+                      fontSize: '1rem',
+                      height: 'calc(100vh - 65px - 51px)',
+                      padding: '.7rem 1rem .7rem .7rem',
+                      overflowY: 'auto',
+                    }}
                 />
                 <Beforeunload onBeforeunload={() => this.save()} />
             </Fragment>
@@ -181,12 +180,12 @@ export default class TextEditor extends Component {
     const isActive = this.hasMark(type)
 
     return (
-      <Button
+      <ToolbarButton
         active={isActive}
         onMouseDown={event => this.onClickMark(event, type)}
       >
           <Icon />
-      </Button>
+      </ToolbarButton>
     )
   }
 
@@ -211,12 +210,12 @@ export default class TextEditor extends Component {
     }
 
     return (
-      <Button
+      <ToolbarButton
         active={isActive}
         onMouseDown={event => this.onClickBlock(event, type)}
       >
           <Icon />
-      </Button>
+      </ToolbarButton>
     )
   }
 
@@ -232,12 +231,12 @@ export default class TextEditor extends Component {
     const isActive = this.hasLinks();
 
     return (
-      <Button
+      <ToolbarButton
         active={isActive}
         onMouseDown={event => this.onClickLink(event, type)}
       >
           <Icon />
-      </Button>
+      </ToolbarButton>
     )
   }
 

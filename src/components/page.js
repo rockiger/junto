@@ -79,19 +79,6 @@ export default class Page extends React.Component {
         this.setState({ pageHead: ev.target.value });
     };
 
-    openPicker = () => {
-        const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-        var view = new google.picker.View(google.picker.ViewId.DOCS);
-        view.setMimeTypes("image/png,image/jpeg,image/jpg");
-        var picker = new google.picker.PickerBuilder()
-            .addView(google.picker.ViewId.DOCS)
-            .setOAuthToken(accessToken)
-            .setDeveloperKey(API_KEY)
-            .setCallback((data) => console.log('DATA:', data))
-            .build();
-        picker.setVisible(true);
-    }
-
     render() {
         let editor = <TextEditor
             fileId={this.state.fileId}
@@ -127,25 +114,23 @@ export default class Page extends React.Component {
                             width: 100%;
                         }
                         .editorHeader {
+                            border-bottom: 1px solid #d5d5d5;
                             font-size: 1.5rem;
                             font-weight: 400;
                             margin: 0;
-                            padding: .45rem .5rem .5rem;
+                            padding: .45rem .5rem .5rem 0;
                         }
                         .editorInput {
                             border: 1px solid transparent;
                             font: unset;
-                            font-family: 'Open Sans', -apple-system,
-                                BlinkMacSystemFont, Avenir Next, Avenir,
-                                Helvetica, sans-serif;
+                            font-family: "Open Sans", Helvetica, Arial, sans-serif;
                             font-weight: 400;;
-                            padding: 0;
+                            padding: 0 .5rem;
                         }
                         .editorInput:hover {
                             border-color: #dadce0;
                         }                        
                     `}</style>
-                    <button style={{position: 'fixed', top: '75px', left: '400px'}} onClick={this.openPicker}>Open Picker</button>
                 </div>
             );
         } else if (!this.props.isSignedIn && this.props.isSigningIn)
