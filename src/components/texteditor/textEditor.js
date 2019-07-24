@@ -393,10 +393,23 @@ export default class TextEditor extends Component {
     ev.preventDefault()
     console.log('onClickSelecButton:', this.state.autocompleteValue)
     const href = this.state.autocompleteValue;
-    this.setState(
-      { isModalOpen: false, autocompleteValue: '' },
-      () => this.editor.command(wrapLink, href),
-    )
+    const newState = { isModalOpen: false, autocompleteValue: '' };
+    if (this.editor.value.selection.isExpanded) {
+      this.setState(
+        newState,
+        () => this.editor.command(wrapLink, href),
+      )
+    } else {
+      const text = href;
+      this.setState(
+        newState,
+        () => this.editor
+          .insertText(text)
+          .moveFocusBackward(text.length)
+          .command(wrapLink, href)
+      )
+    }
+
 }
 
   onCloseModal = () => {
@@ -551,29 +564,12 @@ onSelectAutocomplete = (val) => {
 
     if (hasLinks) {
       editor.command(unwrapLink)
-    } else if (value.selection.isExpanded) {
+    } else {
 
       // add only url
       // const href = window.prompt()
       // editor.command(wrapLink, href)
       this.setState({ isModalOpen: true });
-    } else {
-      const href = window.prompt('Enter the URL of the link:')
-
-      if (href == null) {
-        return
-      }
-
-      const text = window.prompt('Enter the text for the link:')
-
-      if (text == null) {
-        return
-      }
-
-      editor
-        .insertText(text)
-        .moveFocusBackward(text.length)
-        .command(wrapLink, href)
     }
   }
 }
