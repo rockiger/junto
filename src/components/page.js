@@ -1,7 +1,7 @@
 /* global gapi */
 /* global google */
-import React from 'react';
-import PropTypes from 'prop-types';
+    import React from 'react';
+    import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive';
 

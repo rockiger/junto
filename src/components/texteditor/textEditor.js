@@ -20,6 +20,7 @@ import Toolbar from './toolbar';
 import ToolbarButton from './toolbarButton'
 import DriveToolbarButton from './driveToolbarButton'
 import { updateFile } from '../../lib/gdrive'
+import LinkModal from './linkModal';
 
 /**
  * Define the default node type.
@@ -49,7 +50,9 @@ const isLinkHotkey = isKeyHotkey('mod+k')
 export default class TextEditor extends Component {
 
     state = {
-        value: Value.fromJSON(JSON.parse(this.props.initialValue)),
+      autocompleteValue: '',
+      value: Value.fromJSON(JSON.parse(this.props.initialValue)),
+      isModalOpen: false,
     }
 
     componentWillUnmount() {
@@ -128,7 +131,7 @@ export default class TextEditor extends Component {
 
     render() {
         return (
-            <Fragment>
+            <>
                 <Toolbar>
                     {this.renderMarkButton('bold', FormatBoldIcon)}
                     {this.renderMarkButton('italic', FormatItalicIcon)}
@@ -145,7 +148,7 @@ export default class TextEditor extends Component {
                 <Editor 
                     spellCheck
                     autoFocus
-                    readOnly={true}
+                    readOnly={false}
                     placeholder="Enter some rich text..."
                     ref={this.ref}
                     value={this.state.value}
@@ -164,7 +167,15 @@ export default class TextEditor extends Component {
                     }}
                 />
                 <Beforeunload onBeforeunload={() => this.save()} />
-            </Fragment>
+                <LinkModal
+                    isModalOpen={this.state.isModalOpen}
+                    onChangeAutocomplete={this.onChangeAutocomplete}
+                    onClickSelectButton={this.onClickSelectButton}
+                    onCloseModal={this.onCloseModal}
+                    onSelectAutocomplete={this.onSelectAutocomplete}
+                    autocompleteValue={this.state.autocompleteValue}
+                />
+            </>
         )
     }
 
@@ -376,6 +387,32 @@ export default class TextEditor extends Component {
     this.setState({ value })
   }
 
+  onChangeAutocomplete = ev => this.setState({ autocompleteValue: ev.target.value })
+
+  onClickSelectButton = (ev) => {
+    ev.preventDefault()
+    console.log('onClickSelecButton:', this.state.autocompleteValue)
+    const href = this.state.autocompleteValue;
+    this.setState(
+      { isModalOpen: false, autocompleteValue: '' },
+      () => this.editor.command(wrapLink, href),
+    )
+}
+
+  onCloseModal = () => {
+    this.setState({ isModalOpen: false })
+}
+
+
+onSelectAutocomplete = (val) => {
+  // TODO
+  const href = `/page/${val}`
+  this.setState(
+    { isModalOpen: false, autocompleteValue: '' },
+    () => this.editor.command(wrapLink, href),
+  )
+}
+
   /**
    * On key down, if it's a formatting command toggle a mark.
    *
@@ -515,13 +552,11 @@ export default class TextEditor extends Component {
     if (hasLinks) {
       editor.command(unwrapLink)
     } else if (value.selection.isExpanded) {
-      const href = window.prompt('Enter the URL of the link:')
 
-      if (href == null) {
-        return
-      }
-
-      editor.command(wrapLink, href)
+      // add only url
+      // const href = window.prompt()
+      // editor.command(wrapLink, href)
+      this.setState({ isModalOpen: true });
     } else {
       const href = window.prompt('Enter the URL of the link:')
 
