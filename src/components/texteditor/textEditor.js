@@ -19,8 +19,10 @@ import LinkIcon from 'mdi-react/LinkIcon'
 import Toolbar from './toolbar';
 import ToolbarButton from './toolbarButton'
 import DriveToolbarButton from './driveToolbarButton'
-import { updateFile } from '../../lib/gdrive'
 import LinkModal from './linkModal';
+import { getFolderId, listFiles, updateFile} from '../../lib/gdrive';
+import { getExtFromFilenName, getTitleFromFileName } from '../../lib/helper'
+import { EXT } from '../../lib/constants'
 
 /**
  * Define the default node type.
@@ -50,9 +52,14 @@ const isLinkHotkey = isKeyHotkey('mod+k')
 export default class TextEditor extends Component {
 
     state = {
+      autocompleteItems: [],
       autocompleteValue: '',
       value: Value.fromJSON(JSON.parse(this.props.initialValue)),
       isModalOpen: false,
+    }
+
+    componentDidMount() {
+      this.populateAutocompletItems();
     }
 
     componentWillUnmount() {
@@ -71,6 +78,21 @@ export default class TextEditor extends Component {
           console.log('Error:', err)
       }
   };
+
+
+
+    populateAutocompletItems = async () => {
+      const folderId = await getFolderId();
+      if (folderId) {
+          const files = await listFiles();
+          const autocompleteItems = files.filter(file => {
+              const ext = getExtFromFilenName(file.name);                
+              return (ext === EXT)
+          })
+
+          this.setState({ autocompleteItems });
+      }
+  }
 
     /**
      * Check if the current selection has a mark with `type` in it.
@@ -174,6 +196,7 @@ export default class TextEditor extends Component {
                     onCloseModal={this.onCloseModal}
                     onSelectAutocomplete={this.onSelectAutocomplete}
                     autocompleteValue={this.state.autocompleteValue}
+                    autocompleteItems={this.state.autocompleteItems}
                 />
             </>
         )
@@ -390,27 +413,29 @@ export default class TextEditor extends Component {
   onChangeAutocomplete = ev => this.setState({ autocompleteValue: ev.target.value })
 
   onClickSelectButton = (ev) => {
-    ev.preventDefault()
     console.log('onClickSelecButton:', this.state.autocompleteValue)
     const href = this.state.autocompleteValue;
     const newState = { isModalOpen: false, autocompleteValue: '' };
+    this.wrapLinkAndsetState(newState, href)
+}
+
+  wrapLinkAndsetState(newState, href, text='') {
     if (this.editor.value.selection.isExpanded) {
       this.setState(
         newState,
         () => this.editor.command(wrapLink, href),
       )
     } else {
-      const text = href;
+      const linktext = text ? text : href;
       this.setState(
         newState,
         () => this.editor
-          .insertText(text)
-          .moveFocusBackward(text.length)
+          .insertText(linktext)
+          .moveFocusBackward(linktext.length)
           .command(wrapLink, href)
       )
     }
-
-}
+  }
 
   onCloseModal = () => {
     this.setState({ isModalOpen: false })
@@ -420,10 +445,11 @@ export default class TextEditor extends Component {
 onSelectAutocomplete = (val) => {
   // TODO
   const href = `/page/${val}`
-  this.setState(
-    { isModalOpen: false, autocompleteValue: '' },
-    () => this.editor.command(wrapLink, href),
-  )
+  const newState = { isModalOpen: false, autocompleteValue: '' };
+  const filename = this.state.autocompleteItems.find(el => el.id === val).name
+  const text = getTitleFromFileName(filename)
+  console.log('onSelectAutocomplete', text);
+  this.wrapLinkAndsetState(newState, href, text)
 }
 
   /**
