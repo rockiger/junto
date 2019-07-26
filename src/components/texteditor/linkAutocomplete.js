@@ -64,12 +64,13 @@ class LinkAutocomplete extends React.Component  {
                 borderRadius: '3px',
                 border: '1px solid #e5e5e5',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                padding: '2px 0',
                 fontSize: '90%',
-                position: 'static',
-                overflow: 'auto',
                 maxHeight: '50%',
-                minWidth: 'unset',
+                minWidth: '24%',
+                overflow: 'auto',
+                padding: '2px 0',
+                position: 'fixed',
+                zIndex: 1
             }}
             renderInput={props => <TextField {...props} />}
         />

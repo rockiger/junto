@@ -30,7 +30,8 @@ const LinkModal = props => {
             aria-labelledby="form-dialog-title"
             className={classes.root}
             onClose={props.onCloseModal}  
-            open={true /* props.isModalOpen */} 
+            open={props.isModalOpen} 
+            fullWidth={true}
         >
             <DialogTitle>
                 Insert Link
