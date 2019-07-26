@@ -30,7 +30,7 @@ const LinkModal = props => {
             aria-labelledby="form-dialog-title"
             className={classes.root}
             onClose={props.onCloseModal}  
-            open={true} 
+            open={true /* props.isModalOpen */} 
         >
             <DialogTitle>
                 Insert Link
@@ -44,17 +44,11 @@ const LinkModal = props => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                {/*Sholud be an autocomplet */}
-                <TextField
-                    autoFocus
-                    label="Link"
-                    margin="dense"
-                    placeholder="Paste a link, or search"
-                    variant="outlined"
-
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                <LinkAutocomplete 
+                    items={props.autocompleteItems}
+                    value={props.autocompleteValue}
+                    onSelect={props.onSelectAutocomplete}
+                    onChange={props.onChangeAutocomplete}
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>
