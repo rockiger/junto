@@ -2,10 +2,95 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import LinkAutocomplete from './linkAutocomplete';
+import { makeStyles } from '@material-ui/core/styles';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, IconButton } from '@material-ui/core';
+import CloseIcon from 'mdi-react/CloseIcon';
+
+
+const useStyles = makeStyles(theme => ({
+    root: {
+      margin: 0,
+      padding: theme.spacing(2),
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(2),
+      top: theme.spacing(2),
+      color: theme.palette.grey[500],
+    },
+    actions: {
+        padding: theme.spacing(1, 2, 2, 2),
+    },
+  }));
 
 const LinkModal = props => {
+    const classes = useStyles();
     return (
-        <ReactModal
+        <Dialog 
+            aria-labelledby="form-dialog-title"
+            className={classes.root}
+            onClose={props.onCloseModal}  
+            open={true} 
+        >
+            <DialogTitle>
+                Insert Link
+                <IconButton 
+                    aria-label="close" 
+                    className={classes.closeButton}
+                    onClick={props.onCloseModal}
+                    size="small"
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent>
+                {/*Sholud be an autocomplet */}
+                <TextField
+                    autoFocus
+                    label="Link"
+                    margin="dense"
+                    placeholder="Paste a link, or search"
+                    variant="outlined"
+
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+            </DialogContent>
+            <DialogActions className={classes.actions}>
+                <Button 
+                    onClick={props.onCloseModal}
+                >
+                    Cancel
+                </Button>
+                <Button 
+                    color="primary"
+                    disabled={props.autocompleteValue ? false : true}
+                    onClick={props.onClickSelectButton} 
+                    variant="contained"
+                >
+                    Apply
+                </Button>
+            </DialogActions>
+        </Dialog>
+        
+    )
+}
+LinkModal.propType = {
+    isModalOpen: PropTypes.bool.isRequired,
+    onClickSelectButton: PropTypes.func.isRequired,
+    onCloseModal: PropTypes.func.isRequired,
+    // props for <Autocomplete
+    autocompleteItems: PropTypes.array.isRequired,
+    autocompleteValue: PropTypes.string.isRequired,
+    onChangeAutocomplete: PropTypes.func.isRequired,
+    onSelectAutocomplete: PropTypes.func.isRequired
+}
+
+export default LinkModal;
+
+/* 
+<ReactModal
             appElement={document.getElementById('root')}
             isOpen={props.isModalOpen}
             onRequestClose={props.onCloseModal}
@@ -58,17 +143,4 @@ const LinkModal = props => {
                 <button className="action" onClick={props.onClickSelectButton}>Select</button> <button onClick={props.onCloseModal}>Cancel</button>
             </div>
 
-        </ReactModal>
-    )
-}
-LinkModal.propType = {
-    autocompleteValue: PropTypes.string.isRequired,
-    autocompleteItems: PropTypes.array.isRequired,
-    isModalOpen: PropTypes.bool.isRequired,
-    onChangeAutocomplete: PropTypes.func.isRequired,
-    onClickSelectButton: PropTypes.func.isRequired,
-    onCloseModal: PropTypes.func.isRequired,
-    onSelectAutocomplete: PropTypes.func.isRequired
-}
-
-export default LinkModal;
+        </ReactModal> */
