@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
+import {TextField, MenuItem } from '@material-ui/core';
 
 import { getFolderId, listFiles} from '../../lib/gdrive';
 import { getExtFromFilenName, getTitleFromFileName } from '../../lib/helper';
@@ -50,14 +51,12 @@ class LinkAutocomplete extends React.Component  {
             onChange={this.props.onChange}
             onSelect={this.props.onSelect}
             inputProps={{
-                style: {
-                    borderColor: 'rgb(192, 192, 192) rgb(217, 217, 217) rgb(217, 217, 217)',
-                    borderStyle: 'solid',
-                    borderWidth: 1,
-                    height: '1.25rem',
-                    paddingLeft: '.25rem',
-                    width: 300,
-                },
+                autoFocus: true,
+                label: 'Link',
+                margin: 'dense',
+                placeholder: 'Paste a link, or search',
+                variant: 'outlined',
+                InputLabelProps: { shrink: true },
                 onKeyDown: this.onKeyDownInput,
             }}
             menuStyle={{
@@ -72,6 +71,7 @@ class LinkAutocomplete extends React.Component  {
                 maxHeight: '50%',
                 minWidth: 'unset',
             }}
+            renderInput={props => <TextField {...props} />}
         />
     )
 }
