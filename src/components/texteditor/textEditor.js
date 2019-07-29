@@ -4,13 +4,8 @@ import { Value } from 'slate'
 import { isKeyHotkey } from 'is-hotkey'
 import isUrl from 'is-url'
 import { Beforeunload } from 'react-beforeunload';
-import { Paper, Toolbar } from '@material-ui/core';
 
 import CodeTagsIcon from 'mdi-react/CodeTagsIcon';
-import ContentCopyIcon from 'mdi-react/ContentCopyIcon';
-import PencilOutlineIcon from 'mdi-react/PencilOutlineIcon';
-import LinkOffIcon from 'mdi-react/LinkOffIcon';
-import EarthIcon from 'mdi-react/EarthIcon'
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
 import FormatHeader1Icon from 'mdi-react/FormatHeader1Icon';
 import FormatHeader2Icon from 'mdi-react/FormatHeader2Icon'
@@ -25,11 +20,11 @@ import EditorToolbar from './toolbar';
 import ToolbarButton from './toolbarButton'
 import DriveToolbarButton from './driveToolbarButton'
 import LinkModal from './linkModal';
+import LinkTooltip from './linkTooltip'
 
 import { getFolderId, listFiles, updateFile} from '../../lib/gdrive';
 import { getExtFromFilenName, getTitleFromFileName } from '../../lib/helper'
 import { EXT } from '../../lib/constants'
-import Logo from '../logo';
 
 /**
  * Define the default node type.
@@ -61,8 +56,10 @@ export default class TextEditor extends Component {
     state = {
       autocompleteItems: [],
       autocompleteValue: '',
-      value: Value.fromJSON(JSON.parse(this.props.initialValue)),
+      href: '',
       isModalOpen: false,
+      showTooltip: false,
+      value: Value.fromJSON(JSON.parse(this.props.initialValue)),
     }
 
     componentDidMount() {
@@ -205,6 +202,15 @@ export default class TextEditor extends Component {
                     autocompleteValue={this.state.autocompleteValue}
                     autocompleteItems={this.state.autocompleteItems}
                 />
+                <LinkTooltip
+                  editor={this.editor}
+                  closeTooltip={this.closeTooltip}
+                  setAutocompleteValue={this.setAutocompleteValue}
+                  setEditorState={this.setEditorState}
+                  setModal={() => this.setState({ isModalOpen: true, showTooltip: false })}
+                  show={this.state.showTooltip}
+                  value={this.state.value}
+                />
             </>
         )
     }
@@ -325,101 +331,31 @@ export default class TextEditor extends Component {
 
     switch (node.type) {
       case 'link': {
-        const hasLinks = this.hasLinks()
-        const getLink = this.getLink()
-
         const {selection} = this.state.value;
 
         const focusedOnCurrentNode = this.getLink() && node.key === this.getLink().key
         const showTooltip = !readOnly && selection.isCollapsed && focusedOnCurrentNode
+        if (showTooltip !== this.state.showTooltip) {
+          this.setState({showTooltip});
+        }
         console.log('focusedOnCurrentNode:', focusedOnCurrentNode)
         console.log('showTooltip:', showTooltip)
 
         const { data } = node
         const href = data.get('href')
         const isInternal = href.startsWith('/page/')
-        return (
-          <span>
-            {showTooltip && (
-              <Paper 
-              elevation={2} 
-              style={{ 
-                alignItems: 'center',
-                background: 'white',
-                border: '1px solid lightgrey',
-                cursor: 'default',
-                display: 'inline-flex',
-                minWidth: 275,
-                padding: 5,
-                position: 'absolute',
-                top: '100%',
-                zIndex: 1,
-                }}
-              >
-                  { isInternal ? <Logo  style={{ height: 18, width: 18}} /> : <EarthIcon style={{ height: 18, width: 18}} /> }
-                  <a 
-                    href={href} 
-                    alt={href} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    onClick={() => window.open(href, '_blank')}
-                    style={{
-                      cursor: 'pointer', 
-                      display: 'inline-block',
-                      fontFamily: 'Roboto, sans-serif',
-                      fontSize: '.9rem',
-                      fontWeight: 500,
-                      letterSpacing: 0.3,
-                      margin: '.1rem 8px 0',
-                      width: 180, 
-                      overflow: 'hidden',
-                      textDecoration: 'none',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                      {href}
-                  </a>
-                  <ToolbarButton 
-                    onMouseDown={(ev) => {
-                      copyToClipboard(href);
-                      this.editor.focus();
-                    }}
-                    style={{ height: 30, width: 30, }}
-                  >
-                    <ContentCopyIcon style={{ height: 18, width: 18}} />
-                  </ToolbarButton>
-                  
-                  <ToolbarButton
-                    onMouseDown={ev => {
-                      this.setState({ 
-                        isModalOpen: true, 
-                        autocompleteValue: href
-                      });
-                      this.editor.focus();
-                    }}
-                    style={{ height: 30, width: 30, }}
-                  >
-                    <PencilOutlineIcon style={{ height: 18, width: 18}} />
-                  </ToolbarButton> 
-                  <ToolbarButton
-                    onMouseDown={ ev => {
-                      editor.command(unwrapLink).focus()
-                    }}
-                    style={{ height: 30, width: 30, }}
-                  >
-                    <LinkOffIcon style={{ height: 18, width: 18}} />
-                  </ToolbarButton>
-                </Paper>
-            )}
+        return (            
             <a {...attributes} href={href}>
               {children}
             </a>
-          </span>
         )
       }
 
       default: {
+
+        if (this.state.showTooltip === true) {
+          this.setState({showTooltip: false});
+        }
         return next()
       }
     }
@@ -633,6 +569,14 @@ onSelectAutocomplete = (val) => {
     editor.command(wrapLink, text)
   }
 
+  closeTooltip = () => this.setState({ showTooltip: false });
+
+  setEditorState = (newState, fn=null) => {
+        this.setState(newState)
+    }
+  
+  setAutocompleteValue = (val) => this.setState({ autocompleteValue: val })
+
   toggleLink = (type='link') => {
     if (type !== 'link') return // do something in the future
 
@@ -677,21 +621,3 @@ function wrapLink(editor, href) {
 function unwrapLink(editor) {
     editor.unwrapInline('link')
   }
-
-function copyToClipboard(str) {
-    const el = document.createElement('textarea');
-    el.value = str;
-    el.setAttribute('readonly', '');
-    el.style.position = 'absolute';
-    el.style.left = '-9999px';
-    document.body.appendChild(el);
-    const selected =
-      document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    if (selected) {
-      document.getSelection().removeAllRanges();
-      document.getSelection().addRange(selected);
-    }
-  };
