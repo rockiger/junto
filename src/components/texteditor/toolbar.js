@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
 }
 })
 )
-const FormatToolbar = (props) => {
+const EditorToolbar = (props) => {
     const classes = useStyles()
     return (
     <Toolbar 
@@ -22,4 +22,4 @@ const FormatToolbar = (props) => {
 )
     }
 
-export default FormatToolbar;
+export default EditorToolbar;

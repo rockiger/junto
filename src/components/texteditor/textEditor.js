@@ -4,8 +4,13 @@ import { Value } from 'slate'
 import { isKeyHotkey } from 'is-hotkey'
 import isUrl from 'is-url'
 import { Beforeunload } from 'react-beforeunload';
+import { Paper, Toolbar } from '@material-ui/core';
 
 import CodeTagsIcon from 'mdi-react/CodeTagsIcon';
+import ContentCopyIcon from 'mdi-react/ContentCopyIcon';
+import PencilOutlineIcon from 'mdi-react/PencilOutlineIcon';
+import LinkOffIcon from 'mdi-react/LinkOffIcon';
+import EarthIcon from 'mdi-react/EarthIcon'
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon';
 import FormatHeader1Icon from 'mdi-react/FormatHeader1Icon';
 import FormatHeader2Icon from 'mdi-react/FormatHeader2Icon'
@@ -16,13 +21,15 @@ import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon';
 import FormatUnderlineIcon from 'mdi-react/FormatUnderlineIcon'
 import LinkIcon from 'mdi-react/LinkIcon'
 
-import Toolbar from './toolbar';
+import EditorToolbar from './toolbar';
 import ToolbarButton from './toolbarButton'
 import DriveToolbarButton from './driveToolbarButton'
 import LinkModal from './linkModal';
+
 import { getFolderId, listFiles, updateFile} from '../../lib/gdrive';
 import { getExtFromFilenName, getTitleFromFileName } from '../../lib/helper'
 import { EXT } from '../../lib/constants'
+import Logo from '../logo';
 
 /**
  * Define the default node type.
@@ -154,7 +161,7 @@ export default class TextEditor extends Component {
     render() {
         return (
             <>
-                <Toolbar>
+                <EditorToolbar>
                     {this.renderMarkButton('bold', FormatBoldIcon)}
                     {this.renderMarkButton('italic', FormatItalicIcon)}
                     {this.renderMarkButton('underlined', FormatUnderlineIcon)}
@@ -166,7 +173,7 @@ export default class TextEditor extends Component {
                     {this.renderBlockButton('block-quote', FormatQuoteCloseIcon)}
                     {this.renderBlockButton('numbered-list', FormatListNumberedIcon)}
                     {this.renderBlockButton('bulleted-list', FormatListBulletedIcon)}
-                </Toolbar>
+                </EditorToolbar>
                 <Editor 
                     spellCheck
                     autoFocus
@@ -319,11 +326,7 @@ export default class TextEditor extends Component {
     switch (node.type) {
       case 'link': {
         const hasLinks = this.hasLinks()
-        //const hasLink = this.hasLink()
         const getLink = this.getLink()
-        console.log('hasLinks:', hasLinks);
-        //console.log('haskLink:', hasLink);
-        console.log('getLink:', getLink);
 
         const {selection} = this.state.value;
 
@@ -334,34 +337,80 @@ export default class TextEditor extends Component {
 
         const { data } = node
         const href = data.get('href')
+        const isInternal = href.startsWith('/page/')
         return (
           <span>
             {showTooltip && (
-              <span style={{ 
-                position: 'absolute',
-                bottom: -35,
+              <Paper 
+              elevation={2} 
+              style={{ 
+                alignItems: 'center',
                 background: 'white',
-                minWidth: 275,
                 border: '1px solid lightgrey',
-                padding: 5
-                }}>
-                  <span>Icon</span>
+                cursor: 'default',
+                display: 'inline-flex',
+                minWidth: 275,
+                padding: 5,
+                position: 'absolute',
+                top: '100%',
+                zIndex: 1,
+                }}
+              >
+                  { isInternal ? <Logo  style={{ height: 18, width: 18}} /> : <EarthIcon style={{ height: 18, width: 18}} /> }
                   <a 
                     href={href} 
                     alt={href} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    onClick={() => window.open(href, '_blank')}>
+                    onClick={() => window.open(href, '_blank')}
+                    style={{
+                      cursor: 'pointer', 
+                      display: 'inline-block',
+                      fontFamily: 'Roboto, sans-serif',
+                      fontSize: '.9rem',
+                      fontWeight: 500,
+                      letterSpacing: 0.3,
+                      margin: '.1rem 8px 0',
+                      width: 180, 
+                      overflow: 'hidden',
+                      textDecoration: 'none',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
                       {href}
                   </a>
-                  <span onClick={(ev) => copyToClipboard(href)}>
-                    Copy
-                  </span>
-                  <span onClick={ev => window.prompt('Enter the URL of the link:', href)}>
-                    Edit
-                  </span>
-                  <span onClick={ ev => editor.command(unwrapLink).focus() }>Remove</span>
-                </span>
+                  <ToolbarButton 
+                    onMouseDown={(ev) => {
+                      copyToClipboard(href);
+                      this.editor.focus();
+                    }}
+                    style={{ height: 30, width: 30, }}
+                  >
+                    <ContentCopyIcon style={{ height: 18, width: 18}} />
+                  </ToolbarButton>
+                  
+                  <ToolbarButton
+                    onMouseDown={ev => {
+                      this.setState({ 
+                        isModalOpen: true, 
+                        autocompleteValue: href
+                      });
+                      this.editor.focus();
+                    }}
+                    style={{ height: 30, width: 30, }}
+                  >
+                    <PencilOutlineIcon style={{ height: 18, width: 18}} />
+                  </ToolbarButton> 
+                  <ToolbarButton
+                    onMouseDown={ ev => {
+                      editor.command(unwrapLink).focus()
+                    }}
+                    style={{ height: 30, width: 30, }}
+                  >
+                    <LinkOffIcon style={{ height: 18, width: 18}} />
+                  </ToolbarButton>
+                </Paper>
             )}
             <a {...attributes} href={href}>
               {children}
@@ -420,6 +469,9 @@ export default class TextEditor extends Component {
 }
 
   wrapLinkAndsetState(newState, href, text='') {
+    this.editor.focus()
+    console.log('isExpanded: ', this.editor.value.selection.isExpanded)
+    console.log('hasLinks:', this.hasLinks())
     if (this.editor.value.selection.isExpanded) {
       this.setState(
         newState,
@@ -438,7 +490,7 @@ export default class TextEditor extends Component {
   }
 
   onCloseModal = () => {
-    this.setState({ isModalOpen: false })
+    this.setState({ isModalOpen: false, autocompleteValue: '' })
 }
 
 
