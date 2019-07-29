@@ -1,12 +1,14 @@
 /* global gapi */
 /* global google */
-    import React from 'react';
-    import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive';
 
 import TextEditor from './texteditor'
 import Editor from './editor';
+import MaterialEditor from './material-editor'
+
 import Spinner from './spinner';
 
 import { API_KEY, EMPTYVALUE, UNTITLEDFILE, UNTITLEDNAME, EXT } from '../lib/constants';
@@ -88,7 +90,7 @@ export default class Page extends React.Component {
         if (this.props.isSignedIn && this.props.match.params.id) {
             return (
                 <div className="page">
-                    <div className="editorContainer">
+                   <div className="editorContainer">
                         {this.state.fileLoaded && (
                             <h1 className="editorHeader">
                                 <input className="editorInput"
@@ -100,10 +102,10 @@ export default class Page extends React.Component {
                             </h1>
                         )}
                         {this.state.fileLoaded && (
-                            editor 
+                            <MaterialEditor />
                         )}
                         {!this.state.fileLoaded && <Spinner />}
-                    </div>
+                    </div> 
                     <style>{`
                         .page {
                             display: flex;
