@@ -1,14 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-import logo from '../static/logo.svg';
-import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, InputBase, Paper } from '@material-ui/core';
+import logo from '../static/logo.svg'
+import { makeStyles } from '@material-ui/core/styles'
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    InputBase,
+    Paper,
+} from '@material-ui/core'
 import SearchIcon from 'mdi-react/SearchIcon'
 
 const Nav = props => {
-    const classes = useStyles();
+    const classes = useStyles()
     if (props.isSignedIn) {
         return (
             <AppBar className={classes.appBarSignedIn} color="default">
@@ -16,10 +22,18 @@ const Nav = props => {
                     <Toolbar className={classes.toolbar} variant="dense">
                         <div className={classes.titleWrapper}>
                             <Link className={classes.logoWrapper} to="/">
-                                <img className={classes.logo} src={logo} alt="App logo" />
+                                <img
+                                    className={classes.logo}
+                                    src={logo}
+                                    alt="App logo"
+                                />
                             </Link>
                             <Link className={classes.titleSignedIn} to="/">
-                                <Typography color="textPrimary" variant="h6" noWrap>
+                                <Typography
+                                    color="textPrimary"
+                                    variant="h6"
+                                    noWrap
+                                >
                                     Wiki
                                 </Typography>
                             </Link>
@@ -29,7 +43,7 @@ const Nav = props => {
                                 <SearchIcon />
                             </div>
                             <InputBase
-                                placeholder="Search Wiki" y
+                                placeholder="Search Wiki"
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
@@ -38,9 +52,7 @@ const Nav = props => {
                             />
                         </div>
                         <div className={classes.grow} />
-                        <div>
-                            {props.children}
-                        </div>
+                        <div>{props.children}</div>
                     </Toolbar>
                 </Paper>
             </AppBar>
@@ -51,34 +63,41 @@ const Nav = props => {
                 <Toolbar className={classes.toolbar}>
                     <div className={classes.titleWrapper}>
                         <Link className={classes.logoWrapper} to="/">
-                            <img className={classes.logo} src={logo} alt="App logo" />
+                            <img
+                                className={classes.logo}
+                                src={logo}
+                                alt="App logo"
+                            />
                         </Link>
                         <Link className={classes.title} to="/">
-                            <Typography className={classes.title} color="textPrimary" variant="h6" noWrap>
+                            <Typography
+                                className={classes.title}
+                                color="textPrimary"
+                                variant="h6"
+                                noWrap
+                            >
                                 Junto Wiki
-                </Typography>
+                            </Typography>
                         </Link>
                     </div>
                     <div className={classes.grow} />
 
-                    <div>
-                        {props.children}
-                    </div>
+                    <div>{props.children}</div>
                 </Toolbar>
             </AppBar>
         )
     }
 }
-export default Nav;
+export default Nav
 Nav.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
 }
 
 function useStyles() {
     const useStyles = makeStyles(theme => {
-        console.log(theme);
+        console.log(theme)
 
-        return ({
+        return {
             grow: {
                 flexGrow: 1,
             },
@@ -92,7 +111,7 @@ function useStyles() {
                 boxShadow: 'none',
                 [theme.breakpoints.up('md')]: {
                     borderBottom: `1px solid ${theme.palette.grey['A100']}`,
-                }
+                },
             },
             card: {
                 marginBottom: theme.spacing(1),
@@ -102,34 +121,32 @@ function useStyles() {
                 [theme.breakpoints.up('md')]: {
                     margin: 0,
                     boxShadow: 'none',
-                }
+                },
             },
             toolbar: {
                 [theme.breakpoints.up('md')]: {
                     minHeight: 64,
                     paddingLeft: 20,
                     paddingRight: 20,
-
-                }
+                },
             },
             menuButton: {
                 paddingLeft: 0,
             },
-            logoWrapper: {
-            },
+            logoWrapper: {},
             logo: {
                 maxHeight: 24,
                 marginRight: theme.spacing(1.5),
                 [theme.breakpoints.up('md')]: {
                     maxHeight: 40,
-                }
+                },
             },
             titleWrapper: {
                 display: 'flex',
                 alignItems: 'center',
                 [theme.breakpoints.up('md')]: {
                     width: 236,
-                }
+                },
             },
             titleSignedIn: {
                 display: 'none',
@@ -178,7 +195,7 @@ function useStyles() {
                 transition: theme.transitions.create('width'),
                 width: '100%',
             },
-        })
+        }
     })
-    return useStyles();
-};
+    return useStyles()
+}
