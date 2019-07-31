@@ -1,182 +1,214 @@
 import React, { Component } from 'react'
-import { Modal, ModalButton, ModalContent, ModalForm } from '../../slate-editor-components/src'
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
+    Button,
+    IconButton,
+} from '@material-ui/core'
+import { ModalForm } from '../../slate-editor-components/src'
 import { updateLinkStrategy, unlink } from './LinkUtils'
+import CloseIcon from 'mdi-react/CloseIcon'
+import LinkAutocomplete from './LinkAutocomplete'
+
+const classes = {}
 
 class LinkDataModal extends Component {
-  constructor(props) {
-    super(props)
+    constructor(props) {
+        super(props)
 
-    const { node } = this.props
+        const { node } = this.props
 
-    this.state = {
-      imageAttributes: {
-        title: node.data.get('title'),
-        href: node.data.get('href'),
-        text: node.data.get('text') || this.props.presetData.text,
-        target: node.data.get('target'),
-      },
+        this.state = {
+            imageAttributes: {
+                title: node.data.get('title'),
+                href: node.data.get('href'),
+                text: node.data.get('text') || this.props.presetData.text,
+                target: node.data.get('target'),
+            },
+        }
     }
-  }
 
-  hasNodeText(props) {
-    return props.node.data.get('text')
-  }
-
-  componentWillUpdate(props) {
-    const hasDiffText = this.props.presetData.text !== props.presetData.text
-
-    if (!this.hasNodeText(this.props) && hasDiffText) {
-      this.setLinkAttribute(
-        { target: { name: 'text' } },
-        props.presetData.text
-      )
+    hasNodeText(props) {
+        return props.node.data.get('text')
     }
-  }
 
-  componentWillMount() {
-    const hasDiffText = this.props.presetData.text !== this.state.imageAttributes.text
+    componentWillUpdate(props) {
+        const hasDiffText = this.props.presetData.text !== props.presetData.text
 
-    // update the text input value according to text that
-    // have modified inline outside of the modal.
-    if (this.hasNodeText(this.props) && hasDiffText) {
-      this.setLinkAttribute(
-        { target: { name: 'text' } },
-        this.props.presetData.text
-      )
+        if (!this.hasNodeText(this.props) && hasDiffText) {
+            this.setLinkAttribute(
+                { target: { name: 'text' } },
+                props.presetData.text
+            )
+        }
     }
-  }
 
-  componentDidMount() {
-    this.inputHref.focus()
-  }
+    componentWillMount() {
+        const hasDiffText =
+            this.props.presetData.text !== this.state.imageAttributes.text
 
-  setLinkAttribute(event, value) {
-    this.setState({
-      imageAttributes: {
-        ...this.state.imageAttributes,
-        [event.target.name]: value,
-      }
-    })
-  }
+        // update the text input value according to text that
+        // have modified inline outside of the modal.
+        if (this.hasNodeText(this.props) && hasDiffText) {
+            this.setLinkAttribute(
+                { target: { name: 'text' } },
+                this.props.presetData.text
+            )
+        }
+    }
 
-  isValidHref(href) {
-    // allow http://, https:// (secure) and non-protocol (default http://)
-    // eslint-disable-next-line
-    return /^(https?:\/\/)?[\w]{2,}\.[\w\.]{2,}$/.test(href)
-  }
+    onCloseModal = () => {
+        const { node, value, onChange, changeModalState } = this.props
 
-  render() {
-    const { node, value, onChange, changeModalState } = this.props
+        if (!node.data.get('href')) onChange(unlink(value.change()))
+        changeModalState(false)
+    }
 
-    return (
-      <Modal>
-        <Modal.Header
-          closeButtonAction={() => {
-            if (!node.data.get('href')) onChange(unlink(value.change()))
-            changeModalState(false)
-          }}
-        />
+    setLinkAttribute(event, value, fn = null) {
+        this.setState(
+            {
+                imageAttributes: {
+                    ...this.state.imageAttributes,
+                    [event.target.name]: value,
+                },
+            },
+            fn
+        )
+    }
 
-        <ModalContent>
-          <ModalContent.Right>
-            <ModalForm onSubmit={e => {
-              e.preventDefault()
+    isValidHref(href) {
+        // allow http://, https:// (secure) and non-protocol (default http://)
+        // eslint-disable-next-line
+        return /^(https?:\/\/)?[\w]{2,}\.[\w\.]{2,}$/.test(href)
+    }
 
-              const { imageAttributes } = this.state
+    render() {
+        const { node, value, onChange, changeModalState } = this.props
 
-              if (!imageAttributes.href) {
-                onChange(unlink(value.change()))
-              } else {
-                onChange(updateLinkStrategy({ change: value.change(), data: imageAttributes }))
-              }
+        return (
+            <Dialog
+                aria-labelledby="form-dialog-title"
+                onClose={this.onCloseModal}
+                fullWidth={true}
+                open={true}
+                style={{ margin: 0, padding: '1rem' }}
+            >
+                <DialogTitle>
+                    Insert Link
+                    <IconButton
+                        aria-label="close"
+                        className={classes.closeButton}
+                        onClick={this.onCloseModal}
+                        size="small"
+                        style={{
+                            position: 'absolute',
+                            right: '1rem',
+                            top: '1rem',
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <ModalForm
+                    onSubmit={e => {
+                        e.preventDefault()
 
-              changeModalState(false)
-            }}>
-              <ModalForm.Group>
-                <label htmlFor="image-plugin--edit-title">Título</label>
-                <ModalForm.LabelHelper>
-                  Esta mensagem aparecerá quando o cursor do mouse
-                  estiver posicionado sobre o link.
-                </ModalForm.LabelHelper>
-                <input
-                  id="image-plugin--edit-title"
-                  type="text"
-                  name="title"
-                  onClick={e => e.stopPropagation()}
-                  onChange={e => this.setLinkAttribute(e, e.target.value)}
-                  value={this.state.imageAttributes.title || ''}
-                  placeholder="Insira uma descrição para o link"
-                />
-              </ModalForm.Group>
+                        const { imageAttributes } = this.state
 
-              <ModalForm.Group>
-                <label htmlFor="image-plugin--edit-href">URL</label>
-                <input
-                  id="image-plugin--edit-href"
-                  type="text"
-                  name="href"
-                  onClick={e => e.stopPropagation()}
-                  onChange={e => this.setLinkAttribute(e, e.target.value)}
-                  value={this.state.imageAttributes.href || ''}
-                  placeholder="Ex: http://dominio.com"
-                  ref={input => this.inputHref = input}
-                />
-              </ModalForm.Group>
+                        if (!imageAttributes.href) {
+                            onChange(unlink(value.change()))
+                        } else {
+                            onChange(
+                                updateLinkStrategy({
+                                    change: value.change(),
+                                    data: imageAttributes,
+                                })
+                            )
+                        }
 
-              <ModalForm.Group>
-                <label htmlFor="image-plugin--edit-text">Texto</label>
-                <input
-                  id="image-plugin--edit-text"
-                  type="text"
-                  name="text"
-                  onClick={e => e.stopPropagation()}
-                  onChange={e => this.setLinkAttribute(e, e.target.value)}
-                  value={this.state.imageAttributes.text || ''}
-                />
-              </ModalForm.Group>
+                        changeModalState(false)
+                    }}
+                >
+                    <DialogContent>
+                        <div>
+                            <TextField
+                                label="Text"
+                                margin="dense"
+                                name="text"
+                                onClick={e => e.stopPropagation()}
+                                onChange={e =>
+                                    this.setLinkAttribute(e, e.target.value)
+                                }
+                                value={this.state.imageAttributes.text || ''}
+                                variant="outlined"
+                                InputLabelProps={{ shrink: true }}
+                            />
+                        </div>
+                        <div>
+                            <LinkAutocomplete
+                                onChange={e =>
+                                    this.setLinkAttribute(e, e.target.value)
+                                }
+                                onSelect={val => {
+                                    console.log('onSelect', val)
+                                    const e = { target: { name: 'href' } }
+                                    this.setLinkAttribute(
+                                        e,
+                                        '/page/' + val,
+                                        () => {
+                                            const {
+                                                imageAttributes,
+                                            } = this.state
 
-              <ModalForm.Group>
-                <label htmlFor="image-plugin--edit-open-external">
-                  <input
-                    id="image-plugin--edit-open-external"
-                    type="checkbox"
-                    name="target"
-                    onClick={e => e.stopPropagation()}
-                    onChange={e => this.setLinkAttribute(e, e.target.checked ? '_blank' : '_self')}
-                    checked={this.state.imageAttributes.target === '_blank'}
-                  />
-                  Abrir em nova aba
-                </label>
-              </ModalForm.Group>
+                                            if (!imageAttributes.href) {
+                                                onChange(unlink(value.change()))
+                                            } else {
+                                                onChange(
+                                                    updateLinkStrategy({
+                                                        change: value.change(),
+                                                        data: imageAttributes,
+                                                    })
+                                                )
+                                            }
 
-              <ModalButton.Container>
-                <ModalButton.Primary
-                  type="submit"
-                  text="Salvar"
-                />
-                <ModalButton.Opaque
-                  text="Cancelar"
-                  onClick={() => {
-                    if (!node.data.get('href')) onChange(unlink(value.change()))
-                    changeModalState(false)
-                  }}
-                />
-                <ModalButton.Danger
-                  text="Remover"
-                  onClick={e => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    onChange(unlink(value.change()))
-                    changeModalState(false)
-                  }}
-                />
-              </ModalButton.Container>
-            </ModalForm>
-          </ModalContent.Right>
-        </ModalContent>
-      </Modal>
-    )
-  }
+                                            changeModalState(false)
+                                        }
+                                    )
+                                }}
+                                value={this.state.imageAttributes.href || ''}
+                            />
+                        </div>
+                    </DialogContent>
+
+                    <DialogActions
+                        className={classes.actions}
+                        style={{ padding: '.5rem 1rem 1rem' }}
+                    >
+                        <Button
+                            onClick={this.onCloseModal}
+                            style={{
+                                textTransform: 'capitalize',
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            color="primary"
+                            disabled={true ? false : true}
+                            style={{ textTransform: 'capitalize' }}
+                            type="submit"
+                            variant="contained"
+                        >
+                            Apply
+                        </Button>
+                    </DialogActions>
+                </ModalForm>
+            </Dialog>
+        )
+    }
 }
 
 export default LinkDataModal
