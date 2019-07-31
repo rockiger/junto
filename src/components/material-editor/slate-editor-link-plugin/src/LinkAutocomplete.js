@@ -136,20 +136,21 @@ class LinkAutocomplete extends React.Component {
                     margin: 'dense',
                     name: 'href',
                     placeholder: 'Paste a link, or search',
+                    style: { width: 310 },
                     variant: 'outlined',
                     InputLabelProps: { shrink: true },
                 }}
                 menuStyle={{
-                    background: 'rgba(255, 255, 255, 0.9)',
+                    background: 'rgba(255, 255, 255, 1)',
                     borderRadius: '3px',
                     border: '1px solid #e5e5e5',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                     fontSize: '90%',
-                    maxHeight: '50%',
-                    minWidth: '24%',
+                    maxHeight: 214,
                     overflow: 'auto',
                     padding: '2px 0',
                     position: 'fixed',
+                    width: 310,
                     zIndex: 1,
                 }}
                 renderInput={props => <TextField {...props} />}
