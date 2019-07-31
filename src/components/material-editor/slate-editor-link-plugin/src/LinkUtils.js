@@ -33,9 +33,15 @@ export const insertLinkStrategy = change => {
     const { selection } = value
 
     if (hasLinks(value)) {
-        change.unwrapInline('link')
+        change.unwrapInline('link').focus()
     } else if (selection.isExpanded && !hasMultiBlocks(value)) {
-        change.wrapInline(createLink({ target: '_blank', openModal: true }))
+        change
+            .wrapInline(
+                createLink({ target: '_blank', openModal: true }, () =>
+                    document.getElementById('Autocomplete').focus()
+                )
+            )
+            .focus()
     } else if (hasMultiBlocks(value)) {
         console.info('[SlateJS][LinkPlugin] has multiple blocks on selection')
     } else if (selection.isCollapsed && !hasLinks(value)) {
