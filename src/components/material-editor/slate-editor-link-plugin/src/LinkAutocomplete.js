@@ -23,7 +23,7 @@ class LinkAutocomplete extends React.Component {
     }
 
     componentDidMount() {
-        this.autocomplete.current.focus()
+        setTimeout(() => document.getElementById('Autocomplete').focus(), 100)
         if (this.state.items.length === 0) this.listFiles()
     }
 
