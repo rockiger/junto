@@ -11,6 +11,7 @@ const MaterialEditor = React.forwardRef((props, ref) => {
             initialState={props.initialState}
             ref={ref}
             onChange={props.onChange}
+            plugins={plugins}
         >
             <SlateToolbar>
                 <LinkButton />

@@ -1,42 +1,49 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ReactModal from 'react-modal';
-import LinkAutocomplete from './linkAutocomplete';
-import { makeStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, IconButton } from '@material-ui/core';
-import CloseIcon from 'mdi-react/CloseIcon';
-
+import React from 'react'
+import PropTypes from 'prop-types'
+import ReactModal from 'react-modal'
+import LinkAutocomplete from './linkAutocomplete'
+import { makeStyles } from '@material-ui/core/styles'
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
+    Button,
+    IconButton,
+} from '@material-ui/core'
+import CloseIcon from 'mdi-react/CloseIcon'
 
 const useStyles = makeStyles(theme => ({
     root: {
-      margin: 0,
-      padding: theme.spacing(2),
+        margin: 0,
+        padding: theme.spacing(2),
     },
     closeButton: {
-      position: 'absolute',
-      right: theme.spacing(2),
-      top: theme.spacing(2),
-      color: theme.palette.grey[500],
+        position: 'absolute',
+        right: theme.spacing(2),
+        top: theme.spacing(2),
+        color: theme.palette.grey[500],
     },
     actions: {
         padding: theme.spacing(1, 2, 2, 2),
     },
-  }));
+}))
 
 const LinkModal = props => {
-    const classes = useStyles();
+    const classes = useStyles()
     return (
-        <Dialog 
+        <Dialog
             aria-labelledby="form-dialog-title"
             className={classes.root}
-            onClose={props.onCloseModal}  
-            open={props.isModalOpen} 
+            onClose={props.onCloseModal}
+            open={props.isModalOpen}
             fullWidth={true}
         >
             <DialogTitle>
                 Insert Link
-                <IconButton 
-                    aria-label="close" 
+                <IconButton
+                    aria-label="close"
                     className={classes.closeButton}
                     onClick={props.onCloseModal}
                     size="small"
@@ -45,7 +52,7 @@ const LinkModal = props => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <LinkAutocomplete 
+                <LinkAutocomplete
                     items={props.autocompleteItems}
                     value={props.autocompleteValue}
                     onSelect={props.onSelectAutocomplete}
@@ -53,22 +60,17 @@ const LinkModal = props => {
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button 
-                    onClick={props.onCloseModal}
-                >
-                    Cancel
-                </Button>
-                <Button 
+                <Button onClick={props.onCloseModal}>Cancel</Button>
+                <Button
                     color="primary"
                     disabled={props.autocompleteValue ? false : true}
-                    onClick={props.onClickSelectButton} 
+                    onClick={props.onClickSelectButton}
                     variant="contained"
                 >
                     Apply
                 </Button>
             </DialogActions>
         </Dialog>
-        
     )
 }
 LinkModal.propType = {
@@ -79,10 +81,10 @@ LinkModal.propType = {
     autocompleteItems: PropTypes.array.isRequired,
     autocompleteValue: PropTypes.string.isRequired,
     onChangeAutocomplete: PropTypes.func.isRequired,
-    onSelectAutocomplete: PropTypes.func.isRequired
+    onSelectAutocomplete: PropTypes.func.isRequired,
 }
 
-export default LinkModal;
+export default LinkModal
 
 /* 
 <ReactModal
