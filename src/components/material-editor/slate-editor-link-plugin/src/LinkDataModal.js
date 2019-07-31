@@ -142,6 +142,7 @@ class LinkDataModal extends Component {
                                 onChange={e =>
                                     this.setLinkAttribute(e, e.target.value)
                                 }
+                                style={{ width: 310 }}
                                 value={this.state.imageAttributes.text || ''}
                                 variant="outlined"
                                 InputLabelProps={{ shrink: true }}
