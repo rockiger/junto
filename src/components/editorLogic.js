@@ -27,17 +27,20 @@ function EditorLogic({
 
     useEffect(() => {
         return () => {
-            save(fileId, initialValue)
+            if (editor.current && !editor.current.state.readOnly) {
+                save(fileId, initialValue)
+            }
         }
     }, [])
 
     const initialState = Value.fromJSON(JSON.parse(initialValue))
     initStorage(initialState)
-    const ref = React.createRef()
+    const editor = React.createRef()
 
     function onChange(newValue) {
         // check, if we really need to save changes
-        if (ref.current && ref.current.state.value == newValue) {
+        if (editor.current && editor.current.state.value == newValue) {
+            console.log('onChange:', editor.current.state)
             return
         }
         const content = JSON.stringify(newValue.toJSON())
@@ -49,7 +52,8 @@ function EditorLogic({
             <MaterialEditor
                 initialState={initialState}
                 onChange={onChange}
-                ref={ref}
+                ref={editor}
+                save={() => save(fileId, initialValue)}
                 style={{
                     fontFamily: '"Open Sans", Helvetica, Arial, sans-serif',
                     fontSize: '1rem',
@@ -58,7 +62,13 @@ function EditorLogic({
                     overflowY: 'auto',
                 }}
             />
-            <Beforeunload onBeforeunload={() => save(fileId, initialValue)} />
+            <Beforeunload
+                onBeforeunload={() => {
+                    if (editor.current && !!editor.current.state.readOnly) {
+                        save(fileId, initialValue)
+                    }
+                }}
+            />
         </>
     )
 }

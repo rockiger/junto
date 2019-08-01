@@ -24,7 +24,7 @@ const MaterialEditor = React.forwardRef((props, ref) => {
                 <LinkButton />
                 <DriveButton />
                 <Divider />
-                <ToggleReadOnlyButton />
+                <ToggleReadOnlyButton save={props.save} />
             </SlateToolbar>
             <SlateContent style={props.style} />
         </SlateEditor>

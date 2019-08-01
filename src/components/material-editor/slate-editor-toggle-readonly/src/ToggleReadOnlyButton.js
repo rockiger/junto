@@ -11,6 +11,7 @@ const ToggleReadOnlyButton = ({
     onChange,
     changeState,
     className,
+    save,
     style,
     type,
 }) => (
@@ -19,6 +20,7 @@ const ToggleReadOnlyButton = ({
         style={style}
         type={type}
         onClick={e => {
+            if (!readOnly) save()
             changeState({ value, readOnly: !readOnly })
             const editor = document.getElementsByClassName('editor--content')[0]
                 .firstElementChild
