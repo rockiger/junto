@@ -2,7 +2,7 @@ import { PropTypes } from 'prop-types'
 import React, { Component } from 'react'
 import { Value } from 'slate'
 import classnames from 'classnames'
-import { react, typeCheck } from '../../slate-editor-utils/src'
+import { keyboardEvent, react, typeCheck } from '../../slate-editor-utils/src'
 
 import initialEditorState from './initialEditorState'
 
@@ -19,6 +19,9 @@ class SlateEditor extends Component {
         }
     }
 
+    componentDidMount() {
+        window.addEventListener('keydown', this.onKeyDown)
+    }
     //
     // Migrate Slate's Value object
     // From v0.25.3
@@ -51,6 +54,22 @@ class SlateEditor extends Component {
 
         const { onChange } = this.props
         if (typeCheck.isFunction(onChange)) onChange(value)
+    }
+
+    onKeyDown = ev => {
+        if (ev.key === 'e' && this.state.readOnly === true) {
+            ev.stopPropagation()
+            ev.preventDefault()
+            this.setState({ readOnly: false }, () =>
+                window.editorRef.current.focus()
+            )
+        } else if (keyboardEvent.isMod(ev) && ev.key === 'Enter') {
+            ev.stopPropagation()
+            ev.preventDefault()
+            this.setState({ readOnly: true }, () => {
+                document.querySelector('.editor--toolbar').click()
+            })
+        }
     }
 
     //
