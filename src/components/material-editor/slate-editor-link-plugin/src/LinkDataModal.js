@@ -65,6 +65,9 @@ class LinkDataModal extends Component {
 
         if (!node.data.get('href')) onChange(unlink(value.change()))
         changeModalState(false)
+
+        if (this.props.presetData.text === ' ')
+            onChange(value.change().insertText(''))
     }
 
     setLinkAttribute(event, value, fn = null) {
@@ -117,6 +120,9 @@ class LinkDataModal extends Component {
                         e.preventDefault()
 
                         const { imageAttributes } = this.state
+
+                        if (!imageAttributes.text.trim())
+                            imageAttributes.text = imageAttributes.href
 
                         if (!imageAttributes.href) {
                             onChange(unlink(value.change()))
