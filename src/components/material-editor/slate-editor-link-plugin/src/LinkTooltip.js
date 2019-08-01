@@ -16,17 +16,19 @@ const LinkTooltip = props => {
     return (
         <Paper
             elevation={2}
+            contentEditable={false}
             style={{
                 alignItems: 'center',
                 background: 'white',
                 border: '1px solid lightgrey',
-                bottom: -55,
+                bottom: -40,
                 cursor: 'default',
                 display: props.show ? 'inline-flex' : 'none',
-                left: 0,
+                left: -1,
                 minWidth: 275,
                 padding: 5,
                 position: 'absolute',
+                userSelect: 'none',
                 zIndex: 1,
             }}
         >

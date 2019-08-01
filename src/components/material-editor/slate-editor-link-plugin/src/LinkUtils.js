@@ -48,6 +48,16 @@ export const insertLinkStrategy = change => {
         console.info(
             '[SlateJS][LinkPlugin] selection collapsed, w/o links on selection'
         )
+        change
+            .insertText(' ')
+            .moveFocusBackward(' '.length)
+            .wrapInline(
+                createLink({ target: '_blank', openModal: true }, () =>
+                    document.getElementById('Autocomplete').focus()
+                )
+            )
+            .focus()
+        console.log(change)
     }
 
     return change
