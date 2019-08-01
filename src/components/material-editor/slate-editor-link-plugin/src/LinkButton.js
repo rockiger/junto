@@ -6,7 +6,15 @@ import LinkIcon from 'mdi-react/LinkIcon'
 import { Button } from '../../slate-editor-components/src'
 import { insertLinkStrategy, hasLinks } from './LinkUtils'
 
-const LinkButton = ({ value, onChange, className, style, type }) => {
+const LinkButton = ({
+    value,
+    onChange,
+    className,
+    outerState: { readOnly },
+    style,
+    type,
+}) => {
+    if (readOnly) return null
     return (
         <Button
             active={hasLinks(value)}

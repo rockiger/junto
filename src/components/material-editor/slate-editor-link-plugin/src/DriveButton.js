@@ -30,8 +30,9 @@ const openPicker = () => {
     picker.setVisible(true)
 }
 
-const DriveToolbarButton = props => {
-    const classes = useStyles()
+const DriveToolbarButton = ({ outerState: { readOnly } }) => {
+    const classes = useStyles() // HOOK: Don't call hooks conditionally
+    if (readOnly) return null
     return (
         <IconButton className={classes.icon} onClick={openPicker} size="small">
             <GoogleDriveIcon />

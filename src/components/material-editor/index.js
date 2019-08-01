@@ -6,10 +6,13 @@ import {
     LinkPlugin,
     LinkButton,
 } from './slate-editor-link-plugin/src'
+import { ToggleReadOnlyButton } from './slate-editor-toggle-readonly/src/'
+import Divider from './slate-editor-components/src/Divider'
 
 const plugins = [LinkPlugin()]
 
 const MaterialEditor = React.forwardRef((props, ref) => {
+    console.log('initialState:', props.initialState)
     return (
         <SlateEditor
             initialState={props.initialState}
@@ -20,6 +23,8 @@ const MaterialEditor = React.forwardRef((props, ref) => {
             <SlateToolbar>
                 <LinkButton />
                 <DriveButton />
+                <Divider />
+                <ToggleReadOnlyButton />
             </SlateToolbar>
             <SlateContent style={props.style} />
         </SlateEditor>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Tooltip } from '../../slate-editor-components/src'
+import { Link } from 'react-router-dom'
 import { hasLinks, getLink, unlink } from './LinkUtils'
 import LinkDataModal from './LinkDataModal'
 import LinkTooltip from './LinkTooltip'
@@ -59,7 +59,7 @@ class LinkNode extends Component {
             getLink(value) && node.key === getLink(value).key
         const showTooltip =
             !readOnly && selection.isCollapsed && focusedOnCurrentNode
-
+        console.log(node.data.get('href'))
         return (
             <span>
                 {!isModalActive ? null : (
@@ -86,18 +86,34 @@ class LinkNode extends Component {
                             }
                         />
                     )}
-                    <a
-                        {...attributes}
-                        className="link-node"
-                        href={node.data.get('href')}
-                        target={node.data.get('target')}
-                        title={node.data.get('title')}
-                        ref={text => {
-                            this.text = text
-                        }}
-                    >
-                        {children}
-                    </a>
+                    {node.data.get('href') &&
+                    node.data.get('href').startsWith('/page/') ? (
+                        <Link
+                            to={node.data.get('href')}
+                            {...attributes}
+                            style={{ color: 'red' }}
+                            className="link-node"
+                            title={node.data.get('title')}
+                            ref={text => {
+                                this.text = text
+                            }}
+                        >
+                            {children}
+                        </Link>
+                    ) : (
+                        <a
+                            {...attributes}
+                            className="link-node"
+                            href={node.data.get('href')}
+                            target={node.data.get('target')}
+                            title={node.data.get('title')}
+                            ref={text => {
+                                this.text = text
+                            }}
+                        >
+                            {children}
+                        </a>
+                    )}
                 </span>
             </span>
         )
