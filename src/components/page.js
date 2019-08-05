@@ -1,125 +1,128 @@
 /* global gapi */
 /* global google */
-import React from "react";
-import PropTypes from "prop-types";
-import { BrowserRouter as Router, Redirect } from "react-router-dom";
-import { renameFile, downloadFile, getFileDescription } from "../lib/gdrive";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { BrowserRouter as Router, Redirect } from 'react-router-dom'
+import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive'
 
-import TextEditor from "./texteditor";
-import Editor from "./editor";
-import MaterialEditor from "./material-editor";
-import EditorLogic from "./editorLogic";
+import TextEditor from './texteditor'
+import Editor from './editor'
+import MaterialEditor from './material-editor'
+import EditorLogic from './editorLogic'
 
-import Spinner from "./spinner";
+import Spinner from './spinner'
 
 import {
-  API_KEY,
-  EMPTYVALUE,
-  UNTITLEDFILE,
-  UNTITLEDNAME,
-  EXT
-} from "../lib/constants";
-import { getTitleFromFileName } from "../lib/helper";
+    API_KEY,
+    EMPTYVALUE,
+    UNTITLEDFILE,
+    UNTITLEDNAME,
+    EXT,
+} from '../lib/constants'
+import { getTitleFromFileName } from '../lib/helper'
 
 export default class Page extends React.Component {
-  state = {
-    editorDelta: {},
-    fileId: this.props.match.params.id,
-    fileName: UNTITLEDFILE,
-    pageHead: UNTITLEDNAME,
-    fileLoaded: false
-  };
-
-  componentDidMount() {
-    this.props.setGoToNewFile(false);
-  }
-
-  componentDidUpdate(prevProps) {
-    // load editor content when user is signed in and can use drive api
-    if (this.props.isSignedIn && !this.state.fileLoaded) {
-      this.loadEditorContent();
-      gapi.load("picker", { callback: () => console.log("Picker loaded") });
+    state = {
+        editorDelta: {},
+        fileId: this.props.match.params.id,
+        fileName: UNTITLEDFILE,
+        pageHead: UNTITLEDNAME,
+        fileLoaded: false,
     }
 
-    // when going from one page to the next, we check if the parmeter in the url changed
-    if (prevProps.match.params.id !== this.props.match.params.id) {
-      this.props.setGoToNewFile(false);
-      this.setState(
-        {
-          fileId: this.props.match.params.id,
-          fileLoaded: false
-        },
-        this.loadEditorContent
-      );
+    componentDidMount() {
+        this.props.setGoToNewFile(false)
     }
-  }
 
-  loadEditorContent = async ev => {
-    if (this.state.fileId) {
-      const fileContent = await downloadFile(this.state.fileId);
-      const fileDescription = await getFileDescription(this.state.fileId);
-      const pageHead = getTitleFromFileName(fileDescription.name);
-      console.log("this.loadEditorContent:", JSON.parse(fileContent));
-      this.setState({
-        initialContent: fileContent ? fileContent : "",
-        fileLoaded: true,
-        fileName: fileDescription.name,
-        pageHead
-      });
-    } else {
-      Router.push("/");
+    componentDidUpdate(prevProps) {
+        // load editor content when user is signed in and can use drive api
+        if (this.props.isSignedIn && !this.state.fileLoaded) {
+            this.loadEditorContent()
+            gapi.load('picker', {
+                callback: () => console.log('Picker loaded'),
+            })
+        }
+
+        // when going from one page to the next, we check if the parmeter in the url changed
+        if (prevProps.match.params.id !== this.props.match.params.id) {
+            this.props.setGoToNewFile(false)
+            this.setState(
+                {
+                    fileId: this.props.match.params.id,
+                    fileLoaded: false,
+                },
+                this.loadEditorContent
+            )
+        }
     }
-  };
 
-  setEditorDelta = editorDelta => {
-    this.setState({ editorDelta });
-  };
-
-  onBlurInput = ev => {
-    if (!this.state.pageHead) return;
-
-    if (this.state.fileName !== this.state.pageHead + EXT) {
-      this.setState({ fileName: this.state.pageHead });
-      renameFile(this.state.fileId, this.state.pageHead + EXT);
+    loadEditorContent = async ev => {
+        if (this.state.fileId) {
+            const fileContent = await downloadFile(this.state.fileId)
+            const fileDescription = await getFileDescription(this.state.fileId)
+            const pageHead = getTitleFromFileName(fileDescription.name)
+            console.log('this.loadEditorContent:', JSON.parse(fileContent))
+            this.setState({
+                initialContent: fileContent ? fileContent : '',
+                fileLoaded: true,
+                fileName: fileDescription.name,
+                pageHead,
+            })
+        } else {
+            Router.push('/')
+        }
     }
-  };
 
-  onChangeInput = ev => {
-    this.setState({ pageHead: ev.target.value });
-  };
+    setEditorDelta = editorDelta => {
+        this.setState({ editorDelta })
+    }
 
-  render() {
-    let editor = (
-      <EditorLogic
-        fileId={this.state.fileId}
-        fileLoaded={this.state.fileLoaded}
-        initialValue={this.state.initialContent}
-        setEditorDelta={this.setEditorDelta}
-      />
-    );
-    if (this.props.isSignedIn && this.props.match.params.id) {
-      return (
-        <div className="page">
-          <div className="editorContainer">
-            {this.state.fileLoaded && (
-              <h1 className="editorHeader">
-                <input
-                  className="editorInput"
-                  onBlur={this.onBlurInput}
-                  value={
-                    this.state.pageHead !== "Untitled page"
-                      ? this.state.pageHead
-                      : ""
-                  }
-                  placeholder="Untitled page"
-                  onChange={this.onChangeInput}
-                />
-              </h1>
-            )}
-            {this.state.fileLoaded && editor}
-            {!this.state.fileLoaded && <Spinner />}
-          </div>
-          <style>{`
+    onBlurInput = ev => {
+        if (!this.state.pageHead) return
+
+        if (this.state.fileName !== this.state.pageHead + EXT) {
+            this.setState({ fileName: this.state.pageHead })
+            renameFile(this.state.fileId, this.state.pageHead + EXT)
+        }
+    }
+
+    onChangeInput = ev => {
+        this.setState({ pageHead: ev.target.value })
+    }
+
+    render() {
+        let editor = (
+            <EditorLogic
+                fileId={this.state.fileId}
+                fileLoaded={this.state.fileLoaded}
+                initialValue={this.state.initialContent}
+                setEditorDelta={this.setEditorDelta}
+            />
+        )
+        if (this.props.isSignedIn && this.props.match.params.id) {
+            return (
+                <div className="page">
+                    <div className="editorContainer">
+                        {this.state.fileLoaded && (
+                            <h1 className="editorHeader">
+                                <input
+                                    className="editorInput"
+                                    onBlur={this.onBlurInput}
+                                    value={
+                                        this.state.pageHead !== 'Untitled page'
+                                            ? this.state.pageHead
+                                            : ''
+                                    }
+                                    placeholder="Untitled page"
+                                    onKeyDown={ev => ev.stopPropagation()}
+                                    onChange={this.onChangeInput}
+                                />
+                            </h1>
+                        )}
+                        {this.state.fileLoaded && editor}
+                        {!this.state.fileLoaded && <Spinner />}
+                    </div>
+                    <style>{`
                         .page {
                             display: flex;
                         }
@@ -146,23 +149,23 @@ export default class Page extends React.Component {
                             border-color: #dadce0;
                         }                        
                     `}</style>
-        </div>
-      );
-    } else if (!this.props.isSignedIn && this.props.isSigningIn)
-      return <Spinner />;
-    else if (!this.props.isSignedIn && !this.props.isSigningIn) {
-      return <Redirect to="/" />;
+                </div>
+            )
+        } else if (!this.props.isSignedIn && this.props.isSigningIn)
+            return <Spinner />
+        else if (!this.props.isSignedIn && !this.props.isSigningIn) {
+            return <Redirect to="/" />
+        }
     }
-  }
 }
 
 Page.propTypes = {
-  isSignedIn: PropTypes.bool.isRequired,
-  isSigningIn: PropTypes.bool.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired
-    })
-  }),
-  setGoToNewFile: PropTypes.func.isRequired
-};
+    isSignedIn: PropTypes.bool.isRequired,
+    isSigningIn: PropTypes.bool.isRequired,
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+        }),
+    }),
+    setGoToNewFile: PropTypes.func.isRequired,
+}
