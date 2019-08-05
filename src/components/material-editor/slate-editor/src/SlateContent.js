@@ -2,6 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import { Editor } from 'slate-react'
 
+import { onPaste } from '../../slate-editor-paste-plugin/src'
 //
 // Nodes
 //
@@ -103,6 +104,7 @@ export default ({
                 plugins={plugins}
                 value={value}
                 onChange={onChange}
+                onPaste={onPaste}
                 readOnly={readOnly}
                 outerState={outerState}
                 style={style}
