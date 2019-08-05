@@ -24,6 +24,7 @@
     "react-s3-uploader": "^4.8.0",
     "react-scripts": "3.0.1",
     "slate": "0.41.3",
+    "slate-html-serializer": "^0.8.6",
     "slate-react": "0.18.11"
   },
   "scripts": {
