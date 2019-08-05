@@ -109,7 +109,6 @@ export default ({
                 ref={editorRef}
                 renderNode={renderNode}
                 renderMark={renderMark}
-                onKeyDown={el => console.log('onKeyDown:', el)}
                 {...rest}
             />
             {children}
