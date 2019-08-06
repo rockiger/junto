@@ -4,6 +4,7 @@ import PencilOffOutlineIcon from 'mdi-react/PencilOffOutlineIcon'
 import PencilOutlineIcon from 'mdi-react/PencilOutlineIcon'
 
 import { Button } from '../../slate-editor-components/src'
+import { platform } from '../../slate-editor-utils/src'
 
 const ToggleReadOnlyButton = props => {
     const {
@@ -28,6 +29,9 @@ const ToggleReadOnlyButton = props => {
                 if (readOnly) window.editorRef.current.focus()
             }}
             readOnly={readOnly}
+            title={
+                readOnly ? `Edit (e)` : `Save (${platform.controlKey()}+Enter)`
+            }
         >
             {readOnly ? <PencilOutlineIcon /> : <PencilOffOutlineIcon />}
         </Button>

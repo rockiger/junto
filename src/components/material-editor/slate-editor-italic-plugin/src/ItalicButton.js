@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import FormatItalicIcon from 'mdi-react/FormatItalicIcon'
 
 import { Button } from '../../slate-editor-components/src'
+import { platform } from '../../slate-editor-utils/src'
 
 import { italicMarkStrategy, hasMark } from './ItalicUtils'
 
@@ -22,6 +23,7 @@ const ItalicButton = ({
             type={type}
             onClick={e => onChange(italicMarkStrategy(value.change()))}
             className={classnames('slate-italic-plugin--button', className)}
+            title={`Italic (${platform.controlKey()}+I)`}
         >
             <FormatItalicIcon />
         </Button>
