@@ -1,5 +1,4 @@
 import React from 'react'
-import FontAwesome from 'react-fontawesome'
 import classnames from 'classnames'
 
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon'
