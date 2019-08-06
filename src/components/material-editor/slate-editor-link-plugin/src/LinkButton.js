@@ -13,9 +13,8 @@ const LinkButton = ({
     outerState: { readOnly },
     style,
     type,
-}) => {
-    if (readOnly) return null
-    return (
+}) =>
+    readOnly ? null : (
         <Button
             active={hasLinks(value)}
             style={style}
@@ -26,6 +25,5 @@ const LinkButton = ({
             <LinkIcon />
         </Button>
     )
-}
 
 export default LinkButton
