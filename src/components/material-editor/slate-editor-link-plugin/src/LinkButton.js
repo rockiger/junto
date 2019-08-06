@@ -3,6 +3,7 @@ import classnames from 'classnames'
 
 import LinkIcon from 'mdi-react/LinkIcon'
 
+import { platform } from '../../slate-editor-utils/src'
 import { Button } from '../../slate-editor-components/src'
 import { insertLinkStrategy, hasLinks } from './LinkUtils'
 
@@ -21,6 +22,7 @@ const LinkButton = ({
             type={type}
             onMouseDown={e => onChange(insertLinkStrategy(value.change()))}
             className={classnames('slate-link-plugin--button', className)}
+            title={`Insert Link (${platform.controlKey()}+K)`}
         >
             <LinkIcon />
         </Button>

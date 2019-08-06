@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import blue from '@material-ui/core/colors/blue'
 
 import { IconButton } from '@material-ui/core'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import { typeCheck } from '../../../slate-editor-utils/src'
 
@@ -26,26 +27,29 @@ const Button = ({
     onClick,
     className,
     style,
+    title,
     type,
     active,
     ...props
 }) => {
     const classes = useStyles()
     return (
-        <IconButton
-            id={id}
-            style={style}
-            type={type}
-            onClick={e => typeCheck.isFunction(onClick) && onClick(e)}
-            className={classnames(
-                className,
-                active ? classes.active : classes.unactive
-            )}
-            size="small"
-            {...props}
-        >
-            {children}
-        </IconButton>
+        <Tooltip title={title ? title : ''} enterDelay={500} leaveDelay={200}>
+            <IconButton
+                id={id}
+                style={style}
+                type={type}
+                onClick={e => typeCheck.isFunction(onClick) && onClick(e)}
+                className={classnames(
+                    className,
+                    active ? classes.active : classes.unactive
+                )}
+                size="small"
+                {...props}
+            >
+                {children}
+            </IconButton>
+        </Tooltip>
     )
 }
 
