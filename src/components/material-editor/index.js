@@ -10,8 +10,12 @@ import { ToggleReadOnlyButton } from './slate-editor-toggle-readonly/src/'
 import Divider from './slate-editor-components/src/Divider'
 import { BoldButton, BoldPlugin } from './slate-editor-bold-plugin/src'
 import { ItalicButton, ItalicPlugin } from './slate-editor-italic-plugin/src'
+import {
+    UnderlinePlugin,
+    UnderlineButton,
+} from './slate-editor-underline-plugin/src'
 
-const plugins = [BoldPlugin(), ItalicPlugin(), LinkPlugin()]
+const plugins = [BoldPlugin(), ItalicPlugin(), LinkPlugin(), UnderlinePlugin()]
 
 const MaterialEditor = React.forwardRef((props, ref) => {
     console.log('initialState:', props.initialState)
@@ -25,6 +29,7 @@ const MaterialEditor = React.forwardRef((props, ref) => {
             <SlateToolbar>
                 <BoldButton />
                 <ItalicButton />
+                <UnderlineButton />
 
                 <LinkButton />
                 <DriveButton />
