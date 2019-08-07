@@ -18,8 +18,13 @@ import {
     StrikethroughButton,
     StrikethroughPlugin,
 } from './slate-editor-strikethrough-plugin/src'
+import {
+    AlignmentPlugin,
+    AlignmentButtonBar,
+} from './slate-editor-alignment-plugin/src'
 
 const plugins = [
+    AlignmentPlugin(),
     BoldPlugin(),
     ItalicPlugin(),
     LinkPlugin(),
@@ -37,6 +42,8 @@ const MaterialEditor = React.forwardRef((props, ref) => {
             plugins={plugins}
         >
             <SlateToolbar>
+                <AlignmentButtonBar />
+
                 <BoldButton />
                 <ItalicButton />
                 <UnderlineButton />
