@@ -32,6 +32,8 @@ import { ItalicMark } from '../../slate-editor-italic-plugin/src'
 import { StrikethroughMark } from '../../slate-editor-strikethrough-plugin/src'
 import { UnderlineMark } from '../../slate-editor-underline-plugin/src'
 
+import './SlateContent.css'
+
 /* eslint-disable default-case */
 export const renderNode = props => {
     switch (props.node.type) {
