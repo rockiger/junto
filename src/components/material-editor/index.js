@@ -46,17 +46,24 @@ const MaterialEditor = React.forwardRef((props, ref) => {
             <SlateToolbar>
                 <AlignmentButtonBar />
 
+                <Divider />
+
                 <BoldButton />
                 <ItalicButton />
                 <UnderlineButton />
                 <StrikethroughButton />
 
+                <Divider />
+
                 <LinkButton />
                 <DriveButton />
+
+                <Divider />
 
                 <ListButtonBar />
 
                 <Divider />
+
                 <ToggleReadOnlyButton save={props.save} />
             </SlateToolbar>
             <SlateContent style={props.style} />
