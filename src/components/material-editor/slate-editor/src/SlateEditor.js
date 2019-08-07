@@ -14,7 +14,7 @@ class SlateEditor extends Component {
             value: this.migrateStateVersion(
                 props.initialState || initialEditorState
             ),
-            readOnly: false, //true,
+            readOnly: true,
             uid: new Date().getUTCMilliseconds(),
         }
     }
