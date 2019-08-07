@@ -1,13 +1,19 @@
 import { strikethroughMarkStrategy } from './StrikethroughUtils'
 
-
 const StrikethroughKeyboardShortcut = (event, change) => {
-  const key = event.key === 's'
-  const mac = event.metaKey && event.ctrlKey && key
-  const win = event.ctrlKey && event.altKey && key
+    const key = event.key === 'S'
+    const mac = event.metaKey && event.shiftKey && key
+    const win = event.shiftKey && event.ctrlKey && key
 
-  if (mac || win) return strikethroughMarkStrategy(change)
-  return
+    console.log(
+        'event:',
+        event.shiftKey,
+        event.altKey,
+        event.metaKey,
+        event.key
+    )
+    if (mac || win) return strikethroughMarkStrategy(change)
+    return
 }
 
 export default StrikethroughKeyboardShortcut

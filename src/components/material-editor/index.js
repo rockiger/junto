@@ -14,8 +14,18 @@ import {
     UnderlinePlugin,
     UnderlineButton,
 } from './slate-editor-underline-plugin/src'
+import {
+    StrikethroughButton,
+    StrikethroughPlugin,
+} from './slate-editor-strikethrough-plugin/src'
 
-const plugins = [BoldPlugin(), ItalicPlugin(), LinkPlugin(), UnderlinePlugin()]
+const plugins = [
+    BoldPlugin(),
+    ItalicPlugin(),
+    LinkPlugin(),
+    StrikethroughPlugin(),
+    UnderlinePlugin(),
+]
 
 const MaterialEditor = React.forwardRef((props, ref) => {
     console.log('initialState:', props.initialState)
@@ -30,6 +40,7 @@ const MaterialEditor = React.forwardRef((props, ref) => {
                 <BoldButton />
                 <ItalicButton />
                 <UnderlineButton />
+                <StrikethroughButton />
 
                 <LinkButton />
                 <DriveButton />
