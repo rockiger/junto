@@ -22,12 +22,14 @@ import {
     AlignmentPlugin,
     AlignmentButtonBar,
 } from './slate-editor-alignment-plugin/src'
+import { ListPlugin, ListButtonBar } from './slate-editor-list-plugin/src'
 
 const plugins = [
     AlignmentPlugin(),
     BoldPlugin(),
     ItalicPlugin(),
     LinkPlugin(),
+    ListPlugin(),
     StrikethroughPlugin(),
     UnderlinePlugin(),
 ]
@@ -51,6 +53,9 @@ const MaterialEditor = React.forwardRef((props, ref) => {
 
                 <LinkButton />
                 <DriveButton />
+
+                <ListButtonBar />
+
                 <Divider />
                 <ToggleReadOnlyButton save={props.save} />
             </SlateToolbar>
