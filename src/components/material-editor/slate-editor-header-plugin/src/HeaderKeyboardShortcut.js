@@ -1,9 +1,4 @@
-import {
-    h1Strategy,
-    h2Strategy,
-    headingTypes,
-    headingStrategy,
-} from './HeaderUtils'
+import { headingTypes, headingStrategy } from './HeaderUtils'
 
 const HeaderKeyboardShortcut = (event, change) => {
     // „ for neo, ( for german layout

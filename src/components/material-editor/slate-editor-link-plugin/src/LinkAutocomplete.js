@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Autocomplete from 'react-autocomplete'
-import { TextField, MenuItem } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 
 import { getFolderId, listFiles } from '../../../../lib/gdrive'
 import {

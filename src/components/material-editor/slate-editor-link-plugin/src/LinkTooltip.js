@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Paper, Toolbar, Link } from '@material-ui/core'
+import { Paper, Link } from '@material-ui/core'
 
 import ContentCopyIcon from 'mdi-react/ContentCopyIcon'
 import PencilOutlineIcon from 'mdi-react/PencilOutlineIcon'
@@ -11,8 +11,6 @@ import Logo from '../../../logo'
 import { Button as ToolbarButton } from '../../slate-editor-components/src'
 
 const LinkTooltip = props => {
-    const [isInternal, setIsInternal] = useState(false)
-
     return (
         <Paper
             elevation={2}
@@ -85,7 +83,6 @@ const LinkTooltip = props => {
 LinkTooltip.propTypes = {
     href: PropTypes.string.isRequired,
     onClickCopy: PropTypes.func.isRequired,
-    onClickEdit: PropTypes.func.isRequired,
     onClickEdit: PropTypes.func.isRequired,
     show: PropTypes.bool,
 }

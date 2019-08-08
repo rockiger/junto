@@ -10,7 +10,6 @@ const ToggleReadOnlyButton = props => {
     const {
         value,
         outerState: { readOnly },
-        onChange,
         changeState,
         className,
         save,
