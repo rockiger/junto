@@ -16,7 +16,6 @@ const ToggleReadOnlyButton = props => {
         style,
         type,
     } = props
-    console.log(props)
     return (
         <Button
             className={className}

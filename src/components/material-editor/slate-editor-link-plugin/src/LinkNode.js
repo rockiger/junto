@@ -52,14 +52,12 @@ class LinkNode extends Component {
                 props: { value },
             },
         } = this.props
-        console.log(value)
         window.value = this.props
         const { selection } = value
         const focusedOnCurrentNode =
             getLink(value) && node.key === getLink(value).key
         const showTooltip =
             !readOnly && selection.isCollapsed && focusedOnCurrentNode
-        console.log(node.data.get('href'))
         return (
             <span>
                 {!isModalActive ? null : (

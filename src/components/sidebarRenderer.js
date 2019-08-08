@@ -1,22 +1,21 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles';
-import { Fab } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles'
+import { Fab } from '@material-ui/core'
 import AddIcon from 'mdi-react/AddIcon'
 
-
 const SidebarRenderer = props => {
-    const classes = useStyles();
+    const classes = useStyles()
 
-    if (props.goToNewFile && props.fileId ) {
+    if (props.goToNewFile && props.fileId) {
         return <Redirect to={`/page/${props.fileId}`} />
     }
 
     return (
         <>
-            <Fab 
+            <Fab
                 arial-label="Add"
-                className={classes.fab} 
+                className={classes.fab}
                 color="secondary"
                 onClick={props.onClickNewButton}
             >
@@ -27,7 +26,8 @@ const SidebarRenderer = props => {
                     className="Sidebar-newButton"
                     onClick={props.onClickNewButton}
                 >
-                    <svg className={classes.svg}
+                    <svg
+                        className={classes.svg}
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -69,15 +69,13 @@ const SidebarRenderer = props => {
                 `}</style>
             </div>
         </>
-    );
+    )
 }
-export default SidebarRenderer;
+export default SidebarRenderer
 
 function useStyles() {
     const useStyles = makeStyles(theme => {
-        console.log(theme);
-
-        return ({
+        return {
             fab: {
                 color: '#fff',
                 position: 'fixed',
@@ -86,7 +84,7 @@ function useStyles() {
                 visibility: 'visible',
                 [theme.breakpoints.up('md')]: {
                     display: 'none',
-                }
+                },
             },
             link: {
                 display: 'flex',
@@ -102,8 +100,8 @@ function useStyles() {
                 fill: theme.palette.secondary.main,
                 paddingRight: theme.spacing(1),
                 width: theme.spacing(5),
-            }
-        })
+            },
+        }
     })
-    return useStyles();
+    return useStyles()
 }

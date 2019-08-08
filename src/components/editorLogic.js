@@ -20,7 +20,7 @@ function EditorLogic({
     useEffect(() => {
         return () => {
             if (currentEditor && !currentEditor.state.readOnly) {
-                console.log('useEffect for save')
+                console.log('useEffect for save') // check if gets fired to often
                 save(fileId, initialValue)
             }
         }

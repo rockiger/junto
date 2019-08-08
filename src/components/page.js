@@ -18,6 +18,7 @@ export default class Page extends React.Component {
         fileName: UNTITLEDFILE,
         pageHead: UNTITLEDNAME,
         fileLoaded: false,
+        fileLoading: false,
     }
 
     componentDidMount() {
@@ -26,10 +27,16 @@ export default class Page extends React.Component {
 
     componentDidUpdate(prevProps) {
         // load editor content when user is signed in and can use drive api
-        if (this.props.isSignedIn && !this.state.fileLoaded) {
-            this.loadEditorContent()
-            gapi.load('picker', {
-                callback: () => console.log('Picker loaded'),
+        if (
+            this.props.isSignedIn &&
+            !this.state.fileLoaded &&
+            !this.state.fileLoading
+        ) {
+            this.setState({ fileLoading: true }, () => {
+                this.loadEditorContent()
+                gapi.load('picker', {
+                    callback: () => console.log('Picker loaded'),
+                })
             })
         }
 
@@ -55,6 +62,7 @@ export default class Page extends React.Component {
             this.setState({
                 initialContent: fileContent ? fileContent : '',
                 fileLoaded: true,
+                fileLoading: false,
                 fileName: fileDescription.name,
                 pageHead,
             })
