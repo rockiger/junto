@@ -1,24 +1,14 @@
 /* global gapi */
-/* global google */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Redirect } from 'react-router-dom'
 import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive'
 
-import TextEditor from './texteditor'
-import Editor from './editor'
-import MaterialEditor from './material-editor'
 import EditorLogic from './editorLogic'
 
 import Spinner from './spinner'
 
-import {
-    API_KEY,
-    EMPTYVALUE,
-    UNTITLEDFILE,
-    UNTITLEDNAME,
-    EXT,
-} from '../lib/constants'
+import { UNTITLEDFILE, UNTITLEDNAME, EXT } from '../lib/constants'
 import { getTitleFromFileName } from '../lib/helper'
 
 export default class Page extends React.Component {

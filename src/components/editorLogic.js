@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 
 import MaterialEditor from './material-editor'
-import { getFolderId, listFiles, updateFile } from '../lib/gdrive'
+import { updateFile } from '../lib/gdrive'
 
-import {
-    API_KEY,
-    EMPTYVALUE,
-    UNTITLEDFILE,
-    UNTITLEDNAME,
-    EXT,
-    LOCALSTORAGE_NAME,
-} from '../lib/constants'
+import { LOCALSTORAGE_NAME } from '../lib/constants'
 
 function EditorLogic({
     fileId,
@@ -21,25 +14,24 @@ function EditorLogic({
     setEditorDelta,
     ...props
 }) {
-    const [fileName, setFileName] = useState(UNTITLEDFILE)
-    const [pageHead, setPageHead] = useState(UNTITLEDNAME)
-    //const [fileLoaded, setFileLoaded] = useState(false);
+    const editor = React.createRef()
+    const currentEditor = editor.current
 
     useEffect(() => {
         return () => {
-            if (editor.current && !editor.current.state.readOnly) {
+            if (currentEditor && !currentEditor.state.readOnly) {
+                console.log('useEffect for save')
                 save(fileId, initialValue)
             }
         }
-    }, [])
+    }, [currentEditor, fileId, initialValue])
 
     const initialState = Value.fromJSON(JSON.parse(initialValue))
     initStorage(initialState)
-    const editor = React.createRef()
 
     function onChange(newValue) {
         // check, if we really need to save changes
-        if (editor.current && editor.current.state.value == newValue) {
+        if (editor.current && editor.current.state.value === newValue) {
             console.log('onChange:', editor.current.state)
             return
         }
@@ -96,12 +88,4 @@ async function save(fileId, initialValue) {
     }
 }
 
-function compare(obj1, obj2) {
-    return (
-        Object.keys(obj1).length === Object.keys(obj2).length &&
-        Object.keys(obj1).every(
-            key => obj2.hasOwnProperty(key) && obj1[key] === obj2[key]
-        )
-    )
-}
 export default EditorLogic

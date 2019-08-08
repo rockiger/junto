@@ -1,6 +1,5 @@
 import React from 'react'
 import classnames from 'classnames'
-import FontAwesome from 'react-fontawesome'
 
 import FormatAlignCenterIcon from 'mdi-react/FormatAlignCenterIcon'
 

@@ -11,7 +11,7 @@ import serializer from './PasteSerializer'
 
 const onPaste = (event, change) => {
     const transfer = getEventTransfer(event)
-    if (transfer.type != 'html') return
+    if (transfer.type !== 'html') return
     const { document } = serializer.deserialize(transfer.html)
     change.insertFragment(document)
     return true

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { hasLinks, getLink, unlink } from './LinkUtils'
+import { getLink, unlink } from './LinkUtils'
 import LinkDataModal from './LinkDataModal'
 import LinkTooltip from './LinkTooltip'
 

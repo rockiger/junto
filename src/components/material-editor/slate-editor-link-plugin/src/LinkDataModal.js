@@ -89,7 +89,7 @@ class LinkDataModal extends Component {
     }
 
     render() {
-        const { node, value, onChange, changeModalState } = this.props
+        const { value, onChange, changeModalState } = this.props
 
         return (
             <Dialog
