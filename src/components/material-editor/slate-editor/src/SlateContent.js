@@ -33,6 +33,7 @@ import { StrikethroughMark } from '../../slate-editor-strikethrough-plugin/src'
 import { UnderlineMark } from '../../slate-editor-underline-plugin/src'
 
 import './SlateContent.css'
+import { H1Node, H2Node } from '../../slate-editor-header-plugin/src'
 
 /* eslint-disable default-case */
 export const renderNode = props => {
@@ -47,6 +48,10 @@ export const renderNode = props => {
             return <GridRowNode {...props} />
         case 'grid-cell':
             return <GridCellNode {...props} />
+        case 'heading-one':
+            return <H1Node {...props} />
+        case 'heading-two':
+            return <H2Node {...props} />
         case 'image':
             return <ImageNode {...props} />
         case 'imageLink':

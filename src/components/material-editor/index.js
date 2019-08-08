@@ -23,11 +23,13 @@ import {
     AlignmentButtonBar,
 } from './slate-editor-alignment-plugin/src'
 import { ListPlugin, ListButtonBar } from './slate-editor-list-plugin/src'
+import { HeaderPlugin, HeaderButtonBar } from './slate-editor-header-plugin/src'
 
 const plugins = [
     AlignmentPlugin(),
     BoldPlugin(),
     ItalicPlugin(),
+    HeaderPlugin(),
     LinkPlugin(),
     ListPlugin(),
     StrikethroughPlugin(),
@@ -44,6 +46,10 @@ const MaterialEditor = React.forwardRef((props, ref) => {
             plugins={plugins}
         >
             <SlateToolbar>
+                <HeaderButtonBar />
+
+                <Divider />
+
                 <AlignmentButtonBar />
 
                 <Divider />
