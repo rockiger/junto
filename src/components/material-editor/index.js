@@ -49,10 +49,6 @@ const MaterialEditor = React.forwardRef((props, ref) => {
 
                 <Divider />
 
-                <AlignmentButtonBar />
-
-                <Divider />
-
                 <BoldButton />
                 <ItalicButton />
                 <UnderlineButton />
@@ -62,6 +58,10 @@ const MaterialEditor = React.forwardRef((props, ref) => {
 
                 <LinkButton />
                 <DriveButton />
+
+                <Divider />
+
+                <AlignmentButtonBar />
 
                 <Divider />
 
