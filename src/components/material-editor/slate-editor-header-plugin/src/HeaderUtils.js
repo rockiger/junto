@@ -21,3 +21,12 @@ export const headingStrategy = (change, type) => {
 export const h1Strategy = change => headingStrategy(change, 'heading-one')
 
 export const h2Strategy = change => headingStrategy(change, 'heading-two')
+
+export const headingTypes = {
+    1: 'one',
+    2: 'two',
+    3: 'three',
+    4: 'four',
+    5: 'five',
+    6: 'six',
+}
