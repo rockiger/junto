@@ -33,7 +33,14 @@ import { StrikethroughMark } from '../../slate-editor-strikethrough-plugin/src'
 import { UnderlineMark } from '../../slate-editor-underline-plugin/src'
 
 import './SlateContent.css'
-import { H1Node, H2Node } from '../../slate-editor-header-plugin/src'
+import {
+    H1Node,
+    H2Node,
+    H3Node,
+    H4Node,
+    H5Node,
+    H6Node,
+} from '../../slate-editor-header-plugin/src'
 
 /* eslint-disable default-case */
 export const renderNode = props => {
@@ -52,6 +59,14 @@ export const renderNode = props => {
             return <H1Node {...props} />
         case 'heading-two':
             return <H2Node {...props} />
+        case 'heading-three':
+            return <H3Node {...props} />
+        case 'heading-four':
+            return <H4Node {...props} />
+        case 'heading-five':
+            return <H5Node {...props} />
+        case 'heading-six':
+            return <H6Node {...props} />
         case 'image':
             return <ImageNode {...props} />
         case 'imageLink':
