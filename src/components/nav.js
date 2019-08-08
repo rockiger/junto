@@ -95,8 +95,6 @@ Nav.propTypes = {
 
 function useStyles() {
     const useStyles = makeStyles(theme => {
-        console.log(theme)
-
         return {
             grow: {
                 flexGrow: 1,

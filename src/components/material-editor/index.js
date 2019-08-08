@@ -37,7 +37,6 @@ const plugins = [
 ]
 
 const MaterialEditor = React.forwardRef((props, ref) => {
-    console.log('initialState:', props.initialState)
     return (
         <SlateEditor
             initialState={props.initialState}

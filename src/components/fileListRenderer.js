@@ -1,46 +1,48 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
 import Spinner from './spinner'
-import { EXT } from '../lib/constants';
-import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper';
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { EXT } from '../lib/constants'
+import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper'
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 const FileListRenderer = props => {
-    const classes = useStyles();
+    const classes = useStyles()
     return (
         <div className="filelist">
             <h1>Your work</h1>
             <div className="filelist-tagline">Last edited</div>
             {props.isLoading && <Spinner />}
-            {!props.isLoading && <List className="filelist-list">
-                {props.files
-                    .filter(file => {
-                        console.log('file.name:', file.name)
-                        const ext = getExtFromFilenName(file.name);
-                        console.log('ext:', ext);
-                        
-                        return (ext === EXT)
-                    })
-                    .map(file => {
-                        const filename = getTitleFromFileName(file.name);
-                        return (
-                            <ListItem className={classes.listitem} key={file.id}>
-                                <Link className={classes.link}
-                                    to={`/page/${file.id}`}
+            {!props.isLoading && (
+                <List className="filelist-list">
+                    {props.files
+                        .filter(file => {
+                            const ext = getExtFromFilenName(file.name)
+                            return ext === EXT
+                        })
+                        .map(file => {
+                            const filename = getTitleFromFileName(file.name)
+                            return (
+                                <ListItem
+                                    className={classes.listitem}
+                                    key={file.id}
                                 >
-                                    <ListItemIcon className={classes.icon} 
+                                    <Link
+                                        className={classes.link}
+                                        to={`/page/${file.id}`}
                                     >
-                                        <FileDocumentIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={filename} />
-                                </Link>
-                            </ListItem>
-                        );
-                    })}
-            </List>}
+                                        <ListItemIcon className={classes.icon}>
+                                            <FileDocumentIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={filename} />
+                                    </Link>
+                                </ListItem>
+                            )
+                        })}
+                </List>
+            )}
             <style>{`
                     .filelist h1 {
                         border-bottom: 1px solid var(--border-color);
@@ -69,15 +71,13 @@ const FileListRenderer = props => {
                     }
                 `}</style>
         </div>
-    );
+    )
 }
 export default FileListRenderer
 
 function useStyles() {
     const useStyles = makeStyles(theme => {
-        console.log(theme);
-
-        return ({
+        return {
             icon: {
                 color: theme.palette.primary.main,
                 minWidth: theme.spacing(4),
@@ -91,8 +91,8 @@ function useStyles() {
             listitem: {
                 padding: 0,
                 paddingRight: theme.spacing(2),
-            }
-        })
+            },
+        }
     })
-    return useStyles();
+    return useStyles()
 }

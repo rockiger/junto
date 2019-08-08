@@ -13,12 +13,15 @@ import { EXT } from '../lib/constants'
 export default class FileList extends React.Component {
     state = {
         files: [],
-        isLoading: true,
+        isLoading: false,
     }
 
-    async componentDidMount() {
-        this.listFiles()
-        console.log('componentDidMount:')
+    componentDidMount() {
+        if (!this.state.isLoading) {
+            this.setState({ isLoading: true }, () => {
+                this.listFiles()
+            })
+        }
     }
 
     listFiles = async () => {
