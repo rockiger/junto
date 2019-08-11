@@ -24,12 +24,14 @@ import {
 } from './slate-editor-alignment-plugin/src'
 import { ListPlugin, ListButtonBar } from './slate-editor-list-plugin/src'
 import { HeaderPlugin, HeaderButtonBar } from './slate-editor-header-plugin/src'
+import { ImagePlugin, ImageButton } from './slate-editor-image-plugin/src'
 
 const plugins = [
     AlignmentPlugin(),
     BoldPlugin(),
-    ItalicPlugin(),
     HeaderPlugin(),
+    ImagePlugin(),
+    ItalicPlugin(),
     LinkPlugin(),
     ListPlugin(),
     StrikethroughPlugin(),
@@ -57,6 +59,7 @@ const MaterialEditor = React.forwardRef((props, ref) => {
                 <Divider />
 
                 <LinkButton />
+                <ImageButton />
                 <DriveButton />
 
                 <Divider />
