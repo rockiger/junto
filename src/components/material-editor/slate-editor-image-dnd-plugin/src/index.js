@@ -1,14 +1,16 @@
 import React from 'react'
 
-import { Editor, getEventRange, getEventTransfer } from 'slate-react'
+import { getEventRange, getEventTransfer } from 'slate-react'
 import imageExtensions from 'image-extensions'
 import isUrl from 'is-url'
 
 const ImageNode = props => {
     const { attributes, node, isFocused } = props
     const src = node.data.get('src')
+    const alt = node.data.get('alt')
     return (
         <img
+            alt={alt}
             src={src}
             style={{
                 display: 'block',
@@ -61,16 +63,16 @@ function insertImage(change, src, target) {
 
 const onImageDrop = (event, change, editor) => {
     const target = getEventRange(event, change.value)
-    if (!target && event.type == 'drop') return
+    if (!target && event.type === 'drop') return
 
     const transfer = getEventTransfer(event)
     const { type, text, files } = transfer
 
-    if (type == 'files') {
+    if (type === 'files') {
         for (const file of files) {
             const reader = new FileReader()
             const [mime] = file.type.split('/')
-            if (mime != 'image') continue
+            if (mime !== 'image') continue
 
             reader.addEventListener('load', () => {
                 editor.change(c => {
@@ -82,7 +84,7 @@ const onImageDrop = (event, change, editor) => {
         }
     }
 
-    if (type == 'text') {
+    if (type === 'text') {
         if (!isUrl(text)) return
         if (!isImage(text)) return
         change.call(insertImage, text, target)
