@@ -1,4 +1,5 @@
 import React from 'react'
+import { Block } from 'slate'
 
 import { getEventRange, getEventTransfer } from 'slate-react'
 import imageExtensions from 'image-extensions'
@@ -7,10 +8,10 @@ import isUrl from 'is-url'
 const ImageNode = props => {
     const { attributes, node, isFocused } = props
     const src = node.data.get('src')
-    const alt = node.data.get('alt')
+    //const alt = node.data.get('alt')
     return (
         <img
-            alt={alt}
+            alt=""
             src={src}
             style={{
                 display: 'block',
@@ -18,6 +19,7 @@ const ImageNode = props => {
                 maxHeight: '20em',
                 boxShadow: isFocused ? '0 0 0 2px blue' : 'none',
             }}
+            selected={isFocused}
             {...attributes}
         />
     )
@@ -91,4 +93,33 @@ const onImageDrop = (event, change, editor) => {
     }
 }
 
-export { ImageNode, onImageDrop }
+/**
+ * The editor's schema.
+ *
+ * @type {Object}
+ */
+
+const schema = {
+    document: {
+        last: { type: 'paragraph' },
+        normalize: (change, { code, node, child }) => {
+            switch (code) {
+                case 'last_child_type_invalid': {
+                    const paragraph = Block.create('paragraph')
+                    return change.insertNodeByKey(
+                        node.key,
+                        node.nodes.size,
+                        paragraph
+                    )
+                }
+            }
+        },
+    },
+    blocks: {
+        image: {
+            isVoid: true,
+        },
+    },
+}
+
+export { ImageNode, onImageDrop, schema }

@@ -41,7 +41,7 @@ import {
     H5Node,
     H6Node,
 } from '../../slate-editor-header-plugin/src'
-import { onImageDrop } from '../../slate-editor-image-dnd-plugin/src'
+import { onImageDrop, schema } from '../../slate-editor-image-dnd-plugin/src'
 
 /* eslint-disable default-case */
 export const renderNode = props => {
@@ -135,6 +135,7 @@ export default ({
                 ref={editorRef}
                 renderNode={renderNode}
                 renderMark={renderMark}
+                schema={schema}
                 {...rest}
             />
             {children}
