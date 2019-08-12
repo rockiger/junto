@@ -26,7 +26,6 @@ class ImageNode extends Component {
 
     render() {
         const { node, attributes, readOnly, isSelected } = this.props
-        console.log(this.props)
         return (
             <div
                 className={classnames('image-node--container', {
