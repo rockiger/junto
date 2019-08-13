@@ -139,7 +139,7 @@ export default class Page extends React.Component {
                         .editorInput {
                             border: 1px solid transparent;
                             font: unset;
-                            font-family: "Open Sans", Helvetica, Arial, sans-serif;
+                            font-family: Roboto, "Open Sans", Helvetica, Arial, sans-serif;
                             font-weight: 400;;
                             padding: 0 .5rem;
                         }
