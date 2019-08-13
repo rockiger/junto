@@ -8,40 +8,107 @@ import { EXT } from '../lib/constants'
 import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
-const FileListRenderer = props => {
+const FileListPartial = props => {
     const classes = useStyles()
+    return (
+        <List className="filelist-list">
+            {props.files
+                .filter(file => {
+                    const ext = getExtFromFilenName(file.name)
+                    return ext === EXT
+                })
+                .map(file => {
+                    const filename = getTitleFromFileName(file.name)
+                    console.log(Date.parse(file.modifiedByMeTime))
+                    return (
+                        <ListItem className={classes.listitem} key={file.id}>
+                            <Link
+                                className={classes.link}
+                                to={`/page/${file.id}`}
+                            >
+                                <ListItemIcon className={classes.icon}>
+                                    <FileDocumentIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={filename} />
+                            </Link>
+                        </ListItem>
+                    )
+                })}
+        </List>
+    )
+}
+
+const PeriodList = ({ files, headline }) => {
+    if (files.length > 0) {
+        return (
+            <>
+                <div className="filelist-tagline">{headline}</div>
+                <FileListPartial files={files} />
+            </>
+        )
+    } else {
+        return null
+    }
+}
+
+const Periods = ({ files }) => {
+    const createFilter = (older, younger = new Date()) => {
+        return file => {
+            const date = parseInt(Date.parse(file.modifiedByMeTime))
+            return (
+                date > parseInt(older.getTime()) &&
+                date < parseInt(younger.getTime())
+            )
+        }
+    }
+
+    const newTimeBorder = (daysBack = 0) => {
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        today.setDate(today.getDate() - daysBack)
+        return new Date(today.getTime())
+    }
+
+    const today = newTimeBorder()
+    const todayFilter = createFilter(today)
+    const todayFiles = files.filter(todayFilter)
+
+    const yesterday = newTimeBorder(1)
+    const yesterdayFilter = createFilter(yesterday, today)
+    const yesterdayFiles = files.filter(yesterdayFilter)
+
+    const lastWeek = newTimeBorder(7)
+    const lastWeekFilter = createFilter(lastWeek, yesterday)
+    const lastWeekFiles = files.filter(lastWeekFilter)
+
+    const lastMonth = newTimeBorder(30)
+    const lastMonthFilter = createFilter(lastMonth, lastWeek)
+    const lastMonthFiles = files.filter(lastMonthFilter)
+
+    const earlier = newTimeBorder(31)
+    const earlierFilter = createFilter(earlier, lastMonth)
+    const earlierFiles = files.filter(earlierFilter)
+
+    return (
+        <>
+            <PeriodList files={todayFiles} headline="Today" />
+            <PeriodList files={yesterdayFiles} headline="Yesterday" />
+            <PeriodList files={lastWeekFiles} headline="Previous 7 Days" />
+            <PeriodList files={lastMonthFiles} headline="Previous 30 Days" />
+            <PeriodList files={earlierFiles} headline="Earlier" />
+        </>
+    )
+}
+
+const FileListRenderer = props => {
     return (
         <div className="filelist">
             <h1>Your work</h1>
-            <div className="filelist-tagline">Last edited</div>
             {props.isLoading && <Spinner />}
             {!props.isLoading && (
-                <List className="filelist-list">
-                    {props.files
-                        .filter(file => {
-                            const ext = getExtFromFilenName(file.name)
-                            return ext === EXT
-                        })
-                        .map(file => {
-                            const filename = getTitleFromFileName(file.name)
-                            return (
-                                <ListItem
-                                    className={classes.listitem}
-                                    key={file.id}
-                                >
-                                    <Link
-                                        className={classes.link}
-                                        to={`/page/${file.id}`}
-                                    >
-                                        <ListItemIcon className={classes.icon}>
-                                            <FileDocumentIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary={filename} />
-                                    </Link>
-                                </ListItem>
-                            )
-                        })}
-                </List>
+                <>
+                    <Periods files={props.files} />
+                </>
             )}
             <style>{`
                     .filelist h1 {
