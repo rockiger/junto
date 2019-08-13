@@ -19,7 +19,6 @@ const FileListPartial = props => {
                 })
                 .map(file => {
                     const filename = getTitleFromFileName(file.name)
-                    console.log(Date.parse(file.modifiedByMeTime))
                     return (
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link

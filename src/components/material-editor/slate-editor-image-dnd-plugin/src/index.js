@@ -103,6 +103,7 @@ const schema = {
     document: {
         last: { type: 'paragraph' },
         normalize: (change, { code, node, child }) => {
+            // eslint-disable-next-line
             switch (code) {
                 case 'last_child_type_invalid': {
                     const paragraph = Block.create('paragraph')
