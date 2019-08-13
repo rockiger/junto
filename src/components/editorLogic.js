@@ -47,7 +47,6 @@ function EditorLogic({
                 ref={editor}
                 save={() => save(fileId, initialValue)}
                 style={{
-                    fontFamily: '"Open Sans", Helvetica, Arial, sans-serif',
                     fontSize: '1rem',
                     height: 'calc(100vh - 65px - 51px)',
                     padding: '.7rem 1rem .7rem .7rem',

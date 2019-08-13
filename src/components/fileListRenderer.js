@@ -103,12 +103,10 @@ const FileListRenderer = props => {
     return (
         <div className="filelist">
             <h1>Your work</h1>
-            {props.isLoading && <Spinner />}
-            {!props.isLoading && (
-                <>
-                    <Periods files={props.files} />
-                </>
-            )}
+            <div className="filelist-content">
+                {props.isLoading && <Spinner />}
+                {!props.isLoading && <Periods files={props.files} />}
+            </div>
             <style>{`
                     .filelist h1 {
                         border-bottom: 1px solid var(--border-color);
@@ -117,9 +115,14 @@ const FileListRenderer = props => {
                         margin: 0;
                         padding: .5rem;
                     }
+                    .filelist-content {
+                        overflow-y: auto;
+                        height: calc((100vh - 65px) - 51px);
+                    }
                     .filelist-tagline {
                         margin-top: 1rem;
-                        font-weight: 600;
+                        font-weight: 500;
+                        font-size: 1rem;
                     }
                     .filelist-list a {
                         border-radius: var(--border-radius);
