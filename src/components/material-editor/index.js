@@ -59,8 +59,9 @@ const MaterialEditor = React.forwardRef((props, ref) => {
                 <Divider />
 
                 <LinkButton />
-                <ImageButton />
-                <DriveButton />
+                {/* Wait till picker feature is finished */}
+                {/* <ImageButton /> */}
+                {/* <DriveButton /> */}
 
                 <Divider />
 
