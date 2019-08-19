@@ -22,6 +22,10 @@ class SlateEditor extends Component {
     componentDidMount() {
         window.addEventListener('keydown', this.onKeyDown)
     }
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.onKeyDown)
+    }
     //
     // Migrate Slate's Value object
     // From v0.25.3
@@ -57,6 +61,9 @@ class SlateEditor extends Component {
     }
 
     onKeyDown = ev => {
+        console.log('ev.key:', ev.key)
+        console.log('this.state.readOnly:', this.state.readOnly)
+        console.log('keyboardEvent.isMod(ev):', keyboardEvent.isMod(ev))
         if (ev.key === 'e' && this.state.readOnly === true) {
             ev.stopPropagation()
             ev.preventDefault()

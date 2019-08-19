@@ -22,15 +22,6 @@ const ListKeyboardShortcut = (event, change) => {
     const winUnordered = event.ctrlKey && event.shiftKey && unorderedKey
     const isUnordered = macUnordered || winUnordered
 
-    console.log(
-        'event:',
-        event.shiftKey,
-        event.altKey,
-        event.metaKey,
-        event.key,
-        event.keyCode
-    )
-
     if (isUnordered) return unorderedListStrategy(change)
 
     // „ for neo, ( for german layout
