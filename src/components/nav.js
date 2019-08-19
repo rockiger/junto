@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import logo from '../static/logo.svg'
+import logo from '../static/logo_48.svg'
 import { makeStyles } from '@material-ui/core/styles'
 import {
     AppBar,
