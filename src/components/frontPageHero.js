@@ -1,25 +1,32 @@
-import React from 'react';
+import React from 'react'
 
-import GoogleIcon from './googleIcon';
-import logo from '../static/logo.svg';
+import GoogleIcon from './googleIcon'
+import logo from '../static/logo.svg'
 
 export default function FrontPageHero() {
     return (
         <div className="hero">
             <div className="hero-logo">
-                <img src={logo} alt="Awiki Logo" style={{textAlign: 'center'}} />
+                <img
+                    src={logo}
+                    alt="Awiki Logo"
+                    style={{ textAlign: 'center' }}
+                />
             </div>
             <h1 className="hero-title">Welcome to Awiki!</h1>
-            <p className="hero-description">
-              
-            </p>
+            <p className="hero-description" />
             <div className="hero-row">
-              <button className="hero-heroButon">
-                <GoogleIcon /> 
-                <div className="hero-buttonLabel" onClick={() => {document.getElementById('authorize_button').click();}}>
-                  Login with Google
-                </div>
-              </button>
+                <button className="hero-heroButon">
+                    <GoogleIcon />
+                    <div
+                        className="hero-buttonLabel"
+                        onClick={() => {
+                            document.getElementById('authorize_button').click()
+                        }}
+                    >
+                        Login with Google
+                    </div>
+                </button>
             </div>
             <style>{`
             .hero {
@@ -56,7 +63,9 @@ export default function FrontPageHero() {
                 border-top: 1px solid #e8e8e8;
             }
             .hero button {
-                display: inline-block;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
                 background: white;
                 color: #444;
                 border-radius: 5px;
@@ -77,6 +86,6 @@ export default function FrontPageHero() {
                 padding: 0 1rem;
             }
             `}</style>
-          </div>
+        </div>
     )
 }
