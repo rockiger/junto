@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+
+import { getState } from '../state'
 
 import logo from '../static/logo_48.svg'
 import { makeStyles } from '@material-ui/core/styles'
 import {
     AppBar,
-    Toolbar,
-    Typography,
+    IconButton,
     InputBase,
     Paper,
+    Typography,
+    Toolbar,
 } from '@material-ui/core'
 import SearchIcon from 'mdi-react/SearchIcon'
 
 const Nav = props => {
+    const [{ isSearchFieldActive }, dispatch] = getState()
+    const [searchValue, setSearchValue] = useState('')
     const classes = useStyles()
     if (props.isSignedIn) {
         return (
@@ -38,10 +43,21 @@ const Nav = props => {
                                 </Typography>
                             </Link>
                         </div>
-                        <div className={classes.search}>
-                            <div className={classes.searchIcon}>
+                        <Paper
+                            className={classes.search}
+                            elevation={isSearchFieldActive ? 1 : 0}
+                            style={{
+                                backgroundColor: isSearchFieldActive
+                                    ? 'white'
+                                    : null,
+                            }}
+                        >
+                            <IconButton
+                                className={classes.searchIcon}
+                                aria-label="Search"
+                            >
                                 <SearchIcon />
-                            </div>
+                            </IconButton>
                             <InputBase
                                 placeholder="Search Wiki"
                                 classes={{
@@ -49,8 +65,21 @@ const Nav = props => {
                                     input: classes.inputInput,
                                 }}
                                 inputProps={{ 'aria-label': 'Search' }}
+                                onFocus={() =>
+                                    dispatch({ type: 'ACTIVATE_SEARCH_FIELD' })
+                                }
+                                onBlur={() =>
+                                    dispatch({
+                                        type: 'DEACTIVATE_SEARCH_FIELD',
+                                    })
+                                }
+                                onChange={ev => setSearchValue(ev.target.value)}
+                                onKeyDown={ev => {
+                                    if (ev.key === 'Enter')
+                                        console.log(searchValue)
+                                }}
                             />
-                        </div>
+                        </Paper>
                         <div className={classes.grow} />
                         <div>{props.children}</div>
                     </Toolbar>
