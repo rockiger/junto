@@ -9,6 +9,7 @@ import {
 } from '../lib/gdrive'
 import FileListRenderer from './fileListRenderer'
 import { EXT } from '../lib/constants'
+import { StateContext } from '../state'
 
 export default class FileList extends React.Component {
     state = {
@@ -16,21 +17,33 @@ export default class FileList extends React.Component {
         isLoading: false,
     }
 
+    static contextType = StateContext
+
     componentDidMount() {
-        if (!this.state.isLoading) {
-            this.setState({ isLoading: true }, () => {
-                this.listFiles()
-            })
+        const [{ isFileListLoading }, dispatch] = this.context
+        if (!isFileListLoading) {
+            dispatch({ type: 'FILELIST_LOADING' })
+            this.listFiles()
         }
     }
 
     listFiles = async () => {
+        const [{ searchTerm }, dispatch] = this.context
         const folderId = await getFolderId()
-        console.log('FolderId: ', folderId)
+        console.log('searchTerm: ', searchTerm)
         if (folderId) {
-            const files = await listFiles()
+            const files = await listFiles(searchTerm)
             console.log('listFiles:', files)
-            this.setState({ files, isLoading: false })
+            this.setState(
+                { isLoading: false },
+                dispatch({
+                    type: 'SET_FILES',
+                    payload: {
+                        files,
+                        oldSearchTerm: searchTerm,
+                    },
+                })
+            )
         } else {
             const newFolderId = await createNewWiki()
             const newFileId = await createFile(`Home${EXT}`, newFolderId)
@@ -42,12 +55,8 @@ export default class FileList extends React.Component {
     }
 
     render() {
-        return (
-            <FileListRenderer
-                isLoading={this.state.isLoading}
-                files={this.state.files}
-            />
-        )
+        const [{ files, isFileListLoading }, _] = this.context
+        return <FileListRenderer isLoading={isFileListLoading} files={files} />
     }
 }
 

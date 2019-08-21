@@ -66,7 +66,7 @@ export function init() {
  * returns an array of file descriptions:
  * [{driveId, driveVersion, name, ifid}]
  */
-export function listFiles() {
+export function listFiles(searchTerm = '') {
     function formatResult(response) {
         var stories = []
         for (var i = 0; i < response.files.length; i++) {
@@ -82,7 +82,7 @@ export function listFiles() {
             .list({
                 pageSize: 300,
                 fields: 'files(' + fileFields + ')',
-                q: 'trashed=false',
+                q: `fullText contains '${searchTerm}' and trashed=false`,
             })
             .execute(response => resolve(formatResult(response)))
     })
