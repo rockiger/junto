@@ -11,7 +11,7 @@ import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 const FileListPartial = props => {
-    const [{ searchTerm }, dispatch] = getState()
+    const [, dispatch] = getState()
     const classes = useStyles()
     return (
         <List className="filelist-list">

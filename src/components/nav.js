@@ -24,7 +24,7 @@ const Nav = props => {
 
     useEffect(() => {
         if (searchValue !== searchTerm) setSearchValue(searchTerm)
-    }, [searchTerm])
+    }, [searchTerm, searchValue])
 
     const submit = () => {
         dispatch({
