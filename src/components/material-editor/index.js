@@ -45,6 +45,7 @@ const MaterialEditor = React.forwardRef((props, ref) => {
             ref={ref}
             onChange={props.onChange}
             plugins={plugins}
+            save={props.save}
         >
             <SlateToolbar>
                 <HeaderButtonBar />
