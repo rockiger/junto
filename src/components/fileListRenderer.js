@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
+import { getState } from '../state'
+
 import Spinner from './spinner'
 import { EXT } from '../lib/constants'
 import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper'
@@ -100,9 +102,10 @@ const Periods = ({ files }) => {
 }
 
 const FileListRenderer = props => {
+    const [{ searchTerm }] = getState()
     return (
         <div className="filelist">
-            <h1>Your work</h1>
+            <h1>{searchTerm ? 'Search Result' : 'Your Work'}</h1>
             <div className="filelist-content">
                 {props.isLoading && <Spinner />}
                 {!props.isLoading && <Periods files={props.files} />}

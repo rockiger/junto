@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { getState } from '../state'
@@ -15,11 +15,36 @@ import {
     Toolbar,
 } from '@material-ui/core'
 import SearchIcon from 'mdi-react/SearchIcon'
+import CloseIcon from 'mdi-react/CloseIcon'
 
 const Nav = props => {
     const [{ isSearchFieldActive }, dispatch] = getState()
     const [searchValue, setSearchValue] = useState('')
     const classes = useStyles()
+
+    const submit = () => {
+        dispatch({
+            type: 'SET_SEARCHTERM',
+            payload: {
+                searchTerm: searchValue,
+            },
+        })
+        props.history.push('/')
+    }
+
+    const clearSearch = () => {
+        setSearchValue('')
+        dispatch({
+            type: 'SET_SEARCHTERM',
+            payload: {
+                searchTerm: '',
+            },
+        })
+        dispatch({
+            type: 'DEACTIVATE_SEARCH_FIELD',
+        })
+    }
+
     if (props.isSignedIn) {
         return (
             <AppBar className={classes.appBarSignedIn} color="default">
@@ -50,11 +75,14 @@ const Nav = props => {
                                 backgroundColor: isSearchFieldActive
                                     ? 'white'
                                     : null,
+                                padding: '2px 4px',
                             }}
                         >
                             <IconButton
-                                className={classes.searchIcon}
                                 aria-label="Search"
+                                className={classes.searchIcon}
+                                onClick={submit}
+                                size="small"
                             >
                                 <SearchIcon />
                             </IconButton>
@@ -75,16 +103,27 @@ const Nav = props => {
                                 }
                                 onChange={ev => setSearchValue(ev.target.value)}
                                 onKeyDown={ev => {
+                                    ev.stopPropagation()
+                                    console.log(ev.key)
                                     if (ev.key === 'Enter') {
-                                        dispatch({
-                                            type: 'SET_SEARCHTERM',
-                                            payload: {
-                                                searchTerm: searchValue,
-                                            },
-                                        })
+                                        submit()
+                                    } else if (ev.key === 'Escape') {
+                                        clearSearch()
                                     }
                                 }}
+                                readOnly={!isSearchFieldActive}
+                                value={searchValue}
                             />
+                            {searchValue && (
+                                <IconButton
+                                    aria-label="Clear search"
+                                    className={classes.searchIcon}
+                                    onClick={clearSearch}
+                                    size="small"
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            )}
                         </Paper>
                         <div className={classes.grow} />
                         <div>{props.children}</div>
@@ -123,7 +162,7 @@ const Nav = props => {
         )
     }
 }
-export default Nav
+export default withRouter(Nav)
 Nav.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
 }
@@ -178,7 +217,7 @@ function useStyles() {
                 display: 'flex',
                 alignItems: 'center',
                 [theme.breakpoints.up('md')]: {
-                    width: 236,
+                    minWidth: 236,
                 },
             },
             titleSignedIn: {
@@ -207,16 +246,22 @@ function useStyles() {
                 },
             },
             searchIcon: {
-                width: theme.spacing(7),
-                height: '100%',
-                marginTop: 5,
-                position: 'absolute',
-                pointerEvents: 'none',
-                display: 'flex',
-                justifyContent: 'center',
-                [theme.breakpoints.up('md')]: {
-                    marginTop: 0,
-                    alignItems: 'center',
+                marginTop: 1,
+                marginLeft: 5,
+                height: 40,
+                width: 40,
+                [theme.breakpoints.down('sm')]: {
+                    width: theme.spacing(7),
+                    height: '100%',
+                    [theme.breakpoints.up('md')]: {
+                        marginTop: 0,
+                        alignItems: 'center',
+                    },
+                    marginTop: 5,
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    display: 'flex',
+                    justifyContent: 'center',
                 },
             },
             inputRoot: {
@@ -224,7 +269,10 @@ function useStyles() {
                 width: '100%',
             },
             inputInput: {
-                padding: theme.spacing(1, 1, 1, 7),
+                paddingBottom: theme.spacing(1),
+                paddingLeft: theme.spacing(1),
+                paddingRight: theme.spacing(1),
+                paddingTop: 6,
                 transition: theme.transitions.create('width'),
                 width: '100%',
             },

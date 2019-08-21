@@ -27,6 +27,23 @@ export default class FileList extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        const [
+            { isFileListLoading, oldSearchTerm, searchTerm },
+            dispatch,
+        ] = this.context
+        console.log(
+            'componentDidUpdate:',
+            isFileListLoading,
+            oldSearchTerm,
+            searchTerm
+        )
+        if (!isFileListLoading && oldSearchTerm !== searchTerm) {
+            dispatch({ type: 'FILELIST_LOADING' })
+            this.listFiles()
+        }
+    }
+
     listFiles = async () => {
         const [{ searchTerm }, dispatch] = this.context
         const folderId = await getFolderId()
