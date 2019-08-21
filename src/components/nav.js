@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
@@ -18,9 +18,13 @@ import SearchIcon from 'mdi-react/SearchIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 
 const Nav = props => {
-    const [{ isSearchFieldActive }, dispatch] = getState()
+    const [{ isSearchFieldActive, searchTerm }, dispatch] = getState()
     const [searchValue, setSearchValue] = useState('')
     const classes = useStyles()
+
+    useEffect(() => {
+        if (searchValue !== searchTerm) setSearchValue(searchTerm)
+    }, [searchTerm])
 
     const submit = () => {
         dispatch({
@@ -33,7 +37,7 @@ const Nav = props => {
     }
 
     const clearSearch = () => {
-        setSearchValue('')
+        setSearchValue(searchTerm)
         dispatch({
             type: 'SET_SEARCHTERM',
             payload: {
@@ -51,14 +55,22 @@ const Nav = props => {
                 <Paper className={classes.card}>
                     <Toolbar className={classes.toolbar} variant="dense">
                         <div className={classes.titleWrapper}>
-                            <Link className={classes.logoWrapper} to="/">
+                            <Link
+                                className={classes.logoWrapper}
+                                onClick={() => clearSearch()}
+                                to="/"
+                            >
                                 <img
                                     className={classes.logo}
                                     src={logo}
                                     alt="App logo"
                                 />
                             </Link>
-                            <Link className={classes.titleSignedIn} to="/">
+                            <Link
+                                className={classes.titleSignedIn}
+                                onClick={() => clearSearch()}
+                                to="/"
+                            >
                                 <Typography
                                     color="textPrimary"
                                     variant="h6"
@@ -93,6 +105,9 @@ const Nav = props => {
                                     input: classes.inputInput,
                                 }}
                                 inputProps={{ 'aria-label': 'Search' }}
+                                onClick={() =>
+                                    dispatch({ type: 'ACTIVATE_SEARCH_FIELD' })
+                                }
                                 onFocus={() =>
                                     dispatch({ type: 'ACTIVATE_SEARCH_FIELD' })
                                 }
