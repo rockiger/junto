@@ -14,7 +14,7 @@ export default class Sidebar extends React.Component {
     }
 
     onClickNewButton = async ev => {
-        const [{ searchTerm }, dispatch] = this.context
+        const [, dispatch] = this.context
         const parentId = await getFolderId()
         const fileId = await createFile(UNTITLEDFILE, parentId)
         await updateFile(fileId, JSON.stringify(EMPTYVALUE))
