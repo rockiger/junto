@@ -17,7 +17,12 @@ import { CLIENT_ID, API_KEY, DISCOVERY_DOCS, SCOPES } from './lib/constants'
 import './App.css'
 
 const initialState = {
+    isFileListLoading: false,
     isSearchFieldActive: false,
+    oldSearchTerm: '',
+    redirect: false,
+    searchTerm: '',
+    files: [],
 }
 
 const reducer = (state, action) => {
@@ -31,6 +36,28 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 isSearchFieldActive: false,
+            }
+        case 'SET_FILES':
+            return {
+                ...state,
+                files: action.payload.files,
+                isFileListLoading: false,
+                oldSearchTerm: action.payload.oldSearchTerm,
+            }
+        case 'SET_SEARCHTERM':
+            return {
+                ...state,
+                searchTerm: action.payload.searchTerm,
+            }
+        case 'FILELIST_LOADING':
+            return {
+                ...state,
+                isFileListLoading: true,
+            }
+        case 'FILELIST_NOT_LOADING':
+            return {
+                ...state,
+                isFileListLoading: false,
             }
         default:
             return state

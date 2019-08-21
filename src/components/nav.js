@@ -75,8 +75,14 @@ const Nav = props => {
                                 }
                                 onChange={ev => setSearchValue(ev.target.value)}
                                 onKeyDown={ev => {
-                                    if (ev.key === 'Enter')
-                                        console.log(searchValue)
+                                    if (ev.key === 'Enter') {
+                                        dispatch({
+                                            type: 'SET_SEARCHTERM',
+                                            payload: {
+                                                searchTerm: searchValue,
+                                            },
+                                        })
+                                    }
                                 }}
                             />
                         </Paper>
