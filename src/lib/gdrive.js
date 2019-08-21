@@ -82,7 +82,7 @@ export function listFiles(searchTerm = '') {
             .list({
                 pageSize: 300,
                 fields: 'files(' + fileFields + ')',
-                q: `fullText contains '${searchTerm}' and trashed=false`,
+                q: `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`,
             })
             .execute(response => resolve(formatResult(response)))
     })

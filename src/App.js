@@ -47,6 +47,7 @@ const reducer = (state, action) => {
         case 'SET_SEARCHTERM':
             return {
                 ...state,
+                oldSearchTerm: state.searchTerm,
                 searchTerm: action.payload.searchTerm,
             }
         case 'FILELIST_LOADING':
