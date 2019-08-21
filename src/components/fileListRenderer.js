@@ -11,6 +11,7 @@ import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 const FileListPartial = props => {
+    const [{ searchTerm }, dispatch] = getState()
     const classes = useStyles()
     return (
         <List className="filelist-list">
@@ -25,6 +26,14 @@ const FileListPartial = props => {
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
                                 className={classes.link}
+                                onClick={() =>
+                                    dispatch({
+                                        type: 'SET_SEARCHTERM',
+                                        payload: {
+                                            searchTerm: '',
+                                        },
+                                    })
+                                }
                                 to={`/page/${file.id}`}
                             >
                                 <ListItemIcon className={classes.icon}>
