@@ -70,9 +70,14 @@ class SlateEditor extends Component {
             this.setState({ readOnly: false }, () =>
                 window.editorRef.current.focus()
             )
-        } else if (keyboardEvent.isMod(ev) && ev.key === 'Enter') {
+        } else if (
+            keyboardEvent.isMod(ev) &&
+            ev.key === 'Enter' &&
+            !this.state.readOnly
+        ) {
             ev.stopPropagation()
             ev.preventDefault()
+            this.props.save()
             this.setState({ readOnly: true }, () => {
                 document.querySelector('.editor--toolbar').click()
             })
