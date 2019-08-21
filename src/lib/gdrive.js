@@ -103,6 +103,7 @@ export async function createFile(name, parentId) {
         name: name,
         mimeType: 'text/json',
         parents: [parentId],
+        useContentAsIndexableText: true,
     }
     try {
         const response = await window.gapi.client.drive.files.create({
@@ -317,7 +318,11 @@ export function updateFile(driveId, newData) {
             .request({
                 path: driveUploadPath + '/' + driveId,
                 method: 'PATCH',
-                params: { uploadType: 'media', fields: fileFields },
+                params: {
+                    uploadType: 'media',
+                    fields: fileFields,
+                    useContentAsIndexableText: true,
+                },
                 body: newData,
             })
             .then(
