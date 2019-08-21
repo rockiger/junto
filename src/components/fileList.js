@@ -12,11 +12,6 @@ import { EXT } from '../lib/constants'
 import { StateContext } from '../state'
 
 export default class FileList extends React.Component {
-    state = {
-        files: [],
-        isLoading: false,
-    }
-
     static contextType = StateContext
 
     componentDidMount() {
@@ -72,7 +67,7 @@ export default class FileList extends React.Component {
     }
 
     render() {
-        const [{ files, isFileListLoading }, _] = this.context
+        const [{ files, isFileListLoading }] = this.context
         return <FileListRenderer isLoading={isFileListLoading} files={files} />
     }
 }

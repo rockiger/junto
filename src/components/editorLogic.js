@@ -71,13 +71,20 @@ function initStorage(initialState) {
 async function save(fileId, initialValue) {
     console.log('save()')
     const newValue = localStorage.getItem(LOCALSTORAGE_NAME)
-
-    console.log('newValue:', newValue)
-    console.log('initialValue:', initialValue)
     if (initialValue === newValue) {
         console.log('SAME SAME')
         return
     }
+
+    // Extract text from document
+    /* const document = Document.create(JSON.parse(newValue).document)
+    const text = document
+        .getTexts()
+        .reduce((acc, currVal, currIndex, array) => {
+            return `${acc} ${currVal.getText()}`
+        }, '')
+    console.log(text) */
+
     try {
         await updateFile(fileId, newValue)
         console.log('save:', fileId)
