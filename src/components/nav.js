@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import useDimensions from 'react-use-dimensions'
 
 import { getState } from '../state'
 
@@ -17,9 +18,12 @@ import {
 import SearchIcon from 'mdi-react/SearchIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 
+import SearchAutocomplete from './SearchAutocomplete'
+
 const Nav = props => {
     const [{ isSearchFieldActive, searchTerm }, dispatch] = getState()
     const [searchValue, setSearchValue] = useState('')
+    const [searchRef, { height, width }] = useDimensions()
     const classes = useStyles()
 
     useEffect(() => {
@@ -83,9 +87,16 @@ const Nav = props => {
                         <Paper
                             className={classes.search}
                             elevation={isSearchFieldActive ? 1 : 0}
+                            ref={searchRef}
                             style={{
                                 backgroundColor: isSearchFieldActive
                                     ? 'white'
+                                    : null,
+                                borderBottomLeftRadius: isSearchFieldActive
+                                    ? 0
+                                    : null,
+                                borderBottomRightRadius: isSearchFieldActive
+                                    ? 0
                                     : null,
                                 padding: '2px 4px',
                             }}
@@ -139,6 +150,7 @@ const Nav = props => {
                                     <CloseIcon />
                                 </IconButton>
                             )}
+                            <SearchAutocomplete width={width} height={height} />
                         </Paper>
                         <div className={classes.grow} />
                         <div>{props.children}</div>
