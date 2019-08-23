@@ -5,7 +5,7 @@ const gapi = window.gapi
 // 'version' is driveVersion - version of file on google drive
 // 'name' name of the file on google drive
 // 'appProperties' keep the custom `ifid` field
-const fileFields = 'id,version,name,modifiedByMeTime'
+const fileFields = 'id,version,name,modifiedByMeTime,viewedByMeTime'
 // const fileFields = '*'
 
 function formatFileDescription(response) {
@@ -66,7 +66,7 @@ export function init() {
  * returns an array of file descriptions:
  * [{driveId, driveVersion, name, ifid}]
  */
-export function listFiles(searchTerm = '') {
+export function listFiles(searchTerm = '', orderBy = '') {
     function formatResult(response) {
         var stories = []
         for (var i = 0; i < response.files.length; i++) {
@@ -77,12 +77,19 @@ export function listFiles(searchTerm = '') {
         return stories
     }
 
+    let order = ''
+    let q = `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`
+    if (!searchTerm && orderBy) {
+        q = 'trashed=false'
+        order = orderBy
+    }
     return new Promise((resolve, reject) => {
         gapi.client.drive.files
             .list({
                 pageSize: 300,
                 fields: 'files(' + fileFields + ')',
-                q: `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`,
+                q,
+                orderBy: order,
             })
             .execute(response => resolve(formatResult(response)))
     })

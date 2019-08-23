@@ -6,7 +6,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 
 import { StateProvider } from './state'
 
-import Nav from './components/nav'
+import Navbar from './components/Navbar'
 import GoogleLogin from './components/googleLogin'
 import Sidebar from './components/sidebar'
 import Home from './components/home'
@@ -133,7 +133,7 @@ class App extends React.Component {
                         <CssBaseline />
                         <div className="App">
                             <header className="App-header">
-                                <Nav isSignedIn={this.state.isSignedIn}>
+                                <Navbar isSignedIn={this.state.isSignedIn}>
                                     <GoogleLogin
                                         clientId={CLIENT_ID}
                                         apiKey={API_KEY}
@@ -146,7 +146,7 @@ class App extends React.Component {
                                         isSignedIn={this.state.isSignedIn}
                                         setIsSigningIn={this.setIsSigningIn}
                                     />
-                                </Nav>
+                                </Navbar>
                             </header>
                             <main className="App-main">
                                 {this.state.isSignedIn && (
