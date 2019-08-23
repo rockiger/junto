@@ -1,34 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import useDimensions from 'react-use-dimensions'
 
-import { getState } from '../state'
+import { getState } from '../../state'
 
-import logo from '../static/logo_48.svg'
+import logo from '../../static/logo_48.svg'
 import { makeStyles } from '@material-ui/core/styles'
-import {
-    AppBar,
-    IconButton,
-    InputBase,
-    Paper,
-    Typography,
-    Toolbar,
-} from '@material-ui/core'
-import SearchIcon from 'mdi-react/SearchIcon'
-import CloseIcon from 'mdi-react/CloseIcon'
+import { AppBar, Paper, Typography, Toolbar } from '@material-ui/core'
 
-import SearchAutocomplete from './SearchAutocomplete'
+import Search from './Search'
 
-const Nav = props => {
+const Navbar = props => {
     const [{ isSearchFieldActive, searchTerm }, dispatch] = getState()
     const [searchValue, setSearchValue] = useState('')
-    const [searchRef, { height, width }] = useDimensions()
+
     const classes = useStyles()
 
     useEffect(() => {
         if (searchValue !== searchTerm) setSearchValue(searchTerm)
-    }, [searchTerm, searchValue])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchTerm])
 
     const submit = () => {
         dispatch({
@@ -36,6 +27,9 @@ const Nav = props => {
             payload: {
                 searchTerm: searchValue,
             },
+        })
+        dispatch({
+            type: 'DEACTIVATE_SEARCH_FIELD',
         })
         props.history.push('/')
     }
@@ -84,74 +78,14 @@ const Nav = props => {
                                 </Typography>
                             </Link>
                         </div>
-                        <Paper
-                            className={classes.search}
-                            elevation={isSearchFieldActive ? 1 : 0}
-                            ref={searchRef}
-                            style={{
-                                backgroundColor: isSearchFieldActive
-                                    ? 'white'
-                                    : null,
-                                borderBottomLeftRadius: isSearchFieldActive
-                                    ? 0
-                                    : null,
-                                borderBottomRightRadius: isSearchFieldActive
-                                    ? 0
-                                    : null,
-                                padding: '2px 4px',
-                            }}
-                        >
-                            <IconButton
-                                aria-label="Search"
-                                className={classes.searchIcon}
-                                onClick={submit}
-                                size="small"
-                            >
-                                <SearchIcon />
-                            </IconButton>
-                            <InputBase
-                                placeholder="Search Wiki"
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
-                                }}
-                                inputProps={{ 'aria-label': 'Search' }}
-                                onClick={() =>
-                                    dispatch({ type: 'ACTIVATE_SEARCH_FIELD' })
-                                }
-                                onFocus={() =>
-                                    dispatch({ type: 'ACTIVATE_SEARCH_FIELD' })
-                                }
-                                onBlur={() =>
-                                    dispatch({
-                                        type: 'DEACTIVATE_SEARCH_FIELD',
-                                    })
-                                }
-                                onChange={ev => setSearchValue(ev.target.value)}
-                                onKeyDown={ev => {
-                                    ev.stopPropagation()
-                                    console.log(ev.key)
-                                    if (ev.key === 'Enter') {
-                                        submit()
-                                    } else if (ev.key === 'Escape') {
-                                        clearSearch()
-                                    }
-                                }}
-                                readOnly={!isSearchFieldActive}
-                                value={searchValue}
-                            />
-                            {searchValue && (
-                                <IconButton
-                                    aria-label="Clear search"
-                                    className={classes.searchIcon}
-                                    onClick={clearSearch}
-                                    size="small"
-                                >
-                                    <CloseIcon />
-                                </IconButton>
-                            )}
-                            <SearchAutocomplete width={width} height={height} />
-                        </Paper>
+                        <Search
+                            clearSearch={clearSearch}
+                            dispatch={dispatch}
+                            isSearchFieldActive={isSearchFieldActive}
+                            searchValue={searchValue}
+                            setSearchValue={val => setSearchValue(val)}
+                            submit={submit}
+                        />
                         <div className={classes.grow} />
                         <div>{props.children}</div>
                     </Toolbar>
@@ -189,8 +123,8 @@ const Nav = props => {
         )
     }
 }
-export default withRouter(Nav)
-Nav.propTypes = {
+export default withRouter(Navbar)
+Navbar.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
 }
 
@@ -257,51 +191,6 @@ function useStyles() {
             title: {
                 display: 'block',
                 textDecoration: 'none',
-            },
-            search: {
-                [theme.breakpoints.up('md')]: {
-                    borderRadius: 8,
-                    backgroundColor: '#f1f3f4',
-                    flexGrow: 1,
-                    display: 'flex',
-                    height: theme.spacing(6),
-                    marginRight: theme.spacing(2),
-                    marginLeft: 0,
-                    maxWidth: 720,
-                    position: 'relative',
-                    width: '100%',
-                },
-            },
-            searchIcon: {
-                marginTop: 1,
-                marginLeft: 5,
-                height: 40,
-                width: 40,
-                [theme.breakpoints.down('sm')]: {
-                    width: theme.spacing(7),
-                    height: '100%',
-                    [theme.breakpoints.up('md')]: {
-                        marginTop: 0,
-                        alignItems: 'center',
-                    },
-                    marginTop: 5,
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    display: 'flex',
-                    justifyContent: 'center',
-                },
-            },
-            inputRoot: {
-                color: 'inherit',
-                width: '100%',
-            },
-            inputInput: {
-                paddingBottom: theme.spacing(1),
-                paddingLeft: theme.spacing(1),
-                paddingRight: theme.spacing(1),
-                paddingTop: 6,
-                transition: theme.transitions.create('width'),
-                width: '100%',
             },
         }
     })
