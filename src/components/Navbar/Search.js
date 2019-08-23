@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import useDimensions from 'react-use-dimensions'
 
 import { IconButton, InputBase, Paper } from '@material-ui/core'
@@ -24,6 +24,10 @@ const Search = ({
     const [submitSelected, setSubmitSelected] = useState(false)
     const [filteredFiles, setFilteredFiles] = useState(files)
     const classes = useStyles()
+
+    useEffect(() => {
+        if (!isSearchFieldActive) setSelectedRow(null)
+    }, [isSearchFieldActive])
 
     return (
         <Paper
@@ -62,7 +66,7 @@ const Search = ({
                             dispatch({
                                 type: 'DEACTIVATE_SEARCH_FIELD',
                             }),
-                        1000
+                        100
                     )
                 }
                 onChange={ev => {
