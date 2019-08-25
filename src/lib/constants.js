@@ -32,7 +32,7 @@ export const THEME = createMuiTheme({
             main: '#4285f4',
         },
         secondary: {
-            main: '#34a853',
+            main: '#ea4335',
         },
     },
     typography: {
