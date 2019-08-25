@@ -166,6 +166,7 @@ function useStyles() {
                 height: 40,
                 width: 40,
                 [theme.breakpoints.down('sm')]: {
+                    display: 'none',
                     width: theme.spacing(7),
                     height: '100%',
                     [theme.breakpoints.up('md')]: {
@@ -175,7 +176,7 @@ function useStyles() {
                     marginTop: 5,
                     position: 'absolute',
                     pointerEvents: 'none',
-                    display: 'flex',
+                    //display: 'flex',
                     justifyContent: 'center',
                 },
             },
