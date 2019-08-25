@@ -2,7 +2,6 @@ import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/styles'
-import { createMuiTheme } from '@material-ui/core/styles'
 
 import { StateProvider } from './state'
 
@@ -12,7 +11,13 @@ import Sidebar from './components/sidebar'
 import Home from './components/home'
 import Page from './components/page'
 
-import { CLIENT_ID, API_KEY, DISCOVERY_DOCS, SCOPES } from './lib/constants'
+import {
+    CLIENT_ID,
+    API_KEY,
+    DISCOVERY_DOCS,
+    SCOPES,
+    THEME,
+} from './lib/constants'
 
 import './App.css'
 
@@ -23,6 +28,7 @@ const initialState = {
     redirect: false,
     searchTerm: '',
     files: [],
+    theme: THEME,
 }
 
 const reducer = (state, action) => {
@@ -64,25 +70,6 @@ const reducer = (state, action) => {
             return state
     }
 }
-
-const theme = createMuiTheme({
-    palette: {
-        background: {
-            default: '#fff',
-        },
-        primary: {
-            main: '#4285f4',
-        },
-        secondary: {
-            main: '#ea4335',
-        },
-    },
-    typography: {
-        h6: {
-            fontWeight: 400,
-        },
-    },
-})
 
 class App extends React.Component {
     constructor(props) {
@@ -127,7 +114,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={initialState.theme}>
                 <StateProvider initialState={initialState} reducer={reducer}>
                     <Router>
                         <CssBaseline />

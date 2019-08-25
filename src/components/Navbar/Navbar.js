@@ -170,9 +170,6 @@ function useStyles() {
             logo: {
                 maxHeight: 24,
                 marginRight: theme.spacing(1.5),
-                [theme.breakpoints.up('md')]: {
-                    maxHeight: 40,
-                },
             },
             titleWrapper: {
                 display: 'flex',
