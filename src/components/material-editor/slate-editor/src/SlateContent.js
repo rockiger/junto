@@ -118,6 +118,8 @@ export default ({
     const editorRef = React.createRef()
     window.editorRef = editorRef
 
+    console.log(readOnly)
+
     return (
         <div
             className={classnames('editor--content', className)}
@@ -136,6 +138,7 @@ export default ({
                 renderNode={renderNode}
                 renderMark={renderMark}
                 schema={schema}
+                spellCheck={!readOnly}
                 {...rest}
             />
             {children}

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { SlateEditor, SlateToolbar, SlateContent } from './slate-editor/src'
 import {
-    // DriveButton,
+    DriveButton,
     LinkPlugin,
     LinkButton,
 } from './slate-editor-link-plugin/src'
@@ -25,6 +25,8 @@ import {
 import { ListPlugin, ListButtonBar } from './slate-editor-list-plugin/src'
 import { HeaderPlugin, HeaderButtonBar } from './slate-editor-header-plugin/src'
 import { ImagePlugin /*ImageButton*/ } from './slate-editor-image-plugin/src'
+
+import { isMobileDevice } from '../../lib/helper'
 
 const plugins = [
     AlignmentPlugin(),
@@ -62,7 +64,7 @@ const MaterialEditor = React.forwardRef((props, ref) => {
                 <LinkButton />
                 {/* Wait till picker feature is finished */}
                 {/* <ImageButton /> */}
-                {/* <DriveButton /> */}
+                {<DriveButton />}
 
                 <Divider />
 
@@ -74,7 +76,9 @@ const MaterialEditor = React.forwardRef((props, ref) => {
 
                 <Divider />
 
-                <ToggleReadOnlyButton save={props.save} />
+                {!isMobileDevice() && (
+                    <ToggleReadOnlyButton save={props.save} />
+                )}
             </SlateToolbar>
             <SlateContent style={props.style} />
         </SlateEditor>
