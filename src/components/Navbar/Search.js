@@ -9,6 +9,7 @@ import CloseIcon from 'mdi-react/CloseIcon'
 import { getState } from '../../state'
 
 import SearchAutocomplete from './SearchAutocomplete'
+import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 
 const Search = ({
     clearSearch,
@@ -51,10 +52,22 @@ const Search = ({
             >
                 <SearchIcon />
             </IconButton>
+            {isSearchFieldActive && (
+                <IconButton
+                    aria-label="Clear search"
+                    className={classes.backIcon}
+                    onClick={clearSearch}
+                    size="small"
+                >
+                    <ArrowLeftIcon />
+                </IconButton>
+            )}
             <InputBase
                 placeholder="Search Wiki"
                 classes={{
-                    root: classes.inputRoot,
+                    root: isSearchFieldActive
+                        ? `${classes.inputRoot} ${classes.active}`
+                        : classes.inputRoot,
                     input: classes.inputInput,
                 }}
                 inputProps={{ 'aria-label': 'Search' }}
@@ -183,6 +196,31 @@ function useStyles() {
             inputRoot: {
                 color: 'inherit',
                 width: '100%',
+            },
+            active: {
+                [theme.breakpoints.down('sm')]: {
+                    width: '100vw',
+                    height: 56,
+                    position: 'fixed',
+                    left: 0,
+                    top: 0,
+                    background: 'white',
+                    zIndex: 1000,
+                    paddingLeft: 64,
+                    boxShadow:
+                        '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)',
+                },
+            },
+            backIcon: {
+                [theme.breakpoints.down('sm')]: {
+                    left: 20,
+                    position: 'fixed',
+                    top: 12,
+                    zIndex: 10001,
+                },
+                [theme.breakpoints.up('md')]: {
+                    display: 'none',
+                },
             },
             inputInput: {
                 paddingBottom: theme.spacing(1),

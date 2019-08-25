@@ -74,23 +74,9 @@ const SearchAutocomplete = ({
     return (
         <Paper
             elevation={1}
+            className={classes.root}
             style={{
-                position: 'absolute',
-                borderRadius: 8,
-                borderTopLeftRadius: 0,
-                borderTopRightRadius: 0,
-                flexDirection: 'column',
-                flexGrow: 1,
-                display: 'flex',
-                marginRight: 16,
-                marginLeft: 0,
-                maxHeight: 400,
-                maxWidth: width,
-                overflow: 'hidden',
-                padding: '2px 4px',
-                width: '100%',
                 top: height ? height + 1 : 49,
-                left: 0,
             }}
         >
             <MenuList>
@@ -124,6 +110,28 @@ export default withRouter(SearchAutocomplete)
 function useStyles() {
     const useStyles = makeStyles(theme => {
         return {
+            root: {
+                position: 'absolute',
+                borderRadius: 8,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+                flexDirection: 'column',
+                flexGrow: 1,
+                display: 'flex',
+                marginRight: 16,
+                marginLeft: 0,
+                overflow: 'hidden',
+                padding: '2px 4px',
+                width: '100%',
+                left: 0,
+                [theme.breakpoints.down('sm')]: {
+                    borderBottomLeftRadius: 0,
+                    borderBottomRightRadius: 0,
+                    height: 'calc(100vh - 46px)',
+                    marginLeft: -theme.spacing(2),
+                    width: '100vw',
+                },
+            },
             icon: {
                 color: theme.palette.primary.main,
                 //minWidth: theme.spacing(4),

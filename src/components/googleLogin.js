@@ -2,15 +2,16 @@
 // and posibilitys with google authentication
 /* global gapi */
 
-
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+
+import LogoutIcon from 'mdi-react/LogoutIcon'
 
 export default class GoogleLogin extends React.Component {
-
     componentDidMount() {
-        this.handleClientLoad();
+        this.handleClientLoad()
     }
 
     /**
@@ -18,7 +19,7 @@ export default class GoogleLogin extends React.Component {
      */
     handleClientLoad = () => {
         this.props.setIsSigningIn(true)
-        gapi.load('client:auth2', this.initClient);
+        gapi.load('client:auth2', this.initClient)
     }
 
     /**
@@ -26,31 +27,32 @@ export default class GoogleLogin extends React.Component {
      *  listeners.
      */
     initClient = () => {
-        const {
-            clientId,
-            apiKey,
-            discoveryDocs,
-            scope,
-        } = this.props
-        window.gapi.client.init({
-            apiKey,
-            clientId,
-            discoveryDocs,
-            scope,
-        }).then(() => {
-            this.props.onSuccess()
-        }, function (error) {
-            this.props.onFailure(error)
-        });
+        const { clientId, apiKey, discoveryDocs, scope } = this.props
+        window.gapi.client
+            .init({
+                apiKey,
+                clientId,
+                discoveryDocs,
+                scope,
+            })
+            .then(
+                () => {
+                    this.props.onSuccess()
+                },
+                function(error) {
+                    this.props.onFailure(error)
+                }
+            )
     }
-
 
     /**
      *  Sign in the user upon button click.
      */
-    handleAuthClick = (event) => {
+    handleAuthClick = event => {
         this.props.setIsSigningIn(true)
-        window.gapi.auth2.getAuthInstance().signIn()
+        window.gapi.auth2
+            .getAuthInstance()
+            .signIn()
             .then(
                 user => {
                     console.log(user)
@@ -59,36 +61,39 @@ export default class GoogleLogin extends React.Component {
                     // end signingIn because breakup of process
                     this.props.setIsSigningIn(false)
                 }
-            );
+            )
     }
 
     render() {
         if (this.props.isSignedIn) {
             return (
-                <Button onClick={handleSignoutClick}>
-                    Logout
-                </Button>
-            );
+                <IconButton onClick={handleSignoutClick}>
+                    <LogoutIcon />
+                </IconButton>
+            )
         } else {
             return (
-                <Button variant="contained" color="primary"
-                edge="end" id="authorize_button" className="action" onClick={this.handleAuthClick}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    edge="end"
+                    id="authorize_button"
+                    className="action"
+                    onClick={this.handleAuthClick}
+                >
                     {this.props.buttonText}
                 </Button>
-            );
+            )
         }
     }
 }
-
-
-
 
 /**
  *  Sign out the user upon button click.
  */
 function handleSignoutClick(event) {
-    window.gapi.auth2.getAuthInstance().signOut();
-    event.preventDefault();
+    window.gapi.auth2.getAuthInstance().signOut()
+    event.preventDefault()
 }
 
 GoogleLogin.propTypes = {
@@ -106,5 +111,5 @@ GoogleLogin.propTypes = {
 
 GoogleLogin.defaultProps = {
     isSignedIn: false,
-    buttonText: 'Login with Google'
+    buttonText: 'Login with Google',
 }
