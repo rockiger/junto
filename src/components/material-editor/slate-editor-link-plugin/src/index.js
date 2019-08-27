@@ -13,7 +13,10 @@ import LinkKeyboardShortcut from './LinkKeyboardShortcut'
 //
 import * as LinkUtils from './LinkUtils'
 import LinkButton from './LinkButton'
+
+import * as DriveUtils from './LinkUtils'
 import DriveButton from './DriveButton'
+import DriveLinkNode from './DriveLinkNode'
 
 const LinkPlugin = options => ({
     onKeyDown(...args) {
@@ -23,6 +26,8 @@ const LinkPlugin = options => ({
 
 export {
     DriveButton,
+    DriveLinkNode,
+    DriveUtils,
     LinkPlugin,
     LinkNode,
     LinkKeyboardShortcut,

@@ -14,7 +14,7 @@ import {
     GridCellNode,
 } from '../../slate-editor-grid-plugin/src'
 import { ImageNode, ImageLinkNode } from '../../slate-editor-image-plugin/src'
-import { LinkNode } from '../../slate-editor-link-plugin/src'
+import { LinkNode, DriveLinkNode } from '../../slate-editor-link-plugin/src'
 import {
     ListItemNode,
     OrderedListNode,
@@ -48,6 +48,8 @@ export const renderNode = props => {
     switch (props.node.type) {
         case 'alignment':
             return <AlignmentNode {...props} />
+        case 'drive-link':
+            return <DriveLinkNode {...props} />
         case 'embed':
             return <EmbedNode {...props} />
         case 'grid':
