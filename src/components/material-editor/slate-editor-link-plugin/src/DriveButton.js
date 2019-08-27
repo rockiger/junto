@@ -54,7 +54,7 @@ const openPicker = (onChange, value) => {
 
 const DriveToolbarButton = ({ value, onChange, outerState: { readOnly } }) => {
     const classes = useStyles() // HOOK: Don't call hooks conditionally
-    //if (readOnly) return null
+    if (readOnly) return null
     return (
         <IconButton
             className={classes.icon}
