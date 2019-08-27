@@ -89,7 +89,6 @@ class LinkNode extends Component {
                         <Link
                             to={node.data.get('href')}
                             {...attributes}
-                            style={{ color: 'red' }}
                             className="link-node"
                             title={node.data.get('title')}
                             ref={text => {
