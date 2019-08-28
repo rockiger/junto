@@ -4,6 +4,8 @@ import { getLink, unlink } from './LinkUtils'
 import LinkDataModal from './LinkDataModal'
 import LinkTooltip from './LinkTooltip'
 
+import OpenInNewIcon from 'mdi-react/OpenInNewIcon'
+
 // FIXME: Needs to handle assets files to work with SSR
 if (require('exenv').canUseDOM) require('./LinkNode.css')
 
@@ -109,6 +111,10 @@ class LinkNode extends Component {
                             }}
                         >
                             {children}
+                            <OpenInNewIcon
+                                size="1em"
+                                style={{ marginBottom: -2 }}
+                            />
                         </a>
                     )}
                 </span>
