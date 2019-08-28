@@ -72,6 +72,7 @@ const Navbar = props => {
                                 <Typography
                                     color="textPrimary"
                                     variant="h6"
+                                    style={{ color: '#5f6368' }}
                                     noWrap
                                 >
                                     Wiki
@@ -170,9 +171,13 @@ function useStyles() {
             logo: {
                 maxHeight: 24,
                 marginRight: theme.spacing(1.5),
+                [theme.breakpoints.up('md')]: {
+                    maxHeight: 40,
+                },
             },
             titleWrapper: {
                 display: 'flex',
+                color: '#5f6368',
                 alignItems: 'center',
                 [theme.breakpoints.up('md')]: {
                     minWidth: 236,

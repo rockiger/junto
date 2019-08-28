@@ -1,18 +1,21 @@
-import React from 'react';
+import React from 'react'
 
-export default function Spinner() {
-    return (<div className="Spinner">
-        <Svg />
-        <style>{`
+export default function Spinner({ children }) {
+    return (
+        <div className="Spinner">
+            {children}
+            <Svg />
+            <style>{`
             .Spinner {
                 width: 100%;
                 height: 100%;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
-                padding-top: 2rem;
             }
             .Spinner-spinner {
             animation: rotator 1.4s linear infinite;
+            margin: 0 auto;
             }
             @keyframes rotator {
             0% {
@@ -59,11 +62,28 @@ export default function Spinner() {
             }
             }                
         `}</style>
-    </div>);
+        </div>
+    )
 }
 
 function Svg() {
-    return (<svg className="Spinner-spinner" width="32px" height="32px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-        <circle className="Spinner-path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-    </svg>)
+    return (
+        <svg
+            className="Spinner-spinner"
+            width="32px"
+            height="32px"
+            viewBox="0 0 66 66"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <circle
+                className="Spinner-path"
+                fill="none"
+                strokeWidth="6"
+                strokeLinecap="round"
+                cx="33"
+                cy="33"
+                r="30"
+            ></circle>
+        </svg>
+    )
 }
