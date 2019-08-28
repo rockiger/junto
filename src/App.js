@@ -28,7 +28,6 @@ const initialState = {
     redirect: false,
     searchTerm: '',
     files: [],
-    theme: THEME,
 }
 
 const reducer = (state, action) => {

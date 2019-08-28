@@ -15,18 +15,22 @@ import ImageKeyboardShortcut from './ImageKeyboardShortcut'
 import * as ImageUtils from './ImageUtils'
 import ImageButton from './ImageButton'
 
+import DriveImageButton from './DriveImageButton'
+import DriveImageNode from './DriveImageNode'
 
 const ImagePlugin = options => ({
-  onKeyDown(...args) {
-    return ImageKeyboardShortcut(...args)
-  },
+    onKeyDown(...args) {
+        return ImageKeyboardShortcut(...args)
+    },
 })
 
 export {
-  ImagePlugin,
-  ImageNode,
-  ImageLinkNode,
-  ImageKeyboardShortcut,
-  ImageUtils,
-  ImageButton,
+    DriveImageButton,
+    DriveImageNode,
+    ImagePlugin,
+    ImageNode,
+    ImageLinkNode,
+    ImageKeyboardShortcut,
+    ImageUtils,
+    ImageButton,
 }

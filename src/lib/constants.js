@@ -27,12 +27,16 @@ export const THEME = createMuiTheme({
     palette: {
         background: {
             default: '#fff',
+            alternative: '#f1f3f4',
         },
         primary: {
             main: '#4285f4',
         },
         secondary: {
             main: '#ea4335',
+        },
+        grey: {
+            foreground: '#6e6f70',
         },
     },
     typography: {
