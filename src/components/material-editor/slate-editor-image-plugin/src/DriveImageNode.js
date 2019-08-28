@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import classnames from 'classnames'
 
 import FileImageOutlineIcon from 'mdi-react/FileImageOutlineIcon'
-import { THEME } from '../../../../lib/constants'
+import { THEMEVARS } from '../../../../lib/constants'
 import Spinner from '../../../spinner'
 
 // FIXME: Needs to handle assets files to work with SSR
@@ -26,7 +26,7 @@ const ImageNode = ({ node, attributes, readOnly, isSelected, children }) => {
                         <FileImageOutlineIcon
                             size={120}
                             style={{
-                                color: THEME.palette.grey.foreground,
+                                color: THEMEVARS.grey,
                                 margin: '0 auto',
                             }}
                         />

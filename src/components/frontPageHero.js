@@ -13,7 +13,7 @@ export default function FrontPageHero() {
                     style={{ textAlign: 'center' }}
                 />
             </div>
-            <h1 className="hero-title">Welcome to Awiki!</h1>
+            <h1 className="hero-title">Knowledge Base for Google Drive!</h1>
             <p className="hero-description" />
             <div className="hero-row">
                 <button className="hero-heroButon">
@@ -29,6 +29,12 @@ export default function FrontPageHero() {
                 </button>
             </div>
             <style>{`
+            body {
+                overflow-y: auto;
+            }
+            .App-main {
+                padding: 0;
+            }
             .hero {
                 width: 100%;
                 color: #333;
@@ -53,7 +59,7 @@ export default function FrontPageHero() {
                 text-align: center;
             }
             .hero-row {
-                margin: 80px 0 40px;
+                margin: 80px 0 0px;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-around;
