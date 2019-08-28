@@ -72,7 +72,6 @@ const Navbar = props => {
                                 <Typography
                                     color="textPrimary"
                                     variant="h6"
-                                    style={{ color: '#5f6368' }}
                                     noWrap
                                 >
                                     Wiki
@@ -112,7 +111,7 @@ const Navbar = props => {
                                 variant="h6"
                                 noWrap
                             >
-                                Junto Wiki
+                                Fulcrum Wiki
                             </Typography>
                         </Link>
                     </div>

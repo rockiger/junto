@@ -23,23 +23,38 @@ export const UNTITLEDFILE = UNTITLEDNAME + EXT
 
 export const DEFAULTVALUE = {}
 
+export const THEMEVARS = {
+    background: '#fff',
+    backgroundDark: '#f1f3f4',
+    primary: '#4285f4',
+    grey: '#6e6f70',
+    secondary: '#ea4335',
+    text: '#3c4043',
+}
+
 export const THEME = createMuiTheme({
     palette: {
         background: {
-            default: '#fff',
-            alternative: '#f1f3f4',
+            default: THEMEVARS.background,
+            alternative: THEMEVARS.backgroundDark,
         },
         primary: {
-            main: '#4285f4',
+            main: THEMEVARS.primary,
         },
         secondary: {
-            main: '#ea4335',
+            main: THEMEVARS.secondary,
         },
         grey: {
-            foreground: '#6e6f70',
+            foreground: THEMEVARS.grey,
+        },
+        text: {
+            primary: THEMEVARS.text,
         },
     },
     typography: {
+        h2: {
+            fontSize: '1.5rem',
+        },
         h6: {
             fontWeight: 400,
         },
