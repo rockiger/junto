@@ -11,13 +11,7 @@ import Sidebar from './components/sidebar'
 import Home from './components/home'
 import Page from './components/page'
 
-import {
-    CLIENT_ID,
-    API_KEY,
-    DISCOVERY_DOCS,
-    SCOPES,
-    THEME,
-} from './lib/constants'
+import { CLIENT_ID, API_KEY, DISCOVERY_DOCS, SCOPES } from './lib/constants'
 
 import './App.css'
 
