@@ -61,6 +61,8 @@ export const THEME = createMuiTheme({
     },
 })
 
+window.THEME = THEME
+
 export const EMPTYVALUE = {
     document: {
         nodes: [
