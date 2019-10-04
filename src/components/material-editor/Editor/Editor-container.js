@@ -57,63 +57,61 @@ const schema = {
     },
 }
 
-const Editor = ({
-    children,
-    initialValue,
-    items,
-    onChangeHandler,
-    apiKey,
-    readOnly,
-}) => {
-    const [value, setValue] = useState(initialValue)
-    //const [showModal, setShowModal] = useState(false)
-    /**
-     * Store a reference to the `editor`.
-     *
-     * @param {Editor} editor
-     */
-    const editorRef = useRef(null)
-    const modalRef = useRef(null)
+const Editor = React.forwardRef(
+    (
+        { children, initialValue, items, onChangeHandler, apiKey, readOnly },
+        editorRef
+    ) => {
+        const [value, setValue] = useState(initialValue)
+        //const [showModal, setShowModal] = useState(false)
+        /**
+         * Store a reference to the `editor`.
+         *
+         * @param {Editor} editor
+         */
+        // const editorRef = useRef(null)
+        const modalRef = useRef(null)
 
-    showModal = async (linkText = '', href = '') => {
-        const modal = modalRef.current
-        const editor = editorRef.current
-        try {
-            // Wait user to confirm !
-            const result = await modal.show(linkText, href)
-            // this line below is executed only after user click on OK
-            editor.focus()
-            return result
-        } catch (err) {
-            console.log(err)
-            editor.focus()
-            return null
+        showModal = async (linkText = '', href = '') => {
+            const modal = modalRef.current
+            const editor = editorRef.current
+            try {
+                // Wait user to confirm !
+                const result = await modal.show(linkText, href)
+                // this line below is executed only after user click on OK
+                editor.focus()
+                return result
+            } catch (err) {
+                console.log(err)
+                editor.focus()
+                return null
+            }
         }
+
+        // On change, update the app's React state with the new editor value.
+        const onChange = change => onChangeHandler(change, setValue, value)
+
+        return (
+            <EditorComponent
+                apiKey={apiKey}
+                decorateNode={decorateNode}
+                items={items}
+                plugins={plugins}
+                value={value}
+                onChange={onChange}
+                onPaste={onPaste}
+                editorRef={editorRef}
+                readOnly={readOnly}
+                renderBlock={renderBlock}
+                renderDecoration={renderDecoration}
+                renderMark={renderMark}
+                schema={schema}
+                showModal={showModal}
+                modalRef={modalRef}
+            />
+        )
     }
-
-    // On change, update the app's React state with the new editor value.
-    const onChange = change => onChangeHandler(change, setValue, value)
-
-    return (
-        <EditorComponent
-            apiKey={apiKey}
-            decorateNode={decorateNode}
-            items={items}
-            plugins={plugins}
-            value={value}
-            onChange={onChange}
-            onPaste={onPaste}
-            editorRef={editorRef}
-            readOnly={readOnly}
-            renderBlock={renderBlock}
-            renderDecoration={renderDecoration}
-            renderMark={renderMark}
-            schema={schema}
-            showModal={showModal}
-            modalRef={modalRef}
-        />
-    )
-}
+)
 export default Editor
 
 Editor.propTypes = {

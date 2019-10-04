@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
@@ -19,16 +19,32 @@ function EditorLogic({
     ...props
 }) {
     const [readOnly, setReadOnly] = useState(true)
-    const editor = React.createRef()
-    const currentEditor = editor.current
+    const editorRef = useRef(null)
+    const currentEditor = editorRef.current
+    window.editorRef = editorRef
 
     useEffect(() => {
+        function onKeyDown(ev) {
+            if (ev.key === 'e' && readOnly === true) {
+                ev.stopPropagation()
+                ev.preventDefault()
+                setReadOnly(false)
+                //window.
+                editorRef.current.focus()
+            } else if (isSaveHotkey(ev) && readOnly === false) {
+                ev.stopPropagation()
+                ev.preventDefault()
+                // save()
+                setReadOnly(true)
+                // document.querySelector('.editor--toolbar').click()
+            }
+        }
         window.addEventListener('keydown', onKeyDown)
 
         return function cleanup() {
             window.removeEventListener('keydown', onKeyDown)
         }
-    }, [onKeyDown])
+    }, [readOnly])
 
     useEffect(() => {
         return () => {
@@ -42,6 +58,19 @@ function EditorLogic({
     const initialState = Value.fromJSON(JSON.parse(initialValue))
     initStorage(initialState)
 
+    function onClickToggleButton(ev) {
+        ev.preventDefault()
+        ev.stopPropagation()
+        if (readOnly === true) {
+            setReadOnly(false)
+            //window.
+            setTimeout(() => editorRef.current.focus(), 100)
+        } else if (readOnly === false) {
+            // save()
+            setReadOnly(true)
+            // document.querySelector('.editor--toolbar').click()
+        }
+    }
     function onChange({ value }, setValue, oldValue) {
         if (value.document !== oldValue.document) {
             // check, if we really need to save changes
@@ -51,40 +80,18 @@ function EditorLogic({
         setValue(value)
     }
 
-    function onKeyDown(ev) {
-        console.log('ev.key:', ev.key)
-        console.log('readOnly:', readOnly)
-        console.log('isSaveHotkeye:', isSaveHotkey(ev))
-        if (ev.key === 'e' && readOnly === true) {
-            ev.stopPropagation()
-            ev.preventDefault()
-            console.log('SetReadonly to false')
-            setReadOnly(false)
-            console.log(readOnly)
-            //window.editorRef.current.focus()
-        } else if (isSaveHotkey(ev) && readOnly === false) {
-            ev.stopPropagation()
-            ev.preventDefault()
-            // this.props.save()
-            console.log('SetReadonly to true')
-            setReadOnly(true)
-            // document.querySelector('.editor--toolbar').click()
-        }
-    }
-
     return (
         <>
             <PageButtons>
                 <ToggleReadOnlyButton
                     readOnly={readOnly}
-                    setReadOnly={setReadOnly}
-                    onSave={() => {}}
+                    onClick={onClickToggleButton}
                 />
             </PageButtons>
             <MaterialEditor
                 initialValue={initialState}
                 onChangeHandler={onChange}
-                ref={editor}
+                ref={editorRef}
                 readOnly={readOnly}
                 save={() => save(fileId, initialValue)}
                 style={{
@@ -96,7 +103,10 @@ function EditorLogic({
             />
             <Beforeunload
                 onBeforeunload={() => {
-                    if (editor.current && !!editor.current.state.readOnly) {
+                    if (
+                        editorRef.current &&
+                        !!editorRef.current.state.readOnly
+                    ) {
                         save(fileId, initialValue)
                     }
                 }}
