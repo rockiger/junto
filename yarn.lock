@@ -1177,6 +1177,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.4.4":
+  version "7.6.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.2.tgz#c3d6e41b304ef10dcf13777a33e7694ec4a9a6dd"
+  integrity sha512-EXxN64agfUqqIGeEjI5dL5z0Sw0ZwWo1mLTi4mQowCZ42O59b7DRpZAnTC6OqdF28wMBMFKNb/4uFGrVaigSpg==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.1.0":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.1.2.tgz#090484a574fef5a2d2d7726a674eceda5c5b5644"
@@ -1604,6 +1611,16 @@
   dependencies:
     "@babel/runtime" "^7.2.0"
 
+"@material-ui/lab@^4.0.0-alpha.28":
+  version "4.0.0-alpha.28"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.28.tgz#a21955ab756d8477390a71b711c6ec4ca6cdf2e7"
+  integrity sha512-ic5LO8ASk1htzDbKB52JhYRioFGD/+HJ+XkNdYWGOUmHDNH3akD9KvCNWoQ7dP6NGOct/0dxkYxSkoVg5w64wA==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    "@material-ui/utils" "^4.4.0"
+    clsx "^1.0.4"
+    prop-types "^15.7.2"
+
 "@material-ui/styles@^4.2.0":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.2.1.tgz#b07383ffeaa840bcb6969eb17c5f0e3b734e8e5b"
@@ -1653,6 +1670,15 @@
     "@babel/runtime" "^7.2.0"
     prop-types "^15.7.2"
     react-is "^16.8.0"
+
+"@material-ui/utils@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-4.4.0.tgz#9275421e2798a067850d201212d46f12725828ad"
+  integrity sha512-UXoQVwArQEQWXxf2FPs0iJGT+MePQpKr0Qh0CPoLc1OdF0GSMTmQczcqCzwZkeHxHAOq/NkIKM1Pb/ih1Avicg==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    prop-types "^15.7.2"
+    react-is "^16.8.6"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -4086,7 +4112,7 @@ clone@^2.1.1:
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
   integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
 
-clsx@^1.0.2:
+clsx@^1.0.2, clsx@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.0.4.tgz#0c0171f6d5cb2fe83848463c15fcc26b4df8c2ec"
   integrity sha512-1mQ557MIZTrL/140j+JVdRM6e31/OA4vTYxXgqIIZlndyfjHpyawKZia1Im05Vp9BWmImkcNrNtFYQMyFcgJDg==
@@ -8757,10 +8783,10 @@ md5.js@^1.3.4:
     inherits "^2.0.1"
     safe-buffer "^5.1.2"
 
-mdi-react@^5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/mdi-react/-/mdi-react-5.5.0.tgz#710173f6ff5dd4b217a8d8874600d914dbcb054d"
-  integrity sha512-OTm2TnBRgvHaMfBJsEqxHdiLZ4SToDC/f9ewI3x8yg0g20Fk7vO3YbBdpBF5C046ls2Emv5yKshoxue6mYpP7A==
+mdi-react@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/mdi-react/-/mdi-react-6.1.0.tgz#eb53447dff0aef899d95fb951f00216ec6b2c63f"
+  integrity sha512-k/Tu204ok5ouabcrC8/9CaekseMQ+CAhHCVi7Wr9Au5qW9UkxkW/TNSKEpDImEQ2nOAXieQTawYkddNlNfxE9w==
 
 mdn-data@~1.1.0:
   version "1.1.4"
@@ -12466,6 +12492,13 @@ slate-base64-serializer@^0.2.69:
   dependencies:
     isomorphic-base64 "^1.0.2"
 
+slate-deep-table@^0.9.6:
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/slate-deep-table/-/slate-deep-table-0.9.6.tgz#5ff103bfcc90d02aa0f2a60ba1840e519db8a593"
+  integrity sha512-k3iUoGrFYzRGVWayewW3NH2Qwiumu7F4PsUcmhXLkdCfKVLXv0X9bVVGcKOIyjux8+9G8g+QefKEP6Rdf3gIyg==
+  dependencies:
+    slate-html-serializer "^0.8.0"
+
 slate-dev-environment@^0.2.0, slate-dev-environment@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/slate-dev-environment/-/slate-dev-environment-0.2.2.tgz#bd8946e1fe4cf5447060c84a362a1d026ed8b77f"
@@ -12485,6 +12518,13 @@ slate-hotkeys@^0.2.5:
   dependencies:
     is-hotkey "0.1.4"
     slate-dev-environment "^0.2.2"
+
+slate-html-serializer@^0.8.0:
+  version "0.8.10"
+  resolved "https://registry.yarnpkg.com/slate-html-serializer/-/slate-html-serializer-0.8.10.tgz#b1a34c840051f6aaf634ab949c92742eac750450"
+  integrity sha512-mWJeMLlIvuwGTbk73itvFtZtRFV0+LRvJeBlGb5NNnBsD27nJNax72mfDjb9tsM1PfYSK1JeMd087mQY1+74cg==
+  dependencies:
+    type-of "^2.0.1"
 
 slate-html-serializer@^0.8.6:
   version "0.8.6"
