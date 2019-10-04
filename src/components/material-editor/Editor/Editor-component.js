@@ -59,6 +59,7 @@ export function EditorComponent({
     onChange,
     onPaste,
     editorRef,
+    readOnly,
     renderBlock,
     renderDecoration,
     renderMark,
@@ -67,259 +68,262 @@ export function EditorComponent({
 }) {
     return (
         <>
-            <EditorToolbar>
-                <ToggleButtonGroup
-                    style={{
-                        marginRight: '1rem',
-                    }}
-                >
-                    {renderBlockButton(
-                        editorRef.current,
-                        value,
-                        <FormatHeader1Icon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'heading-one',
-                        h1Plugin.shortcut
-                    )}
-                    {renderBlockButton(
-                        editorRef.current,
-                        value,
-                        <FormatHeader2Icon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'heading-two',
-                        h2Plugin.shortcut
-                    )}
-                    {renderBlockButton(
-                        editorRef.current,
-                        value,
-                        <FormatQuoteCloseIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'block-quote',
-                        quotePlugin.shortcut
-                    )}
-                </ToggleButtonGroup>
-                <ToggleButtonGroup
-                    style={{
-                        marginRight: '1rem',
-                    }}
-                >
-                    {renderMarkButton(
-                        editorRef.current,
-                        value,
-                        <FormatBoldIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'bold',
-                        boldPlugin.shortcut
-                    )}
-                    {renderMarkButton(
-                        editorRef.current,
-                        value,
-                        <FormatItalicIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'italic',
-                        italicPlugin.shortcut
-                    )}
-                    {renderMarkButton(
-                        editorRef.current,
-                        value,
-                        <FormatUnderlineIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'underline',
-                        underlinePlugin.shortcut
-                    )}
-                    {renderMarkButton(
-                        editorRef.current,
-                        value,
-                        <FormatStrikethroughIcon
-                            style={{
-                                height: 16,
-                            }}
-                        />,
-                        'strikethrough',
-                        strikethroughPlugin.shortcut
-                    )}
-                    {renderMarkButton(
-                        editorRef.current,
-                        value,
-                        <CodeTagsIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'code',
-                        codePlugin.shortcut
-                    )}
-                </ToggleButtonGroup>
+            {!readOnly && (
+                <EditorToolbar>
+                    <ToggleButtonGroup
+                        style={{
+                            marginRight: '1rem',
+                        }}
+                    >
+                        {renderBlockButton(
+                            editorRef.current,
+                            value,
+                            <FormatHeader1Icon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'heading-one',
+                            h1Plugin.shortcut
+                        )}
+                        {renderBlockButton(
+                            editorRef.current,
+                            value,
+                            <FormatHeader2Icon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'heading-two',
+                            h2Plugin.shortcut
+                        )}
+                        {renderBlockButton(
+                            editorRef.current,
+                            value,
+                            <FormatQuoteCloseIcon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'block-quote',
+                            quotePlugin.shortcut
+                        )}
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup
+                        style={{
+                            marginRight: '1rem',
+                        }}
+                    >
+                        {renderMarkButton(
+                            editorRef.current,
+                            value,
+                            <FormatBoldIcon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'bold',
+                            boldPlugin.shortcut
+                        )}
+                        {renderMarkButton(
+                            editorRef.current,
+                            value,
+                            <FormatItalicIcon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'italic',
+                            italicPlugin.shortcut
+                        )}
+                        {renderMarkButton(
+                            editorRef.current,
+                            value,
+                            <FormatUnderlineIcon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'underline',
+                            underlinePlugin.shortcut
+                        )}
+                        {renderMarkButton(
+                            editorRef.current,
+                            value,
+                            <FormatStrikethroughIcon
+                                style={{
+                                    height: 16,
+                                }}
+                            />,
+                            'strikethrough',
+                            strikethroughPlugin.shortcut
+                        )}
+                        {renderMarkButton(
+                            editorRef.current,
+                            value,
+                            <CodeTagsIcon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'code',
+                            codePlugin.shortcut
+                        )}
+                    </ToggleButtonGroup>
 
-                <ToggleButtonGroup
-                    style={{
-                        marginRight: '1rem',
-                    }}
-                >
-                    {renderLinkButton(
-                        editorRef.current,
-                        value,
-                        <LinkIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'link',
-                        linkPlugin.shortcut
-                    )}
-                    {renderImageButton(
-                        editorRef.current,
-                        value,
-                        <ImageIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'image',
-                        apiKey
-                    )}
-                    {renderDriveButton(
-                        editorRef.current,
-                        <GoogleDriveIcon style={{ height: 18 }} />,
-                        apiKey
-                    )}
-                </ToggleButtonGroup>
-                <ToggleButtonGroup
-                    style={{
-                        marginRight: '1rem',
-                    }}
-                >
-                    {renderBlockButton(
-                        editorRef.current,
-                        value,
-                        <FormatListBulletedIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'bulleted-list',
-                        blistPlugin.shortcut
-                    )}
-                    {renderBlockButton(
-                        editorRef.current,
-                        value,
-                        <FormatListNumberedIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'numbered-list',
-                        nlistPlugin.shortcut
-                    )}
-                    {renderBlockButton(
-                        editorRef.current,
-                        value,
-                        <CodeBracesIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'code',
-                        codeBlockPlugin.shortcut
-                    )}
-                </ToggleButtonGroup>
-                <ToggleButtonGroup>
-                    {renderTableButton(
-                        editorRef.current,
-                        <TableLargeIcon
-                            style={{
-                                height: 18,
-                            }}
-                        />,
-                        'insertTable'
-                    )}
-                    {hasTable(editorRef.current) &&
-                        renderTableButton(
+                    <ToggleButtonGroup
+                        style={{
+                            marginRight: '1rem',
+                        }}
+                    >
+                        {renderLinkButton(
                             editorRef.current,
-                            <TableLargeRemoveIcon
+                            value,
+                            <LinkIcon
                                 style={{
                                     height: 18,
                                 }}
                             />,
-                            'removeTable'
+                            'link',
+                            linkPlugin.shortcut
                         )}
-                    {hasTable(editorRef.current) &&
-                        renderTableButton(
+                        {renderImageButton(
                             editorRef.current,
-                            <TableColumnPlusAfterIcon
+                            value,
+                            <ImageIcon
                                 style={{
                                     height: 18,
                                 }}
                             />,
-                            'insertColumn'
+                            'image',
+                            apiKey
                         )}
-                    {hasTable(editorRef.current) &&
-                        renderTableButton(
+                        {renderDriveButton(
                             editorRef.current,
-                            <TableColumnRemoveIcon
-                                style={{
-                                    height: 18,
-                                }}
-                            />,
-                            'removeColumn'
+                            <GoogleDriveIcon style={{ height: 18 }} />,
+                            apiKey
                         )}
-                    {hasTable(editorRef.current) &&
-                        renderTableButton(
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup
+                        style={{
+                            marginRight: '1rem',
+                        }}
+                    >
+                        {renderBlockButton(
                             editorRef.current,
-                            <TableRowPlusAfterIcon
+                            value,
+                            <FormatListBulletedIcon
                                 style={{
                                     height: 18,
                                 }}
                             />,
-                            'insertRow'
+                            'bulleted-list',
+                            blistPlugin.shortcut
                         )}
-                    {hasTable(editorRef.current) &&
-                        renderTableButton(
+                        {renderBlockButton(
                             editorRef.current,
-                            <TableRowRemoveIcon
+                            value,
+                            <FormatListNumberedIcon
                                 style={{
                                     height: 18,
                                 }}
                             />,
-                            'removeRow'
+                            'numbered-list',
+                            nlistPlugin.shortcut
                         )}
-                    {hasTable(editorRef.current) &&
-                        renderTableButton(
+                        {renderBlockButton(
                             editorRef.current,
-                            <PageLayoutHeaderIcon
+                            value,
+                            <CodeBracesIcon
                                 style={{
                                     height: 18,
                                 }}
                             />,
-                            'toggleTableHeaders',
+                            'code',
                             codeBlockPlugin.shortcut
                         )}
-                </ToggleButtonGroup>
-            </EditorToolbar>
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup>
+                        {renderTableButton(
+                            editorRef.current,
+                            <TableLargeIcon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'insertTable'
+                        )}
+                        {hasTable(editorRef.current) &&
+                            renderTableButton(
+                                editorRef.current,
+                                <TableLargeRemoveIcon
+                                    style={{
+                                        height: 18,
+                                    }}
+                                />,
+                                'removeTable'
+                            )}
+                        {hasTable(editorRef.current) &&
+                            renderTableButton(
+                                editorRef.current,
+                                <TableColumnPlusAfterIcon
+                                    style={{
+                                        height: 18,
+                                    }}
+                                />,
+                                'insertColumn'
+                            )}
+                        {hasTable(editorRef.current) &&
+                            renderTableButton(
+                                editorRef.current,
+                                <TableColumnRemoveIcon
+                                    style={{
+                                        height: 18,
+                                    }}
+                                />,
+                                'removeColumn'
+                            )}
+                        {hasTable(editorRef.current) &&
+                            renderTableButton(
+                                editorRef.current,
+                                <TableRowPlusAfterIcon
+                                    style={{
+                                        height: 18,
+                                    }}
+                                />,
+                                'insertRow'
+                            )}
+                        {hasTable(editorRef.current) &&
+                            renderTableButton(
+                                editorRef.current,
+                                <TableRowRemoveIcon
+                                    style={{
+                                        height: 18,
+                                    }}
+                                />,
+                                'removeRow'
+                            )}
+                        {hasTable(editorRef.current) &&
+                            renderTableButton(
+                                editorRef.current,
+                                <PageLayoutHeaderIcon
+                                    style={{
+                                        height: 18,
+                                    }}
+                                />,
+                                'toggleTableHeaders',
+                                codeBlockPlugin.shortcut
+                            )}
+                    </ToggleButtonGroup>
+                </EditorToolbar>
+            )}
             <SlateEditor
                 decorateNode={decorateNode}
                 plugins={plugins}
                 value={value}
                 onChange={onChange}
                 onPaste={onPaste}
+                readOnly={readOnly}
                 ref={editorRef}
                 renderBlock={renderBlock}
                 renderDecoration={renderDecoration}

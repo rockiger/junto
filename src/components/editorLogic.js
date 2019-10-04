@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 
@@ -6,6 +6,7 @@ import MaterialEditor from './material-editor'
 import { updateFile } from '../lib/gdrive'
 
 import { LOCALSTORAGE_NAME } from '../lib/constants'
+import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
 
 function EditorLogic({
     fileId,
@@ -14,6 +15,7 @@ function EditorLogic({
     setEditorDelta,
     ...props
 }) {
+    const [readOnly, setReadOnly] = useState(true)
     const editor = React.createRef()
     const currentEditor = editor.current
 
@@ -41,10 +43,18 @@ function EditorLogic({
 
     return (
         <>
+            <PageButtons>
+                <ToggleReadOnlyButton
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
+                    onSave={() => {}}
+                />
+            </PageButtons>
             <MaterialEditor
-                initialState={initialState}
-                onChange={onChange}
+                initialValue={initialState}
+                onChangeHandler={onChange}
                 ref={editor}
+                readOnly={readOnly}
                 save={() => save(fileId, initialValue)}
                 style={{
                     fontSize: '1rem',
