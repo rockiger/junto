@@ -5,12 +5,13 @@
   "dependencies": {
     "@material-ui/core": "^4.2.1",
     "@material-ui/icons": "^4.2.1",
+    "@material-ui/lab": "^4.0.0-alpha.28",
     "classnames": "^2.2.6",
     "image-extensions": "^1.1.0",
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",
     "is-url": "^1.2.4",
-    "mdi-react": "^5.5.0",
+    "mdi-react": "^6.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-autocomplete": "^1.8.1",
@@ -26,6 +27,7 @@
     "react-scripts": "3.0.1",
     "react-use-dimensions": "^1.2.1",
     "slate": "0.41.3",
+    "slate-deep-table": "^0.9.6",
     "slate-html-serializer": "^0.8.6",
     "slate-react": "0.18.11"
   },

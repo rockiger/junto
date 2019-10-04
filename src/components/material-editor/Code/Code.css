@@ -1,0 +1,10 @@
+pre.code {
+    padding: 1rem;
+}
+code.code {
+    padding: 3px;
+}
+
+.code {
+    background-color: #f1f3f4;
+}
