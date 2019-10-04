@@ -57,7 +57,14 @@ const schema = {
     },
 }
 
-const Editor = ({ children, initialValue, items, onChangeHandler, apiKey }) => {
+const Editor = ({
+    children,
+    initialValue,
+    items,
+    onChangeHandler,
+    apiKey,
+    readOnly,
+}) => {
     const [value, setValue] = useState(initialValue)
     //const [showModal, setShowModal] = useState(false)
     /**
@@ -97,6 +104,7 @@ const Editor = ({ children, initialValue, items, onChangeHandler, apiKey }) => {
             onChange={onChange}
             onPaste={onPaste}
             editorRef={editorRef}
+            readOnly={readOnly}
             renderBlock={renderBlock}
             renderDecoration={renderDecoration}
             renderMark={renderMark}
@@ -118,7 +126,7 @@ Editor.propTypes = {
             name: propTypes.string.isRequired,
         })
     ),
-    onChange: propTypes.func,
+    onChangeHandler: propTypes.func,
     renderBlock: propTypes.func,
     renderMark: propTypes.func,
 }
