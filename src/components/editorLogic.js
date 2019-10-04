@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
+import { isHotkey } from 'is-hotkey'
 
 import MaterialEditor from './material-editor'
 import { updateFile } from '../lib/gdrive'
 
 import { LOCALSTORAGE_NAME } from '../lib/constants'
 import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
+
+const isSaveHotkey = isHotkey('mod+Enter')
 
 function EditorLogic({
     fileId,
@@ -20,6 +23,14 @@ function EditorLogic({
     const currentEditor = editor.current
 
     useEffect(() => {
+        window.addEventListener('keydown', onKeyDown)
+
+        return function cleanup() {
+            window.removeEventListener('keydown', onKeyDown)
+        }
+    }, [onKeyDown])
+
+    useEffect(() => {
         return () => {
             if (currentEditor && !currentEditor.state.readOnly) {
                 console.log('useEffect for save') // check if gets fired to often
@@ -31,14 +42,34 @@ function EditorLogic({
     const initialState = Value.fromJSON(JSON.parse(initialValue))
     initStorage(initialState)
 
-    function onChange(newValue) {
-        // check, if we really need to save changes
-        if (editor.current && editor.current.state.value === newValue) {
-            console.log('onChange:', editor.current.state)
-            return
+    function onChange({ value }, setValue, oldValue) {
+        if (value.document !== oldValue.document) {
+            // check, if we really need to save changes
+            const content = JSON.stringify(oldValue.toJSON())
+            localStorage.setItem(LOCALSTORAGE_NAME, content)
         }
-        const content = JSON.stringify(newValue.toJSON())
-        localStorage.setItem(LOCALSTORAGE_NAME, content)
+        setValue(value)
+    }
+
+    function onKeyDown(ev) {
+        console.log('ev.key:', ev.key)
+        console.log('readOnly:', readOnly)
+        console.log('isSaveHotkeye:', isSaveHotkey(ev))
+        if (ev.key === 'e' && readOnly === true) {
+            ev.stopPropagation()
+            ev.preventDefault()
+            console.log('SetReadonly to false')
+            setReadOnly(false)
+            console.log(readOnly)
+            //window.editorRef.current.focus()
+        } else if (isSaveHotkey(ev) && readOnly === false) {
+            ev.stopPropagation()
+            ev.preventDefault()
+            // this.props.save()
+            console.log('SetReadonly to true')
+            setReadOnly(true)
+            // document.querySelector('.editor--toolbar').click()
+        }
     }
 
     return (
