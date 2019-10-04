@@ -144,7 +144,7 @@ export const renderDriveButton = (editor, icon, type, shortcut = '') => {
             onMouseDown={event => onClickDriveButton(editor, event, type)}
             shortcut={shortcut}
             style={{ color: isActive ? 'white' : 'black' }}
-            value={type}
+            value={'image'}
         >
             {icon}
         </ToolbarButton>
