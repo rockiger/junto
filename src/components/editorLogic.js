@@ -74,7 +74,7 @@ function EditorLogic({
     function onChange({ value }, setValue, oldValue) {
         if (value.document !== oldValue.document) {
             // check, if we really need to save changes
-            const content = JSON.stringify(oldValue.toJSON())
+            const content = JSON.stringify(value.toJSON())
             localStorage.setItem(LOCALSTORAGE_NAME, content)
         }
         setValue(value)
