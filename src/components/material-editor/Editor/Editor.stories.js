@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { Value } from 'slate'
@@ -6,8 +6,10 @@ import { Value } from 'slate'
 import Editor from './Editor-container.js'
 
 import codeValueAsJson from './codevalue.json'
+import checkListValueAsJson from './checkListValue.json'
 
 const codeValue = Value.fromJSON(codeValueAsJson)
+const checkListValue = Value.fromJSON(checkListValueAsJson)
 
 const initialValue = Value.fromJSON({
     document: {
@@ -92,33 +94,26 @@ const externalLinkValue = Value.fromJSON({
     },
 })
 
+function EditorWithRef(props) {
+    const editorRef = useRef(null)
+    return <Editor ref={editorRef} {...props} />
+}
+
 storiesOf('Editor', module)
     .addDecorator(story => (
         <div style={{ padding: '1rem', border: '1px solid rgba(0,0,0, 0.2' }}>
             {story()}
         </div>
     ))
-    .add('default', () => <Editor initialValue={initialValue} />)
-    .add('empty', () => <Editor />)
-    .add('with autocomplete items', () => <Editor items={items} />)
-    .add('replace &', () => (
-        <Editor
-            initialValue={initialValue}
-            onKeyDown={(event, editor, next) => {
-                // Return with no changes if the keypress is not '&'
-                if (event.key !== '&') return next()
-
-                // Prevent the ampersand character from being inserted
-                event.preventDefault()
-
-                // Change the value by inserting 'and' at the cursor's position.
-                editor.insertText('and')
-            }}
-        />
-    ))
-    .add('Code node', () => <Editor initialValue={codeValue} />)
+    .add('default', () => {
+        const editorRef = useRef(null)
+        return <Editor initialValue={initialValue} ref={editorRef} />
+    })
+    .add('empty', () => <EditorWithRef />)
+    .add('with autocomplete items', () => <EditorWithRef items={items} />)
+    .add('Code node', () => <EditorWithRef initialValue={codeValue} />)
     .add('localStorage', () => (
-        <Editor
+        <EditorWithRef
             initialValue={localStorageValue}
             onChangeHandler={({ value }, setValue, oldValue) => {
                 // Save the value to Local Storage.
@@ -132,5 +127,7 @@ storiesOf('Editor', module)
             }}
         />
     ))
-    .add('External Link', () => <Editor initialValue={externalLinkValue} />)
-// .add('Image', () => <Editor initialValue={imageValue} />)
+    .add('External Link', () => (
+        <EditorWithRef initialValue={externalLinkValue} />
+    ))
+    .add('Check List', () => <EditorWithRef initialValue={checkListValue} />)
