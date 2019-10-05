@@ -68,15 +68,11 @@ export const EMPTYVALUE = {
         nodes: [
             {
                 object: 'block',
-                type: 'line',
+                type: 'paragraph',
                 nodes: [
                     {
                         object: 'text',
-                        leaves: [
-                            {
-                                text: '',
-                            },
-                        ],
+                        text: '',
                     },
                 ],
             },
