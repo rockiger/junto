@@ -1,4 +1,5 @@
 import { isCodeHotkey, toKeyName } from 'is-hotkey'
+import { checkListPlugin } from './CheckList'
 
 /**
  * Define the default node type.
@@ -57,6 +58,7 @@ export const blockPlugins = [
     blistPlugin,
     nlistPlugin,
     quotePlugin,
+    checkListPlugin,
 ]
 
 function BlockPlugin(options) {
