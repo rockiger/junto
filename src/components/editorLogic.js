@@ -6,7 +6,7 @@ import { isHotkey } from 'is-hotkey'
 import MaterialEditor from './material-editor'
 import { updateFile } from '../lib/gdrive'
 
-import { LOCALSTORAGE_NAME } from '../lib/constants'
+import { LOCALSTORAGE_NAME, API_KEY } from '../lib/constants'
 import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
 
 const isSaveHotkey = isHotkey('mod+Enter')
@@ -89,6 +89,7 @@ function EditorLogic({
                 />
             </PageButtons>
             <MaterialEditor
+                apiKey={API_KEY}
                 initialValue={initialState}
                 onChangeHandler={onChange}
                 ref={editorRef}
