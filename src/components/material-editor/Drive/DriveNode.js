@@ -112,7 +112,7 @@ const onClickDriveButton = async (editor, event, apiKey) => {
                 .moveFocusBackward(name.length)
                 .wrapInline({
                     type: 'drive-link',
-                    data: { editor, id, name, href, iconUrl },
+                    data: { id, name, href, iconUrl },
                 })
                 .moveToEnd()
                 .insertText(' ')
