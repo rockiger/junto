@@ -4,7 +4,7 @@ export function getTitleFromFileName(filename) {
     return filename.substr(0, filename.length - EXTLENGTH)
 }
 
-export function getExtFromFilenName(filename) {
+export function getExtFromFileName(filename) {
     return filename.substr(filename.length - EXTLENGTH)
 }
 
