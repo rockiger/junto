@@ -74,7 +74,7 @@ const Navbar = props => {
                                     variant="h6"
                                     noWrap
                                 >
-                                    Wiki
+                                    Fulcrum
                                 </Typography>
                             </Link>
                         </div>

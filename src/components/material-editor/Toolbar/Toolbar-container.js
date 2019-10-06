@@ -4,7 +4,7 @@ import { ToggleButton } from '@material-ui/lab'
 
 export const EditorToolbar = props => {
     return (
-        <div style={{ border: '1px solid #ccc', padding: 8 }}>
+        <div style={{ borderBottom: '1px solid #ccc', padding: 8 }}>
             {props.children}
         </div>
     )
