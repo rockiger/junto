@@ -4,10 +4,13 @@ import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
 
 import MaterialEditor from './material-editor'
-import { updateFile } from '../lib/gdrive'
-
-import { LOCALSTORAGE_NAME, API_KEY } from '../lib/constants'
+import FulcrumLogo from './FulcrumLogo'
 import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
+
+import { getState } from '../state'
+import { updateFile } from '../lib/gdrive'
+import { getExtFromFileName, getTitleFromFileName } from '../lib/helper'
+import { LOCALSTORAGE_NAME, API_KEY, EXT } from '../lib/constants'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -18,10 +21,12 @@ function EditorLogic({
     setEditorDelta,
     ...props
 }) {
+    const [{ files }] = getState()
     const [readOnly, setReadOnly] = useState(true)
     const editorRef = useRef(null)
     const currentEditor = editorRef.current
     window.editorRef = editorRef
+    console.log('files:', files)
 
     useEffect(() => {
         function onKeyDown(ev) {
@@ -91,6 +96,7 @@ function EditorLogic({
             <MaterialEditor
                 apiKey={API_KEY}
                 initialValue={initialState}
+                items={convertFilesToAutocompletItems(files)}
                 onChangeHandler={onChange}
                 ref={editorRef}
                 readOnly={readOnly}
@@ -146,4 +152,23 @@ async function save(fileId, initialValue) {
     }
 }
 
+function convertFilesToAutocompletItems(files) {
+    if (files && files.map) {
+        const items = files
+            .filter(file => {
+                const ext = getExtFromFileName(file.name)
+                return ext === EXT
+            })
+            .map(file => {
+                return {
+                    href: `/page/${file.id}`,
+                    id: file.id,
+                    icon: FulcrumLogo,
+                    name: getTitleFromFileName(file.name),
+                }
+            })
+        console.log('items:', items)
+        return items
+    }
+}
 export default EditorLogic

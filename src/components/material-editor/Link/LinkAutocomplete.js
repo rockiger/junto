@@ -82,7 +82,7 @@ class LinkAutocomplete extends React.Component {
                         >
                             <item.icon />
                         </span>
-                        <span style={{ verticalAlign: 'middle' }}>
+                        <span style={{ verticalAlign: 'super' }}>
                             {item.name}
                         </span>
                     </div>
