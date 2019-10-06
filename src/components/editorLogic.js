@@ -34,14 +34,12 @@ function EditorLogic({
                 ev.stopPropagation()
                 ev.preventDefault()
                 setReadOnly(false)
-                //window.
                 editorRef.current.focus()
             } else if (isSaveHotkey(ev) && readOnly === false) {
                 ev.stopPropagation()
                 ev.preventDefault()
-                // save()
+                save(fileId, initialValue)
                 setReadOnly(true)
-                // document.querySelector('.editor--toolbar').click()
             }
         }
         window.addEventListener('keydown', onKeyDown)
@@ -68,12 +66,10 @@ function EditorLogic({
         ev.stopPropagation()
         if (readOnly === true) {
             setReadOnly(false)
-            //window.
             setTimeout(() => editorRef.current.focus(), 100)
         } else if (readOnly === false) {
-            // save()
+            save(fileId, initialValue)
             setReadOnly(true)
-            // document.querySelector('.editor--toolbar').click()
         }
     }
     function onChange({ value }, setValue, oldValue) {
@@ -100,7 +96,6 @@ function EditorLogic({
                 onChangeHandler={onChange}
                 ref={editorRef}
                 readOnly={readOnly}
-                save={() => save(fileId, initialValue)}
                 style={{
                     fontSize: '1rem',
                     height: 'calc(100vh - 65px - 51px)',
