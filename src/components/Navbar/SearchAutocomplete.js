@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
-import { getTitleFromFileName, getExtFromFilenName } from '../../lib/helper'
+import { getTitleFromFileName, getExtFromFileName } from '../../lib/helper'
 import { EXT } from '../../lib/constants'
 
 const SearchAutocomplete = ({
@@ -40,7 +40,7 @@ const SearchAutocomplete = ({
                     file.name.toLowerCase().includes(searchValue.toLowerCase())
                 )
                 .filter(file => {
-                    const ext = getExtFromFilenName(file.name)
+                    const ext = getExtFromFileName(file.name)
                     return ext === EXT
                 })
         )

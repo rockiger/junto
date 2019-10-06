@@ -7,7 +7,7 @@ import { getState } from '../state'
 
 import Spinner from './spinner'
 import { EXT } from '../lib/constants'
-import { getTitleFromFileName, getExtFromFilenName } from '../lib/helper'
+import { getTitleFromFileName, getExtFromFileName } from '../lib/helper'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 const FileListPartial = props => {
@@ -17,7 +17,7 @@ const FileListPartial = props => {
         <List className="filelist-list">
             {props.files
                 .filter(file => {
-                    const ext = getExtFromFilenName(file.name)
+                    const ext = getExtFromFileName(file.name)
                     return ext === EXT
                 })
                 .map(file => {
