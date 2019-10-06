@@ -26,7 +26,6 @@ function EditorLogic({
     const editorRef = useRef(null)
     const currentEditor = editorRef.current
     window.editorRef = editorRef
-    console.log('files:', files)
 
     useEffect(() => {
         function onKeyDown(ev) {
@@ -47,6 +46,7 @@ function EditorLogic({
         return function cleanup() {
             window.removeEventListener('keydown', onKeyDown)
         }
+        // eslint-disable-next-line
     }, [readOnly])
 
     useEffect(() => {
@@ -162,7 +162,6 @@ function convertFilesToAutocompletItems(files) {
                     name: getTitleFromFileName(file.name),
                 }
             })
-        console.log('items:', items)
         return items
     }
 }

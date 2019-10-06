@@ -1,5 +1,6 @@
 import React from 'react'
 import { hasBlock } from './blockPlugins'
+import './Block.css'
 
 import { ToolbarButton } from '../Toolbar/Toolbar-container'
 

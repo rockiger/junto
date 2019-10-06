@@ -141,7 +141,7 @@ export default class Page extends React.Component {
                             font: unset;
                             font-family: Roboto, "Open Sans", Helvetica, Arial, sans-serif;
                             font-weight: 400;;
-                            padding: 0 .5rem;
+                            padding: 0 calc(.5rem - 1px);
                         }
                         .editorInput:hover {
                             border-color: #dadce0;
