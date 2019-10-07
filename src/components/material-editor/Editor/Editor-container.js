@@ -119,7 +119,7 @@ Editor.propTypes = {
     items: propTypes.arrayOf(
         propTypes.shape({
             id: propTypes.string.isRequired,
-            icon: propTypes.node,
+            icon: propTypes.function,
             href: propTypes.string.isRequired,
             name: propTypes.string.isRequired,
         })
