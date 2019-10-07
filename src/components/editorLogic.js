@@ -24,8 +24,10 @@ function EditorLogic({
     const [{ files }] = getState()
     const [readOnly, setReadOnly] = useState(true)
     const editorRef = useRef(null)
+
     const currentEditor = editorRef.current
     window.editorRef = editorRef
+    const initialState = Value.fromJSON(JSON.parse(initialValue))
 
     useEffect(() => {
         function onKeyDown(ev) {
@@ -58,8 +60,10 @@ function EditorLogic({
         }
     }, [currentEditor, fileId, initialValue])
 
-    const initialState = Value.fromJSON(JSON.parse(initialValue))
-    initStorage(initialState)
+    useEffect(() => {
+        initStorage(initialValue)
+        // eslint-disable-next-line
+    }, [])
 
     function onClickToggleButton(ev) {
         ev.preventDefault()
@@ -117,9 +121,8 @@ function EditorLogic({
     )
 }
 
-function initStorage(initialState) {
-    const content = JSON.stringify(initialState.toJSON())
-    localStorage.setItem(LOCALSTORAGE_NAME, content)
+function initStorage(initialValue) {
+    localStorage.setItem(LOCALSTORAGE_NAME, initialValue)
 }
 async function save(fileId, initialValue) {
     console.log('save()')
