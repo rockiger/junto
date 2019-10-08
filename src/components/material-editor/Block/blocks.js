@@ -145,8 +145,8 @@ const onClickBlockButton = (editor, event, type) => {
 
     // Handle everything but list buttons.
     if (type !== 'bulleted-list' && type !== 'numbered-list') {
-        const isActive = hasBlock(type)
-        const isList = hasBlock('list-item')
+        const isActive = hasBlock(editor, type)
+        const isList = hasBlock(editor, 'list-item')
 
         if (isList) {
             editor
@@ -158,7 +158,7 @@ const onClickBlockButton = (editor, event, type) => {
         }
     } else {
         // Handle the extra wrapping required for list buttons.
-        const isList = hasBlock('list-item')
+        const isList = hasBlock(editor, 'list-item')
         const isType = value.blocks.some(block => {
             return !!document.getClosest(
                 block.key,
