@@ -23,6 +23,7 @@ function EditorLogic({
 }) {
     const [{ files }] = getState()
     const [readOnly, setReadOnly] = useState(true)
+    const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
     const editorRef = useRef(null)
 
     const currentEditor = editorRef.current
@@ -44,6 +45,12 @@ function EditorLogic({
             }
         }
         window.addEventListener('keydown', onKeyDown)
+
+        if (readOnly) {
+            setHeight('calc(100vh - 65px - 57px)')
+        } else {
+            setHeight('calc(100vh - 65px - 57px - 43px)')
+        }
 
         return function cleanup() {
             window.removeEventListener('keydown', onKeyDown)
@@ -80,7 +87,7 @@ function EditorLogic({
         if (value.document !== oldValue.document) {
             // check, if we really need to save changes
             const content = JSON.stringify(value.toJSON())
-            //localStorage.setItem(LOCALSTORAGE_NAME, content)
+            localStorage.setItem(LOCALSTORAGE_NAME, content)
         }
         setValue(value)
     }
@@ -102,7 +109,7 @@ function EditorLogic({
                 readOnly={readOnly}
                 style={{
                     fontSize: '1rem',
-                    height: 'calc(100vh - 65px - 51px)',
+                    height,
                     padding: '.7rem 1rem .7rem .7rem',
                     overflowY: 'auto',
                 }}

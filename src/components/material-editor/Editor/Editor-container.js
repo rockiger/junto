@@ -59,7 +59,15 @@ const schema = {
 
 const Editor = React.forwardRef(
     (
-        { children, initialValue, items, onChangeHandler, apiKey, readOnly },
+        {
+            children,
+            initialValue,
+            items,
+            onChangeHandler,
+            apiKey,
+            readOnly,
+            style,
+        },
         editorRef
     ) => {
         const [value, setValue] = useState(initialValue)
@@ -107,6 +115,7 @@ const Editor = React.forwardRef(
                 renderMark={renderMark}
                 schema={schema}
                 showModal={showModal}
+                style={style}
                 modalRef={modalRef}
             />
         )

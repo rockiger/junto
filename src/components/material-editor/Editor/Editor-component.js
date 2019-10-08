@@ -65,6 +65,7 @@ export function EditorComponent({
     renderMark,
     modalRef,
     schema,
+    style,
 }) {
     return (
         <>
@@ -329,12 +330,16 @@ export function EditorComponent({
                 renderDecoration={renderDecoration}
                 renderMark={renderMark}
                 schema={schema}
-                style={{
-                    fontSize: '1rem',
-                    height: 'calc(100vh - 64px - 58px)',
-                    overflowY: 'auto',
-                    padding: '0 .5rem',
-                }}
+                style={
+                    style
+                        ? style
+                        : {
+                              fontSize: '1rem',
+                              height: 'calc(100vh - 64px - 58px)',
+                              overflowY: 'auto',
+                              padding: '0 .5rem',
+                          }
+                }
             />
             <LinkModal ref={modalRef} items={items} />
         </>
