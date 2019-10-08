@@ -341,3 +341,17 @@ export function updateFile(driveId, newData) {
             )
     })
 }
+
+/**
+ * Replaces the file content with newData. Can reject
+ *
+ * @method refreshSession
+ * @return {Promise|Object} A promise of the result that returns
+ * a story description: {driveId, driveVersion, name, ifid}
+ */
+export function refreshSession() {
+    return gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .reloadAuthResponse()
+}
