@@ -85,7 +85,9 @@ class App extends React.Component {
     setIsSigningIn = isSigningIn => this.setState({ isSigningIn })
 
     onFailure = error => {
+        alert(`We couldn't sign you in. Please reload your app and try again.`)
         console.log(JSON.stringify(error, null, 2))
+        this.setState({ isSigningIn: false })
     }
 
     onSuccess = () => {

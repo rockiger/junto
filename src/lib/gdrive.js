@@ -121,6 +121,7 @@ export async function createFile(name, parentId) {
 
         return response.result.id
     } catch (err) {
+        alert(`Couldn't create new file. Please reload the page and try again.`)
         console.log(err)
     }
 }
@@ -146,6 +147,7 @@ export async function createNewWiki(name = 'Awiki Documents') {
 
         return JSON.parse(result.body).id
     } catch (err) {
+        alert(`We couldn't create your base on your Google Drive.`)
         console.log(err)
     }
 }

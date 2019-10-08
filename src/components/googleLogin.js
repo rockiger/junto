@@ -27,7 +27,14 @@ export default class GoogleLogin extends React.Component {
      *  listeners.
      */
     initClient = () => {
-        const { clientId, apiKey, discoveryDocs, scope } = this.props
+        const {
+            clientId,
+            apiKey,
+            discoveryDocs,
+            scope,
+            onFailure,
+            onSuccess,
+        } = this.props
         window.gapi.client
             .init({
                 apiKey,
@@ -37,10 +44,10 @@ export default class GoogleLogin extends React.Component {
             })
             .then(
                 () => {
-                    this.props.onSuccess()
+                    onSuccess()
                 },
-                function(error) {
-                    this.props.onFailure(error)
+                error => {
+                    onFailure(error)
                 }
             )
     }
