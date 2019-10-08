@@ -41,7 +41,6 @@ const LinkTooltip = props => {
                 alt={props.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => window.open(props.href, '_blank')}
                 style={{
                     cursor: 'pointer',
                     display: 'inline-block',
