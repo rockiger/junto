@@ -6,6 +6,7 @@ import {
     updateFile,
     getFolderId,
     createNewWiki,
+    refreshSession,
 } from '../lib/gdrive'
 import FileListRenderer from './fileListRenderer'
 import { EXT } from '../lib/constants'
@@ -44,18 +45,30 @@ export default class FileList extends React.Component {
         const folderId = await getFolderId()
         console.log('searchTerm: ', searchTerm)
         if (folderId) {
-            const files = await listFiles(searchTerm)
-            console.log('listFiles:', files)
-            this.setState(
-                { isLoading: false },
-                dispatch({
-                    type: 'SET_FILES',
-                    payload: {
-                        files,
-                        oldSearchTerm: searchTerm,
-                    },
-                })
-            )
+            try {
+                const files = await listFiles(searchTerm)
+                console.log('listFiles:', files)
+                this.setState(
+                    { isLoading: false },
+                    dispatch({
+                        type: 'SET_FILES',
+                        payload: {
+                            files,
+                            oldSearchTerm: searchTerm,
+                        },
+                    })
+                )
+            } catch (err) {
+                if (err.message === 'Invalid Credentials') {
+                    try {
+                        refreshSession()
+                    } catch (err) {
+                        alert(`Couldn't load files`)
+                    }
+                } else {
+                    alert(`Couldn't load files`)
+                }
+            }
         } else {
             const newFolderId = await createNewWiki()
             const newFileId = await createFile(`Home${EXT}`, newFolderId)

@@ -2,7 +2,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Redirect } from 'react-router-dom'
-import { renameFile, downloadFile, getFileDescription } from '../lib/gdrive'
+import {
+    renameFile,
+    downloadFile,
+    getFileDescription,
+    refreshSession,
+} from '../lib/gdrive'
 
 import EditorLogic from './editorLogic'
 
@@ -55,17 +60,31 @@ export default class Page extends React.Component {
 
     loadEditorContent = async ev => {
         if (this.state.fileId) {
-            const fileContent = await downloadFile(this.state.fileId)
-            const fileDescription = await getFileDescription(this.state.fileId)
-            const pageHead = getTitleFromFileName(fileDescription.name)
-            console.log('this.loadEditorContent:', JSON.parse(fileContent))
-            this.setState({
-                initialContent: fileContent ? fileContent : '',
-                fileLoaded: true,
-                fileLoading: false,
-                fileName: fileDescription.name,
-                pageHead,
-            })
+            try {
+                const fileContent = await downloadFile(this.state.fileId)
+                const fileDescription = await getFileDescription(
+                    this.state.fileId
+                )
+                const pageHead = getTitleFromFileName(fileDescription.name)
+                console.log('this.loadEditorContent:', JSON.parse(fileContent))
+                this.setState({
+                    initialContent: fileContent ? fileContent : '',
+                    fileLoaded: true,
+                    fileLoading: false,
+                    fileName: fileDescription.name,
+                    pageHead,
+                })
+            } catch (err) {
+                if (err.message === 'Invalid Credentials') {
+                    try {
+                        refreshSession()
+                    } catch (err) {
+                        alert(`Couldn't load files`)
+                    }
+                } else {
+                    alert(`Couldn't load files`)
+                }
+            }
         } else {
             Router.push('/')
         }
