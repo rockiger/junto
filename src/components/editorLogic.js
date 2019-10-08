@@ -80,7 +80,7 @@ function EditorLogic({
         if (value.document !== oldValue.document) {
             // check, if we really need to save changes
             const content = JSON.stringify(value.toJSON())
-            localStorage.setItem(LOCALSTORAGE_NAME, content)
+            //localStorage.setItem(LOCALSTORAGE_NAME, content)
         }
         setValue(value)
     }
@@ -145,6 +145,9 @@ async function save(fileId, initialValue) {
         await updateFile(fileId, newValue)
         console.log('save:', fileId)
     } catch (err) {
+        alert(
+            `Couldn't save file with id: ${fileId}.\nPlease copy the content and reload the page.`
+        )
         console.log("save: Couldn't save file with id:", fileId)
         console.log('Error:', err)
     }
