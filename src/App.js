@@ -110,6 +110,7 @@ class App extends React.Component {
      *  appropriately. After a sign-in, the API is called.
      */
     updateSigninStatus = isSignedIn => {
+        console.log({ isSignedIn })
         this.setState({ isSignedIn, isSigningIn: false })
     }
 

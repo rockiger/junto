@@ -59,14 +59,19 @@ export default class FileList extends React.Component {
                     })
                 )
             } catch (err) {
-                if (err.message === 'Invalid Credentials') {
+                const body = JSON.parse(err.body)
+                const { error } = body
+                if (error.message === 'Invalid Credentials') {
                     try {
-                        refreshSession()
+                        await refreshSession()
+                        this.listFiles()
                     } catch (err) {
-                        alert(`Couldn't load files`)
+                        alert(`Couldn't refresh session: ${err.message}`)
+                        console.log({ err })
                     }
                 } else {
-                    alert(`Couldn't load files`)
+                    alert(`Couldn't load files ${err}`)
+                    console.log({ error })
                 }
             }
         } else {
