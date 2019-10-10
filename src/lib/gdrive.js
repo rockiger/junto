@@ -350,6 +350,11 @@ export function updateFile(driveId, newData) {
  * a story description: {driveId, driveVersion, name, ifid}
  */
 export function refreshSession() {
+    const isTokenValid = function() {
+        var token = gapi.auth.getToken()
+        return token && Date.now() < token.expires_at
+    }
+    console.log(isTokenValid())
     return gapi.auth2
         .getAuthInstance()
         .currentUser.get()

@@ -75,14 +75,19 @@ export default class Page extends React.Component {
                     pageHead,
                 })
             } catch (err) {
-                if (err.message === 'Invalid Credentials') {
+                const body = JSON.parse(err.body)
+                const { error } = body
+                if (error.message === 'Invalid Credentials') {
                     try {
-                        refreshSession()
+                        await refreshSession()
+                        this.loadEditorContent()
                     } catch (err) {
-                        alert(`Couldn't load files`)
+                        alert(`Couldn't refresh session:`)
+                        console.log({ err })
                     }
                 } else {
-                    alert(`Couldn't load files`)
+                    alert(`Couldn't load file`)
+                    console.log({ error })
                 }
             }
         } else {
