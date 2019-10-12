@@ -12,6 +12,7 @@ setGlobal({
     oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
+    searchValue: '', // The value in the searchfield
     files: [],
 })
 
