@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
@@ -11,7 +11,7 @@ import { getTitleFromFileName, getExtFromFileName } from '../lib/helper'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 const FileListPartial = props => {
-    const [, dispatch] = getState()
+    const [, setSearchTerm] = useGlobal('searchTerm')
     const classes = useStyles()
     return (
         <List className="filelist-list">
@@ -26,14 +26,7 @@ const FileListPartial = props => {
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
                                 className={classes.link}
-                                onClick={() =>
-                                    dispatch({
-                                        type: 'SET_SEARCHTERM',
-                                        payload: {
-                                            searchTerm: '',
-                                        },
-                                    })
-                                }
+                                onClick={() => setSearchTerm('')}
                                 to={`/page/${file.id}`}
                             >
                                 <ListItemIcon className={classes.icon}>
@@ -111,7 +104,7 @@ const Periods = ({ files }) => {
 }
 
 const FileListRenderer = props => {
-    const [{ searchTerm }] = getState()
+    const { searchTerm } = props
     return (
         <div className="filelist">
             <h1>{searchTerm ? 'Search Result' : 'Your Work'}</h1>

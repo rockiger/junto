@@ -134,7 +134,7 @@ class App extends React.Component {
                                 />
                             </Navbar>
                         </header>
-                        {/*<main className="App-main">
+                        <main className="App-main">
                             {this.state.isSignedIn && (
                                 <aside className="App-sidebar">
                                     <Sidebar
@@ -156,7 +156,7 @@ class App extends React.Component {
                                         />
                                     )}
                                 />
-                                <Route
+                                {/*    <Route
                                     exact
                                     path="/page/:id"
                                     render={props => (
@@ -167,9 +167,9 @@ class App extends React.Component {
                                             setGoToNewFile={this.setGoToNewFile}
                                         />
                                     )}
-                                />
+                                    /> */}
                             </div>
-                                    </main>*/}
+                        </main>
                     </div>
                 </Router>
             </ThemeProvider>
