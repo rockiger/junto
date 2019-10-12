@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useGlobal, useState } from 'reactn'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-
-import { getState } from '../../state'
 
 import logo from '../../static/logo_48.svg'
 import { makeStyles } from '@material-ui/core/styles'
@@ -11,7 +9,9 @@ import { AppBar, Paper, Typography, Toolbar } from '@material-ui/core'
 import Search from './Search'
 
 const Navbar = props => {
-    const [{ isSearchFieldActive, searchTerm }, dispatch] = getState()
+    const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
+    const [, setOldSearchTerm] = useGlobal('oldSearchTerm')
+    const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
     const [searchValue, setSearchValue] = useState('')
 
     const classes = useStyles()
@@ -22,29 +22,16 @@ const Navbar = props => {
     }, [searchTerm])
 
     const submit = () => {
-        dispatch({
-            type: 'SET_SEARCHTERM',
-            payload: {
-                searchTerm: searchValue,
-            },
-        })
-        dispatch({
-            type: 'DEACTIVATE_SEARCH_FIELD',
-        })
+        setSearchTerm(searchValue)
+        setIsSearchFieldActive(false)
         props.history.push('/')
     }
 
     const clearSearch = () => {
         setSearchValue(searchTerm)
-        dispatch({
-            type: 'SET_SEARCHTERM',
-            payload: {
-                searchTerm: '',
-            },
-        })
-        dispatch({
-            type: 'DEACTIVATE_SEARCH_FIELD',
-        })
+        setOldSearchTerm(searchTerm)
+        setSearchTerm('')
+        setIsSearchFieldActive(false)
     }
 
     if (props.isSignedIn) {
@@ -78,14 +65,7 @@ const Navbar = props => {
                                 </Typography>
                             </Link>
                         </div>
-                        <Search
-                            clearSearch={clearSearch}
-                            dispatch={dispatch}
-                            isSearchFieldActive={isSearchFieldActive}
-                            searchValue={searchValue}
-                            setSearchValue={val => setSearchValue(val)}
-                            submit={submit}
-                        />
+                        <Search clearSearch={clearSearch} submit={submit} />
                         <div className={classes.grow} />
                         <div>{props.children}</div>
                     </Toolbar>
