@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'reactn'
 
 import {
     listFiles,
@@ -10,24 +10,18 @@ import {
 } from '../lib/gdrive'
 import FileListRenderer from './fileListRenderer'
 import { EXT } from '../lib/constants'
-import { StateContext } from '../state'
 
 export default class FileList extends React.Component {
-    static contextType = StateContext
-
     componentDidMount() {
-        const [{ isFileListLoading }, dispatch] = this.context
+        const { isFileListLoading } = this.global
         if (!isFileListLoading) {
-            dispatch({ type: 'FILELIST_LOADING' })
+            this.setGlobal({ isFileListLoading: true })
             this.listFiles()
         }
     }
 
     componentDidUpdate() {
-        const [
-            { isFileListLoading, oldSearchTerm, searchTerm },
-            dispatch,
-        ] = this.context
+        const { isFileListLoading, oldSearchTerm, searchTerm } = this.global
         console.log(
             'componentDidUpdate:',
             isFileListLoading,
@@ -35,29 +29,25 @@ export default class FileList extends React.Component {
             searchTerm
         )
         if (!isFileListLoading && oldSearchTerm !== searchTerm) {
-            dispatch({ type: 'FILELIST_LOADING' })
+            this.setGlobal({ isFileListLoading: true })
             this.listFiles()
         }
     }
 
     listFiles = async () => {
-        const [{ searchTerm }, dispatch] = this.context
+        const { searchTerm } = this.global
         const folderId = await getFolderId()
         console.log('searchTerm: ', searchTerm)
         if (folderId) {
             try {
                 const files = await listFiles(searchTerm)
                 console.log('listFiles:', files)
-                this.setState(
-                    { isLoading: false },
-                    dispatch({
-                        type: 'SET_FILES',
-                        payload: {
-                            files,
-                            oldSearchTerm: searchTerm,
-                        },
-                    })
-                )
+                this.setState({ isLoading: false })
+                this.setGlobal({
+                    files,
+                    isFileListLoading: false,
+                    oldSearchTerm: searchTerm,
+                })
             } catch (err) {
                 const body = JSON.parse(err.body)
                 const { error } = body
@@ -85,7 +75,7 @@ export default class FileList extends React.Component {
     }
 
     render() {
-        const [{ files, isFileListLoading }] = this.context
+        const { files, isFileListLoading, searchTerm } = this.global
         return <FileListRenderer isLoading={isFileListLoading} files={files} />
     }
 }
