@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useGlobal, useEffect } from 'reactn'
 import useDimensions from 'react-use-dimensions'
 
 import { IconButton, InputBase, Paper } from '@material-ui/core'
@@ -6,20 +6,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from 'mdi-react/SearchIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 
-import { getState } from '../../state'
-
 import SearchAutocomplete from './SearchAutocomplete'
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 
-const Search = ({
-    clearSearch,
-    dispatch,
-    isSearchFieldActive,
-    searchValue,
-    setSearchValue,
-    submit,
-}) => {
-    const [{ files }] = getState()
+const Search = ({ clearSearch, submit }) => {
+    const [files] = useGlobal('files')
+    const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
+        'isSearchFieldActive'
+    )
+    const [searchValue, setSearchValue] = useState('')
+
     const [searchRef, { height, width }] = useDimensions()
     const [selectedRow, setSelectedRow] = useState(null)
     const [submitSelected, setSubmitSelected] = useState(false)
@@ -71,16 +67,10 @@ const Search = ({
                     input: classes.inputInput,
                 }}
                 inputProps={{ 'aria-label': 'Search' }}
-                onClick={() => dispatch({ type: 'ACTIVATE_SEARCH_FIELD' })}
-                onFocus={() => dispatch({ type: 'ACTIVATE_SEARCH_FIELD' })}
+                onClick={() => setIsSearchFieldActive(true)}
+                onFocus={() => setIsSearchFieldActive(true)}
                 onBlur={() =>
-                    setTimeout(
-                        () =>
-                            dispatch({
-                                type: 'DEACTIVATE_SEARCH_FIELD',
-                            }),
-                        100
-                    )
+                    setTimeout(() => setIsSearchFieldActive(false), 100)
                 }
                 onChange={ev => {
                     setSearchValue(ev.target.value)

@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/styles'
 
-import { StateProvider } from './state'
-
 import Navbar from './components/Navbar'
 import GoogleLogin from './components/googleLogin'
 import Sidebar from './components/sidebar'
@@ -117,77 +115,63 @@ class App extends React.Component {
     render() {
         return (
             <ThemeProvider theme={THEME}>
-                <StateProvider initialState={initialState} reducer={reducer}>
-                    <Router>
-                        <CssBaseline />
-                        <div className="App">
-                            <header className="App-header">
-                                <Navbar isSignedIn={this.state.isSignedIn}>
-                                    <GoogleLogin
-                                        clientId={CLIENT_ID}
-                                        apiKey={API_KEY}
-                                        discoveryDocs={DISCOVERY_DOCS}
-                                        scope={SCOPES}
-                                        buttonText="Login"
-                                        onSuccess={this.onSuccess}
-                                        onFailure={this.onFailure}
-                                        onLogout={this.onLogout}
-                                        isSignedIn={this.state.isSignedIn}
-                                        setIsSigningIn={this.setIsSigningIn}
+                <Router>
+                    <CssBaseline />
+                    <div className="App">
+                        <header className="App-header">
+                            <Navbar isSignedIn={this.state.isSignedIn}>
+                                <GoogleLogin
+                                    clientId={CLIENT_ID}
+                                    apiKey={API_KEY}
+                                    discoveryDocs={DISCOVERY_DOCS}
+                                    scope={SCOPES}
+                                    buttonText="Login"
+                                    onSuccess={this.onSuccess}
+                                    onFailure={this.onFailure}
+                                    onLogout={this.onLogout}
+                                    isSignedIn={this.state.isSignedIn}
+                                    setIsSigningIn={this.setIsSigningIn}
+                                />
+                            </Navbar>
+                        </header>
+                        {/*<main className="App-main">
+                            {this.state.isSignedIn && (
+                                <aside className="App-sidebar">
+                                    <Sidebar
+                                        goToNewFile={this.state.goToNewFile}
+                                        setGoToNewFile={this.setGoToNewFile}
                                     />
-                                </Navbar>
-                            </header>
-                            <main className="App-main">
-                                {this.state.isSignedIn && (
-                                    <aside className="App-sidebar">
-                                        <Sidebar
-                                            goToNewFile={this.state.goToNewFile}
+                                </aside>
+                            )}
+                            <div className="App-main-content">
+                                <Route
+                                    exact
+                                    path="/"
+                                    render={props => (
+                                        <Home
+                                            {...props}
+                                            isSignedIn={this.state.isSignedIn}
+                                            isSigningIn={this.state.isSigningIn}
                                             setGoToNewFile={this.setGoToNewFile}
                                         />
-                                    </aside>
-                                )}
-                                <div className="App-main-content">
-                                    <Route
-                                        exact
-                                        path="/"
-                                        render={props => (
-                                            <Home
-                                                {...props}
-                                                isSignedIn={
-                                                    this.state.isSignedIn
-                                                }
-                                                isSigningIn={
-                                                    this.state.isSigningIn
-                                                }
-                                                setGoToNewFile={
-                                                    this.setGoToNewFile
-                                                }
-                                            />
-                                        )}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/page/:id"
-                                        render={props => (
-                                            <Page
-                                                {...props}
-                                                isSignedIn={
-                                                    this.state.isSignedIn
-                                                }
-                                                isSigningIn={
-                                                    this.state.isSigningIn
-                                                }
-                                                setGoToNewFile={
-                                                    this.setGoToNewFile
-                                                }
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </main>
-                        </div>
-                    </Router>
-                </StateProvider>
+                                    )}
+                                />
+                                <Route
+                                    exact
+                                    path="/page/:id"
+                                    render={props => (
+                                        <Page
+                                            {...props}
+                                            isSignedIn={this.state.isSignedIn}
+                                            isSigningIn={this.state.isSigningIn}
+                                            setGoToNewFile={this.setGoToNewFile}
+                                        />
+                                    )}
+                                />
+                            </div>
+                                    </main>*/}
+                    </div>
+                </Router>
             </ThemeProvider>
         )
     }
