@@ -12,7 +12,7 @@ const Navbar = props => {
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
     const [, setOldSearchTerm] = useGlobal('oldSearchTerm')
     const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
-    const [searchValue, setSearchValue] = useState('')
+    const [searchValue, setSearchValue] = useGlobal('searchValue')
 
     const classes = useStyles()
 

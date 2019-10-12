@@ -14,7 +14,7 @@ const Search = ({ clearSearch, submit }) => {
     const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         'isSearchFieldActive'
     )
-    const [searchValue, setSearchValue] = useState('')
+    const [searchValue, setSearchValue] = useGlobal('searchValue')
 
     const [searchRef, { height, width }] = useDimensions()
     const [selectedRow, setSelectedRow] = useState(null)
