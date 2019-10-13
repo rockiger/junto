@@ -56,14 +56,7 @@ export default class GoogleLogin extends React.Component {
      *  listeners.
      */
     initClient = () => {
-        const {
-            clientId,
-            apiKey,
-            discoveryDocs,
-            scope,
-            onFailure,
-            onSuccess,
-        } = this.props
+        const { clientId, apiKey, discoveryDocs, scope } = this.props
         window.gapi.client
             .init({
                 apiKey,
