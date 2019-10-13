@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState } from 'reactn'
+import React, { useEffect, useGlobal } from 'reactn'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
