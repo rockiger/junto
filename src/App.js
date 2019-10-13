@@ -156,7 +156,7 @@ class App extends React.Component {
                                         />
                                     )}
                                 />
-                                {/*    <Route
+                                <Route
                                     exact
                                     path="/page/:id"
                                     render={props => (
@@ -167,7 +167,7 @@ class App extends React.Component {
                                             setGoToNewFile={this.setGoToNewFile}
                                         />
                                     )}
-                                    /> */}
+                                />
                             </div>
                         </main>
                     </div>
