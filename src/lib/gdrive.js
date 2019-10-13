@@ -134,7 +134,7 @@ export async function createFile(name, parentId) {
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export async function createNewWiki(name = 'Awiki Documents') {
+export async function createNewWiki(name = 'Fulcrum Documents') {
     const fileMetadata = {
         name: name,
         mimeType: 'application/vnd.google-apps.folder',
@@ -238,7 +238,7 @@ export function getFileDescription(driveId) {
  * @return {String} The driveId of the A promise of the result that returns
  * a file'sid: {driveId, driveVersion, name, ifid}
  */
-export async function getFolderId(name = 'Awiki Documents') {
+export async function getFolderId(name = 'Fulcrum Documents') {
     try {
         const result = await gapi.client.drive.files.list({
             q: `name="${name}"`,
