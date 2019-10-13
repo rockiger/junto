@@ -19,55 +19,6 @@ import {
 
 import './App.css'
 
-const initialState = {
-    isFileListLoading: false,
-    isSearchFieldActive: false,
-    oldSearchTerm: '',
-    redirect: false,
-    searchTerm: '',
-    files: [],
-}
-
-const reducer = (state, action) => {
-    switch (action.type) {
-        case 'ACTIVATE_SEARCH_FIELD':
-            return {
-                ...state,
-                isSearchFieldActive: true,
-            }
-        case 'DEACTIVATE_SEARCH_FIELD':
-            return {
-                ...state,
-                isSearchFieldActive: false,
-            }
-        case 'SET_FILES':
-            return {
-                ...state,
-                files: action.payload.files,
-                isFileListLoading: false,
-                oldSearchTerm: action.payload.oldSearchTerm,
-            }
-        case 'SET_SEARCHTERM':
-            return {
-                ...state,
-                oldSearchTerm: state.searchTerm,
-                searchTerm: action.payload.searchTerm,
-            }
-        case 'FILELIST_LOADING':
-            return {
-                ...state,
-                isFileListLoading: true,
-            }
-        case 'FILELIST_NOT_LOADING':
-            return {
-                ...state,
-                isFileListLoading: false,
-            }
-        default:
-            return state
-    }
-}
-
 class App extends React.Component {
     constructor(props) {
         super(props)
