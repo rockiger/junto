@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
-import { getState } from '../state'
-
 import Spinner from './spinner'
 import { EXT } from '../lib/constants'
 import { getTitleFromFileName, getExtFromFileName } from '../lib/helper'

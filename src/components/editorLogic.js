@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useGlobal, useState, useRef } from 'reactn'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
@@ -7,7 +7,6 @@ import MaterialEditor from './material-editor'
 import FulcrumLogo from './FulcrumLogo'
 import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
 
-import { getState } from '../state'
 import { updateFile } from '../lib/gdrive'
 import { getExtFromFileName, getTitleFromFileName } from '../lib/helper'
 import { LOCALSTORAGE_NAME, API_KEY, EXT } from '../lib/constants'
@@ -21,7 +20,7 @@ function EditorLogic({
     setEditorDelta,
     ...props
 }) {
-    const [{ files }] = getState()
+    const [files] = useGlobal('files')
     const [readOnly, setReadOnly] = useState(true)
     const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
     const editorRef = useRef(null)
