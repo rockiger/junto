@@ -7,8 +7,12 @@ import addReactNDevTools from 'reactn-devtools'
 addReactNDevTools()
 
 setGlobal({
+    rootFolderId: null,
     isFileListLoading: false,
     isSearchFieldActive: false,
+    isSignedIn: false,
+    isSigningIn: true,
+    goToNewFile: false,
     oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
