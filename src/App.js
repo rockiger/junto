@@ -10,20 +10,9 @@ import Home from './components/home'
 import Page from './components/page'
 
 import {
-    listFiles,
-    createFile,
-    updateFile,
-    getFolderId,
-    createNewWiki,
-    refreshSession,
-} from './lib/gdrive'
-
-import {
     API_KEY,
     CLIENT_ID,
     DISCOVERY_DOCS,
-    EMPTYVALUE,
-    EXT,
     SCOPES,
     THEME,
 } from './lib/constants'
@@ -31,50 +20,6 @@ import {
 import './App.css'
 
 class App extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    listFiles = async () => {
-        const { searchTerm } = this.global
-        const folderId = await getFolderId()
-        console.log('searchTerm: ', searchTerm)
-        if (folderId) {
-            try {
-                const files = await listFiles(searchTerm)
-                console.log('listFiles:', files)
-                this.setState({ isLoading: false })
-                this.setGlobal({
-                    files,
-                    isFileListLoading: false,
-                    oldSearchTerm: searchTerm,
-                })
-            } catch (err) {
-                const body = JSON.parse(err.body)
-                const { error } = body
-                if (error.message === 'Invalid Credentials') {
-                    try {
-                        await refreshSession()
-                        this.listFiles()
-                    } catch (err) {
-                        alert(`Couldn't refresh session: ${err.message}`)
-                        console.log({ err })
-                    }
-                } else {
-                    alert(`Couldn't load files ${err}`)
-                    console.log({ error })
-                }
-            }
-        } else {
-            const newFolderId = await createNewWiki()
-            const newFileId = await createFile(`Home${EXT}`, newFolderId)
-            await updateFile(newFileId, EMPTYVALUE)
-            // this.setState({folderId: newFolderId})
-            console.log('newFolderId:', newFolderId)
-            this.listFiles()
-        }
-    }
-
     setGoToNewFile = goToNewFile => this.setState({ goToNewFile })
 
     setIsSigningIn = isSigningIn => this.setState({ isSigningIn })
