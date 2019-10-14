@@ -87,6 +87,7 @@ export default class GoogleLogin extends React.Component {
      * Initially load files, get the rootFolderId
      */
     initFiles = async () => {
+        console.log('initFiles')
         this.setGlobal({ isFileListLoading: true })
         const rootFolderId = await getFolderId()
         if (rootFolderId) {
@@ -129,6 +130,7 @@ export default class GoogleLogin extends React.Component {
      * Initially load files, get the rootFolderId
      */
     updateFiles = async () => {
+        console.log('updateFiles')
         this.setGlobal({ isFileListLoading: true })
         const { rootFolderId, searchTerm } = this.global
         if (rootFolderId) {
@@ -228,9 +230,6 @@ function handleSignoutClick(event) {
 }
 
 GoogleLogin.propTypes = {
-    onSuccess: PropTypes.func.isRequired,
-    onFailure: PropTypes.func.isRequired,
-
     clientId: PropTypes.string.isRequired,
     apiKey: PropTypes.string.isRequired,
     scope: PropTypes.string,

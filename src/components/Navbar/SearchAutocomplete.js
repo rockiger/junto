@@ -47,15 +47,11 @@ const SearchAutocomplete = ({
     }, [files, searchValue, setFilteredFiles])
 
     useEffect(() => {
-        console.log('submitSelected:', submitSelected)
-        console.log(' selectedRow:', selectedRow)
-        console.log('filteredFiles:', filteredFiles)
         if (
             submitSelected &&
             selectedRow !== null &&
             filteredFiles.length >= selectedRow
         ) {
-            console.log('all three')
             history.push(`/page/${filteredFiles[selectedRow].id}`)
             clearSearch()
         }

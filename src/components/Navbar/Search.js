@@ -75,11 +75,9 @@ const Search = ({ clearSearch, submit }) => {
                 onChange={ev => {
                     setSearchValue(ev.target.value)
                     setSelectedRow(null)
-                    console.log('onchange:', setSearchValue)
                 }}
                 onKeyDown={ev => {
                     ev.stopPropagation()
-                    console.log(ev.key)
                     const border = Math.min(6, filteredFiles.length - 1)
                     if (ev.key === 'Enter') {
                         if (selectedRow === null) {
