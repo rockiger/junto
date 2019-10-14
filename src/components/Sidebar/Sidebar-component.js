@@ -3,7 +3,9 @@ import { Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { Fab } from '@material-ui/core'
 import AddIcon from 'mdi-react/AddIcon'
-import { isMobileDevice } from '../lib/helper'
+
+import { SidebarTree } from './SidebarTree'
+import { isMobileDevice } from '../../lib/helper'
 window.isMobileDevice = isMobileDevice
 
 const SidebarRenderer = props => {
@@ -43,6 +45,7 @@ const SidebarRenderer = props => {
                         New Page
                     </div>
                 )}
+                <SidebarTree />
                 <style>{`
                     .Sidebar-newButton {
                         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302),
