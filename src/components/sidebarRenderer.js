@@ -9,8 +9,8 @@ window.isMobileDevice = isMobileDevice
 const SidebarRenderer = props => {
     const classes = useStyles()
 
-    if (props.goToNewFile && props.fileId) {
-        return <Redirect to={`/page/${props.fileId}`} />
+    if (props.goToNewFile && props.newFileId) {
+        return <Redirect to={`/page/${props.newFileId}`} />
     }
 
     return (
