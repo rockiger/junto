@@ -5,7 +5,7 @@ import { ThemeProvider } from '@material-ui/styles'
 
 import Navbar from './components/Navbar'
 import GoogleLogin from './components/googleLogin'
-import Sidebar from './components/sidebar'
+import Sidebar from './components/Sidebar'
 import Home from './components/home'
 import Page from './components/page'
 

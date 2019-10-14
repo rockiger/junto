@@ -1,9 +1,9 @@
 import React from 'reactn'
 import PropTypes from 'prop-types'
 
-import { createFile, getFolderId, updateFile } from '../lib/gdrive'
-import { UNTITLEDFILE, EMPTYVALUE } from '../lib/constants'
-import SidebarRenderer from './sidebarRenderer'
+import { createFile, getFolderId, updateFile } from '../../lib/gdrive'
+import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
+import SidebarRenderer from './Sidebar-component'
 
 export default class Sidebar extends React.Component {
     state = {
