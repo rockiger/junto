@@ -93,7 +93,6 @@ export default class GoogleLogin extends React.Component {
         if (rootFolderId) {
             try {
                 const files = await listFiles()
-                console.log('listFiles:', files)
                 this.setState({ isLoading: false })
                 this.setGlobal({
                     files,
@@ -175,7 +174,7 @@ export default class GoogleLogin extends React.Component {
     updateSigninStatus = isSignedIn => {
         console.log({ isSignedIn })
         this.setGlobal({ isSignedIn, isSigningIn: false })
-        if (isSignedIn) this.initFiles()
+        if (isSignedIn && !this.global.isFileListLoading) this.initFiles()
     }
 
     /**
@@ -198,7 +197,7 @@ export default class GoogleLogin extends React.Component {
     }
 
     render() {
-        if (this.props.isSignedIn) {
+        if (this.global.isSignedIn) {
             return (
                 <IconButton onClick={handleSignoutClick}>
                     <LogoutIcon />
