@@ -42,11 +42,6 @@ class App extends React.Component {
                                     discoveryDocs={DISCOVERY_DOCS}
                                     scope={SCOPES}
                                     buttonText="Login"
-                                    onSuccess={this.onSuccess}
-                                    onFailure={this.onFailure}
-                                    onLogout={this.onLogout}
-                                    isSignedIn={this.global.isSignedIn}
-                                    setIsSigningIn={this.setIsSigningIn}
                                 />
                             </Navbar>
                         </header>

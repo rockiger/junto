@@ -47,7 +47,7 @@ export default class GoogleLogin extends React.Component {
      *  On load, called to load the auth2 library and API client library.
      */
     handleClientLoad = () => {
-        this.props.setIsSigningIn(true)
+        this.setGlobal({ isSigningIn: true })
         gapi.load('client:auth2', this.initClient)
     }
 
@@ -235,7 +235,6 @@ GoogleLogin.propTypes = {
     discoveryDocs: PropTypes.array,
 
     buttonText: PropTypes.node,
-    isSignedIn: PropTypes.bool,
 }
 
 GoogleLogin.defaultProps = {
