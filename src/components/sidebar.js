@@ -7,25 +7,24 @@ import SidebarRenderer from './sidebarRenderer'
 
 export default class Sidebar extends React.Component {
     state = {
-        fileId: '',
+        newFileId: '',
     }
 
     onClickNewButton = async ev => {
         const parentId = await getFolderId()
-        const fileId = await createFile(UNTITLEDFILE, parentId)
-        await updateFile(fileId, JSON.stringify(EMPTYVALUE))
+        const newFileId = await createFile(UNTITLEDFILE, parentId)
+        await updateFile(newFileId, JSON.stringify(EMPTYVALUE))
 
-        this.setState({ fileId }, () => {
-            this.setGlobal({ searchTerm: '' })
-            this.props.setGoToNewFile(true)
+        this.setState({ newFileId }, () => {
+            this.setGlobal({ goToNewFile: true, searchTerm: '' })
         })
     }
 
     render() {
         return (
             <SidebarRenderer
-                fileId={this.state.fileId}
-                goToNewFile={this.props.goToNewFile}
+                newFileId={this.state.newFileId}
+                goToNewFile={this.global.goToNewFile}
                 onClickNewButton={this.onClickNewButton}
             />
         )
