@@ -81,7 +81,6 @@ export default class GoogleLogin extends React.Component {
         this.updateSigninStatus(
             window.gapi.auth2.getAuthInstance().isSignedIn.get()
         )
-        this.initFiles()
     }
 
     /**
@@ -174,13 +173,14 @@ export default class GoogleLogin extends React.Component {
     updateSigninStatus = isSignedIn => {
         console.log({ isSignedIn })
         this.setGlobal({ isSignedIn, isSigningIn: false })
+        if (isSignedIn) this.initFiles()
     }
 
     /**
      *  Sign in the user upon button click.
      */
     handleAuthClick = event => {
-        this.props.setIsSigningIn(true)
+        this.setGlobal({ isSigningIn: true })
         window.gapi.auth2
             .getAuthInstance()
             .signIn()
@@ -190,7 +190,7 @@ export default class GoogleLogin extends React.Component {
                 },
                 err => {
                     // end signingIn because breakup of process
-                    this.props.setIsSigningIn(false)
+                    this.setGlobal({ isSigningIn: false })
                 }
             )
     }
