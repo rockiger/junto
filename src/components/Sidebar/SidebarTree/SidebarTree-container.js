@@ -8,7 +8,6 @@ export const SidebarTree = props => {
     const [rootFolderId] = useGlobal('rootFolderId')
     const [files] = useGlobal('files')
 
-    console.log(filterOverview(files))
     return (
         <SidebarTreeComponent
             files={filterOverview(files)}
