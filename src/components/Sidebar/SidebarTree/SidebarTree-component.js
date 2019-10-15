@@ -4,6 +4,8 @@ import TreeView from '@material-ui/lab/TreeView'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import TreeItem from '@material-ui/lab/TreeItem'
+import { EXT } from '../../../lib/constants'
+import { getTitleFromFileName } from '../../../lib/helper'
 
 const useStyles = makeStyles({
     ul: {
@@ -17,22 +19,28 @@ const useStyles = makeStyles({
 
 export const SidebarTreeItem = props => {
     const classes = useStyles()
-    const { nodeId, files, label, level } = props
+    const { nodeId, files, label, level, parentId } = props
     return (
-        <li style={{ paddingLeft: level * 16 }}>
-            <div key={nodeId}>
+        <li>
+            <div key={nodeId} style={{ paddingLeft: level * 16 }}>
                 {label} <button>+</button>
             </div>
             {files && (
                 <ul className={classes.ul}>
-                    {files.map(file => (
-                        <SidebarTreeItem
-                            files={filterChildFiles(file.id, files)}
-                            label={file.name}
-                            nodeId={file.id}
-                            level={level + 1}
-                        />
-                    ))}
+                    {files.map(file => {
+                        const folderId = getFolderId(file.id, files)
+                        if (shouldFileDisplay(file, parentId)) {
+                            return (
+                                <SidebarTreeItem
+                                    files={filterChildFiles(folderId, files)}
+                                    label={getTitleFromFileName(file.name)}
+                                    level={level + 1}
+                                    nodeId={file.id}
+                                    parentId={folderId}
+                                />
+                            )
+                        }
+                    })}
                 </ul>
             )}
         </li>
@@ -43,15 +51,35 @@ export const SidebarTreeComponent = ({ rootFolderId, files }) => {
     return (
         <ul style={{ paddingLeft: 0, listStyleType: 'none' }}>
             <SidebarTreeItem
-                files={filterChildFiles(rootFolderId, files)}
+                files={files}
                 label="My Fulcrum"
-                nodeId={rootFolderId}
                 level={0}
+                nodeId={rootFolderId}
+                parentId={rootFolderId}
             />
         </ul>
     )
 }
 
-function filterChildFiles(parentId, files) {
-    return files.filter(file => file.parents.includes(parentId))
+function getFolderId(fileId, files) {
+    const folder = files.find(file => file.name === fileId)
+    return folder ? folder.id : null
+}
+function filterChildFiles(folderId, files) {
+    if (folderId) return files.filter(file => file.parents.includes(folderId))
+    return []
+}
+
+function filterRootChildFiles(rootFolderId, files) {
+    return files.filter(file => file.parents.includes(rootFolderId))
+}
+
+function shouldFileDisplay(file, parentId) {
+    const { mimeType, name, parents, trashed } = file
+    return (
+        mimeType === 'application/json' &&
+        name.endsWith(EXT) &&
+        parents.includes(parentId) &&
+        trashed === false
+    )
 }
