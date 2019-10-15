@@ -11,8 +11,8 @@ export const SidebarTree = props => {
     console.log(filterOverview(files))
     return (
         <SidebarTreeComponent
-            rootFolderId={rootFolderId}
             files={filterOverview(files)}
+            rootFolderId={rootFolderId}
         />
     )
 }
