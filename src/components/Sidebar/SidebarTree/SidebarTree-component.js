@@ -1,9 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import TreeView from '@material-ui/lab/TreeView'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import TreeItem from '@material-ui/lab/TreeItem'
+import MenuDownIcon from 'mdi-react/MenuDownIcon'
+import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
 import { EXT } from '../../../lib/constants'
 import { getTitleFromFileName } from '../../../lib/helper'
 
@@ -20,10 +18,12 @@ const useStyles = makeStyles({
 export const SidebarTreeItem = props => {
     const classes = useStyles()
     const { nodeId, files, label, level, parentId } = props
+    console.log({ parentId })
     return (
         <li>
             <div key={nodeId} style={{ paddingLeft: level * 16 }}>
-                {label} <button>+</button>
+                {parentId ? <MenuDownIcon /> : <CircleSmallIcon />} {label}{' '}
+                <button>+</button>
             </div>
             {files && (
                 <ul className={classes.ul}>
