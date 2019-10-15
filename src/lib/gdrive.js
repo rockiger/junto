@@ -134,10 +134,11 @@ export async function createFile(name, parentId) {
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export async function createNewWiki(name = 'Fulcrum Documents') {
+export async function createNewWiki(name = 'Fulcrum Documents', parentId = '') {
     const fileMetadata = {
         name: name,
         mimeType: 'application/vnd.google-apps.folder',
+        parents: [parentId],
     }
     try {
         const result = await window.gapi.client.drive.files.create({
