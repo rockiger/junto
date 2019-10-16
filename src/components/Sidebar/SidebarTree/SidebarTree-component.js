@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import Tooltip from '@material-ui/core/Tooltip'
+
 import MenuDownIcon from 'mdi-react/MenuDownIcon'
 import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
 
@@ -14,29 +16,33 @@ export const SidebarTreeItem = props => {
     const currentPageId = isPage(location) ? getPageId(location) : null
     return (
         <li key={nodeId}>
-            <Link
-                className={classes.link}
-                to={`/page/${nodeId}`}
-                style={{
-                    color:
-                        currentPageId === nodeId ? 'var(--primary-color)' : '',
-                    paddingLeft: level * 16,
-                }}
-            >
-                {parentId ? <MenuDownIcon /> : <CircleSmallIcon />}
-                <div
+            <Tooltip title={label} enterDelay={500} leaveDelay={200}>
+                <Link
+                    className={classes.link}
+                    to={`/page/${nodeId}`}
                     style={{
-                        lineHeight: 1.5,
-                        maxWidth: 'calc(100% - 24px)',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
+                        color:
+                            currentPageId === nodeId
+                                ? 'var(--primary-color)'
+                                : '',
+                        paddingLeft: level * 16,
                     }}
                 >
-                    {label}
-                </div>
-                {/*<button>+</button>*/}
-            </Link>
+                    {parentId ? <MenuDownIcon /> : <CircleSmallIcon />}
+                    <div
+                        style={{
+                            lineHeight: 1.5,
+                            maxWidth: 'calc(100% - 24px)',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}
+                    >
+                        {label}
+                    </div>
+                    {/*<button>+</button>*/}
+                </Link>
+            </Tooltip>
             {files && (
                 <ul className={classes.ul}>
                     {files.map(file => {
