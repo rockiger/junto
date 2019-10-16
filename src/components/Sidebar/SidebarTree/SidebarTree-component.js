@@ -6,26 +6,63 @@ import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
 import { EXT, OVERVIEW_NAME } from '../../../lib/constants'
 import { getTitleFromFileName } from '../../../lib/helper'
 
-const useStyles = makeStyles({
-    ul: {
-        listStyleType: 'none',
-        paddingLeft: 0,
-    },
-    group: {
-        marginLeft: 0,
-    },
+const useStyles = makeStyles(theme => {
+    return {
+        ul: {
+            listStyleType: 'none',
+            paddingLeft: 0,
+        },
+        group: {
+            marginLeft: 0,
+        },
+        icon: {
+            color: theme.palette.primary.main,
+            minWidth: theme.spacing(4),
+        },
+        link: {
+            '&:hover': {
+                backgroundColor: 'var(--hover-bg-color)',
+            },
+            display: 'flex',
+            flexGrow: 1,
+            textDecoration: 'none',
+            alignItems: 'center',
+            borderRadius: 'var(--border-radius)',
+            color: 'var(--link-color)',
+            fontSize: '1rem',
+            padding: '.25rem',
+            width: 224,
+            height: '2rem',
+            overflow: 'hidden',
+            lineHeight: '1rem',
+        },
+    }
 })
 
 export const SidebarTreeItem = props => {
     const classes = useStyles()
     const { nodeId, files, label, level, parentId } = props
     return (
-        <li>
-            <div key={nodeId} style={{ paddingLeft: level * 16 }}>
+        <li key={nodeId}>
+            <Link
+                className={classes.link}
+                to={`/page/${nodeId}`}
+                style={{ paddingLeft: level * 16 }}
+            >
                 {parentId ? <MenuDownIcon /> : <CircleSmallIcon />}
-                <Link to={`/page/${nodeId}`}>{label}</Link>
-                <button>+</button>
-            </div>
+                <div
+                    style={{
+                        lineHeight: 1.5,
+                        maxWidth: 'calc(100% - 24px)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                    }}
+                >
+                    {label}
+                </div>
+                {/*<button>+</button>*/}
+            </Link>
             {files && (
                 <ul className={classes.ul}>
                     {files.map(file => {
