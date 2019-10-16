@@ -2,6 +2,7 @@ import React from 'reactn'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 
+import { getPageId, getParentFolderId, isPage } from './Sidebar-helper'
 import {
     createFile,
     getFolderId,
@@ -78,19 +79,4 @@ export default withRouter(Sidebar)
 Sidebar.propTypes = {
     goToNewFile: PropTypes.bool.isRequired,
     setGoToNewFile: PropTypes.func.isRequired,
-}
-
-function isPage(location) {
-    if (location.pathname.startsWith('/page/')) return true
-    return false
-}
-
-function getPageId(location) {
-    const path = location.pathname
-    return path.slice('/page/'.length)
-}
-
-function getParentFolderId(pageId, files) {
-    const file = files.find(f => f.id === pageId)
-    return file.parents[0]
 }

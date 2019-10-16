@@ -1,53 +1,27 @@
 import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
 import MenuDownIcon from 'mdi-react/MenuDownIcon'
 import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
+
+import { useStyles } from './SidebarTree-styles'
+import { getPageId, isPage } from '../Sidebar-helper'
 import { EXT, OVERVIEW_NAME } from '../../../lib/constants'
 import { getTitleFromFileName } from '../../../lib/helper'
 
-const useStyles = makeStyles(theme => {
-    return {
-        ul: {
-            listStyleType: 'none',
-            paddingLeft: 0,
-        },
-        group: {
-            marginLeft: 0,
-        },
-        icon: {
-            color: theme.palette.primary.main,
-            minWidth: theme.spacing(4),
-        },
-        link: {
-            '&:hover': {
-                backgroundColor: 'var(--hover-bg-color)',
-            },
-            display: 'flex',
-            flexGrow: 1,
-            textDecoration: 'none',
-            alignItems: 'center',
-            borderRadius: 'var(--border-radius)',
-            color: 'var(--link-color)',
-            fontSize: '1rem',
-            padding: '.25rem',
-            width: 210,
-            height: '2rem',
-            overflow: 'hidden',
-            lineHeight: '1rem',
-        },
-    }
-})
-
 export const SidebarTreeItem = props => {
     const classes = useStyles()
-    const { nodeId, files, label, level, parentId } = props
+    const { nodeId, files, label, level, location, parentId } = props
+    const currentPageId = isPage(location) ? getPageId(location) : null
     return (
         <li key={nodeId}>
             <Link
                 className={classes.link}
                 to={`/page/${nodeId}`}
-                style={{ paddingLeft: level * 16 }}
+                style={{
+                    color:
+                        currentPageId === nodeId ? 'var(--primary-color)' : '',
+                    paddingLeft: level * 16,
+                }}
             >
                 {parentId ? <MenuDownIcon /> : <CircleSmallIcon />}
                 <div
@@ -88,16 +62,9 @@ export const SidebarTreeItem = props => {
 const SidebarTreeItemWithRouter = withRouter(SidebarTreeItem)
 
 export const SidebarTreeComponent = ({ rootFolderId, files }) => {
+    const classes = useStyles()
     return (
-        <ul
-            style={{
-                height: 'calc(100vh - 138px)',
-                listStyleType: 'none',
-                marginRight: '.5rem',
-                overflowY: 'auto',
-                paddingLeft: 0,
-            }}
-        >
+        <ul className={classes.mydrive}>
             <SidebarTreeItemWithRouter
                 files={files}
                 label="My Fulcrum"
