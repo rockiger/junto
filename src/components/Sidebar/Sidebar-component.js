@@ -17,7 +17,7 @@ const SidebarRenderer = props => {
 
     return (
         <>
-            {!isMobileDevice() && (
+            {isMobileDevice() && (
                 <Fab
                     arial-label="Add"
                     className={classes.fab}
