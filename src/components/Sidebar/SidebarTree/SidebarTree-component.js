@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => {
             color: 'var(--link-color)',
             fontSize: '1rem',
             padding: '.25rem',
-            width: 224,
+            width: 210,
             height: '2rem',
             overflow: 'hidden',
             lineHeight: '1rem',
@@ -89,7 +89,15 @@ const SidebarTreeItemWithRouter = withRouter(SidebarTreeItem)
 
 export const SidebarTreeComponent = ({ rootFolderId, files }) => {
     return (
-        <ul style={{ paddingLeft: 0, listStyleType: 'none' }}>
+        <ul
+            style={{
+                height: 'calc(100vh - 138px)',
+                listStyleType: 'none',
+                marginRight: '.5rem',
+                overflowY: 'auto',
+                paddingLeft: 0,
+            }}
+        >
             <SidebarTreeItemWithRouter
                 files={files}
                 label="My Fulcrum"
