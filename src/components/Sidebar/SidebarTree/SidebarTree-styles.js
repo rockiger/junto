@@ -2,6 +2,12 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles(theme => {
     return {
+        addButton: {
+            display: 'flex',
+            flexShrink: 0,
+            marginLeft: 3,
+            padding: 0,
+        },
         ul: {
             listStyleType: 'none',
             paddingLeft: 0,

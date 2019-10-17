@@ -5,6 +5,7 @@ import { IconButton, Tooltip } from '@material-ui/core'
 import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
 import MenuDownIcon from 'mdi-react/MenuDownIcon'
 import MenuRightIcon from 'mdi-react/MenuRightIcon'
+import PlusIcon from 'mdi-react/PlusIcon'
 
 import { useStyles } from './SidebarTree-styles'
 import { getPageId, isPage } from '../Sidebar-helper'
@@ -12,6 +13,7 @@ import Spinner from '../../spinner'
 import { EXT, OVERVIEW_NAME } from '../../../lib/constants'
 import { getTitleFromFileName } from '../../../lib/helper'
 import { useState } from 'react'
+import { flexbox } from '@material-ui/system'
 
 export const SidebarTreeItem = props => {
     const {
@@ -24,6 +26,7 @@ export const SidebarTreeItem = props => {
         parentId,
     } = props
     const [isExpanded, setExpanded] = useState(expand)
+    const [showAddButton, setShowAddButton] = useState(false)
     const classes = useStyles()
     const currentPageId = isPage(location) ? getPageId(location) : null
 
@@ -31,41 +34,55 @@ export const SidebarTreeItem = props => {
         ev.preventDefault()
         setExpanded(!isExpanded)
     }
+
+    function onMouseEnter(ev) {
+        setShowAddButton(true)
+    }
+
+    function onMouseLeave(ev) {
+        setShowAddButton(false)
+    }
+
     return (
         <li>
-            <Tooltip title={label} enterDelay={500} leaveDelay={200}>
-                <Link
-                    className={classes.link}
-                    to={`/page/${nodeId}`}
-                    style={{
-                        color:
-                            currentPageId === nodeId
-                                ? 'var(--primary-color)'
-                                : '',
-                        paddingLeft: level * 16,
-                    }}
-                >
-                    {parentId ? (
-                        <IconButton
-                            aria-label="open"
-                            onClick={onClickTreeButton}
-                            size="small"
-                            style={{
-                                color:
-                                    currentPageId === nodeId
-                                        ? 'var(--primary-color)'
-                                        : '',
-                                margin: '0 3px',
-                                padding: 0,
-                            }}
-                        >
-                            {isExpanded ? <MenuDownIcon /> : <MenuRightIcon />}
-                        </IconButton>
-                    ) : (
-                        <CircleSmallIcon style={{ margin: '0 3px' }} />
-                    )}
+            <Link
+                className={classes.link}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                to={`/page/${nodeId}`}
+                style={{
+                    color:
+                        currentPageId === nodeId ? 'var(--primary-color)' : '',
+                    paddingLeft: level * 16,
+                    display: 'flex',
+                }}
+            >
+                {parentId ? (
+                    <IconButton
+                        aria-label="open"
+                        onClick={onClickTreeButton}
+                        size="small"
+                        style={{
+                            color:
+                                currentPageId === nodeId
+                                    ? 'var(--primary-color)'
+                                    : '',
+                            flexShrink: 0,
+                            margin: '0 3px',
+                            padding: 0,
+                        }}
+                    >
+                        {isExpanded ? <MenuDownIcon /> : <MenuRightIcon />}
+                    </IconButton>
+                ) : (
+                    <CircleSmallIcon
+                        style={{ flexShrink: 0, margin: '0 3px' }}
+                    />
+                )}
+                <Tooltip title={label} enterDelay={200} leaveDelay={200}>
                     <div
                         style={{
+                            flexGrow: 1,
                             lineHeight: 1.5,
                             maxWidth: 'calc(100% - 30px)',
                             overflow: 'hidden',
@@ -75,9 +92,17 @@ export const SidebarTreeItem = props => {
                     >
                         {label}
                     </div>
-                    {/*<button>+</button>*/}
-                </Link>
-            </Tooltip>
+                </Tooltip>
+                {showAddButton && (
+                    <IconButton
+                        aria-label="add"
+                        className={classes.addButton}
+                        size="small"
+                    >
+                        <PlusIcon />
+                    </IconButton>
+                )}
+            </Link>
             {isExpanded && files && (
                 <ul className={classes.ul}>
                     {files.map(file => {
