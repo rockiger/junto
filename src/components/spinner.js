@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function Spinner({ children }) {
+export default function Spinner({ children, style }) {
     return (
-        <div className="Spinner">
+        <div className="Spinner" style={style}>
             {children}
             <Svg />
             <style>{`
@@ -12,6 +12,7 @@ export default function Spinner({ children }) {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                margin-top: 2rem;
             }
             .Spinner-spinner {
             animation: rotator 1.4s linear infinite;
