@@ -104,12 +104,14 @@ export const SidebarTreeItem = props => {
 const SidebarTreeItemWithRouter = withRouter(SidebarTreeItem)
 
 export const SidebarTreeComponent = ({ rootFolderId, files }) => {
-    const [isFileListLoading] = useGlobal('isFileListLoading')
+    const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
     const classes = useStyles()
     return (
         <>
-            {isFileListLoading && <Spinner style={{ marginTop: '2rem' }} />}
-            {!isFileListLoading && (
+            {isInitialFileListLoading && (
+                <Spinner style={{ marginTop: '2rem' }} />
+            )}
+            {!isInitialFileListLoading && (
                 <ul className={classes.mydrive}>
                     <SidebarTreeItemWithRouter
                         expand={true}

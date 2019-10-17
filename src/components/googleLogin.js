@@ -39,7 +39,11 @@ export default class GoogleLogin extends React.Component {
             searchTerm
         )
         if (!isFileListLoading && oldSearchTerm !== searchTerm && isSignedIn) {
-            this.updateFiles()
+            if (searchTerm) {
+                this.updateFiles()
+            } else {
+                this.setGlobal({ files: this.global.initialFiles })
+            }
         }
     }
 
@@ -88,7 +92,10 @@ export default class GoogleLogin extends React.Component {
      */
     initFiles = async () => {
         console.log('initFiles')
-        this.setGlobal({ isFileListLoading: true })
+        this.setGlobal({
+            isFileListLoading: true,
+            isInitialFileListLoading: true,
+        })
         const rootFolderId = await getFolderId()
         if (rootFolderId) {
             try {
@@ -96,8 +103,10 @@ export default class GoogleLogin extends React.Component {
                 this.setState({ isLoading: false })
                 this.setGlobal({
                     files,
+                    initialFiles: files,
                     isFileListLoading: false,
                     rootFolderId,
+                    isInitialFileListLoading: false,
                 })
             } catch (err) {
                 const body = JSON.parse(err.body)
