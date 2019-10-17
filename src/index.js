@@ -7,6 +7,7 @@ import addReactNDevTools from 'reactn-devtools'
 addReactNDevTools()
 
 setGlobal({
+    isCreatingNewFile: false,
     rootFolderId: null,
     isFileListLoading: false,
     isSearchFieldActive: false,

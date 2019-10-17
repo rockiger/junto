@@ -121,7 +121,11 @@ export default class Page extends React.Component {
                 setEditorDelta={this.setEditorDelta}
             />
         )
-        if (this.props.isSignedIn && this.props.match.params.id) {
+        if (
+            this.props.isSignedIn &&
+            this.props.match.params.id &&
+            !this.props.isCreatingNewFile
+        ) {
             return (
                 <div className="page">
                     <div className="editorContainer">
@@ -173,7 +177,10 @@ export default class Page extends React.Component {
                     `}</style>
                 </div>
             )
-        } else if (!this.props.isSignedIn && this.props.isSigningIn)
+        } else if (
+            (!this.props.isSignedIn && this.props.isSigningIn) ||
+            this.props.isCreatingNewFile
+        )
             return <Spinner />
         else if (!this.props.isSignedIn && !this.props.isSigningIn) {
             return <Redirect to="/" />

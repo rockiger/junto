@@ -1,5 +1,5 @@
 import React, { useGlobal } from 'reactn'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, Redirect, withRouter } from 'react-router-dom'
 import { IconButton, Tooltip } from '@material-ui/core'
 
 import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
@@ -8,13 +8,22 @@ import MenuRightIcon from 'mdi-react/MenuRightIcon'
 import PlusIcon from 'mdi-react/PlusIcon'
 
 import { useStyles } from './SidebarTree-styles'
-import { getPageId, isPage } from '../Sidebar-helper'
+import {
+    getIdByName,
+    getPageId,
+    getParentFolderId,
+    isPage,
+} from '../Sidebar-helper'
 import Spinner from '../../spinner'
-import { EXT, OVERVIEW_NAME } from '../../../lib/constants'
+import { createFile, updateFile, createNewWiki } from '../../../lib/gdrive'
+import {
+    EXT,
+    OVERVIEW_NAME,
+    UNTITLEDFILE,
+    EMPTYVALUE,
+} from '../../../lib/constants'
 import { getTitleFromFileName } from '../../../lib/helper'
 import { useState } from 'react'
-import { flexbox } from '@material-ui/system'
-
 export const SidebarTreeItem = props => {
     const {
         expand = false,
@@ -22,10 +31,16 @@ export const SidebarTreeItem = props => {
         label,
         level,
         location,
-        nodeId,
+        pageId,
         parentId,
     } = props
+    const [goToNewFile, setGoToNewFile] = useGlobal('goToNewFile')
+    const [initialFiles] = useGlobal('initialFiles')
+    const [, setSearchTerm] = useGlobal('searchTerm')
+    const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
+
     const [isExpanded, setExpanded] = useState(expand)
+    const [newFileId, setNewFileId] = useState('')
     const [showAddButton, setShowAddButton] = useState(false)
     const classes = useStyles()
     const currentPageId = isPage(location) ? getPageId(location) : null
@@ -33,6 +48,47 @@ export const SidebarTreeItem = props => {
     function onClickTreeButton(ev) {
         ev.preventDefault()
         setExpanded(!isExpanded)
+    }
+
+    async function onCLickAddButton(ev) {
+        ev.preventDefault(ev)
+
+        setIsCreatingNewFile(true)
+        let parentFolderIdOfNewFile = parentId
+        if (!parentFolderIdOfNewFile) {
+            const parentFolderId = getParentFolderId(pageId, initialFiles)
+            try {
+                parentFolderIdOfNewFile = await createNewWiki(
+                    pageId,
+                    parentFolderId
+                )
+            } catch (err) {
+                setIsCreatingNewFile(false)
+                console.log(err)
+            }
+        }
+
+        try {
+            console.log(parentFolderIdOfNewFile)
+            const newFileId = await createFile(
+                UNTITLEDFILE,
+                parentFolderIdOfNewFile
+            )
+            const result = await updateFile(
+                newFileId,
+                JSON.stringify(EMPTYVALUE)
+            )
+
+            console.log(result)
+
+            setNewFileId(newFileId)
+            setGoToNewFile(true)
+            setSearchTerm('')
+            setIsCreatingNewFile(false)
+        } catch (err) {
+            setIsCreatingNewFile(false)
+            console.log(err)
+        }
     }
 
     function onMouseEnter(ev) {
@@ -43,16 +99,20 @@ export const SidebarTreeItem = props => {
         setShowAddButton(false)
     }
 
+    if (goToNewFile && newFileId) {
+        return <Redirect to={`/page/${newFileId}`} />
+    }
+
     return (
         <li>
             <Link
                 className={classes.link}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
-                to={`/page/${nodeId}`}
+                to={`/page/${pageId}`}
                 style={{
                     color:
-                        currentPageId === nodeId ? 'var(--primary-color)' : '',
+                        currentPageId === pageId ? 'var(--primary-color)' : '',
                     paddingLeft: level * 16,
                     display: 'flex',
                 }}
@@ -64,7 +124,7 @@ export const SidebarTreeItem = props => {
                         size="small"
                         style={{
                             color:
-                                currentPageId === nodeId
+                                currentPageId === pageId
                                     ? 'var(--primary-color)'
                                     : '',
                             flexShrink: 0,
@@ -97,6 +157,7 @@ export const SidebarTreeItem = props => {
                     <IconButton
                         aria-label="add"
                         className={classes.addButton}
+                        onClick={onCLickAddButton}
                         size="small"
                     >
                         <PlusIcon />
@@ -114,7 +175,7 @@ export const SidebarTreeItem = props => {
                                     key={file.id}
                                     label={getTitleFromFileName(file.name)}
                                     level={level + 1}
-                                    nodeId={file.id}
+                                    pageId={file.id}
                                     parentId={folderId}
                                 />
                             )
@@ -143,7 +204,7 @@ export const SidebarTreeComponent = ({ rootFolderId, files }) => {
                         files={files}
                         label="My Fulcrum"
                         level={0}
-                        nodeId={getOverviewFileId(files)}
+                        pageId={getOverviewFileId(files)}
                         parentId={rootFolderId}
                     />
                 </ul>

@@ -2,15 +2,14 @@ import React from 'reactn'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
-import { getPageId, getParentFolderId, isPage } from './Sidebar-helper'
 import {
-    createFile,
-    getFolderId,
-    updateFile,
-    createNewWiki,
-} from '../../lib/gdrive'
+    getIdByName,
+    getPageId,
+    getParentFolderId,
+    isPage,
+} from './Sidebar-helper'
+import { createFile, updateFile, createNewWiki } from '../../lib/gdrive'
 import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
-import { getTitleFromFileName } from '../../lib/helper'
 import SidebarRenderer from './Sidebar-component'
 
 class Sidebar extends React.Component {
@@ -19,24 +18,29 @@ class Sidebar extends React.Component {
     }
 
     onClickNewButton = async ev => {
+        this.setGlobal({ isCreatingNewFile: true })
         let parentFolderIdOfNewFile
         console.log(isPage(this.props.location))
         if (isPage(this.props.location)) {
             const pageId = getPageId(this.props.location)
-            try {
-                parentFolderIdOfNewFile = await getFolderId(pageId)
-                if (!parentFolderIdOfNewFile) {
-                    const parentFolderId = getParentFolderId(
-                        pageId,
-                        this.global.files
-                    )
+            parentFolderIdOfNewFile = getIdByName(
+                pageId,
+                this.global.initialFiles
+            )
+            if (!parentFolderIdOfNewFile) {
+                const parentFolderId = getParentFolderId(
+                    pageId,
+                    this.global.initialFiles
+                )
+                try {
                     parentFolderIdOfNewFile = await createNewWiki(
                         pageId,
                         parentFolderId
                     )
+                } catch (err) {
+                    this.setGlobal({ isCreatingNewFile: false })
+                    console.log(err)
                 }
-            } catch (err) {
-                console.log(err)
             }
         } else {
             parentFolderIdOfNewFile = this.global.rootFolderId
@@ -56,9 +60,14 @@ class Sidebar extends React.Component {
             console.log(result)
 
             this.setState({ newFileId }, () => {
-                this.setGlobal({ goToNewFile: true, searchTerm: '' })
+                this.setGlobal({
+                    goToNewFile: true,
+                    searchTerm: '',
+                    isCreatingNewFile: false,
+                })
             })
         } catch (err) {
+            this.setGlobal({ isCreatingNewFile: false })
             console.log(err)
         }
     }
