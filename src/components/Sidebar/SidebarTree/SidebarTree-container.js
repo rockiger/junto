@@ -6,7 +6,12 @@ import { OVERVIEW_NAME } from '../../../lib/constants'
 
 export const SidebarTree = props => {
     const [rootFolderId] = useGlobal('rootFolderId')
-    const [files] = useGlobal('files')
+    const [initialFiles] = useGlobal('initialFiles')
 
-    return <SidebarTreeComponent files={files} rootFolderId={rootFolderId} />
+    return (
+        <SidebarTreeComponent
+            files={initialFiles}
+            rootFolderId={rootFolderId}
+        />
+    )
 }

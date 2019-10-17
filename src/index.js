@@ -18,6 +18,8 @@ setGlobal({
     searchTerm: '',
     searchValue: '', // The value in the searchfield
     files: [],
+    initialFiles: [],
+    isInitialFileListLoading: false,
 })
 
 ReactDOM.render(<App />, document.getElementById('root'))
