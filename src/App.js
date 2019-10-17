@@ -61,6 +61,9 @@ class App extends React.Component {
                                     render={props => (
                                         <Home
                                             {...props}
+                                            isCreatingNewFile={
+                                                this.global.isCreatingNewFile
+                                            }
                                             isSignedIn={this.global.isSignedIn}
                                             isSigningIn={
                                                 this.global.isSigningIn
@@ -75,6 +78,9 @@ class App extends React.Component {
                                     render={props => (
                                         <Page
                                             {...props}
+                                            isCreatingNewFile={
+                                                this.global.isCreatingNewFile
+                                            }
                                             isSignedIn={this.global.isSignedIn}
                                             isSigningIn={
                                                 this.global.isSigningIn

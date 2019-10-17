@@ -6,9 +6,10 @@ import FileList from './fileList'
 import Spinner from './spinner'
 
 function Home(props) {
-    if (props.isSignedIn && !props.isSigningIn) {
+    const { isSignedIn, isSigningIn, isCreatingNewFile } = props
+    if (isSignedIn && !isSigningIn && !isCreatingNewFile) {
         return <FileList />
-    } else if (!props.isSignedIn && props.isSigningIn) {
+    } else if ((!props.isSignedIn && props.isSigningIn) || isCreatingNewFile) {
         return (
             <div style={{ marginTop: '2rem' }}>
                 <Spinner />
