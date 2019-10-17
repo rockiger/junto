@@ -11,7 +11,7 @@ setGlobal({
     isFileListLoading: false,
     isSearchFieldActive: false,
     isSignedIn: false,
-    isSigningIn: false,
+    isSigningIn: true,
     goToNewFile: false,
     oldSearchTerm: '',
     redirect: false,
