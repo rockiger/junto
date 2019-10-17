@@ -45,7 +45,7 @@ const SidebarRenderer = props => {
                         New Page
                     </div>
                 )}
-                <SidebarTree />
+                {!isMobileDevice() && <SidebarTree />}
                 <style>{`
                     .Sidebar-newButton {
                         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302),

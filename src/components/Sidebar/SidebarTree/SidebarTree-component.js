@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import { Link, withRouter } from 'react-router-dom'
 import Tooltip from '@material-ui/core/Tooltip'
 
@@ -7,6 +7,7 @@ import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
 
 import { useStyles } from './SidebarTree-styles'
 import { getPageId, isPage } from '../Sidebar-helper'
+import Spinner from '../../spinner'
 import { EXT, OVERVIEW_NAME } from '../../../lib/constants'
 import { getTitleFromFileName } from '../../../lib/helper'
 
@@ -68,17 +69,23 @@ export const SidebarTreeItem = props => {
 const SidebarTreeItemWithRouter = withRouter(SidebarTreeItem)
 
 export const SidebarTreeComponent = ({ rootFolderId, files }) => {
+    const [isFileListLoading] = useGlobal('isFileListLoading')
     const classes = useStyles()
     return (
-        <ul className={classes.mydrive}>
-            <SidebarTreeItemWithRouter
-                files={files}
-                label="My Fulcrum"
-                level={0}
-                nodeId={getOverviewFileId(files)}
-                parentId={rootFolderId}
-            />
-        </ul>
+        <>
+            {isFileListLoading && <Spinner style={{ marginTop: '2rem' }} />}
+            {!isFileListLoading && (
+                <ul className={classes.mydrive}>
+                    <SidebarTreeItemWithRouter
+                        files={files}
+                        label="My Fulcrum"
+                        level={0}
+                        nodeId={getOverviewFileId(files)}
+                        parentId={rootFolderId}
+                    />
+                </ul>
+            )}
+        </>
     )
 }
 
