@@ -31,6 +31,7 @@ export default class GoogleLogin extends React.Component {
             isSignedIn,
             oldSearchTerm,
             searchTerm,
+            backgroundUpdate,
         } = this.global
         console.log(
             'componentDidUpdate:',
@@ -44,6 +45,11 @@ export default class GoogleLogin extends React.Component {
             } else {
                 this.setGlobal({ files: this.global.initialFiles })
             }
+        }
+
+        if (backgroundUpdate) {
+            console.log('backgroundUpdate')
+            this.backgroundUpdateFiles()
         }
     }
 
@@ -164,6 +170,41 @@ export default class GoogleLogin extends React.Component {
                     }
                 } else {
                     alert(`Couldn't load files ${err}`)
+                    console.log({ error })
+                }
+            }
+        }
+    }
+
+    /**
+     * Initially load files, get the rootFolderId
+     */
+    backgroundUpdateFiles = async () => {
+        console.log('backgroundUpdateFiles')
+        const { rootFolderId, searchTerm } = this.global
+        if (rootFolderId) {
+            try {
+                const files = await listFiles(searchTerm)
+                this.setGlobal({
+                    backgroundUpdate: false,
+                    files,
+                    initialFiles: files,
+                    isFileListLoading: false,
+                    oldSearchTerm: searchTerm,
+                })
+            } catch (err) {
+                const body = JSON.parse(err.body)
+                const { error } = body
+                if (error.message === 'Invalid Credentials') {
+                    try {
+                        await refreshSession()
+                        this.backgroundUpdate()
+                    } catch (err) {
+                        alert(`Couldn't refresh session: ${err.message}`)
+                        console.log({ err })
+                    }
+                } else {
+                    alert(`Couldn't update files ${err}`)
                     console.log({ error })
                 }
             }

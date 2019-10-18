@@ -36,6 +36,7 @@ export const SidebarTreeItem = props => {
     } = props
     const [goToNewFile, setGoToNewFile] = useGlobal('goToNewFile')
     const [initialFiles] = useGlobal('initialFiles')
+    const [, setBackgroundUpdate] = useGlobal('backgroundUpdate')
     const [, setSearchTerm] = useGlobal('searchTerm')
     const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
 
@@ -85,6 +86,7 @@ export const SidebarTreeItem = props => {
             setGoToNewFile(true)
             setSearchTerm('')
             setIsCreatingNewFile(false)
+            setBackgroundUpdate(true)
         } catch (err) {
             setIsCreatingNewFile(false)
             console.log(err)
@@ -114,7 +116,6 @@ export const SidebarTreeItem = props => {
                     color:
                         currentPageId === pageId ? 'var(--primary-color)' : '',
                     paddingLeft: level * 16,
-                    display: 'flex',
                 }}
             >
                 {parentId ? (
@@ -171,7 +172,10 @@ export const SidebarTreeItem = props => {
                         if (shouldFileDisplay(file, parentId)) {
                             return (
                                 <SidebarTreeItemWithRouter
-                                    files={filterChildFiles(folderId, files)}
+                                    files={filterChildFiles(
+                                        folderId,
+                                        initialFiles
+                                    )}
                                     key={file.id}
                                     label={getTitleFromFileName(file.name)}
                                     level={level + 1}

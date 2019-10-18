@@ -1,5 +1,5 @@
 /* global gapi */
-import React from 'react'
+import React from 'reactn'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Redirect } from 'react-router-dom'
 import {
@@ -99,12 +99,13 @@ export default class Page extends React.Component {
         this.setState({ editorDelta })
     }
 
-    onBlurInput = ev => {
+    onBlurInput = async ev => {
         if (!this.state.pageHead) return
 
         if (this.state.fileName !== this.state.pageHead + EXT) {
             this.setState({ fileName: this.state.pageHead })
-            renameFile(this.state.fileId, this.state.pageHead + EXT)
+            await renameFile(this.state.fileId, this.state.pageHead + EXT)
+            this.setGlobal({ backgroundUpdate: true })
         }
     }
 

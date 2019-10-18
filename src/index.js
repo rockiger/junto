@@ -21,6 +21,7 @@ setGlobal({
     files: [],
     initialFiles: [],
     isInitialFileListLoading: false,
+    backgroundUpdate: false,
 })
 
 ReactDOM.render(<App />, document.getElementById('root'))

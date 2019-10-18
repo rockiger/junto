@@ -61,6 +61,7 @@ class Sidebar extends React.Component {
 
             this.setState({ newFileId }, () => {
                 this.setGlobal({
+                    backgroundUpdate: true,
                     goToNewFile: true,
                     searchTerm: '',
                     isCreatingNewFile: false,
