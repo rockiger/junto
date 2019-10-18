@@ -205,7 +205,7 @@ export const SidebarTreeComponent = ({ rootFolderId, files }) => {
                 <ul className={classes.mydrive}>
                     <SidebarTreeItemWithRouter
                         expand={true}
-                        files={files}
+                        files={sortFilesByName(files)}
                         label="My Fulcrum"
                         level={0}
                         pageId={getOverviewFileId(files)}
@@ -241,4 +241,16 @@ function shouldFileDisplay(file, parentId) {
         parents.includes(parentId) &&
         trashed === false
     )
+}
+
+function sortFilesByName(files) {
+    return files.sort((a, b) => {
+        if (a.name < b.name) {
+            return -1
+        }
+        if (a.name > a.name) {
+            return 1
+        }
+        return 0
+    })
 }
