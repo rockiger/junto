@@ -13,10 +13,6 @@ import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
 import SidebarRenderer from './Sidebar-component'
 
 class Sidebar extends React.Component {
-    state = {
-        newFileId: '',
-    }
-
     onClickNewButton = async ev => {
         this.setGlobal({ isCreatingNewFile: true })
         let parentFolderIdOfNewFile
@@ -59,14 +55,13 @@ class Sidebar extends React.Component {
 
             console.log(result)
 
-            this.setState({ newFileId }, () => {
-                this.setGlobal({
-                    backgroundUpdate: true,
-                    goToNewFile: true,
-                    searchTerm: '',
-                    isCreatingNewFile: false,
-                })
+            this.setGlobal({
+                backgroundUpdate: true,
+                goToNewFile: true,
+                searchTerm: '',
+                isCreatingNewFile: false,
             })
+            this.props.history.push(`/page/${newFileId}`)
         } catch (err) {
             this.setGlobal({ isCreatingNewFile: false })
             console.log(err)
@@ -74,13 +69,7 @@ class Sidebar extends React.Component {
     }
 
     render() {
-        return (
-            <SidebarRenderer
-                newFileId={this.state.newFileId}
-                goToNewFile={this.global.goToNewFile}
-                onClickNewButton={this.onClickNewButton}
-            />
-        )
+        return <SidebarRenderer onClickNewButton={this.onClickNewButton} />
     }
 }
 
