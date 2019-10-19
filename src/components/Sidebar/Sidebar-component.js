@@ -1,5 +1,4 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { Fab } from '@material-ui/core'
 import AddIcon from 'mdi-react/AddIcon'
@@ -10,11 +9,6 @@ window.isMobileDevice = isMobileDevice
 
 const SidebarRenderer = props => {
     const classes = useStyles()
-
-    if (props.goToNewFile && props.newFileId) {
-        return <Redirect to={`/page/${props.newFileId}`} />
-    }
-
     return (
         <>
             {isMobileDevice() && (
