@@ -59,7 +59,7 @@ const Search = ({ clearSearch, submit }) => {
                 </IconButton>
             )}
             <InputBase
-                placeholder="Search Wiki"
+                placeholder="Search Fulcrum"
                 classes={{
                     root: isSearchFieldActive
                         ? `${classes.inputRoot} ${classes.active}`
