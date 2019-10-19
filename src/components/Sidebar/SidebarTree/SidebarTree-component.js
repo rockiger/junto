@@ -17,10 +17,11 @@ import {
 import Spinner from '../../spinner'
 import { createFile, updateFile, createNewWiki } from '../../../lib/gdrive'
 import {
+    EMPTYVALUE,
     EXT,
     OVERVIEW_NAME,
+    MYHOME,
     UNTITLEDFILE,
-    EMPTYVALUE,
 } from '../../../lib/constants'
 import { getTitleFromFileName } from '../../../lib/helper'
 import { useState } from 'react'
@@ -206,7 +207,7 @@ export const SidebarTreeComponent = ({ rootFolderId, files }) => {
                     <SidebarTreeItemWithRouter
                         expand={true}
                         files={sortFilesByName(files)}
-                        label="My Fulcrum"
+                        label={MYHOME}
                         level={0}
                         pageId={getOverviewFileId(files)}
                         parentId={rootFolderId}

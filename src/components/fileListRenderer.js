@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
 import Spinner from './spinner'
-import { EXT } from '../lib/constants'
+import { EXT, MYHOME, OVERVIEW_NAME } from '../lib/constants'
 import { getTitleFromFileName, getExtFromFileName } from '../lib/helper'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
@@ -15,11 +15,13 @@ const FileListPartial = props => {
         <List className="filelist-list">
             {props.files
                 .filter(file => {
-                    const ext = getExtFromFileName(file.name)
-                    return ext === EXT
+                    return shouldFileDisplay(file)
                 })
                 .map(file => {
-                    const filename = getTitleFromFileName(file.name)
+                    const filename =
+                        file.name === OVERVIEW_NAME
+                            ? MYHOME
+                            : getTitleFromFileName(file.name)
                     return (
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
@@ -167,4 +169,13 @@ function useStyles() {
         }
     })
     return useStyles()
+}
+
+function shouldFileDisplay(file) {
+    const { mimeType, name, trashed } = file
+    return (
+        mimeType === 'application/json' &&
+        name.endsWith(EXT) &&
+        trashed === false
+    )
 }
