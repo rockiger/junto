@@ -1,5 +1,5 @@
 import React, { useGlobal } from 'reactn'
-import { Link, Redirect, withRouter } from 'react-router-dom'
+import { Link, useHistory, withRouter } from 'react-router-dom'
 import { IconButton, Tooltip } from '@material-ui/core'
 
 import CircleSmallIcon from 'mdi-react/CircleSmallIcon'
@@ -42,9 +42,11 @@ export const SidebarTreeItem = props => {
     const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
 
     const [isExpanded, setExpanded] = useState(expand)
-    const [newFileId, setNewFileId] = useState('')
     const [showAddButton, setShowAddButton] = useState(false)
+
     const classes = useStyles()
+    const history = useHistory()
+
     const currentPageId = isPage(location) ? getPageId(location) : null
 
     function onClickTreeButton(ev) {
@@ -83,11 +85,11 @@ export const SidebarTreeItem = props => {
 
             console.log(result)
 
-            setNewFileId(newFileId)
             setGoToNewFile(true)
             setSearchTerm('')
             setIsCreatingNewFile(false)
             setBackgroundUpdate(true)
+            history.push(`/page/${newFileId}`)
         } catch (err) {
             setIsCreatingNewFile(false)
             console.log(err)
@@ -100,10 +102,6 @@ export const SidebarTreeItem = props => {
 
     function onMouseLeave(ev) {
         setShowAddButton(false)
-    }
-
-    if (goToNewFile && newFileId) {
-        return <Redirect to={`/page/${newFileId}`} />
     }
 
     return (
