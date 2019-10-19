@@ -137,7 +137,10 @@ export const serializer = new Html({ rules: RULES })
  */
 
 export const onPaste = (event, editor, next) => {
+    event.preventDefault()
+
     const transfer = getEventTransfer(event)
+    console.log(transfer)
     if (transfer.type !== 'html') return next()
     const { document } = serializer.deserialize(transfer.html)
     editor.insertFragment(document)
