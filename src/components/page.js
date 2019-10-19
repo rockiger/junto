@@ -2,6 +2,9 @@
 import React from 'reactn'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Redirect } from 'react-router-dom'
+
+import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
+
 import {
     renameFile,
     downloadFile,
@@ -13,7 +16,13 @@ import EditorLogic from './editorLogic'
 
 import Spinner from './spinner'
 
-import { UNTITLEDFILE, UNTITLEDNAME, EXT } from '../lib/constants'
+import {
+    EXT,
+    OVERVIEW_NAME,
+    UNTITLEDFILE,
+    UNTITLEDNAME,
+    MYHOME,
+} from '../lib/constants'
 import { getTitleFromFileName } from '../lib/helper'
 
 export default class Page extends React.Component {
@@ -132,18 +141,31 @@ export default class Page extends React.Component {
                     <div className="editorContainer">
                         {this.state.fileLoaded && (
                             <h1 className="editorHeader">
-                                <input
-                                    className="editorInput"
-                                    onBlur={this.onBlurInput}
-                                    value={
-                                        this.state.pageHead !== 'Untitled page'
-                                            ? this.state.pageHead
-                                            : ''
-                                    }
-                                    placeholder="Untitled page"
-                                    onKeyDown={ev => ev.stopPropagation()}
-                                    onChange={this.onChangeInput}
-                                />
+                                {this.state.fileName === OVERVIEW_NAME ? (
+                                    <div
+                                        style={{
+                                            color: 'grey',
+                                            paddingLeft: '.5rem',
+                                        }}
+                                    >
+                                        {MYHOME}{' '}
+                                        <LockOutlineIcon size=".75em" />
+                                    </div>
+                                ) : (
+                                    <input
+                                        className="editorInput"
+                                        onBlur={this.onBlurInput}
+                                        value={
+                                            this.state.pageHead !==
+                                            'Untitled page'
+                                                ? this.state.pageHead
+                                                : ''
+                                        }
+                                        placeholder="Untitled page"
+                                        onKeyDown={ev => ev.stopPropagation()}
+                                        onChange={this.onChangeInput}
+                                    />
+                                )}
                             </h1>
                         )}
                         {this.state.fileLoaded && editor}
