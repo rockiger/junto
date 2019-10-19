@@ -8,12 +8,7 @@ import MenuRightIcon from 'mdi-react/MenuRightIcon'
 import PlusIcon from 'mdi-react/PlusIcon'
 
 import { useStyles } from './SidebarTree-styles'
-import {
-    getIdByName,
-    getPageId,
-    getParentFolderId,
-    isPage,
-} from '../Sidebar-helper'
+import { getPageId, getParentFolderId, isPage } from '../Sidebar-helper'
 import Spinner from '../../spinner'
 import { createFile, updateFile, createNewWiki } from '../../../lib/gdrive'
 import {
@@ -35,7 +30,7 @@ export const SidebarTreeItem = props => {
         pageId,
         parentId,
     } = props
-    const [goToNewFile, setGoToNewFile] = useGlobal('goToNewFile')
+    const [, setGoToNewFile] = useGlobal('goToNewFile')
     const [initialFiles] = useGlobal('initialFiles')
     const [, setBackgroundUpdate] = useGlobal('backgroundUpdate')
     const [, setSearchTerm] = useGlobal('searchTerm')
@@ -183,6 +178,7 @@ export const SidebarTreeItem = props => {
                                 />
                             )
                         }
+                        return null
                     })}
                 </ul>
             )}
@@ -247,7 +243,7 @@ function sortFilesByName(files) {
         if (a.name < b.name) {
             return -1
         }
-        if (a.name > a.name) {
+        if (a.name > b.name) {
             return 1
         }
         return 0
