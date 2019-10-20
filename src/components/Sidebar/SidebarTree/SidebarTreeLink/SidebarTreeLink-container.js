@@ -73,13 +73,11 @@ export function SidebarTreeLink(props) {
     }
 
     function onMouseEnter(ev) {
-        console.log('onMouseEnter')
         setShowAddButton(true)
     }
 
     function onMouseLeave(ev) {
         setShowAddButton(false)
-        console.log('OnMousLeaxe')
     }
 
     return (
