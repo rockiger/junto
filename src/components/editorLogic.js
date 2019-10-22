@@ -109,7 +109,9 @@ function EditorLogic({
                 style={{
                     fontSize: '1rem',
                     height,
-                    padding: '.7rem 1rem .7rem .7rem',
+                    padding: `.7rem 1rem ${
+                        !readOnly ? '20rem' : '.7rem'
+                    } .7rem`,
                     overflowY: 'auto',
                 }}
             />
