@@ -134,14 +134,18 @@ export async function createFile(name, parentId) {
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export async function createNewWiki(name = 'Fulcrum Documents', parentId = '') {
+export async function createNewWiki(
+    name = 'Fulcrum Documents',
+    parentId = null
+) {
     const fileMetadata = {
         name: name,
         mimeType: 'application/vnd.google-apps.folder',
-        parents: [parentId],
     }
+    if (parentId) fileMetadata.parents = [parentId]
+
     try {
-        const result = await window.gapi.client.drive.files.create({
+        const result = await gapi.client.drive.files.create({
             resource: fileMetadata,
         })
         console.log(result)
@@ -149,7 +153,7 @@ export async function createNewWiki(name = 'Fulcrum Documents', parentId = '') {
         return JSON.parse(result.body).id
     } catch (err) {
         alert(`We couldn't create your base on your Google Drive.`)
-        console.log(err)
+        console.error(err.body)
     }
 }
 
