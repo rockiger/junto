@@ -18,7 +18,7 @@ import {
     refreshSession,
 } from '../lib/gdrive'
 
-import { EMPTYVALUE, EXT } from '../lib/constants'
+import { OVERVIEW_VALUE, OVERVIEW_NAME } from '../lib/constants'
 
 export default class GoogleLogin extends React.Component {
     componentDidMount() {
@@ -132,8 +132,8 @@ export default class GoogleLogin extends React.Component {
             }
         } else {
             const newRootFolderId = await createNewWiki()
-            const newFileId = await createFile(`Fulcrum${EXT}`, newRootFolderId)
-            await updateFile(newFileId, EMPTYVALUE)
+            const newFileId = await createFile(OVERVIEW_NAME, newRootFolderId)
+            await updateFile(newFileId, OVERVIEW_VALUE)
             // this.setState({folderId: newFolderId})
             console.log('newFolderId:', newRootFolderId)
             this.initFiles()
