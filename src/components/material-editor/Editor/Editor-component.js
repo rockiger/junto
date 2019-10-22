@@ -324,6 +324,8 @@ export function EditorComponent({
                 value={value}
                 onChange={onChange}
                 onPaste={onPaste}
+                placeholder="Bring your content to life with text, images, files, code blocks and pictures from Google Drive. 
+                Did you know you can write even faster with Markdown?"
                 readOnly={readOnly}
                 ref={editorRef}
                 renderBlock={renderBlock}
