@@ -122,7 +122,7 @@ const FileListRenderer = props => {
                     }
                     .filelist-content {
                         overflow-y: auto;
-                        height: calc((100vh - 65px) - 51px);
+                        height: calc((100vh - 65px) - 56px);
                     }
                     .filelist-tagline {
                         margin-top: 1rem;
