@@ -61,7 +61,7 @@ class Sidebar extends React.Component {
                 searchTerm: '',
                 isCreatingNewFile: false,
             })
-            this.props.history.push(`/page/${newFileId}`)
+            this.props.history.push(`/page/${newFileId}?edit`)
         } catch (err) {
             this.setGlobal({ isCreatingNewFile: false })
             console.log(err)
