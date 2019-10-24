@@ -2,6 +2,7 @@ import React, { useEffect, useGlobal, useState, useRef } from 'reactn'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
+import { useLocation } from 'react-router-dom'
 
 import MaterialEditor from './material-editor'
 import FulcrumLogo from './FulcrumLogo'
@@ -21,7 +22,8 @@ function EditorLogic({
     ...props
 }) {
     const [files] = useGlobal('files')
-    const [readOnly, setReadOnly] = useState(true)
+    const { search } = useLocation()
+    const [readOnly, setReadOnly] = useState(search === '?edit' ? false : true)
     const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
     const editorRef = useRef(null)
 
@@ -49,6 +51,9 @@ function EditorLogic({
             setHeight('calc(100vh - 65px - 57px)')
         } else {
             setHeight('calc(100vh - 65px - 57px - 43px)')
+            setTimeout(() => {
+                if (editorRef.current) editorRef.current.focus()
+            }, 100)
         }
 
         return function cleanup() {

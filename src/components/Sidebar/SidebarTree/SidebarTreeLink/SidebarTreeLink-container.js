@@ -60,7 +60,7 @@ export function SidebarTreeLink(props) {
             setSearchTerm('')
             setIsCreatingNewFile(false)
             setBackgroundUpdate(true)
-            history.push(`/page/${newFileId}`)
+            history.push(`/page/${newFileId}?edit`)
         } catch (err) {
             setIsCreatingNewFile(false)
             console.log(err)
