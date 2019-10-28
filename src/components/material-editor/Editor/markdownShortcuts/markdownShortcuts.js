@@ -13,6 +13,8 @@ const getType = chars => {
             return 'list-item'
         case '>':
             return 'block-quote'
+        case '[]':
+            return 'check-list-item'
         case '#':
             return 'heading-one'
         case '##':
@@ -25,6 +27,8 @@ const getType = chars => {
             return 'heading-five'
         case '######':
             return 'heading-six'
+        case '1.':
+            return 'number-item'
         default:
             return null
     }
@@ -38,15 +42,26 @@ const onSpace = (event, editor, next) => {
     const { startBlock } = value
     const { start } = selection
     const chars = startBlock.text.slice(0, start.offset).replace(/\s*/g, '')
-    const type = getType(chars)
+    let type = getType(chars)
+    let isNumbered = false
+
     if (!type) return next()
+
+    if (type === 'number-item') {
+        type = 'list-item'
+        isNumbered = true
+    }
+
     if (type === 'list-item' && startBlock.type === 'list-item') return next()
     event.preventDefault()
 
     editor.setBlocks(type)
 
-    if (type === 'list-item') {
+    if (type === 'list-item' && !isNumbered) {
         editor.wrapBlock('bulleted-list')
+    }
+    if (type === 'list-item' && isNumbered) {
+        editor.wrapBlock('numbered-list')
     }
 
     editor.moveFocusToStartOfNode(startBlock).delete()
