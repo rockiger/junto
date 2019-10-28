@@ -89,7 +89,7 @@ const onBackspace = (event, editor, next) => {
     editor.setBlocks('paragraph')
 
     if (startBlock.type === 'list-item') {
-        editor.unwrapBlock('bulleted-list')
+        editor.unwrapBlock('bulleted-list').unwrapBlock('numbered-list')
     }
 }
 
