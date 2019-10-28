@@ -40,12 +40,13 @@ export class CheckListItem extends React.Component {
                         onChange={this.onChange}
                     />
                 </span>
-                <span
+                <div
                     contentEditable={!readOnly}
                     suppressContentEditableWarning
                     style={{
                         flex: 1,
                         opacity: checked ? 0.666 : 1,
+                        paddingTop: 2,
                         textDecoration: checked ? 'line-through' : 'none',
                         // &:focus {
                         //     outline: none,
@@ -53,7 +54,7 @@ export class CheckListItem extends React.Component {
                     }}
                 >
                     {children}
-                </span>
+                </div>
             </div>
         )
     }
