@@ -1,4 +1,5 @@
 import React from 'react'
+import Checkbox from '@material-ui/core/Checkbox'
 
 export class CheckListItem extends React.Component {
     /**
@@ -26,19 +27,14 @@ export class CheckListItem extends React.Component {
         return (
             <div
                 {...attributes}
-                className={{
+                style={{
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}
             >
-                <span
-                    contentEditable={false}
-                    className={{
-                        marginRight: '0.75em',
-                    }}
-                >
-                    <input
+                <span contentEditable={false}>
+                    <Checkbox
                         type="checkbox"
                         checked={checked}
                         onChange={this.onChange}
@@ -47,10 +43,10 @@ export class CheckListItem extends React.Component {
                 <span
                     contentEditable={!readOnly}
                     suppressContentEditableWarning
-                    className={{
+                    style={{
                         flex: 1,
                         opacity: checked ? 0.666 : 1,
-                        textDecoration: checked ? 'none' : 'line-through',
+                        textDecoration: checked ? 'line-through' : 'none',
                         // &:focus {
                         //     outline: none,
                         // }
