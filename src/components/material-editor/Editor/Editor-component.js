@@ -12,6 +12,7 @@ import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon'
 import CodeBracesIcon from 'mdi-react/CodeBracesIcon'
 import FormatListBulletedIcon from 'mdi-react/FormatListBulletedIcon'
 import FormatListNumberedIcon from 'mdi-react/FormatListNumberedIcon'
+import FormatListChecksIcon from 'mdi-react/FormatListChecksIcon'
 import ImageIcon from 'mdi-react/ImageIcon'
 import LinkIcon from 'mdi-react/LinkIcon'
 import GoogleDriveIcon from 'mdi-react/GoogleDriveIcon'
@@ -231,6 +232,17 @@ export function EditorComponent({
                             />,
                             'numbered-list',
                             nlistPlugin.shortcut
+                        )}
+                        ,
+                        {renderBlockButton(
+                            editorRef.current,
+                            value,
+                            <FormatListChecksIcon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'check-list-item'
                         )}
                         {renderBlockButton(
                             editorRef.current,
