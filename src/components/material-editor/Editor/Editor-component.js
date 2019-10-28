@@ -320,6 +320,7 @@ export function EditorComponent({
             )}
             <SlateEditor
                 decorateNode={decorateNode}
+                id="SlateEditor"
                 plugins={plugins}
                 value={value}
                 onChange={onChange}
