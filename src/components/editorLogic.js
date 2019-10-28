@@ -10,7 +10,7 @@ import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
 
 import { updateFile } from '../lib/gdrive'
 import { getExtFromFileName, getTitleFromFileName } from '../lib/helper'
-import { LOCALSTORAGE_NAME, API_KEY, EXT } from '../lib/constants'
+import { API_KEY, EXT } from '../lib/constants'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -72,7 +72,7 @@ function EditorLogic({
     }, [currentEditor, fileId, initialValue])
 
     useEffect(() => {
-        initStorage(initialValue)
+        initStorage(initialValue, fileId)
         // eslint-disable-next-line
     }, [])
 
@@ -91,7 +91,7 @@ function EditorLogic({
         if (value.document !== oldValue.document) {
             // check, if we really need to save changes
             const content = JSON.stringify(value.toJSON())
-            localStorage.setItem(LOCALSTORAGE_NAME, content)
+            localStorage.setItem(fileId, content)
         }
         setValue(value)
     }
@@ -134,12 +134,12 @@ function EditorLogic({
     )
 }
 
-function initStorage(initialValue) {
-    localStorage.setItem(LOCALSTORAGE_NAME, initialValue)
+function initStorage(initialValue, localStorageId) {
+    localStorage.setItem(localStorageId, initialValue)
 }
 async function save(fileId, initialValue) {
     console.log('save()')
-    const newValue = localStorage.getItem(LOCALSTORAGE_NAME)
+    const newValue = localStorage.getItem(fileId)
     if (initialValue === newValue) {
         console.log('SAME SAME')
         return
