@@ -1,4 +1,4 @@
-import React, { useState, useGlobal, useEffect } from 'reactn'
+import React, { useGlobal, useEffect, useRef, useState } from 'reactn'
 import useDimensions from 'react-use-dimensions'
 
 import { IconButton, InputBase, Paper } from '@material-ui/core'
@@ -16,14 +16,34 @@ const Search = ({ clearSearch, submit }) => {
     )
     const [searchValue, setSearchValue] = useGlobal('searchValue')
 
-    const [searchRef, { height, width }] = useDimensions()
     const [selectedRow, setSelectedRow] = useState(null)
     const [submitSelected, setSubmitSelected] = useState(false)
     const [filteredFiles, setFilteredFiles] = useState(files)
+
+    const [searchRef, { height, width }] = useDimensions()
+    const inputRef = useRef(null)
     const classes = useStyles()
 
     useEffect(() => {
         if (!isSearchFieldActive) setSelectedRow(null)
+    }, [isSearchFieldActive])
+
+    useEffect(() => {
+        function onKeyDown(ev) {
+            if (ev.key === '/' && !isSearchFieldActive) {
+                ev.stopPropagation()
+                ev.preventDefault()
+                setIsSearchFieldActive(true)
+                console.log('/')
+                inputRef.current.click()
+            }
+        }
+        window.addEventListener('keydown', onKeyDown)
+
+        return function cleanup() {
+            window.removeEventListener('keydown', onKeyDown)
+        }
+        // eslint-disable-next-line
     }, [isSearchFieldActive])
 
     return (
@@ -77,15 +97,16 @@ const Search = ({ clearSearch, submit }) => {
                     setSelectedRow(null)
                 }}
                 onKeyDown={ev => {
-                    ev.stopPropagation()
                     const border = Math.min(6, filteredFiles.length - 1)
                     if (ev.key === 'Enter') {
+                        ev.preventDefault()
                         if (selectedRow === null) {
                             submit()
                         } else {
                             setSubmitSelected(true)
                         }
                     } else if (ev.key === 'Escape') {
+                        ev.preventDefault()
                         clearSearch()
                     } else if (ev.key === 'ArrowDown') {
                         ev.preventDefault()
@@ -109,9 +130,12 @@ const Search = ({ clearSearch, submit }) => {
                         } else {
                             setSelectedRow(selectedRow - 1)
                         }
+                    } else {
+                        if (isSearchFieldActive) ev.stopPropagation()
                     }
                 }}
                 readOnly={!isSearchFieldActive}
+                ref={inputRef}
                 value={searchValue}
             />
             {searchValue && (
