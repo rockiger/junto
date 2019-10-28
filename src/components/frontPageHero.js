@@ -14,7 +14,15 @@ export default function FrontPageHero() {
                 />
             </div>
             <h1 className="hero-title">Knowledge Base for Google Drive!</h1>
-            <p className="hero-description" />
+            <p className="hero-description">
+                Welcome to our Beta! Fulcrum is your personal wiki on your
+                Google Drive. All content you create is saved on your personal
+                Google Drive.
+            </p>
+            <p className="hero-description">
+                You can use it to develop ideas, use it as a notebook, collect
+                links and files or post code snippets you find useful.
+            </p>
             <div className="hero-row">
                 <button className="hero-heroButon">
                     <GoogleIcon />
