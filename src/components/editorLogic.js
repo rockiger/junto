@@ -96,8 +96,12 @@ function EditorLogic({
         setValue(value)
     }
 
+    const onKeyDown = ev => {
+        if (!readOnly) ev.stopPropagation()
+    }
+
     return (
-        <>
+        <div onKeyDown={onKeyDown}>
             <PageButtons>
                 <ToggleReadOnlyButton
                     readOnly={readOnly}
@@ -130,7 +134,7 @@ function EditorLogic({
                     }
                 }}
             />
-        </>
+        </div>
     )
 }
 
