@@ -249,7 +249,7 @@ export default class GoogleLogin extends React.Component {
     render() {
         if (this.global.isSignedIn) {
             return (
-                <IconButton onClick={handleSignoutClick}>
+                <IconButton id="LogoutButton" onClick={handleSignoutClick}>
                     <LogoutIcon />
                 </IconButton>
             )
