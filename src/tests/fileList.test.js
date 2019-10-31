@@ -1,6 +1,6 @@
 import React, { setGlobal } from 'reactn'
 import ReactDOM from 'react-dom'
-import { render, fireExent, cleanup } from '@testing-library/react'
+import { render, fireEvent, cleanup } from '@testing-library/react'
 
 import FileList from '../components/fileList'
 
@@ -45,5 +45,4 @@ it('Text in in headline', () => {
     const { getByText, debug } = render(<FileList />)
 
     expect(getByText(/Your Work/i).textContent).toBe('Your Work')
-    //eexpect(getByText(/Today/i).textContent).toBe('Today')
 })
