@@ -1,22 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import renderer from 'react-test-renderer';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { render, fireEvent, cleanup } from '@testing-library/react'
 
-import App from './App';
+import App from './App'
 
-describe('App', () => {
+afterEach(cleanup)
 
-  it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<App />, div);
-    ReactDOM.unmountComponentAtNode(div);
-  });
-
-  test('has a valid snapshot', () => {
-    const component = renderer.create(
-      <App />
-    );
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-});
+it('Spinner shows after button clickte', () => {
+    const { getByText, debug, container } = render(<App />)
+    expect(getByText(/Knowledge/i).textContent).toBe(
+        'Knowledge Base for Google Drive!'
+    )
+    fireEvent.click(getByText('Login with Google'))
+    debug()
+    //expect(getByText(/Knowledge/i).textContent).toBe(null)
+})
