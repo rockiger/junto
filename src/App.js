@@ -8,6 +8,7 @@ import GoogleLogin from './components/googleLogin'
 import Sidebar from './components/Sidebar'
 import Home from './components/home'
 import Page from './components/page'
+import { initGA, setGA } from './components/Tracking'
 
 import {
     API_KEY,
@@ -20,6 +21,11 @@ import {
 import './App.css'
 
 class App extends React.Component {
+    componentDidMount() {
+        initGA('UA-151325933-1')
+        setGA({ anonymizeIp: true })
+    }
+
     setGoToNewFile = goToNewFile => this.setState({ goToNewFile })
 
     setIsSigningIn = isSigningIn => this.setState({ isSigningIn })

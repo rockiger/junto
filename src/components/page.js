@@ -13,6 +13,7 @@ import {
 } from '../lib/gdrive'
 
 import EditorLogic from './editorLogic'
+import { PageView } from './Tracking'
 
 import Spinner from './spinner'
 
@@ -37,6 +38,7 @@ export default class Page extends React.Component {
 
     componentDidMount() {
         this.setGlobal({ goToNewFile: false })
+        PageView()
     }
 
     componentDidUpdate(prevProps) {
