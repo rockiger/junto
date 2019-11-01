@@ -97,7 +97,10 @@ function EditorLogic({
     }
 
     const onKeyDown = ev => {
-        if (!readOnly) ev.stopPropagation()
+        if (!readOnly) {
+            if (isSaveHotkey(ev)) return
+            ev.stopPropagation()
+        }
     }
 
     return (
