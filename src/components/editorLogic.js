@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import MaterialEditor from './material-editor'
 import FulcrumLogo from './FulcrumLogo'
 import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
+import { Event } from './Tracking'
 
 import { updateFile } from '../lib/gdrive'
 import { getExtFromFileName, getTitleFromFileName } from '../lib/helper'
@@ -38,11 +39,13 @@ function EditorLogic({
                 ev.preventDefault()
                 setReadOnly(false)
                 editorRef.current.focus()
+                Event('Editor', 'Activate Editor')
             } else if (isSaveHotkey(ev) && readOnly === false) {
                 ev.stopPropagation()
                 ev.preventDefault()
                 save(fileId, initialValue)
                 setReadOnly(true)
+                Event('Editor', 'Deactivate Editor')
             }
         }
         window.addEventListener('keydown', onKeyDown)
@@ -82,9 +85,11 @@ function EditorLogic({
         if (readOnly === true) {
             setReadOnly(false)
             setTimeout(() => editorRef.current.focus(), 100)
+            Event('Editor', 'Activate Editor')
         } else if (readOnly === false) {
             save(fileId, initialValue)
             setReadOnly(true)
+            Event('Editor', 'Deactivate Editor')
         }
     }
     function onChange({ value }, setValue, oldValue) {
