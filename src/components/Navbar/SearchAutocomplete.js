@@ -39,18 +39,12 @@ export const SearchAutocomplete = ({
                     const ext = getExtFromFileName(file.name)
                     return ext === EXT
                 })
-                .slice(0, 7)
                 .sort((file1, file2) => {
-                    const date1 = file1.viewedByMeTime
-                    const date2 = file2.viewedByMeTime
-                    let result = sortByDate(date1, date2)
-
-                    if (result === 0) {
-                        result = sortByDate(
-                            file1.modifiedByMe,
-                            file2.modifiedByMe
-                        )
-                    }
+                    let result = sortByDate(
+                        file1.modifiedByMeTime,
+                        file2.modifiedByMeTime
+                    )
+                    console.log(result)
                     return result
                 })
         )
@@ -86,7 +80,7 @@ export const SearchAutocomplete = ({
             }}
         >
             <MenuList>
-                {filteredFiles.map((file, index) => {
+                {filteredFiles.slice(0, 7).map((file, index) => {
                     const filename = getTitleFromFileName(file.name)
                     return (
                         <MenuItem
