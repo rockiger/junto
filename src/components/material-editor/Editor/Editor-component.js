@@ -6,8 +6,8 @@ import FormatItalicIcon from 'mdi-react/FormatItalicIcon'
 import FormatUnderlineIcon from 'mdi-react/FormatUnderlineIcon'
 import FormatStrikethroughIcon from 'mdi-react/FormatStrikethroughVariantIcon'
 import CodeTagsIcon from 'mdi-react/CodeTagsIcon'
-import FormatHeader1Icon from 'mdi-react/FormatHeader1Icon'
 import FormatHeader2Icon from 'mdi-react/FormatHeader2Icon'
+import FormatHeader3Icon from 'mdi-react/FormatHeader3Icon'
 import FormatQuoteCloseIcon from 'mdi-react/FormatQuoteCloseIcon'
 import CodeBracesIcon from 'mdi-react/CodeBracesIcon'
 import FormatListBulletedIcon from 'mdi-react/FormatListBulletedIcon'
@@ -34,9 +34,9 @@ import {
     renderMarkButton,
 } from '../Mark'
 import {
-    h1Plugin,
-    h2Plugin,
     blistPlugin,
+    h2Plugin,
+    h3Plugin,
     nlistPlugin,
     quotePlugin,
     renderBlockButton,
@@ -80,17 +80,6 @@ export function EditorComponent({
                         {renderBlockButton(
                             editorRef.current,
                             value,
-                            <FormatHeader1Icon
-                                style={{
-                                    height: 18,
-                                }}
-                            />,
-                            'heading-one',
-                            h1Plugin.shortcut
-                        )}
-                        {renderBlockButton(
-                            editorRef.current,
-                            value,
                             <FormatHeader2Icon
                                 style={{
                                     height: 18,
@@ -98,6 +87,17 @@ export function EditorComponent({
                             />,
                             'heading-two',
                             h2Plugin.shortcut
+                        )}
+                        {renderBlockButton(
+                            editorRef.current,
+                            value,
+                            <FormatHeader3Icon
+                                style={{
+                                    height: 18,
+                                }}
+                            />,
+                            'heading-three',
+                            h3Plugin.shortcut
                         )}
                         {renderBlockButton(
                             editorRef.current,
