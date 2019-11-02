@@ -9,7 +9,7 @@ import CloseIcon from 'mdi-react/CloseIcon'
 import SearchAutocomplete from './SearchAutocomplete'
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 
-const Search = ({ clearSearch, submit }) => {
+export const Search = ({ clearSearch, submit }) => {
     const [files] = useGlobal('files')
     const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         'isSearchFieldActive'
