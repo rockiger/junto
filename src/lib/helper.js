@@ -1,6 +1,7 @@
-import { EXTLENGTH } from './constants'
+import { EXTLENGTH, MYHOME, OVERVIEW_NAME } from './constants'
 
 export function getTitleFromFileName(filename) {
+    if (filename === OVERVIEW_NAME) return MYHOME
     return filename.substr(0, filename.length - EXTLENGTH)
 }
 
