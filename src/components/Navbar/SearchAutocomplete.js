@@ -154,8 +154,8 @@ function useStyles() {
 
 /**
  *
- * @param {string} date1 UTC String of a Date
- * @param {string} date2 UTC String of a Date
+ * @param {string} date1 ISO String of a Date
+ * @param {string} date2 ISO String of a Date
  *
  * @returns {number} indicates if date1 is smaller (-1), date2 is smaller (1), is equal (0)
  */
