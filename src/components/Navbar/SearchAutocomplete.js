@@ -14,7 +14,7 @@ import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import { getTitleFromFileName, getExtFromFileName } from '../../lib/helper'
 import { EXT } from '../../lib/constants'
 
-const SearchAutocomplete = ({
+export const SearchAutocomplete = ({
     clearSearch,
     files,
     filteredFiles,
@@ -32,16 +32,26 @@ const SearchAutocomplete = ({
     useEffect(() => {
         setFilteredFiles(
             files
-                /* .sort(
-                    (file1, file2) =>
-                        file2.viewedByMeTime - file1.viewedByMeTime
-                ) */
                 .filter(file =>
                     file.name.toLowerCase().includes(searchValue.toLowerCase())
                 )
                 .filter(file => {
                     const ext = getExtFromFileName(file.name)
                     return ext === EXT
+                })
+                .slice(0, 7)
+                .sort((file1, file2) => {
+                    const date1 = file1.viewedByMeTime
+                    const date2 = file2.viewedByMeTime
+                    let result = sortByDate(date1, date2)
+
+                    if (result === 0) {
+                        result = sortByDate(
+                            file1.modifiedByMe,
+                            file2.modifiedByMe
+                        )
+                    }
+                    return result
                 })
         )
     }, [files, searchValue, setFilteredFiles])
@@ -76,7 +86,7 @@ const SearchAutocomplete = ({
             }}
         >
             <MenuList>
-                {filteredFiles.slice(0, 7).map((file, index) => {
+                {filteredFiles.map((file, index) => {
                     const filename = getTitleFromFileName(file.name)
                     return (
                         <MenuItem
@@ -146,4 +156,27 @@ function useStyles() {
         }
     })
     return useStyles()
+}
+
+/**
+ *
+ * @param {string} date1 UTC String of a Date
+ * @param {string} date2 UTC String of a Date
+ *
+ * @returns {number} indicates if date1 is smaller (-1), date2 is smaller (1), is equal (0)
+ */
+export function sortByDate(date1, date2) {
+    if (!date1 && !date2) {
+        return 0
+    } else if (!date1 && date2) {
+        return 1
+    } else if (date1 && !date2) {
+        return -1
+    } else if (date1 < date2) {
+        return 1
+    } else if (date1 > date2) {
+        return -1
+    } else {
+        return 0
+    }
 }
