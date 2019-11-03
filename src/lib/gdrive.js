@@ -302,6 +302,30 @@ export function renameFile(driveId, newName) {
 }
 
 /**
+ * Changes the metadata of the file on Google Drive. Can reject
+ *
+ * @method renameFile
+ * @param {String} driveId Google Drive file identifier
+ * @param {object} metadata New metadata that will be displayed in drive
+ * @return {Promise|Object} A promise of the result that returns
+ * a file description: {driveId, driveVersion, name, ifid}
+ */
+export function updateMetadata(driveId, metadata) {
+    return new Promise((resolve, reject) => {
+        gapi.client.drive.files
+            .update({
+                fileId: driveId,
+                ...metadata,
+                fields: fileFields,
+            })
+            .then(
+                response => resolve(formatFileDescription(response.result)),
+                reject
+            )
+    })
+}
+
+/**
  * Removes file completely from drive. Can reject
  *
  * @method deleteFile
