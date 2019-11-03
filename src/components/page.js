@@ -25,6 +25,7 @@ import {
     MYHOME,
 } from '../lib/constants'
 import { getTitleFromFileName } from '../lib/helper'
+import { FlexInput } from './FlexInput'
 
 export default class Page extends React.Component {
     state = {
@@ -111,7 +112,9 @@ export default class Page extends React.Component {
     }
 
     onBlurInput = async ev => {
-        if (!this.state.pageHead) return
+        if (!this.state.pageHead) {
+            this.state.pageHead = 'Untitled page'
+        }
 
         if (this.state.fileName !== this.state.pageHead + EXT) {
             this.setState({ fileName: this.state.pageHead })
@@ -154,8 +157,7 @@ export default class Page extends React.Component {
                                         <LockOutlineIcon size=".75em" />
                                     </div>
                                 ) : (
-                                    <input
-                                        className="editorInput"
+                                    <FlexInput
                                         onBlur={this.onBlurInput}
                                         value={
                                             this.state.pageHead !==
@@ -177,7 +179,6 @@ export default class Page extends React.Component {
                         .page {
                             display: flex;
                         }
-
                         .editorContainer {
                             height: calc(100vh - 65px);
                             width: 100%;
@@ -188,17 +189,7 @@ export default class Page extends React.Component {
                             font-weight: 400;
                             margin: 0;
                             padding: .45rem .5rem .5rem 0;
-                        }
-                        .editorInput {
-                            border: 1px solid transparent;
-                            font: unset;
-                            font-family: Roboto, "Open Sans", Helvetica, Arial, sans-serif;
-                            font-weight: 400;;
-                            padding: 0 calc(.5rem - 1px);
-                        }
-                        .editorInput:hover {
-                            border-color: #dadce0;
-                        }                        
+                        }                       
                     `}</style>
                 </div>
             )
