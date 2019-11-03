@@ -10,6 +10,7 @@ import {
     downloadFile,
     getFileDescription,
     refreshSession,
+    updateMetadata,
 } from '../lib/gdrive'
 
 import EditorLogic from './editorLogic'
@@ -53,6 +54,10 @@ export default class Page extends React.Component {
                 this.loadEditorContent()
                 gapi.load('picker', {
                     callback: () => console.log('Picker loaded'),
+                })
+                const now = new Date()
+                updateMetadata(this.state.fileId, {
+                    viewedByMeTime: now.toISOString(),
                 })
             })
         }
