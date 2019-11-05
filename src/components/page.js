@@ -55,11 +55,9 @@ export default class Page extends React.Component {
                 gapi.load('picker', {
                     callback: () => console.log('Picker loaded'),
                 })
-                const now = new Date()
-                updateMetadata(this.state.fileId, {
-                    viewedByMeTime: now.toISOString(),
-                })
             })
+
+            this.updateViewedByMeDate()
         }
 
         // when going from one page to the next, we check if the parmeter in the url changed
@@ -132,6 +130,41 @@ export default class Page extends React.Component {
         this.setState({ pageHead: ev.target.value })
     }
 
+    updateViewedByMeDate = () => {
+        const { fileId } = this.state
+        const now = new Date().toISOString()
+
+        const change = {
+            viewedByMe: true,
+            viewedByMeTime: now,
+        }
+
+        // Update the current state
+        this.setGlobal(global => {
+            const updateViewByMeDateItem = (items, id, change) =>
+                items.map(item => {
+                    if (item.id === id) {
+                        return { ...item, ...change }
+                    } else {
+                        return item
+                    }
+                })
+
+            const files = updateViewByMeDateItem(global.files, fileId, change)
+            const initialFiles = updateViewByMeDateItem(
+                global.initialFiles,
+                fileId,
+                change
+            )
+            return {
+                files,
+                initialFiles,
+            }
+        })
+
+        // Update the file on Google Drive
+        updateMetadata(this.state.fileId, { viewedByMeTime: now })
+    }
     render() {
         let editor = (
             <EditorLogic
