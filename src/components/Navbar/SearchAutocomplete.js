@@ -41,10 +41,16 @@ export const SearchAutocomplete = ({
                 })
                 .sort((file1, file2) => {
                     let result = sortByDate(
-                        file1.modifiedByMeTime,
-                        file2.modifiedByMeTime
+                        file1.viewedByMeTime,
+                        file2.viewedByMeTime
                     )
-                    console.log(result)
+
+                    if (result === 0) {
+                        result = sortByDate(
+                            file1.modifiedByMe,
+                            file2.modifiedByMe
+                        )
+                    }
                     return result
                 })
         )
@@ -79,7 +85,7 @@ export const SearchAutocomplete = ({
                 top: height ? height + 1 : 49,
             }}
         >
-            <MenuList>
+            <MenuList id="SearchAutocomplet__list">
                 {filteredFiles.slice(0, 7).map((file, index) => {
                     const filename = getTitleFromFileName(file.name)
                     return (

@@ -19,6 +19,12 @@ describe('complete e to e test', () => {
         cy.wait(1000)
         cy.contains('Welcome to your personal wiki')
 
+        cy.get('input[aria-label="Search"]').click()
+        cy.get('#SearchAutocomplet__list')
+            .find('li')
+            .first()
+            .contains('My Fulcrum')
+
         cy.get('#LogoutButton').click()
     })
 })
