@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Spinner from 'components/spinner'
+
 import FrontPageHero from './frontPageHero'
-import FileList from './fileList'
-import Spinner from './spinner'
+import FileList from './FileList'
 
 function Home(props) {
     const { isSignedIn, isSigningIn, isCreatingNewFile } = props
