@@ -2,7 +2,7 @@ import React, { setGlobal } from 'reactn'
 import ReactDOM from 'react-dom'
 import { render, fireEvent, cleanup } from '@testing-library/react'
 
-import FileList from '../components/fileList'
+import FileList from './fileList-container'
 
 afterEach(cleanup)
 const date1 = new Date()
