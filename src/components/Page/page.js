@@ -13,7 +13,7 @@ import {
     updateMetadata,
 } from 'lib/gdrive'
 
-import EditorLogic from 'components/editorLogic'
+import Editor from 'components/Editor'
 import { PageView } from 'components/Tracking'
 
 import Spinner from 'components/spinner'
@@ -167,7 +167,7 @@ export default class Page extends React.Component {
     }
     render() {
         let editor = (
-            <EditorLogic
+            <Editor
                 fileId={this.state.fileId}
                 fileLoaded={this.state.fileLoaded}
                 initialValue={this.state.initialContent}

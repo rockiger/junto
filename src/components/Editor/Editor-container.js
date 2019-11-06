@@ -4,14 +4,14 @@ import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
 
-import MaterialEditor from './material-editor'
-import FulcrumLogo from './FulcrumLogo'
-import { PageButtons, ToggleReadOnlyButton } from './pageButtons'
-import { Event } from './Tracking'
+import FulcrumLogo from 'components/FulcrumLogo'
+import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
+import { Event } from 'components/Tracking'
+import { updateFile } from 'lib/gdrive'
+import { getExtFromFileName, getTitleFromFileName } from 'lib/helper'
+import { API_KEY, EXT } from 'lib/constants'
 
-import { updateFile } from '../lib/gdrive'
-import { getExtFromFileName, getTitleFromFileName } from '../lib/helper'
-import { API_KEY, EXT } from '../lib/constants'
+import MaterialEditor from './material-editor'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
