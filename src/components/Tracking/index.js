@@ -1,7 +1,9 @@
 import ReactGA from 'react-ga'
 
 export const initGA = trackingID => {
-    ReactGA.initialize(trackingID)
+    try {
+        ReactGA.initialize(trackingID)
+    } catch (err) {}
 }
 
 export const PageView = () => {

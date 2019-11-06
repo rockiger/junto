@@ -6,7 +6,7 @@ import App from './App'
 
 afterEach(cleanup)
 
-it('Spinner shows after button clickte', () => {
+it('Spinner shows after button clicked', () => {
     const { getByText, debug, container } = render(<App />)
     expect(getByText(/Knowledge/i).textContent).toBe(
         'Knowledge Base for Google Drive!'
