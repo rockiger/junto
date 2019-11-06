@@ -11,12 +11,12 @@ import {
     getFileDescription,
     refreshSession,
     updateMetadata,
-} from '../lib/gdrive'
+} from 'lib/gdrive'
 
-import EditorLogic from './editorLogic'
-import { PageView } from './Tracking'
+import EditorLogic from 'components/editorLogic'
+import { PageView } from 'components/Tracking'
 
-import Spinner from './spinner'
+import Spinner from 'components/spinner'
 
 import {
     EXT,
@@ -24,9 +24,9 @@ import {
     UNTITLEDFILE,
     UNTITLEDNAME,
     MYHOME,
-} from '../lib/constants'
-import { getTitleFromFileName } from '../lib/helper'
-import { FlexInput } from './FlexInput'
+} from 'lib/constants'
+import { getTitleFromFileName } from 'lib/helper'
+import { FlexInput } from 'components/FlexInput'
 
 export default class Page extends React.Component {
     state = {

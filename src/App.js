@@ -7,7 +7,7 @@ import Navbar from './components/Navbar'
 import GoogleLogin from './components/googleLogin'
 import Sidebar from './components/Sidebar'
 import Home from './components/home'
-import Page from './components/page'
+import Page from './components/Page'
 import { initGA, setGA } from './components/Tracking'
 
 import {
