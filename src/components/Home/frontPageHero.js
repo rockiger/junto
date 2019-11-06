@@ -1,7 +1,7 @@
 import React from 'react'
 
-import GoogleIcon from './googleIcon'
-import logo from '../static/logo.svg'
+import GoogleIcon from 'components/googleIcon'
+import logo from 'static/logo.svg'
 
 export default function FrontPageHero() {
     return (

@@ -6,7 +6,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import Navbar from './components/Navbar'
 import GoogleLogin from './components/googleLogin'
 import Sidebar from './components/Sidebar'
-import Home from './components/home'
+import Home from './components/Home'
 import Page from './components/Page'
 import { initGA, setGA } from './components/Tracking'
 

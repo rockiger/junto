@@ -1,7 +1,7 @@
 import React from 'reactn'
-import { PageView } from './Tracking'
+import { PageView } from 'components/Tracking'
 
-import FileListRenderer from './fileListRenderer'
+import FileListRenderer from './fileList-component'
 
 export default class FileList extends React.Component {
     componentDidMount() {

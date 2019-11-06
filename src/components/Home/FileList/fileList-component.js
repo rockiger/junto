@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
-import Spinner from './spinner'
-import { EXT, MYHOME, OVERVIEW_NAME } from '../lib/constants'
-import { getTitleFromFileName } from '../lib/helper'
+import Spinner from 'components/spinner'
+import { EXT, MYHOME, OVERVIEW_NAME } from 'lib/constants'
+import { getTitleFromFileName } from 'lib/helper'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 
 const FileListPartial = props => {
