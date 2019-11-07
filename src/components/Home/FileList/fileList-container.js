@@ -2,14 +2,32 @@
 import React from 'reactn'
 import { PageView } from 'components/Tracking'
 
+import { LOCALSTORAGE_NAME } from 'lib/constants'
+
 import FileListComponent from './fileList-component'
+
+const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
+
+/** @typedef {{sortBy: 'modifiedByMeTime' | 'viewedByMeTime'}} SortBy */
 
 // @ts-ignore
 export default class FileList extends React.Component {
-    /** @typedef {{sortBy: 'modifiedByMeTime' | 'viewedByMeTime'}} SortBy */
+    constructor(props) {
+        super(props)
 
-    /** @type {SortBy} */
-    state = { sortBy: 'modifiedByMeTime' }
+        const sortByLS = localStorage.getItem(localStorageKey)
+        const sortBy =
+            sortByLS &&
+            (sortByLS === 'modifiedByMeTime' || sortByLS === 'viewedByMeTime')
+                ? sortByLS
+                : 'modifiedByMeTime'
+
+        /** @type {SortBy} */
+        this.state = {
+            sortBy,
+        }
+    }
+
     componentDidMount() {
         PageView()
     }
@@ -21,6 +39,8 @@ export default class FileList extends React.Component {
     setSortBy = sortBy => {
         console.log({ sortBy })
         this.setState({ sortBy })
+        //@ts-ignore
+        localStorage.setItem(localStorageKey, sortBy)
     }
 
     render() {

@@ -187,6 +187,11 @@ const FileListComponent = props => {
     return (
         <div className="filelist">
             <PageButtons>
+                <strong style={{ fontWeight: 500, marginRight: '.5rem' }}>
+                    {sortBy === 'viewedByMeTime'
+                        ? 'Last opened by me'
+                        : 'Last modified by me'}
+                </strong>
                 <ButtonMenu
                     items={[
                         {
