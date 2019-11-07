@@ -28,7 +28,11 @@ describe('Sidebar', () => {
         const div = document.createElement('div')
         ReactDOM.render(
             <MemoryRouter>
-                <Sidebar files={[]} />
+                <Sidebar
+                    files={[]}
+                    goToNewFile={false}
+                    setGoToNewFile={() => {}}
+                />
             </MemoryRouter>,
             div
         )

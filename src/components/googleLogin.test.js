@@ -11,17 +11,34 @@ describe('GoogleLogin', () => {
     }
     it('renders without crashing', () => {
         const div = document.createElement('div')
-        ReactDOM.render(<GoogleLogin {...props} />, div)
+        ReactDOM.render(
+            <GoogleLogin {...props} apiKey={'bar'} clientId={'foo'} />,
+            div
+        )
         ReactDOM.unmountComponentAtNode(div)
     })
 
     it('has a signin button', () => {
-        const element = shallow(<GoogleLogin {...props} isSignedIn={false} />)
+        const element = shallow(
+            <GoogleLogin
+                {...props}
+                isSignedIn={false}
+                apiKey={'bar'}
+                clientId={'foo'}
+            />
+        )
         expect(element.find('#authorize_button').exists())
     })
 
     it('has a signout button', () => {
-        const element = shallow(<GoogleLogin {...props} isSignedIn={true} />)
+        const element = shallow(
+            <GoogleLogin
+                {...props}
+                isSignedIn={true}
+                apiKey={'bar'}
+                clientId={'foo'}
+            />
+        )
         expect(element.find('#signout_button').exists())
     })
 })

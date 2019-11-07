@@ -8,6 +8,8 @@ import Page from './page'
 
 describe('Page', () => {
     const props = {
+        isSignedIn: false,
+        isSigningIn: false,
         match: {
             params: { id: '' },
         },

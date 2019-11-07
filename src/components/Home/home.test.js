@@ -11,7 +11,7 @@ describe('Home', () => {
         const div = document.createElement('div')
         ReactDOM.render(
             <MemoryRouter>
-                <Home />
+                <Home isSignedIn={true} isSigningIn={true} />
             </MemoryRouter>,
             div
         )

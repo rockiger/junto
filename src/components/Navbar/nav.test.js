@@ -11,7 +11,7 @@ describe('Nav', () => {
         const div = document.createElement('div')
         ReactDOM.render(
             <MemoryRouter>
-                <Nav />
+                <Nav isSignedIn={false} />
             </MemoryRouter>,
             div
         )
