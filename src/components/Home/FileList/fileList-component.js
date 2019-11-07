@@ -1,21 +1,58 @@
+// @ts-check
+
 import React, { useGlobal } from 'reactn'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
+import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalIcon'
 
 import Spinner from 'components/spinner'
 import { EXT, MYHOME, OVERVIEW_NAME } from 'lib/constants'
-import { getTitleFromFileName } from 'lib/helper'
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import { getTitleFromFileName, sortByDate } from 'lib/helper'
+import { PageButtons } from 'components/pageButtons'
+import { ButtonMenu } from 'components/ButtonMenu'
 
+/** @typedef {{id: string, mimeType: string, name: string, modifiedByMeTime: string, trashed: boolean, viewedByMeTime: string}} File */
+/** @typedef {'viewedByMeTime' | 'modifiedByMeTime'} SortBy */
+
+/**
+ * @typedef {object} Props
+ * @prop {File[]} files
+ * @prop {'viewedByMeTime' | 'modifiedByMeTime'} sortBy
+ *
+ */
+
+/**
+ *
+ * @param {Props} props
+ */
 const FileListPartial = props => {
+    const { files, sortBy } = props
+    // @ts-ignore
     const [, setSearchTerm] = useGlobal('searchTerm')
     const classes = useStyles()
     return (
         <List className="filelist-list">
-            {props.files
+            {files
                 .filter(file => {
                     return shouldFileDisplay(file)
+                })
+                .sort((file1, file2) => {
+                    let result
+
+                    if (sortBy === 'viewedByMeTime') {
+                        result = sortByDate(
+                            file1.viewedByMeTime,
+                            file2.viewedByMeTime
+                        )
+                    } else {
+                        result = sortByDate(
+                            file1.modifiedByMeTime,
+                            file2.modifiedByMeTime
+                        )
+                    }
+                    return result
                 })
                 .map(file => {
                     const filename =
@@ -41,12 +78,12 @@ const FileListPartial = props => {
     )
 }
 
-const PeriodList = ({ files, headline }) => {
+const PeriodList = ({ files, headline, sortBy }) => {
     if (files.length > 0) {
         return (
             <>
                 <div className="filelist-tagline">{headline}</div>
-                <FileListPartial files={files} />
+                <FileListPartial files={files} sortBy={sortBy} />
             </>
         )
     } else {
@@ -54,12 +91,25 @@ const PeriodList = ({ files, headline }) => {
     }
 }
 
-const Periods = ({ files }) => {
+/**
+ *
+ * @param {{files: File[], sortBy: SortBy}} param0
+ */
+
+const Periods = ({ files, sortBy }) => {
     const createFilter = (older, younger = new Date()) => {
         return file => {
-            const date = parseInt(Date.parse(file.modifiedByMeTime))
+            let date
+            if (sortBy === 'viewedByMeTime') {
+                // @ts-ignore
+                date = parseInt(Date.parse(file.viewedByMeTime))
+            } else {
+                // @ts-ignore
+                date = parseInt(Date.parse(file.modifiedByMeTime))
+            }
             return (
                 date > parseInt(older.getTime()) &&
+                // @ts-ignore
                 date < parseInt(younger.getTime())
             )
         }
@@ -94,23 +144,74 @@ const Periods = ({ files }) => {
 
     return (
         <>
-            <PeriodList files={todayFiles} headline="Today" />
-            <PeriodList files={yesterdayFiles} headline="Yesterday" />
-            <PeriodList files={lastWeekFiles} headline="Previous 7 Days" />
-            <PeriodList files={lastMonthFiles} headline="Previous 30 Days" />
-            <PeriodList files={earlierFiles} headline="Earlier" />
+            <PeriodList files={todayFiles} headline="Today" sortBy={sortBy} />
+            <PeriodList
+                files={yesterdayFiles}
+                headline="Yesterday"
+                sortBy={sortBy}
+            />
+            <PeriodList
+                files={lastWeekFiles}
+                headline="Previous 7 Days"
+                sortBy={sortBy}
+            />
+            <PeriodList
+                files={lastMonthFiles}
+                headline="Previous 30 Days"
+                sortBy={sortBy}
+            />
+            <PeriodList
+                files={earlierFiles}
+                headline="Earlier"
+                sortBy={sortBy}
+            />
         </>
     )
 }
 
-const FileListRenderer = props => {
-    const { searchTerm } = props
+/**
+ * @typedef {object} FileListComponentProps
+ * @prop {File[]} files
+ * @prop {boolean} isLoading
+ * @prop {'viewedByMeTime' | 'modifiedByMeTime'} sortBy
+ * @prop {string} searchTerm
+ * @prop {function} setSortBy
+ */
+
+/**
+ *
+ * @param {FileListComponentProps} props
+ */
+const FileListComponent = props => {
+    const { searchTerm, setSortBy, sortBy } = props
     return (
         <div className="filelist">
+            <PageButtons>
+                <ButtonMenu
+                    items={[
+                        {
+                            key: 1,
+                            name: 'Last modified by me',
+                            handler: () => setSortBy('modifiedByMeTime'),
+                        },
+                        {
+                            key: 2,
+                            name: 'Last opened by me',
+                            handler: () => setSortBy('viewedByMeTime'),
+                        },
+                    ]}
+                >
+                    <SortAlphabeticalIcon />
+                </ButtonMenu>
+            </PageButtons>
             <h1>{searchTerm ? 'Search Result' : 'Your Work'}</h1>
             <div className="filelist-content">
+                {/* 
+                // @ts-ignore */}
                 {props.isLoading && <Spinner />}
-                {!props.isLoading && <Periods files={props.files} />}
+                {!props.isLoading && (
+                    <Periods files={props.files} sortBy={sortBy} />
+                )}
             </div>
             <style>{`
                     .filelist h1 {
@@ -147,7 +248,7 @@ const FileListRenderer = props => {
         </div>
     )
 }
-export default FileListRenderer
+export default FileListComponent
 
 function useStyles() {
     const useStyles = makeStyles(theme => {
@@ -171,6 +272,9 @@ function useStyles() {
     return useStyles()
 }
 
+/**
+ * @param {{mimeType: string, name: string, trashed: boolean}} file
+ */
 function shouldFileDisplay(file) {
     const { mimeType, name, trashed } = file
     return (

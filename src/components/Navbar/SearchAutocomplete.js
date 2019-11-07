@@ -11,8 +11,12 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
-import { getTitleFromFileName, getExtFromFileName } from '../../lib/helper'
-import { EXT } from '../../lib/constants'
+import {
+    getTitleFromFileName,
+    getExtFromFileName,
+    sortByDate,
+} from 'lib/helper'
+import { EXT } from 'lib/constants'
 
 export const SearchAutocomplete = ({
     clearSearch,
@@ -156,27 +160,4 @@ function useStyles() {
         }
     })
     return useStyles()
-}
-
-/**
- *
- * @param {string} date1 ISO String of a Date
- * @param {string} date2 ISO String of a Date
- *
- * @returns {number} indicates if date1 is smaller (-1), date2 is smaller (1), is equal (0)
- */
-export function sortByDate(date1, date2) {
-    if (!date1 && !date2) {
-        return 0
-    } else if (!date1 && date2) {
-        return 1
-    } else if (date1 && !date2) {
-        return -1
-    } else if (date1 < date2) {
-        return 1
-    } else if (date1 > date2) {
-        return -1
-    } else {
-        return 0
-    }
 }

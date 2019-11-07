@@ -1,4 +1,3 @@
-// @ts-check
 import React, { useState } from 'react'
 
 import Menu from '@material-ui/core/Menu'
@@ -9,10 +8,10 @@ import { Button } from 'components/pageButtons'
 /**
  * @typedef {object} Props
  * @prop {string} children
- * @prop {files} array
+ * @prop {items} array
  *
  */
-export function ButtonMenu({ children, files }) {
+export function ButtonMenu({ children, items }) {
     const [anchorEl, setAnchorEl] = useState(null)
 
     const handleClick = event => {
@@ -32,6 +31,7 @@ export function ButtonMenu({ children, files }) {
 
     return (
         <div>
+            {/* @ts-ignore */}
             <Button
                 aria-controls="button-menu"
                 aria-haspopup="true"
@@ -55,7 +55,7 @@ export function ButtonMenu({ children, files }) {
                     horizontal: 'center',
                 }}
             >
-                {files.map(el => (
+                {items.map(el => (
                     <MenuItem key={el.key} onClick={() => onSelect(el.handler)}>
                         {el.name}
                     </MenuItem>
