@@ -15,7 +15,7 @@ const getByAriaHidden = queryByAttribute.bind(null, 'aria-hidden')
 it('Text in in headline', () => {
     const dom = render(
         <ButtonMenu
-            files={[
+            items={[
                 {
                     key: 1,
                     name: 'Menu Item 1',

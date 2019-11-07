@@ -24,7 +24,7 @@ storiesOf('ButtonMenu', module)
         return (
             <>
                 <ButtonMenu
-                    files={[
+                    items={[
                         {
                             key: 1,
                             name: 'Menu Item 1',
