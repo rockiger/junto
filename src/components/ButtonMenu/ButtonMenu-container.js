@@ -30,7 +30,7 @@ export function ButtonMenu({ children, items }) {
     }
 
     return (
-        <div>
+        <span>
             {/* @ts-ignore */}
             <Button
                 aria-controls="button-menu"
@@ -61,7 +61,7 @@ export function ButtonMenu({ children, items }) {
                     </MenuItem>
                 ))}
             </Menu>
-        </div>
+        </span>
     )
 }
 
