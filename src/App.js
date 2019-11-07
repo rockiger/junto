@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'reactn'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
