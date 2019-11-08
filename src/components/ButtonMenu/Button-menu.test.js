@@ -12,7 +12,7 @@ import { ButtonMenu } from './ButtonMenu-container'
 const getById = queryByAttribute.bind(null, 'id')
 const getByAriaHidden = queryByAttribute.bind(null, 'aria-hidden')
 
-it('Text in in headline', () => {
+it('Menu opens and closes', () => {
     const dom = render(
         <ButtonMenu
             items={[
@@ -50,4 +50,39 @@ it('Text in in headline', () => {
 
     menuButton.click()
     expect(menuItem).toBeVisible()
+})
+
+it('Menu has checkmark', () => {
+    const dom = render(
+        <ButtonMenu
+            items={[
+                {
+                    key: 1,
+                    name: 'Menu Item 1',
+                    handler: () => console.log('Menu Item 1'),
+                },
+                {
+                    key: 2,
+                    name: 'Menu Item 2',
+                    handler: () => console.log('Menu Item 2'),
+                    active: true,
+                },
+                {
+                    key: 3,
+                    name: 'Menu Item 3',
+                    handler: () => console.log('Menu Item 3'),
+                },
+            ]}
+            selectable={true}
+        >
+            <MenuIcon />
+        </ButtonMenu>
+    )
+    const { container, getByRole, debug } = dom
+    const menuButton = container.querySelector('button')
+    menuButton.click()
+    const menu = getByRole('menu') //getById(container, 'ButtenMenu-Checkmark')
+
+    const checkmark = menu.querySelector('svg')
+    expect(checkmark).toBeVisible()
 })
