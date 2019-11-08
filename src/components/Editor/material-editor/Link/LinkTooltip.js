@@ -31,7 +31,7 @@ const LinkTooltip = props => {
                 zIndex: 1,
             }}
         >
-            {props.href.startsWith('/page/') ? (
+            {props.href && props.href.startsWith('/page/') ? (
                 <DomainIcon style={{ height: 18, width: 18 }} />
             ) : (
                 <EarthIcon style={{ height: 18, width: 18 }} />

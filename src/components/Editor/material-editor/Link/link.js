@@ -31,7 +31,7 @@ export function LinkNode({
             <Link
                 {...attributes}
                 href={href}
-                target={href.startsWith('/page/') ? '_self' : '_blank'}
+                target={href && href.startsWith('/page/') ? '_self' : '_blank'}
             >
                 {children}
             </Link>
