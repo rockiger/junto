@@ -207,6 +207,7 @@ const FileListComponent = props => {
                             active: sortBy === 'viewedByMeTime',
                         },
                     ]}
+                    selectable={true}
                 >
                     <SortAlphabeticalIcon />
                 </ButtonMenu>

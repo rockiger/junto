@@ -1,25 +1,18 @@
+//@ts-check
 import React, { useState } from 'react'
 
-import { Menu, MenuItem, ListItemText, ListItemIcon } from '@material-ui/core'
-import CheckIcon from 'mdi-react/CheckIcon'
+import { ButtonMenuComponent } from './ButtonMenu-component'
 
-import { Button } from 'components/pageButtons'
-import { THEME } from 'lib/constants'
-
-import { useStyles } from './Buttno-menu-styles'
-
-console.log(THEME)
 /**
  * @typedef {object} Props
  * @prop {string} children
  * @prop {items} array
  *
  */
-export function ButtonMenu({ children, items }) {
+export function ButtonMenu({ children, items, selectable }) {
     const [anchorEl, setAnchorEl] = useState(null)
-    const styles = useStyles()
 
-    const handleClick = event => {
+    const onClick = event => {
         setAnchorEl(event.currentTarget)
     }
 
@@ -35,50 +28,16 @@ export function ButtonMenu({ children, items }) {
     }
 
     return (
-        <span>
-            {/* @ts-ignore */}
-            <Button
-                aria-controls="button-menu"
-                aria-haspopup="true"
-                className={anchorEl ? styles.active : null}
-                onClick={handleClick}
-            >
-                {children}
-            </Button>
-            <Menu
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                getContentAnchorEl={null}
-                id="button-menu"
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={onClose}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                {items.map(el => (
-                    <MenuItem key={el.key} onClick={() => onSelect(el.handler)}>
-                        {el.active && (
-                            <ListItemIcon style={{ minWidth: '2.25rem' }}>
-                                <CheckIcon />
-                            </ListItemIcon>
-                        )}
-                        <ListItemText
-                            style={{
-                                paddingLeft: !el.active ? '2.25rem' : null,
-                            }}
-                        >
-                            {el.name}
-                        </ListItemText>
-                    </MenuItem>
-                ))}
-            </Menu>
-        </span>
+        <ButtonMenuComponent
+            anchorEl={anchorEl}
+            items={items}
+            onClick={onClick}
+            onClose={onClose}
+            onSelect={onSelect}
+            selectable={selectable}
+        >
+            {children}
+        </ButtonMenuComponent>
     )
 }
 

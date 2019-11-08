@@ -47,3 +47,32 @@ storiesOf('ButtonMenu', module)
             </>
         )
     })
+    .add('selectable', () => {
+        return (
+            <>
+                <ButtonMenu
+                    items={[
+                        {
+                            key: 1,
+                            name: 'Menu Item 1',
+                            handler: () => console.log('Menu Item 1'),
+                        },
+                        {
+                            key: 2,
+                            name: 'Menu Item 2',
+                            handler: () => console.log('Menu Item 2'),
+                            active: true,
+                        },
+                        {
+                            key: 3,
+                            name: 'Menu Item 3',
+                            handler: () => console.log('Menu Item 3'),
+                        },
+                    ]}
+                    selectable={true}
+                >
+                    <MenuIcon />
+                </ButtonMenu>
+            </>
+        )
+    })
