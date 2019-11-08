@@ -4,7 +4,11 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { Button } from 'components/pageButtons'
+import { THEME } from 'lib/constants'
 
+import { useStyles } from './Buttno-menu-styles'
+
+console.log(THEME)
 /**
  * @typedef {object} Props
  * @prop {string} children
@@ -13,6 +17,7 @@ import { Button } from 'components/pageButtons'
  */
 export function ButtonMenu({ children, items }) {
     const [anchorEl, setAnchorEl] = useState(null)
+    const styles = useStyles()
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget)
@@ -35,6 +40,7 @@ export function ButtonMenu({ children, items }) {
             <Button
                 aria-controls="button-menu"
                 aria-haspopup="true"
+                className={anchorEl ? styles.active : null}
                 onClick={handleClick}
             >
                 {children}
