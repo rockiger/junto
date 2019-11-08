@@ -198,11 +198,13 @@ const FileListComponent = props => {
                             key: 1,
                             name: 'Last modified by me',
                             handler: () => setSortBy('modifiedByMeTime'),
+                            active: sortBy === 'modifiedByMeTime',
                         },
                         {
                             key: 2,
                             name: 'Last opened by me',
                             handler: () => setSortBy('viewedByMeTime'),
+                            active: sortBy === 'viewedByMeTime',
                         },
                     ]}
                 >
