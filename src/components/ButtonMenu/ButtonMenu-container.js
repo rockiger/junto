@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
+import { Menu, MenuItem, ListItemText, ListItemIcon } from '@material-ui/core'
+import CheckIcon from 'mdi-react/CheckIcon'
 
 import { Button } from 'components/pageButtons'
 import { THEME } from 'lib/constants'
@@ -63,7 +63,18 @@ export function ButtonMenu({ children, items }) {
             >
                 {items.map(el => (
                     <MenuItem key={el.key} onClick={() => onSelect(el.handler)}>
-                        {el.name}
+                        {el.active && (
+                            <ListItemIcon style={{ minWidth: '2.25rem' }}>
+                                <CheckIcon />
+                            </ListItemIcon>
+                        )}
+                        <ListItemText
+                            style={{
+                                paddingLeft: !el.active ? '2.25rem' : null,
+                            }}
+                        >
+                            {el.name}
+                        </ListItemText>
                     </MenuItem>
                 ))}
             </Menu>
