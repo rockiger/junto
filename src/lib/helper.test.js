@@ -1,6 +1,4 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { sortByDate } from './SearchAutocomplete'
+import { sortByDate } from './helper'
 
 describe('SearchAutocomplete', () => {
     it('sortByDate works', () => {

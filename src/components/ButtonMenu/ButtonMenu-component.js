@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Menu, MenuItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import CheckIcon from 'mdi-react/CheckIcon'
 
 import { Button } from 'components/pageButtons'
-import { THEME } from 'lib/constants'
 
 import { useStyles } from './Buttno-menu-styles'
 /**
@@ -26,8 +25,6 @@ export function ButtonMenuComponent({
 
     return (
         <span>
-            {/* 
-            // @ts-ignore */}
             <Button
                 aria-controls="button-menu"
                 aria-haspopup="true"
@@ -56,7 +53,7 @@ export function ButtonMenuComponent({
                     <MenuItem key={el.key} onClick={() => onSelect(el.handler)}>
                         {selectable && el.active && (
                             <ListItemIcon style={{ minWidth: '2.25rem' }}>
-                                <CheckIcon />
+                                <CheckIcon id="ButtenMenu-Checkmark" />
                             </ListItemIcon>
                         )}
                         <ListItemText
