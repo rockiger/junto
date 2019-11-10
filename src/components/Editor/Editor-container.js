@@ -5,7 +5,11 @@ import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
 
 import FulcrumLogo from 'components/FulcrumLogo'
-import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
+import {
+    PageButtons,
+    ToggleReadOnlyButton,
+    ShareButton,
+} from 'components/pageButtons'
 import { Event } from 'components/Tracking'
 import { updateFile } from 'lib/gdrive'
 import { getExtFromFileName, getTitleFromFileName } from 'lib/helper'
@@ -111,6 +115,7 @@ function EditorLogic({
     return (
         <div onKeyDown={onKeyDown}>
             <PageButtons>
+                <ShareButton fileId={fileId} />
                 <ToggleReadOnlyButton
                     readOnly={readOnly}
                     onClick={onClickToggleButton}
