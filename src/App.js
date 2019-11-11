@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/styles'
 
+import { Drive } from './components/Drive/index'
 import Navbar from './components/Navbar'
 import GoogleLogin from './components/googleLogin'
 import Sidebar from './components/Sidebar'
@@ -95,6 +96,11 @@ class App extends React.Component {
                                             setGoToNewFile={this.setGoToNewFile}
                                         />
                                     )}
+                                />
+                                <Route
+                                    exact
+                                    path="/drive/"
+                                    render={props => <Drive />}
                                 />
                             </div>
                         </main>
