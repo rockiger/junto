@@ -115,7 +115,7 @@ function EditorLogic({
     return (
         <div onKeyDown={onKeyDown}>
             <PageButtons>
-                <ShareButton fileId={fileId} />
+                {/*<ShareButton fileId={fileId} />*/}
                 <ToggleReadOnlyButton
                     readOnly={readOnly}
                     onClick={onClickToggleButton}
