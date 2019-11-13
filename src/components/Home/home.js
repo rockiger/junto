@@ -1,28 +1,61 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useGlobal, useState } from "reactn";
+import PropTypes from "prop-types";
 
-import Spinner from 'components/spinner'
+import Spinner from "components/spinner";
+import { LOCALSTORAGE_NAME } from "lib/constants";
 
-import FrontPageHero from './frontPageHero'
-import FileList from './FileList'
+import FrontPageHero from "./frontPageHero";
+import FileList from "./FileList";
 
+const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`;
+
+/** @typedef {{sortBy: 'modifiedByMeTime' | 'viewedByMeTime' | 'sharedWithMeTime'}} SortBy */
 function Home(props) {
-    const { isSignedIn, isSigningIn, isCreatingNewFile } = props
-    if (isSignedIn && !isSigningIn && !isCreatingNewFile) {
-        return <FileList />
-    } else if ((!props.isSignedIn && props.isSigningIn) || isCreatingNewFile) {
-        return (
-            <div style={{ marginTop: '2rem' }}>
-                <Spinner />
-            </div>
-        )
-    } else {
-        return <FrontPageHero />
-    }
+  const { isSignedIn, isSigningIn, isCreatingNewFile } = props;
+  const sortByLS = localStorage.getItem(localStorageKey);
+
+  const [files] = useGlobal("files");
+  const [sortBy, setSortBy] = useState(
+    sortByLS &&
+      (sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")
+      ? sortByLS
+      : "modifiedByMeTime"
+  );
+
+  /**
+   * @param {SortBy} sortBy
+   * @returns {void}
+   */
+  const setSortByAndLocalStorage = sortBy => {
+    console.log({ sortBy });
+    setSortBy(sortBy);
+    //@ts-ignore
+    localStorage.setItem(localStorageKey, sortBy);
+  };
+
+  if (isSignedIn && !isSigningIn && !isCreatingNewFile) {
+    return (
+      <FileList
+        emptyMessage={`You don't have any shared files`}
+        files={files}
+        sortBy={sortBy}
+        setSortBy={setSortByAndLocalStorage}
+        title="Your Work"
+      />
+    );
+  } else if ((!props.isSignedIn && props.isSigningIn) || isCreatingNewFile) {
+    return (
+      <div style={{ marginTop: "2rem" }}>
+        <Spinner />
+      </div>
+    );
+  } else {
+    return <FrontPageHero />;
+  }
 }
 Home.propTypes = {
-    isSignedIn: PropTypes.bool.isRequired,
-    isSigningIn: PropTypes.bool.isRequired,
-}
+  isSignedIn: PropTypes.bool.isRequired,
+  isSigningIn: PropTypes.bool.isRequired
+};
 
-export default Home
+export default Home;

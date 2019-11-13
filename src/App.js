@@ -10,6 +10,7 @@ import GoogleLogin from './components/googleLogin'
 import Sidebar from './components/Sidebar'
 import Home from './components/Home'
 import Page from './components/Page'
+import { SharedWithMe } from 'components/SharedWithMe'
 import { initGA, setGA } from './components/Tracking'
 
 import {
@@ -85,6 +86,23 @@ class App extends React.Component {
                                     path="/page/:id"
                                     render={props => (
                                         <Page
+                                            {...props}
+                                            isCreatingNewFile={
+                                                this.global.isCreatingNewFile
+                                            }
+                                            isSignedIn={this.global.isSignedIn}
+                                            isSigningIn={
+                                                this.global.isSigningIn
+                                            }
+                                            setGoToNewFile={this.setGoToNewFile}
+                                        />
+                                    )}
+                                />
+                                <Route
+                                    exact
+                                    path="/shared-with-me"
+                                    render={props => (
+                                        <SharedWithMe
                                             {...props}
                                             isCreatingNewFile={
                                                 this.global.isCreatingNewFile
