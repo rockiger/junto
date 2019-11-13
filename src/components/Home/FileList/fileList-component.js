@@ -14,12 +14,12 @@ import { PageButtons } from 'components/pageButtons'
 import { ButtonMenu } from 'components/ButtonMenu'
 
 /** @typedef {{id: string, mimeType: string, name: string, modifiedByMeTime: string, trashed: boolean, viewedByMeTime: string}} File */
-/** @typedef {'viewedByMeTime' | 'modifiedByMeTime'} SortBy */
+/** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
 
 /**
  * @typedef {object} Props
  * @prop {File[]} files
- * @prop {'viewedByMeTime' | 'modifiedByMeTime'} sortBy
+ * @prop {SortBy} sortBy
  *
  */
 
@@ -99,14 +99,9 @@ const PeriodList = ({ files, headline, sortBy }) => {
 const Periods = ({ files, sortBy }) => {
     const createFilter = (older, younger = new Date()) => {
         return file => {
-            let date
-            if (sortBy === 'viewedByMeTime') {
-                // @ts-ignore
-                date = parseInt(Date.parse(file.viewedByMeTime))
-            } else {
-                // @ts-ignore
-                date = parseInt(Date.parse(file.modifiedByMeTime))
-            }
+            // @ts-ignore
+            const date = parseInt(Date.parse(file[sortBy]))
+
             return (
                 date > parseInt(older.getTime()) &&
                 // @ts-ignore
@@ -171,11 +166,13 @@ const Periods = ({ files, sortBy }) => {
 
 /**
  * @typedef {object} FileListComponentProps
+ * @prop {string} [emptyMessage]
  * @prop {File[]} files
  * @prop {boolean} isLoading
- * @prop {'viewedByMeTime' | 'modifiedByMeTime'} sortBy
+ * @prop {SortBy} sortBy
  * @prop {string} searchTerm
  * @prop {function} setSortBy
+ * @prop {string} title
  */
 
 /**
@@ -183,43 +180,44 @@ const Periods = ({ files, sortBy }) => {
  * @param {FileListComponentProps} props
  */
 const FileListComponent = props => {
-    const { searchTerm, setSortBy, sortBy } = props
+    const { emptyMessage, files, searchTerm, setSortBy, sortBy, title } = props
     return (
         <div className="filelist">
-            <PageButtons>
-                <strong style={{ fontWeight: 500, marginRight: '.5rem' }}>
-                    {sortBy === 'viewedByMeTime'
-                        ? 'Last opened by me'
-                        : 'Last modified by me'}
-                </strong>
-                <ButtonMenu
-                    items={[
-                        {
-                            key: 1,
-                            name: 'Last modified by me',
-                            handler: () => setSortBy('modifiedByMeTime'),
-                            active: sortBy === 'modifiedByMeTime',
-                        },
-                        {
-                            key: 2,
-                            name: 'Last opened by me',
-                            handler: () => setSortBy('viewedByMeTime'),
-                            active: sortBy === 'viewedByMeTime',
-                        },
-                    ]}
-                    selectable={true}
-                >
-                    <SortAlphabeticalIcon />
-                </ButtonMenu>
-            </PageButtons>
-            <h1>{searchTerm ? 'Search Result' : 'Your Work'}</h1>
+            {setSortBy && (
+                <PageButtons>
+                    <strong style={{ fontWeight: 500, marginRight: '.5rem' }}>
+                        {sortBy === 'viewedByMeTime'
+                            ? 'Last opened by me'
+                            : 'Last modified by me'}
+                    </strong>
+                    <ButtonMenu
+                        items={[
+                            {
+                                key: 1,
+                                name: 'Last modified by me',
+                                handler: () => setSortBy('modifiedByMeTime'),
+                                active: sortBy === 'modifiedByMeTime',
+                            },
+                            {
+                                key: 2,
+                                name: 'Last opened by me',
+                                handler: () => setSortBy('viewedByMeTime'),
+                                active: sortBy === 'viewedByMeTime',
+                            },
+                        ]}
+                        selectable={true}
+                    >
+                        <SortAlphabeticalIcon />
+                    </ButtonMenu>
+                </PageButtons>
+            )}
+            <h1>{searchTerm ? 'Search Result' : title}</h1>
             <div className="filelist-content">
                 {/* 
                 // @ts-ignore */}
                 {props.isLoading && <Spinner />}
-                {!props.isLoading && (
-                    <Periods files={props.files} sortBy={sortBy} />
-                )}
+                {!props.isLoading && <Periods files={files} sortBy={sortBy} />}
+                {files.length === 0 && <h2>{emptyMessage}</h2>}
             </div>
             <style>{`
                     .filelist h1 {

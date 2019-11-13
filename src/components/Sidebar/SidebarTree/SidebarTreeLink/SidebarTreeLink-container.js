@@ -86,6 +86,8 @@ export function SidebarTreeLink(props) {
             isExpanded={isExpanded}
             label={label}
             linkStyle={{
+                backgroundColor:
+                    currentPageId === pageId ? 'var(--hover-bg-color)' : '',
                 color: currentPageId === pageId ? 'var(--primary-color)' : '',
                 paddingLeft: level * 16,
             }}
