@@ -7,7 +7,7 @@ import { Button } from 'components/pageButtons'
 
 export function ShareButton({ fileId }) {
     useEffect(() => {
-        gapi.load('drive-share', initPicker)
+        gapi.load('drive-share', () => initPicker(fileId))
     }, [])
     return (
         <Button
