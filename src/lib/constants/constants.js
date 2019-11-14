@@ -12,8 +12,9 @@ export const DISCOVERY_DOCS = [
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
+// Could make sense at a later stage https://www.googleapis.com/auth/drive.appfolder
 export const SCOPES =
-    'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appfolder https://www.googleapis.com/auth/drive.install'
+    'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.install'
 
 export const EXT = '.gwiki'
 export const EXTLENGTH = EXT.length
