@@ -6,23 +6,26 @@ import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
 import { Chip } from '@material-ui/core'
 
-import FulcrumLogo from 'components/FulcrumLogo'
 import {
     PageButtons,
     ToggleReadOnlyButton,
     ShareButton,
 } from 'components/pageButtons'
 import { Event } from 'components/Tracking'
-import { updateFile } from 'lib/gdrive'
-import { getExtFromFileName, getTitleFromFileName } from 'lib/helper'
-import { API_KEY, EXT } from 'lib/constants'
+import { API_KEY } from 'lib/constants'
 
 import MaterialEditor from './material-editor'
-import { getUserRole } from './Editor-helper'
+import {
+    convertFilesToAutocompletItems,
+    getUserRole,
+    initStorage,
+    save,
+} from './Editor-helper'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
 function EditorLogic({
+    canWrite,
     fileId,
     fileLoaded,
     initialValue,
@@ -31,7 +34,6 @@ function EditorLogic({
 }) {
     const [files] = useGlobal('initialFiles')
     const { search } = useLocation()
-    const [canWrite, setCanWrite] = useState(true)
     const [readOnly, setReadOnly] = useState(search === '?edit' ? false : true)
     const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
     const editorRef = useRef(null)
@@ -87,19 +89,7 @@ function EditorLogic({
         // eslint-disable-next-line
     }, [])
 
-    useEffect(() => {
-        const userEmail = gapi.auth2
-            .getAuthInstance()
-            .currentUser.get()
-            .getBasicProfile()
-            .getEmail()
-        const userRole = getUserRole(fileId, files, userEmail)
-        if (['commenter', 'reader'].includes(userRole)) {
-            setCanWrite(false)
-        } else {
-            setCanWrite(true)
-        }
-    }, [files])
+    useEffect(() => {}, [files, fileId])
 
     function onClickToggleButton(ev) {
         ev.preventDefault()
@@ -172,56 +162,5 @@ function EditorLogic({
             />
         </div>
     )
-}
-
-function initStorage(initialValue, localStorageId) {
-    localStorage.setItem(localStorageId, initialValue)
-}
-async function save(fileId, initialValue) {
-    console.log('save()')
-    const newValue = localStorage.getItem(fileId)
-    if (initialValue === newValue) {
-        console.log('SAME SAME')
-        return
-    }
-
-    // Extract text from document
-    /* const document = Document.create(JSON.parse(newValue).document)
-    const text = document
-        .getTexts()
-        .reduce((acc, currVal, currIndex, array) => {
-            return `${acc} ${currVal.getText()}`
-        }, '')
-    console.log(text) */
-
-    try {
-        await updateFile(fileId, newValue)
-        console.log('save:', fileId)
-    } catch (err) {
-        alert(
-            `Couldn't save file with id: ${fileId}.\nPlease copy the content and reload the page.`
-        )
-        console.log("save: Couldn't save file with id:", fileId)
-        console.log('Error:', err)
-    }
-}
-
-function convertFilesToAutocompletItems(files) {
-    if (files && files.map) {
-        const items = files
-            .filter(file => {
-                const ext = getExtFromFileName(file.name)
-                return ext === EXT
-            })
-            .map(file => {
-                return {
-                    href: `/page/${file.id}`,
-                    id: file.id,
-                    icon: FulcrumLogo,
-                    name: getTitleFromFileName(file.name),
-                }
-            })
-        return items
-    }
 }
 export default EditorLogic

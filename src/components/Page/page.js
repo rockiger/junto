@@ -30,6 +30,7 @@ import { FlexInput } from 'components/FlexInput'
 
 export default class Page extends React.Component {
     state = {
+        canWrite: true,
         editorDelta: {},
         fileId: this.props.match.params.id,
         fileName: UNTITLEDFILE,
@@ -43,7 +44,7 @@ export default class Page extends React.Component {
         PageView()
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         // load editor content when user is signed in and can use drive api
         if (
             this.props.isSignedIn &&
@@ -70,6 +71,24 @@ export default class Page extends React.Component {
                 },
                 this.loadEditorContent
             )
+        }
+
+        if (!prevState.fileLoaded && this.state.fileLoaded) {
+            const userEmail = gapi.auth2
+                .getAuthInstance()
+                .currentUser.get()
+                .getBasicProfile()
+                .getEmail()
+            const userRole = getUserRole(
+                this.state.fileId,
+                this.global.files,
+                userEmail
+            )
+            if (['commenter', 'reader'].includes(userRole)) {
+                this.setState({ canWrite: false })
+            } else {
+                this.setState({ canWrite: true })
+            }
         }
     }
 
@@ -168,6 +187,7 @@ export default class Page extends React.Component {
     render() {
         let editor = (
             <Editor
+                canWrite={this.state.canWrite}
                 fileId={this.state.fileId}
                 fileLoaded={this.state.fileLoaded}
                 initialValue={this.state.initialContent}
@@ -251,4 +271,25 @@ Page.propTypes = {
         }),
     }),
     setGoToNewFile: PropTypes.func.isRequired,
+}
+
+/**
+ *
+ * @param {string} fileId
+ * @param {object[]} files
+ * @param {string} userEmail
+ */
+export function getUserRole(fileId, files, userEmail) {
+    const fileMeta = files.find(file => file.id === fileId)
+
+    /** @type {'organizer' | 'owner' | 'fileOrganizer' | 'writer' | 'commenter' | 'reader'} */
+    let userRole = 'reader'
+    if (fileMeta && fileMeta.permissions) {
+        const userPermission = fileMeta.permissions.find(
+            el => el.emailAddress === userEmail
+        )
+        if (userPermission) userRole = userPermission.role
+    }
+
+    return userRole
 }
