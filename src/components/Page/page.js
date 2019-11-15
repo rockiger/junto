@@ -241,6 +241,7 @@ export default class Page extends React.Component {
                                     >
                                         {this.state.pageHead}
                                         <Chip
+                                            id="Readonly-Chip"
                                             color="primary"
                                             label="Readonly"
                                             size="small"
