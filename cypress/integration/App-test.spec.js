@@ -25,6 +25,24 @@ describe('complete e to e test', () => {
             .first()
             .contains('My Fulcrum')
 
+        cy.contains('Shared With Me').click()
+        cy.wait(100)
+        cy.contains('Shared can view').click()
+        cy.wait(1000)
+        cy.contains('Readonly')
+
+        cy.contains('Shared With Me').click()
+        cy.wait(100)
+        cy.contains('Shared can comment').click()
+        cy.wait(1000)
+        cy.contains('Readonly')
+
+        cy.contains('Shared With Me').click()
+        cy.wait(100)
+        cy.contains('Shared can edit').click()
+        cy.wait(1000)
+        cy.get('#Readonly-Chip').should('not.exist')
+
         cy.get('#LogoutButton').click()
     })
 })
