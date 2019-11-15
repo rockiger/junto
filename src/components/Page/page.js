@@ -3,6 +3,7 @@ import React from 'reactn'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Redirect } from 'react-router-dom'
 
+import { Chip } from '@material-ui/core'
 import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
 
 import {
@@ -204,29 +205,48 @@ export default class Page extends React.Component {
                     <div className="editorContainer">
                         {this.state.fileLoaded && (
                             <h1 className="editorHeader">
-                                {this.state.fileName === OVERVIEW_NAME ? (
+                                {this.state.canWrite &&
+                                    (this.state.fileName === OVERVIEW_NAME ? (
+                                        <div
+                                            style={{
+                                                color: 'grey',
+                                                paddingLeft: '.5rem',
+                                            }}
+                                        >
+                                            {MYHOME}{' '}
+                                            <LockOutlineIcon size=".75em" />
+                                        </div>
+                                    ) : (
+                                        <FlexInput
+                                            onBlur={this.onBlurInput}
+                                            value={
+                                                this.state.pageHead !==
+                                                'Untitled page'
+                                                    ? this.state.pageHead
+                                                    : ''
+                                            }
+                                            placeholder="Untitled page"
+                                            onKeyDown={ev =>
+                                                ev.stopPropagation()
+                                            }
+                                            onChange={this.onChangeInput}
+                                        />
+                                    ))}
+                                {!this.state.canWrite && (
                                     <div
                                         style={{
                                             color: 'grey',
                                             paddingLeft: '.5rem',
                                         }}
                                     >
-                                        {MYHOME}{' '}
-                                        <LockOutlineIcon size=".75em" />
+                                        {this.state.pageHead}
+                                        <Chip
+                                            color="primary"
+                                            label="Readonly"
+                                            size="small"
+                                            style={{ margin: '0 0 3px 1rem' }}
+                                        />
                                     </div>
-                                ) : (
-                                    <FlexInput
-                                        onBlur={this.onBlurInput}
-                                        value={
-                                            this.state.pageHead !==
-                                            'Untitled page'
-                                                ? this.state.pageHead
-                                                : ''
-                                        }
-                                        placeholder="Untitled page"
-                                        onKeyDown={ev => ev.stopPropagation()}
-                                        onChange={this.onChangeInput}
-                                    />
                                 )}
                             </h1>
                         )}

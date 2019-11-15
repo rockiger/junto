@@ -4,7 +4,6 @@ import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
-import { Chip } from '@material-ui/core'
 
 import {
     PageButtons,
@@ -17,7 +16,6 @@ import { API_KEY } from 'lib/constants'
 import MaterialEditor from './material-editor'
 import {
     convertFilesToAutocompletItems,
-    getUserRole,
     initStorage,
     save,
 } from './Editor-helper'
@@ -120,6 +118,7 @@ function EditorLogic({
         }
     }
 
+    // TODO: Move to editor-component
     return (
         <div onKeyDown={onKeyDown}>
             <PageButtons>
@@ -129,9 +128,6 @@ function EditorLogic({
                         readOnly={readOnly}
                         onClick={onClickToggleButton}
                     />
-                )}
-                {!canWrite && (
-                    <Chip color="primary" label="Readonly" size="small" />
                 )}
             </PageButtons>
             <MaterialEditor
