@@ -1,4 +1,3 @@
-/* global gapi */
 import React, { useEffect, useGlobal, useState, useRef } from 'reactn'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
