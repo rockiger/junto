@@ -6,7 +6,6 @@ import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 import { useStyles } from './SidebarItem-styles'
 
 export const SidebarItem = props => {
-    const { linkStyle } = props
     const classes = useStyles()
     const location = useLocation()
     const { pathname } = location
