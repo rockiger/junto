@@ -8,7 +8,7 @@ import { Button } from 'components/pageButtons'
 export function ShareButton({ fileId }) {
     useEffect(() => {
         gapi.load('drive-share', () => initPicker(fileId))
-    }, [])
+    }, [fileId])
     return (
         <Button
             aria-controls="button-menu"
