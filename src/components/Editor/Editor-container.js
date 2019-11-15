@@ -1,8 +1,10 @@
+/* global gapi */
 import React, { useEffect, useGlobal, useState, useRef } from 'reactn'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
+import { Chip } from '@material-ui/core'
 
 import FulcrumLogo from 'components/FulcrumLogo'
 import {
@@ -16,6 +18,7 @@ import { getExtFromFileName, getTitleFromFileName } from 'lib/helper'
 import { API_KEY, EXT } from 'lib/constants'
 
 import MaterialEditor from './material-editor'
+import { getUserRole } from './Editor-helper'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -26,8 +29,9 @@ function EditorLogic({
     setEditorDelta,
     ...props
 }) {
-    const [files] = useGlobal('files')
+    const [files] = useGlobal('initialFiles')
     const { search } = useLocation()
+    const [canWrite, setCanWrite] = useState(true)
     const [readOnly, setReadOnly] = useState(search === '?edit' ? false : true)
     const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
     const editorRef = useRef(null)
@@ -83,6 +87,20 @@ function EditorLogic({
         // eslint-disable-next-line
     }, [])
 
+    useEffect(() => {
+        const userEmail = gapi.auth2
+            .getAuthInstance()
+            .currentUser.get()
+            .getBasicProfile()
+            .getEmail()
+        const userRole = getUserRole(fileId, files, userEmail)
+        if (['commenter', 'reader'].includes(userRole)) {
+            setCanWrite(false)
+        } else {
+            setCanWrite(true)
+        }
+    }, [files])
+
     function onClickToggleButton(ev) {
         ev.preventDefault()
         ev.stopPropagation()
@@ -116,10 +134,15 @@ function EditorLogic({
         <div onKeyDown={onKeyDown}>
             <PageButtons>
                 <ShareButton fileId={fileId} />
-                <ToggleReadOnlyButton
-                    readOnly={readOnly}
-                    onClick={onClickToggleButton}
-                />
+                {canWrite && (
+                    <ToggleReadOnlyButton
+                        readOnly={readOnly}
+                        onClick={onClickToggleButton}
+                    />
+                )}
+                {!canWrite && (
+                    <Chip color="primary" label="Readonly" size="small" />
+                )}
             </PageButtons>
             <MaterialEditor
                 apiKey={API_KEY}
