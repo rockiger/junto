@@ -304,7 +304,7 @@ export function getUserRole(fileId, files, userEmail) {
     const fileMeta = files.find(file => file.id === fileId)
 
     /** @type {'organizer' | 'owner' | 'fileOrganizer' | 'writer' | 'commenter' | 'reader'} */
-    let userRole = 'reader'
+    let userRole = 'owner'
     if (fileMeta && fileMeta.permissions) {
         const userPermission = fileMeta.permissions.find(
             el => el.emailAddress === userEmail
