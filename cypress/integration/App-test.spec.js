@@ -3,9 +3,9 @@
 describe('complete e to e test', () => {
     it('Visit the homepage, login, watch a page and logout', () => {
         cy.visit('/')
-        cy.contains('Knowledge Base for Google Drive!')
+        cy.contains('The missing knowledge base for GSuite')
         cy.contains('Login')
-        cy.contains('Login with Google').click()
+        cy.contains('Sign in with Google').click()
         cy.get('.Spinner').find('.Spinner-spinner')
 
         cy.wait(1000)
