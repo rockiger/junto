@@ -1,6 +1,6 @@
 //@ts-check
 import React from 'react'
-import { Container, Grid, Paper } from '@material-ui/core'
+import { Container, Grid, Link, Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import GoogleIcon from 'components/googleIcon'
 
@@ -260,6 +260,27 @@ export default function FrontPageHero() {
                     <GoogleButton />
                 </p>
             </Container>
+            <footer className={styles.footer}>
+                <Container>
+                    <Grid container>
+                        <Grid item sm={2} xs={12}>
+                            <Typography color="textSecondary">
+                                <strong>© Fulcrum</strong>
+                            </Typography>
+                        </Grid>
+                        <Grid item sm={10} xs={12}>
+                            <Link
+                                className={styles.footerLink}
+                                color="textSecondary"
+                                href="https://rockiger.com/en/privacy/"
+                                target="blank"
+                            >
+                                Privacy
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </Container>
+            </footer>
             <style>{`
             body {
                 overflow-y: auto;
@@ -362,15 +383,22 @@ export const useStyles = makeStyles(theme => {
                 padding: '0 6%',
             },
         },
-        sm: {
-            [theme.breakpoints.up('sm')]: {
-                display: 'none',
-            },
+        footer: {
+            marginTop: 'auto',
+            padding: '5rem 1rem 1rem',
+        },
+        footerLink: {
+            margin: '4px 16px',
         },
         md: {
             display: 'none',
             [theme.breakpoints.up('sm')]: {
                 display: 'flex',
+            },
+        },
+        sm: {
+            [theme.breakpoints.up('sm')]: {
+                display: 'none',
             },
         },
     }
