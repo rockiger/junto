@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Link from '@material-ui/core/Link'
+import { Link as RouterLink } from 'react-router-dom'
+import { Link as MaterialLink } from '@material-ui/core'
 
 import { hasLinks, toggleLink } from './linkPlugin'
 import LinkTooltip from './LinkTooltip'
@@ -13,6 +14,7 @@ export function LinkNode({
     children,
     onClickEdit,
     onClickRemove,
+    readOnly,
 }) {
     return (
         <span
@@ -28,13 +30,27 @@ export function LinkNode({
                     show={true}
                 />
             )}
-            <Link
-                {...attributes}
-                href={href}
-                target={href && href.startsWith('/page/') ? '_self' : '_blank'}
-            >
-                {children}
-            </Link>
+            {href && href.startsWith('/page/') ? (
+                <RouterLink
+                    className="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
+                    to={href}
+                    onClick={ev => {
+                        if (!readOnly) ev.preventDefault()
+                    }}
+                >
+                    {children}
+                </RouterLink>
+            ) : (
+                <MaterialLink
+                    {...attributes}
+                    href={href}
+                    target={
+                        href && href.startsWith('/page/') ? '_self' : '_blank'
+                    }
+                >
+                    {children}
+                </MaterialLink>
+            )}
         </span>
     )
 }

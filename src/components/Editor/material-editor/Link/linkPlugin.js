@@ -47,6 +47,7 @@ function LinkPlugin(options) {
                 case 'link': {
                     const { data } = node
                     const href = data.get('href')
+                    const { readOnly } = editor
                     return (
                         <LinkNode
                             showTooltip={hasLinks(editor)}
@@ -92,6 +93,7 @@ function LinkPlugin(options) {
                             attributes={attributes}
                             href={href}
                             children={children}
+                            readOnly={readOnly}
                         />
                     )
                 }
