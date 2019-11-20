@@ -2,6 +2,9 @@
 import React from 'react'
 import { Container, Grid, Link, Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import GoogleKeepIcon from 'mdi-react/GoogleKeepIcon'
+import GoogleDocsIcon from 'mdi-react/FileDocumentIcon'
+
 import GoogleIcon from 'components/googleIcon'
 
 import gsuiteIntegrations from 'static/img/gsuite-integrations.png'
@@ -33,7 +36,7 @@ export default function FrontPageHero() {
                     >
                         <h1>The missing knowledge base for G&nbsp;Suite™</h1>
                         <p>
-                            Google Keep™ is to simplistic? Google Docs™ sucks
+                            Google Keep™ is too simplistic? Google Docs™ sucks
                             for reading and organizing your team's knowledge?
                         </p>
                         <p>Then Fulcrum is for you!</p>
@@ -72,39 +75,77 @@ export default function FrontPageHero() {
                     </Grid>
                 </Grid>
             </Container>
-            <Container maxWidth="sm">
-                <div className="hero-logo" style={{ textAlign: 'center' }}>
-                    <img src={logo} alt="Fulcrum Logo" style={{ width: 64 }} />
-                </div>
-                <h2 style={{ textAlign: 'center' }}>Why Fulcrum?</h2>
-                <p>
-                    When we started with G Suite we were looking for a solution
-                    to <strong>create our knowledge base</strong>. We first
-                    tested Keep. Though it's great for keeping notes, it's much
-                    <strong>
-                        {' '}
-                        too simplistic to create compelling documentation{' '}
-                    </strong>{' '}
-                    for your work.{' '}
-                </p>
-                <p>
-                    We then switched to Docs - which is{' '}
-                    <strong>a great word processor</strong>! Maybe the best we
-                    ever used. For <strong>reading and finding</strong>{' '}
-                    information on the other hand it is a real pain. It's very
-                    cumbersome to create an information structure with Docs and
-                    the l<strong>oading of documents takes ages</strong> if you
-                    just want to look up something.{' '}
-                    <strong>It is made for writing, not reading.</strong>
-                </p>
-                <p>
-                    After this experience we started to build Fulcrum.{' '}
-                    <strong>It fits right in there.</strong> It is the missing
-                    link between Keep and Docs. Create{' '}
-                    <strong>powerful documentation</strong>
-                    right in your personal Google Drive or collaborate{' '}
-                    <strong>with your team</strong> on a shared Drive.
-                </p>
+            <Container>
+                <h2 style={{ margin: '80px auto', textAlign: 'center' }}>
+                    Why Fulcrum?
+                </h2>
+                <Grid container spacing={3}>
+                    <Grid
+                        className={styles.whyIconContainer}
+                        item
+                        sm={4}
+                        xs={12}
+                    >
+                        <GoogleKeepIcon
+                            color={'rgba(0, 0, 0, 0.54)'}
+                            size={64}
+                        />
+                        <p>
+                            When we started with G Suite we were looking for a
+                            solution to{' '}
+                            <strong>create our knowledge base</strong>. We first
+                            tested <strong>Keep</strong>. Though it's great for
+                            taking notes, it's much
+                            <strong>
+                                {' '}
+                                too simplistic to create compelling
+                                documentation{' '}
+                            </strong>{' '}
+                            for your work.{' '}
+                        </p>
+                    </Grid>
+                    <Grid
+                        className={styles.whyIconContainer}
+                        item
+                        sm={4}
+                        xs={12}
+                    >
+                        <GoogleDocsIcon
+                            color={'rgba(0, 0, 0, 0.54)'}
+                            size={64}
+                        />
+                        <p>
+                            We then switched to <strong>Docs</strong> - which is{' '}
+                            <strong>a great word processor</strong>! Maybe the
+                            best we ever used. For{' '}
+                            <strong>reading and finding</strong> information on
+                            the other hand it is a real pain. It's very
+                            cumbersome to create an information structure with
+                            Docs and the l
+                            <strong>oading of documents takes ages</strong> if
+                            you just want to look up something.{' '}
+                            <strong>
+                                It is made for writing, not reading.
+                            </strong>
+                        </p>
+                    </Grid>
+                    <Grid
+                        className={styles.whyIconContainer}
+                        item
+                        sm={4}
+                        xs={12}
+                    >
+                        <img src={logo} alt="Fulcrum Logo" height={64} />
+                        <p>
+                            After this experience we started to build Fulcrum.{' '}
+                            <strong>It fits right in there.</strong> It is the
+                            missing link between Keep and Docs. Create{' '}
+                            <strong>powerful documentation</strong> right in
+                            your personal Google Drive or collaborate{' '}
+                            <strong>with your team</strong> on a shared Drive.
+                        </p>
+                    </Grid>
+                </Grid>
             </Container>
             <Container className={styles.container} maxWidth={false}>
                 <Grid container spacing={3}>
@@ -209,7 +250,7 @@ export default function FrontPageHero() {
                     >
                         <h2>Work seamlessly with your G Suite</h2>
                         <p>
-                            Fulcrum allows you to <strong>connect</strong> your
+                            Fulcrum allows you to <strong>connect</strong> your{' '}
                             <strong>
                                 pages with other G Suite applications
                             </strong>
@@ -400,6 +441,11 @@ export const useStyles = makeStyles(theme => {
             [theme.breakpoints.up('sm')]: {
                 display: 'none',
             },
+        },
+        whyIconContainer: {
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
         },
     }
 })
