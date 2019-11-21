@@ -56,7 +56,7 @@ export function getDocument(apiKey) {
                 .addView(uploadView)
                 .setOAuthToken(accessToken)
                 .setDeveloperKey(apiKey)
-                .setTitle('Select an image from Google Drive')
+                .setTitle('Select a file from Google Drive')
                 .setCallback(data => pickerCallback(data, onChange, value))
                 .build()
             picker.setVisible(true)
