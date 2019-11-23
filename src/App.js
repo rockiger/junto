@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/styles'
 
+import { CreateNew } from 'components/CreateNew'
 import { Drive } from './components/Drive/index'
 import Navbar from './components/Navbar'
 import GoogleLogin from './components/googleLogin'
@@ -119,6 +120,18 @@ class App extends React.Component {
                                     exact
                                     path="/drive/"
                                     render={props => <Drive />}
+                                />
+                                <Route
+                                    exact
+                                    path="/new/"
+                                    render={props => (
+                                        <CreateNew
+                                            isSignedIn={this.global.isSignedIn}
+                                            isSigningIn={
+                                                this.global.isSigningIn
+                                            }
+                                        />
+                                    )}
                                 />
                             </div>
                         </main>
