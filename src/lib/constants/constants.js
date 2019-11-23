@@ -18,6 +18,7 @@ export const SCOPES =
 
 export const EXT = '.gwiki'
 export const EXTLENGTH = EXT.length
+export const FOLDER_NAME = 'Fulcrum Documents'
 export const LOCALSTORAGE_NAME = 'junto-content-xlc'
 export const MYHOME = 'My Fulcrum'
 export const OVERVIEW_NAME = '_myDrive_overview_please_do_not_touch' + EXT
