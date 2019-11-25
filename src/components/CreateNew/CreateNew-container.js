@@ -2,7 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect, useLocation } from 'react-router'
 
-import { checkForFulcrumFolder, getFileDescription } from 'lib/gdrive'
+import {
+    checkForFulcrumFolder,
+    createFile,
+    createNewWiki,
+    updateFile,
+} from 'lib/gdrive'
+import { FOLDER_NAME, OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
 
 export const CreateNew = ({ isSignedIn, isSigningIn }) => {
     const location = useLocation()
@@ -23,7 +29,23 @@ export const CreateNew = ({ isSignedIn, isSigningIn }) => {
                         const hasFulcrumFolder = await checkForFulcrumFolder(
                             folderId
                         )
-                        if (!hasFulcrumFolder) console.log('Create Wiki folder')
+                        if (!hasFulcrumFolder) {
+                            console.log(`Creat new wiki on ${folderId}`)
+                            const newRootFolderId = await createNewWiki(
+                                FOLDER_NAME,
+                                folderId,
+                                true
+                            )
+                            const newFileId = await createFile(
+                                OVERVIEW_NAME,
+                                newRootFolderId,
+                                true
+                            )
+                            await updateFile(newFileId, OVERVIEW_VALUE, true)
+                            // this.setState({folderId: newFolderId})
+                            console.log('newFolderId:', newRootFolderId)
+                            // TODO this.initFiles() refresh the state
+                        }
                     }
                     // TODO get Folder in look into  it
                     // TODO test if I can read the metadata of the root folder in personal drive

@@ -106,7 +106,7 @@ export function listFiles(searchTerm = '', orderBy = '') {
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export async function createFile(name, parentId) {
+export async function createFile(name, parentId, supportsAllDrives = false) {
     const fileMetadata = {
         name: name,
         mimeType: 'text/json',
@@ -116,6 +116,7 @@ export async function createFile(name, parentId) {
     try {
         const response = await window.gapi.client.drive.files.create({
             resource: fileMetadata,
+            supportsAllDrives,
         })
         console.log(response)
 
@@ -136,7 +137,8 @@ export async function createFile(name, parentId) {
  */
 export async function createNewWiki(
     name = 'Fulcrum Documents',
-    parentId = null
+    parentId = null,
+    supportsAllDrives = false
 ) {
     const fileMetadata = {
         name: name,
@@ -147,6 +149,7 @@ export async function createNewWiki(
     try {
         const result = await gapi.client.drive.files.create({
             resource: fileMetadata,
+            supportsAllDrives,
         })
         console.log(result)
 
@@ -286,13 +289,14 @@ export function downloadFile(driveId) {
  * @return {Promise|Object} A promise of the result that returns
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export function renameFile(driveId, newName) {
+export function renameFile(driveId, newName, supportsAllDrives = false) {
     return new Promise((resolve, reject) => {
         gapi.client.drive.files
             .update({
                 fileId: driveId,
                 name: newName,
                 fields: fileFields,
+                supportsAllDrives,
             })
             .then(
                 response => resolve(formatFileDescription(response.result)),
@@ -347,11 +351,11 @@ export function deleteFile(driveId) {
  *
  * @method updateFile
  * @param {String} driveId Google Drive file identifier
- * @param {String} newData Data to put into the file
+ * @param {any} newData Data to put into the file
  * @return {Promise|Object} A promise of the result that returns
  * a story description: {driveId, driveVersion, name, ifid}
  */
-export function updateFile(driveId, newData) {
+export function updateFile(driveId, newData, supportsAllDrives = false) {
     return new Promise((resolve, reject) => {
         gapi.client
             .request({
@@ -361,6 +365,7 @@ export function updateFile(driveId, newData) {
                     uploadType: 'media',
                     fields: fileFields,
                     useContentAsIndexableText: true,
+                    supportsAllDrives,
                 },
                 body: newData,
             })
