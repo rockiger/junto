@@ -17,3 +17,19 @@ export async function checkForFulcrumFolder(parent) {
     }
     return false
 }
+
+export async function getAllFulcrumFolderInSharedDrive(name = FOLDER_NAME) {
+    try {
+        const response = await gapi.client.drive.files.list({
+            q: `name="Fulcrum Documents" and mimeType = "application/vnd.google-apps.folder"`,
+            includeItemsFromAllDrives: true,
+            fields: 'nextPageToken, files(*)',
+            supportsAllDrives: true,
+        })
+        const body = JSON.parse(response.body)
+        const files = body.files.filter(el => (el.teamDriveId ? true : false))
+        return files
+    } catch (err) {
+        console.log(err)
+    }
+}
