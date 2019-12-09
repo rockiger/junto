@@ -89,8 +89,10 @@ export function listFiles(searchTerm = '', orderBy = '') {
             .list({
                 pageSize: 300,
                 fields: 'files(' + fileFields + ')',
-                q,
+                includeItemsFromAllDrives: true,
                 orderBy: order,
+                q,
+                supportsAllDrives: true,
             })
             .execute(response => resolve(formatResult(response)))
     })
