@@ -10,7 +10,7 @@ import {
 } from 'lib/gdrive'
 import { FOLDER_NAME, OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
 
-export const CreateNew = ({ isSignedIn, isSigningIn }) => {
+export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
     const location = useLocation()
     const { search } = location
     const state = getState(search)
@@ -55,7 +55,7 @@ export const CreateNew = ({ isSignedIn, isSigningIn }) => {
             }
         }
         anyNameFunction(state)
-    }, [folderId, isSignedIn])
+    }, [folderId, isSignedIn, state])
 
     return <div>Creating your Wiki {JSON.stringify(state)} </div> //<Redirect to={path} />
 }
