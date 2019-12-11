@@ -8,8 +8,8 @@ import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalIcon'
 
 import Spinner from 'components/spinner'
-import { EXT, MYHOME, OVERVIEW_NAME } from 'lib/constants'
-import { getTitleFromFileName, sortByDate } from 'lib/helper'
+import { EXT } from 'lib/constants'
+import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { PageButtons } from 'components/pageButtons'
 import { ButtonMenu } from 'components/ButtonMenu'
 
@@ -55,10 +55,7 @@ const FileListPartial = props => {
                     return result
                 })
                 .map(file => {
-                    const filename =
-                        file.name === OVERVIEW_NAME
-                            ? MYHOME
-                            : getTitleFromFileName(file.name)
+                    const filename = getTitleFromFile(file)
                     return (
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link

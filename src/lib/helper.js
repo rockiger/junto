@@ -1,9 +1,23 @@
 // @ts-check
 import { EXTLENGTH, MYHOME, OVERVIEW_NAME } from './constants'
 
-export function getTitleFromFileName(filename) {
-    if (filename === OVERVIEW_NAME) return MYHOME
-    return filename.substr(0, filename.length - EXTLENGTH)
+/**
+ * Creates the title based on the name and the pageName-property of a file
+ *
+ * @param {Object<string, any>} file - a fileobject form Google Drive
+ *
+ * @returns {string}
+ */
+export function getTitleFromFile(file) {
+    const { name, properties = {} } = file
+    if (name === OVERVIEW_NAME) {
+        const { pageName } = properties
+        if (pageName) {
+            return pageName
+        }
+        return MYHOME
+    }
+    return name.substr(0, name.length - EXTLENGTH)
 }
 
 export function getExtFromFileName(filename) {

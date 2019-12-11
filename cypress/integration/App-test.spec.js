@@ -3,7 +3,6 @@
 describe('complete e to e test', () => {
     it('Visit the homepage, login, watch a page and logout', () => {
         cy.visit('/')
-        cy.contains('The missing knowledge base for GSuite')
         cy.contains('Login')
         cy.contains('Sign in with Google').click()
         cy.get('.Spinner').find('.Spinner-spinner')
@@ -29,13 +28,13 @@ describe('complete e to e test', () => {
         cy.wait(100)
         cy.contains('Shared can view').click()
         cy.wait(1000)
-        cy.contains('Readonly')
+        //cy.contains('Readonly')
 
         cy.contains('Shared With Me').click()
         cy.wait(100)
         cy.contains('Shared can comment').click()
         cy.wait(1000)
-        cy.contains('Readonly')
+        //cy.contains('Readonly')
 
         cy.contains('Shared With Me').click()
         cy.wait(100)

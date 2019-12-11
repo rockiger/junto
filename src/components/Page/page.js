@@ -19,14 +19,8 @@ import { PageView } from 'components/Tracking'
 
 import Spinner from 'components/spinner'
 
-import {
-    EXT,
-    OVERVIEW_NAME,
-    UNTITLEDFILE,
-    UNTITLEDNAME,
-    MYHOME,
-} from 'lib/constants'
-import { getTitleFromFileName } from 'lib/helper'
+import { EXT, OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
+import { getTitleFromFile } from 'lib/helper'
 import { FlexInput } from 'components/FlexInput'
 
 export default class Page extends React.Component {
@@ -100,17 +94,9 @@ export default class Page extends React.Component {
                 const fileDescription = await getFileDescription(
                     this.state.fileId
                 )
-                let pageHead
-                if (fileDescription.name === OVERVIEW_NAME) {
-                    const { properties = {} } = fileDescription
-                    if (properties && properties.pageName) {
-                        pageHead = properties.pageName
-                    } else {
-                        pageHead = MYHOME
-                    }
-                } else {
-                    pageHead = getTitleFromFileName(fileDescription.name)
-                }
+
+                const pageHead = getTitleFromFile(fileDescription)
+
                 this.setState({
                     initialContent: fileContent ? fileContent : '',
                     fileLoaded: true,

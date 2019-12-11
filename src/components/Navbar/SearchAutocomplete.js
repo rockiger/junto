@@ -11,11 +11,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
-import {
-    getTitleFromFileName,
-    getExtFromFileName,
-    sortByDate,
-} from 'lib/helper'
+import { getTitleFromFile, getExtFromFileName, sortByDate } from 'lib/helper'
 import { EXT } from 'lib/constants'
 
 export const SearchAutocomplete = ({
@@ -91,7 +87,7 @@ export const SearchAutocomplete = ({
         >
             <MenuList id="SearchAutocomplet__list">
                 {filteredFiles.slice(0, 7).map((file, index) => {
-                    const filename = getTitleFromFileName(file.name)
+                    const filename = getTitleFromFile(file)
                     return (
                         <MenuItem
                             selected={index === selectedRow}
