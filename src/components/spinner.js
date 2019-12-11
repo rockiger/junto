@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Spinner({ children, style }) {
+export default function Spinner({ children = null, style = {} }) {
     return (
         <div className="Spinner" style={style}>
             {children}
