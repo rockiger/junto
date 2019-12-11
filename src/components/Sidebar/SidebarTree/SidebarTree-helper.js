@@ -15,10 +15,14 @@ export function getFolderId(fileId, files) {
 /**
  *
  * @param {any[]} files
+ * @param {string} rootFolderId
  * @returns {string}
  */
-export function getOverviewFileId(files) {
-    const overview = files.find(file => file.name === OVERVIEW_NAME)
+export function getOverviewFileId(files, rootFolderId) {
+    const overview = files.find(
+        file =>
+            file.name === OVERVIEW_NAME && file.parents.includes(rootFolderId)
+    )
     if (overview) return overview.id
     return ''
 }
