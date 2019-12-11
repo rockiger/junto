@@ -115,9 +115,10 @@ export default class GoogleLogin extends React.Component {
                     isInitialFileListLoading: false,
                 })
             } catch (err) {
-                const body = JSON.parse(err.body)
+                console.log({ err })
+                const body = err.body ? JSON.parse(err.body) : {}
                 const { error } = body
-                if (error.message === 'Invalid Credentials') {
+                if (error && error.message === 'Invalid Credentials') {
                     try {
                         await refreshSession()
                         this.initFiles()

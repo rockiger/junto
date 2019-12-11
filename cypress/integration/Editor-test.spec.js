@@ -1,7 +1,7 @@
 describe('Test the Editor', () => {
     it('Toggle the editor via shortcuts', () => {
         cy.visit('/')
-        cy.contains('Login with Google').click()
+        cy.contains('Sign in with Google').click()
 
         cy.wait(1000)
 

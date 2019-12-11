@@ -2,7 +2,7 @@
 
 import FulcrumLogo from 'components/FulcrumLogo'
 import { updateFile } from 'lib/gdrive'
-import { getExtFromFileName, getTitleFromFileName } from 'lib/helper'
+import { getExtFromFileName, getTitleFromFile } from 'lib/helper'
 
 import { EXT } from 'lib/constants'
 
@@ -23,7 +23,7 @@ export function convertFilesToAutocompletItems(files) {
                     href: `/page/${file.id}`,
                     id: file.id,
                     icon: FulcrumLogo,
-                    name: getTitleFromFileName(file.name),
+                    name: getTitleFromFile(file),
                 }
             })
         return items

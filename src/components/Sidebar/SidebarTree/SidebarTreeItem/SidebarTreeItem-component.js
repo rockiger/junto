@@ -7,7 +7,7 @@ import {
     getFolderId,
     shouldFileDisplay,
 } from '../SidebarTree-helper'
-import { getTitleFromFileName } from '../../../../lib/helper'
+import { getTitleFromFile } from '../../../../lib/helper'
 
 export function SidebarTreeItemComponent(props) {
     const {
@@ -43,7 +43,7 @@ export function SidebarTreeItemComponent(props) {
                                         initialFiles
                                     )}
                                     key={file.id}
-                                    label={getTitleFromFileName(file.name)}
+                                    label={getTitleFromFile(file)}
                                     level={level + 1}
                                     pageId={file.id}
                                     parentId={folderId}
