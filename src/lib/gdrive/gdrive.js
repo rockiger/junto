@@ -108,13 +108,20 @@ export function listFiles(searchTerm = '', orderBy = '') {
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export async function createFile(name, parentId, supportsAllDrives = false) {
+export async function createFile(
+    name,
+    parentId,
+    supportsAllDrives = false,
+    pageName = ''
+) {
     const fileMetadata = {
         name: name,
         mimeType: 'text/json',
         parents: [parentId],
         useContentAsIndexableText: true,
     }
+    if (pageName) fileMetadata.properties = { pageName }
+
     try {
         const response = await window.gapi.client.drive.files.create({
             resource: fileMetadata,
@@ -132,7 +139,7 @@ export async function createFile(name, parentId, supportsAllDrives = false) {
 /**
  * Creates a new (wiki) folder in the base directory
  *
- * @method createFile
+ * @method createNewWiki
  * @param {String} name Name of the new wiki on Google Drive
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
@@ -140,13 +147,18 @@ export async function createFile(name, parentId, supportsAllDrives = false) {
 export async function createNewWiki(
     name = 'Fulcrum Documents',
     parentId = null,
-    supportsAllDrives = false
+    supportsAllDrives = false,
+    description = ''
 ) {
     const fileMetadata = {
         name: name,
         mimeType: 'application/vnd.google-apps.folder',
+        properties: {
+            wikiRoot: true,
+        },
     }
     if (parentId) fileMetadata.parents = [parentId]
+    if (description) fileMetadata.description = description
 
     try {
         const result = await gapi.client.drive.files.create({

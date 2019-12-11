@@ -1,63 +1,95 @@
 //@ts-check
-import React, { useState, useEffect } from 'react'
-import { Redirect, useLocation } from 'react-router'
+import React, { useEffect, useGlobal, useRef } from 'reactn'
+import { useHistory, useLocation } from 'react-router'
 
-import {
-    checkForFulcrumFolder,
-    createFile,
-    createNewWiki,
-    updateFile,
-} from 'lib/gdrive'
-import { FOLDER_NAME, OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
+import Spinner from 'components/spinner'
+import { createFile, createNewWiki, updateFile } from 'lib/gdrive'
+import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
+
+import { CreateNewWikiModal } from './CreateNewWikiModal'
 
 export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
+    //@ts-ignore
+    const [, setBackgroundUpdate] = useGlobal('backgroundUpdate')
+    const [isCreatingNewFile, setIsCreatingNewFile] = useGlobal(
+        //@ts-ignore
+        'isCreatingNewFile'
+    )
+
+    const history = useHistory()
     const location = useLocation()
+    const modalRef = useRef(null)
+
     const { search } = location
     const state = getState(search)
     //@ts-ignore
     const { folderId } = state
-    const [files, setFiles] = useState([])
 
     useEffect(() => {
         // Create an scoped async function in the hook
         async function anyNameFunction(state) {
             try {
                 if (isSignedIn) {
-                    // TODO wait till logged in
                     console.log({ folderId })
-                    if (folderId) {
-                        const hasFulcrumFolder = await checkForFulcrumFolder(
-                            folderId
+                    const modal = modalRef.current
+                    try {
+                        // Wait for user input
+                        const result = await modal.show()
+                        console.log({ result })
+                        const { description = '', name } = result
+                        // Create wiki folder with extra meta data and overview file
+                        // Show spinner
+                        setIsCreatingNewFile(true)
+                        const newRootFolderId = await createNewWiki(
+                            name,
+                            folderId,
+                            true,
+                            description
                         )
-                        if (!hasFulcrumFolder) {
-                            console.log(`Creat new wiki on ${folderId}`)
-                            const newRootFolderId = await createNewWiki(
-                                FOLDER_NAME,
-                                folderId,
-                                true
-                            )
-                            const newFileId = await createFile(
-                                OVERVIEW_NAME,
-                                newRootFolderId,
-                                true
-                            )
-                            await updateFile(newFileId, OVERVIEW_VALUE, true)
-                            // this.setState({folderId: newFolderId})
-                            console.log('newFolderId:', newRootFolderId)
-                            // TODO this.initFiles() refresh the state
-                        }
+                        const newFileId = await createFile(
+                            OVERVIEW_NAME,
+                            newRootFolderId,
+                            true,
+                            name
+                        )
+                        await updateFile(newFileId, OVERVIEW_VALUE, true)
+                        setBackgroundUpdate(true)
+                        setIsCreatingNewFile(false)
+                        history.push(`/page/${newFileId}`)
+                    } catch (err) {
+                        console.log({ err })
+                        setIsCreatingNewFile(false)
+                        if (!err) history.push('/')
                     }
-                    // TODO get Folder in look into  it
-                    // TODO test if I can read the metadata of the root folder in personal drive
                 }
             } catch (err) {
                 console.log(err)
             }
         }
         anyNameFunction(state)
-    }, [folderId, isSignedIn, state])
+    }, [
+        folderId,
+        history,
+        isSignedIn,
+        setBackgroundUpdate,
+        setIsCreatingNewFile,
+        state,
+    ])
 
-    return <div>Creating your Wiki {JSON.stringify(state)} </div> //<Redirect to={path} />
+    if ((!isSignedIn && isSigningIn) || isCreatingNewFile) {
+        return (
+            <div style={{ marginTop: '2rem' }}>
+                <Spinner />
+            </div>
+        )
+    } else {
+        return (
+            <>
+                <h1 style={{ padding: '.5rem' }}>Creating your Wiki ...</h1>
+                <CreateNewWikiModal ref={modalRef} />
+            </>
+        )
+    }
 }
 
 /**
