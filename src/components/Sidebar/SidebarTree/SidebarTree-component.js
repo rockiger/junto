@@ -21,7 +21,7 @@ export const SidebarTreeComponent = ({ rootFolderId, files }) => {
                         files={sortFilesByName(files)}
                         label={MYHOME}
                         level={0}
-                        pageId={getOverviewFileId(files)}
+                        pageId={getOverviewFileId(files, rootFolderId)}
                         parentId={rootFolderId}
                     />
                 </ul>
