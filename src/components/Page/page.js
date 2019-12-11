@@ -100,8 +100,17 @@ export default class Page extends React.Component {
                 const fileDescription = await getFileDescription(
                     this.state.fileId
                 )
-                const pageHead = getTitleFromFileName(fileDescription.name)
-                console.log('this.loadEditorContent:', JSON.parse(fileContent))
+                let pageHead
+                if (fileDescription.name === OVERVIEW_NAME) {
+                    const { properties = {} } = fileDescription
+                    if (properties && properties.pageName) {
+                        pageHead = properties.pageName
+                    } else {
+                        pageHead = MYHOME
+                    }
+                } else {
+                    pageHead = getTitleFromFileName(fileDescription.name)
+                }
                 this.setState({
                     initialContent: fileContent ? fileContent : '',
                     fileLoaded: true,
@@ -110,8 +119,9 @@ export default class Page extends React.Component {
                     pageHead,
                 })
             } catch (err) {
-                const body = JSON.parse(err.body)
-                const { error } = body
+                console.log({ err })
+                const body = err.body ? JSON.parse(err.body) : {}
+                const { error = {} } = body
                 if (error.message === 'Invalid Credentials') {
                     try {
                         await refreshSession()
@@ -213,7 +223,7 @@ export default class Page extends React.Component {
                                                 paddingLeft: '.5rem',
                                             }}
                                         >
-                                            {MYHOME}{' '}
+                                            {this.state.pageHead}
                                             <LockOutlineIcon size=".75em" />
                                         </div>
                                     ) : (

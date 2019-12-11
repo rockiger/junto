@@ -17,6 +17,7 @@ function formatFileDescription(response) {
             driveVersion: response.version,
             name: response.name,
             ifid: '',
+            properties: response.properties,
         }
     } else {
         return {
