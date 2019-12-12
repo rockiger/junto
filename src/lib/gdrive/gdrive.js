@@ -248,6 +248,8 @@ export function getFileDescription(driveId) {
             .get({
                 fileId: driveId,
                 fields: fileFields,
+                includeItemsFromAllDrives: true,
+                supportsAllDrives: true,
             })
             .execute(response => resolve(formatFileDescription(response)))
     })
@@ -304,7 +306,7 @@ export function downloadFile(driveId) {
  * @return {Promise|Object} A promise of the result that returns
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export function renameFile(driveId, newName, supportsAllDrives = false) {
+export function renameFile(driveId, newName, supportsAllDrives = true) {
     return new Promise((resolve, reject) => {
         gapi.client.drive.files
             .update({
@@ -370,7 +372,7 @@ export function deleteFile(driveId) {
  * @return {Promise|Object} A promise of the result that returns
  * a story description: {driveId, driveVersion, name, ifid}
  */
-export function updateFile(driveId, newData, supportsAllDrives = false) {
+export function updateFile(driveId, newData, supportsAllDrives = true) {
     return new Promise((resolve, reject) => {
         gapi.client
             .request({
