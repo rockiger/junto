@@ -112,7 +112,7 @@ export function listFiles(searchTerm = '', orderBy = '') {
 export async function createFile(
     name,
     parentId,
-    supportsAllDrives = false,
+    supportsAllDrives = true,
     pageName = ''
 ) {
     const fileMetadata = {
@@ -148,7 +148,7 @@ export async function createFile(
 export async function createNewWiki(
     name = 'Fulcrum Documents',
     parentId = null,
-    supportsAllDrives = false,
+    supportsAllDrives = true,
     description = ''
 ) {
     const fileMetadata = {
