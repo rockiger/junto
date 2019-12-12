@@ -3,8 +3,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Fab } from '@material-ui/core'
 import AddIcon from 'mdi-react/AddIcon'
 
+import { isMobileDevice } from 'lib/helper'
+import { SidebarSharedDrives } from './SidebarSharedDrives'
 import { SidebarTree } from './SidebarTree'
-import { isMobileDevice } from '../../lib/helper'
 import { SidebarItem } from './SidebarItem'
 window.isMobileDevice = isMobileDevice
 
@@ -43,6 +44,7 @@ const SidebarRenderer = props => {
                 {!isMobileDevice() && (
                     <div className="Sidebar-Navigation" id="Sidebar-Navigation">
                         <SidebarTree />
+                        <SidebarSharedDrives />
                         <SidebarItem />
                     </div>
                 )}
