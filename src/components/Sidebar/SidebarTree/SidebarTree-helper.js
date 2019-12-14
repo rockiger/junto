@@ -53,8 +53,7 @@ export function filterChildFiles(folderId, files) {
  * @param {string} parentId
  */
 export function shouldFileDisplay(file, parentId) {
-    const { mimeType, name, ownedByMe, parents, trashed } = file
-    if (!ownedByMe) return false
+    const { mimeType, name, parents, trashed } = file
     return (
         mimeType === 'application/json' &&
         name !== OVERVIEW_NAME &&

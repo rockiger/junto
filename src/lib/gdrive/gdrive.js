@@ -88,6 +88,7 @@ export function listFiles(searchTerm = '', orderBy = '') {
     return new Promise((resolve, reject) => {
         gapi.client.drive.files
             .list({
+                corpora: 'allDrives',
                 pageSize: 300,
                 fields: 'files(' + fileFields + ')',
                 includeItemsFromAllDrives: true,

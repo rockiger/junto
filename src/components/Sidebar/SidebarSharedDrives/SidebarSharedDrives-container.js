@@ -22,7 +22,7 @@ export function SidebarSharedDrives() {
                             label={getTitleFromFile(file)}
                             level={0}
                             pageId={file.id}
-                            parentId={file.id}
+                            parentId={file.parents[0]}
                         />
                     ))}
                 </ul>
