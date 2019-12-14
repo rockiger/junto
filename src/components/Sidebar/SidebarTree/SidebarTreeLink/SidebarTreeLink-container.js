@@ -49,6 +49,7 @@ export function SidebarTreeLink(props) {
                 UNTITLEDFILE,
                 parentFolderIdOfNewFile
             )
+            console.log({ newFileId })
             const result = await updateFile(
                 newFileId,
                 JSON.stringify(EMPTYVALUE)
