@@ -65,7 +65,6 @@ function BlockPlugin(options) {
     const { type, shortcut } = options
 
     const isHotkey = isCodeHotkey(shortcut)
-    console.log(capitalize(replaceMod(shortcut)))
 
     return {
         onKeyDown(event, editor, next) {
