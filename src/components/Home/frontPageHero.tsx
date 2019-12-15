@@ -12,6 +12,7 @@ import instantSearch from 'static/img/instant-search.png'
 import logo from 'static/logo.svg'
 import page01 from 'static/img/page01.png'
 import page02 from 'static/img/page02.png'
+import GoogleDriveLogo from 'static/googleDriveLogo.svg'
 
 export default function FrontPageHero() {
     const styles = useStyles()
@@ -34,7 +35,18 @@ export default function FrontPageHero() {
                             paddingRight: '2rem',
                         }}
                     >
-                        <h1>The missing knowledge base for G&nbsp;Suite™</h1>
+                        <h1>
+                            Your wiki made for{' '}
+                            <img
+                                alt=""
+                                src={GoogleDriveLogo}
+                                style={{
+                                    bottom: -12,
+                                    height: 46,
+                                    position: 'relative',
+                                }}
+                            />
+                        </h1>
                         <p>
                             Google Keep™ is too simplistic? Google Docs™ sucks
                             for reading and organizing your team's knowledge?
