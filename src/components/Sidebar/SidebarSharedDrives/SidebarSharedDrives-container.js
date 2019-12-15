@@ -1,5 +1,5 @@
 import React, { useGlobal } from 'reactn'
-import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
+import { OVERVIEW_NAME } from 'lib/constants'
 
 import { SidebarTreeItem } from '../SidebarTree/SidebarTreeItem'
 import { useStyles } from '../SidebarTree/SidebarTree-styles'
@@ -7,8 +7,6 @@ import { getTitleFromFile } from 'lib/helper'
 
 export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
-    const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
-    const [rootFolderId] = useGlobal('rootFolderId')
     const classes = useStyles()
 
     return (
