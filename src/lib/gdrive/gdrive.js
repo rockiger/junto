@@ -12,13 +12,14 @@ const fileFields = '*'
 function formatFileDescription(response) {
     response = response || null
     if (response && !response.error) {
-        return {
+        return response
+        /* return {
             driveId: response.id,
             driveVersion: response.version,
             name: response.name,
             ifid: '',
             properties: response.properties,
-        }
+        } */
     } else {
         return {
             driveId: '',
