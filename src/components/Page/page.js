@@ -25,7 +25,7 @@ import { FlexInput } from 'components/FlexInput'
 
 export default class Page extends React.Component {
     state = {
-        canWrite: true,
+        canEdit: false,
         editorDelta: {},
         fileId: this.props.match.params.id,
         fileName: UNTITLEDFILE,
@@ -67,24 +67,6 @@ export default class Page extends React.Component {
                 this.loadEditorContent
             )
         }
-
-        if (!prevState.fileLoaded && this.state.fileLoaded) {
-            const userEmail = gapi.auth2
-                .getAuthInstance()
-                .currentUser.get()
-                .getBasicProfile()
-                .getEmail()
-            const userRole = getUserRole(
-                this.state.fileId,
-                this.global.files,
-                userEmail
-            )
-            if (['commenter', 'reader'].includes(userRole)) {
-                this.setState({ canWrite: false })
-            } else {
-                this.setState({ canWrite: true })
-            }
-        }
     }
 
     loadEditorContent = async ev => {
@@ -94,10 +76,11 @@ export default class Page extends React.Component {
                 const fileDescription = await getFileDescription(
                     this.state.fileId
                 )
-
+                console.log(fileDescription)
                 const pageHead = getTitleFromFile(fileDescription)
 
                 this.setState({
+                    canEdit: fileDescription.capabilities.canEdit,
                     initialContent: fileContent ? fileContent : '',
                     fileLoaded: true,
                     fileLoading: false,
@@ -184,7 +167,7 @@ export default class Page extends React.Component {
     render() {
         let editor = (
             <Editor
-                canWrite={this.state.canWrite}
+                canEdit={this.state.canEdit}
                 fileId={this.state.fileId}
                 fileLoaded={this.state.fileLoaded}
                 initialValue={this.state.initialContent}
@@ -201,7 +184,7 @@ export default class Page extends React.Component {
                     <div className="editorContainer">
                         {this.state.fileLoaded && (
                             <h1 className="editorHeader">
-                                {this.state.canWrite &&
+                                {this.state.canEdit &&
                                     (this.state.fileName === OVERVIEW_NAME ? (
                                         <div
                                             style={{
@@ -228,7 +211,7 @@ export default class Page extends React.Component {
                                             onChange={this.onChangeInput}
                                         />
                                     ))}
-                                {!this.state.canWrite && (
+                                {!this.state.canEdit && (
                                     <div
                                         style={{
                                             color: 'grey',
@@ -241,7 +224,9 @@ export default class Page extends React.Component {
                                             color="primary"
                                             label="Readonly"
                                             size="small"
-                                            style={{ margin: '0 0 3px 1rem' }}
+                                            style={{
+                                                margin: '0 0 3px 1rem',
+                                            }}
                                         />
                                     </div>
                                 )}
@@ -298,7 +283,7 @@ Page.propTypes = {
  */
 export function getUserRole(fileId, files, userEmail) {
     const fileMeta = files.find(file => file.id === fileId)
-
+    console.log(fileMeta)
     /** @type {'organizer' | 'owner' | 'fileOrganizer' | 'writer' | 'commenter' | 'reader'} */
     let userRole = 'owner'
     if (fileMeta && fileMeta.permissions) {

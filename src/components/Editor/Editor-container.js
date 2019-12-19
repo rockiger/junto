@@ -22,7 +22,7 @@ import {
 const isSaveHotkey = isHotkey('mod+Enter')
 
 function EditorLogic({
-    canWrite,
+    canEdit,
     fileId,
     fileLoaded,
     initialValue,
@@ -121,8 +121,8 @@ function EditorLogic({
     return (
         <div onKeyDown={onKeyDown}>
             <PageButtons>
-                <ShareButton fileId={fileId} />
-                {canWrite && (
+                {canEdit && <ShareButton fileId={fileId} />}
+                {canEdit && (
                     <ToggleReadOnlyButton
                         readOnly={readOnly}
                         onClick={onClickToggleButton}
