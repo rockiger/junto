@@ -58,6 +58,7 @@ export function shouldFileDisplay(file, parentId) {
         mimeType === 'application/json' &&
         name !== OVERVIEW_NAME &&
         name.endsWith(EXT) &&
+        parents &&
         parents.includes(parentId) &&
         trashed === false
     )
