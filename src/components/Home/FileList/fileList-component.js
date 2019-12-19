@@ -130,7 +130,7 @@ const Periods = ({ files, sortBy }) => {
     const lastMonthFilter = createFilter(lastMonth, lastWeek)
     const lastMonthFiles = files.filter(lastMonthFilter)
 
-    const earlier = newTimeBorder(31)
+    const earlier = new Date(0) // 1970
     const earlierFilter = createFilter(earlier, lastMonth)
     const earlierFiles = files.filter(earlierFilter)
 
