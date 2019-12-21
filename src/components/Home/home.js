@@ -36,7 +36,7 @@ function Home(props) {
   if (isSignedIn && !isSigningIn && !isCreatingNewFile) {
     return (
       <FileList
-        emptyMessage={`You don't have any shared files`}
+        emptyMessage="There are no files in this view."
         files={files}
         sortBy={sortBy}
         setSortBy={setSortByAndLocalStorage}
