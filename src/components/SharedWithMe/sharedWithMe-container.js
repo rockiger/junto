@@ -12,7 +12,7 @@ function SharedWithMe(props) {
     if (isSignedIn && !isSigningIn) {
         return (
             <FileList
-                emptyMessage="You don't have any shared files"
+                emptyMessage="You don't have any shared files."
                 files={filterSharedWithMe(files)}
                 sortBy="sharedWithMeTime"
                 title="Shared With Me"
