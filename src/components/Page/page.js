@@ -24,16 +24,20 @@ import { getTitleFromFile } from 'lib/helper'
 import { FlexInput } from 'components/FlexInput'
 
 export default class Page extends React.Component {
-    state = {
-        canEdit: false,
-        editorDelta: {},
-        fileId: this.props.match.params.id,
-        fileName: UNTITLEDFILE,
-        pageHead: UNTITLEDNAME,
-        fileLoaded: false,
-        fileLoading: false,
+    constructor(props) {
+        super(props)
+        this.state = {
+            canEdit: false,
+            editorDelta: {},
+            fileId: this.props.match.params.id,
+            fileName: UNTITLEDFILE,
+            pageHead: UNTITLEDNAME,
+            fileLoaded: false,
+            fileLoading: false,
+        }
+        this.editorRef = React.createRef(null)
+        this.inputRef = React.createRef(null)
     }
-
     componentDidMount() {
         this.setGlobal({ goToNewFile: false })
         PageView()
@@ -129,6 +133,21 @@ export default class Page extends React.Component {
         this.setState({ pageHead: ev.target.value })
     }
 
+    onKeyDownInput = ev => {
+        switch (ev.key) {
+            case `ArrowDown`:
+            case `Tab`:
+                ev.preventDefault()
+                this.editorRef.current.focus()
+                break
+
+            default:
+                break
+        }
+
+        ev.stopPropagation()
+    }
+
     updateViewedByMeDate = () => {
         const { fileId } = this.state
         const now = new Date().toISOString()
@@ -171,6 +190,8 @@ export default class Page extends React.Component {
                 fileId={this.state.fileId}
                 fileLoaded={this.state.fileLoaded}
                 initialValue={this.state.initialContent}
+                inputRef={this.inputRef}
+                ref={this.editorRef}
                 setEditorDelta={this.setEditorDelta}
             />
         )
@@ -205,9 +226,8 @@ export default class Page extends React.Component {
                                                     : ''
                                             }
                                             placeholder="Untitled page"
-                                            onKeyDown={ev =>
-                                                ev.stopPropagation()
-                                            }
+                                            ref={this.inputRef}
+                                            onKeyDown={this.onKeyDownInput}
                                             onChange={this.onChangeInput}
                                         />
                                     ))}

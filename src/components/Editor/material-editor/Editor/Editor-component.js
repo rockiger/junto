@@ -58,6 +58,7 @@ export function EditorComponent({
     plugins,
     value,
     onChange,
+    onKeyDown,
     onPaste,
     editorRef,
     readOnly,
@@ -336,6 +337,7 @@ export function EditorComponent({
                 plugins={plugins}
                 value={value}
                 onChange={onChange}
+                onKeyDown={onKeyDown}
                 onPaste={onPaste}
                 placeholder="Bring your content to life with text, images, files, code blocks and pictures from Google Drive. 
                 Did you know you can write even faster with Markdown?"
