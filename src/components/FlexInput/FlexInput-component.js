@@ -1,7 +1,15 @@
 import React from 'react'
 
-export const FlexInputComponent = React.forwardRef((props, h1Ref) => {
-    const { onBlur, onChange, onKeyDown, placeholder, value, width } = props
+export const FlexInputComponent = React.forwardRef((props, ref) => {
+    const {
+        h1Ref,
+        onBlur,
+        onChange,
+        onKeyDown,
+        placeholder,
+        value,
+        width,
+    } = props
     return (
         <>
             <input
@@ -10,6 +18,7 @@ export const FlexInputComponent = React.forwardRef((props, h1Ref) => {
                 onKeyDown={onKeyDown}
                 onChange={onChange}
                 placeholder={placeholder}
+                ref={ref}
                 style={{
                     width,
                 }}

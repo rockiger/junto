@@ -64,6 +64,7 @@ const Editor = React.forwardRef(
             initialValue,
             items,
             onChangeHandler,
+            onKeyDownHandler,
             apiKey,
             readOnly,
             style,
@@ -98,7 +99,6 @@ const Editor = React.forwardRef(
 
         // On change, update the app's React state with the new editor value.
         const onChange = change => onChangeHandler(change, setValue, value)
-
         return (
             <EditorComponent
                 apiKey={apiKey}
@@ -107,6 +107,7 @@ const Editor = React.forwardRef(
                 plugins={plugins}
                 value={value}
                 onChange={onChange}
+                onKeyDown={onKeyDownHandler}
                 onPaste={onPaste}
                 editorRef={editorRef}
                 readOnly={readOnly}
