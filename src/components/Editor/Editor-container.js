@@ -112,6 +112,9 @@ const EditorLogic = React.forwardRef(
                 // check, if we really need to save changes
                 const content = JSON.stringify(value.toJSON())
                 localStorage.setItem(fileId, content)
+                if (readOnly) {
+                    save(fileId, initialValue)
+                }
             }
             setValue(value)
         }
