@@ -29,7 +29,9 @@ export const checkListPlugin = {
 
         if (
             event.key === 'Enter' &&
-            value.startBlock.type === 'check-list-item'
+            value.startBlock.type === 'check-list-item' &&
+            !event.ctrlKey &&
+            !event.metaKey
         ) {
             editor.splitBlock().setBlocks({ data: { checked: false } })
             return
