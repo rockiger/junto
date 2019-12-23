@@ -24,7 +24,7 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
                 }}
                 value={value}
             />
-            <h1
+            <div
                 ref={h1Ref}
                 style={{
                     display: 'inline',
@@ -36,7 +36,7 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
                 }}
             >
                 {value || placeholder}
-            </h1>
+            </div>
             <style>{`
                 .editorInput {
                     border: 1px solid transparent;
