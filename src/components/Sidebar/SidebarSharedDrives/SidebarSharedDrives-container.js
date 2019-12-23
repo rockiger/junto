@@ -16,6 +16,7 @@ export function SidebarSharedDrives() {
                     {filterSharedDrives(initialFiles).map((file, index) => (
                         <SidebarTreeItem
                             expand={false}
+                            key={index}
                             files={initialFiles}
                             label={getTitleFromFile(file)}
                             level={0}
