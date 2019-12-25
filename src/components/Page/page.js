@@ -23,6 +23,8 @@ import { EXT, OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
 import { getTitleFromFile } from 'lib/helper'
 import { FlexInput } from 'components/FlexInput'
 
+import { BreadcrumbsBar } from './Breadcrumbs'
+
 export default class Page extends React.Component {
     constructor(props) {
         super(props)
@@ -254,6 +256,7 @@ export default class Page extends React.Component {
                             </h1>
                         )}
                         {this.state.fileLoaded && editor}
+                        {this.state.fileLoaded && <BreadcrumbsBar />}
                         {!this.state.fileLoaded && <Spinner />}
                     </div>
                     <style>{`

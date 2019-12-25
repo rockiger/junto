@@ -64,9 +64,9 @@ const EditorLogic = React.forwardRef(
             window.addEventListener('keydown', onKeyDown)
 
             if (readOnly) {
-                setHeight('calc(100vh - 65px - 57px)')
+                setHeight('calc(100vh - 65px - 57px - 37px)')
             } else {
-                setHeight('calc(100vh - 65px - 57px - 43px)')
+                setHeight('calc(100vh - 65px - 57px - 37px - 43px)')
                 setTimeout(() => {
                     if (editorRef.current) editorRef.current.focus()
                 }, 100)
