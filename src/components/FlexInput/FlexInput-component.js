@@ -3,6 +3,7 @@ import React from 'react'
 export const FlexInputComponent = React.forwardRef((props, ref) => {
     const {
         h1Ref,
+        id,
         onBlur,
         onChange,
         onKeyDown,
@@ -13,7 +14,8 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
     return (
         <>
             <input
-                className="editorInput"
+                className="flexInput"
+                id={id}
                 onBlur={onBlur}
                 onKeyDown={onKeyDown}
                 onChange={onChange}
@@ -38,14 +40,14 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
                 {value || placeholder}
             </div>
             <style>{`
-                .editorInput {
+                .flexInput {
                     border: 1px solid transparent;
                     font: unset;
                     font-size: 1.5rem;
                     font-weight: 400;
                     padding: 0 calc(.5rem - 1px);
                 }
-                .editorInput:hover {
+                .flexInput:hover {
                     border-color: #dadce0;
                 }
             `}</style>

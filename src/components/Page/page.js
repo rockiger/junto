@@ -218,6 +218,7 @@ export default class Page extends React.Component {
                                         </div>
                                     ) : (
                                         <FlexInput
+                                            id="editorInput"
                                             onBlur={this.onBlurInput}
                                             value={
                                                 this.state.pageHead !==
