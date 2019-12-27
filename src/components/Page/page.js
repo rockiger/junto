@@ -256,7 +256,9 @@ export default class Page extends React.Component {
                             </h1>
                         )}
                         {this.state.fileLoaded && editor}
-                        {this.state.fileLoaded && <BreadcrumbsBar />}
+                        {this.state.fileLoaded && (
+                            <BreadcrumbsBar fileId={this.state.fileId} />
+                        )}
                         {!this.state.fileLoaded && <Spinner />}
                     </div>
                     <style>{`
