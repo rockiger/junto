@@ -8,7 +8,14 @@ export const useStyles = makeStyles(theme => {
             borderTop: `1px solid ${theme.palette.grey['A100']}`,
         },
         breadcrumbs: {
-            margin: '7px .7rem',
+            margin: '7px .7rem 6px',
+        },
+        link: {
+            color: 'inherit',
+            textDecoration: 'none',
+            '&:hover': {
+                textDecoration: 'underline',
+            },
         },
     }
 })
