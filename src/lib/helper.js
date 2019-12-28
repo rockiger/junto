@@ -2,7 +2,7 @@
 import { EXTLENGTH, MYHOME, OVERVIEW_NAME } from './constants'
 
 /**
- * Creates the title based on the name and the pageName-property of a file
+ * Creates the title based on the name and the pageName-property of a file.
  *
  * @param {Object<string, any>} file - a fileobject form Google Drive
  *
@@ -19,7 +19,7 @@ export function getTitleFromFile(file) {
     }
 
     // The title of a folder that acts as a root to a wiki
-    if (properties && properties.wikiRoot) return name
+    if (properties.wikiRoot) return name
 
     return name.substr(0, name.length - EXTLENGTH)
 }
