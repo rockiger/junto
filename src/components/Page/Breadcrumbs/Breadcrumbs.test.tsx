@@ -62,6 +62,20 @@ const overviewFile: IMetaOrNull = {
     parents: ['snrt'],
 }
 
+const wikiRootFolder: IMetaOrNull = {
+    id: '19-OgtjbJ8WORJK0IHwdvT9rml3cW6TxL',
+    name: 'Team2',
+    mimeType: 'application/vnd.google-apps.folder',
+    parents: [],
+}
+
+const wikiOverviewFile: IMetaOrNull = {
+    id: 'euinaerndiuare',
+    name: OVERVIEW_NAME,
+    mimeType: 'application/json',
+    parents: ['19-OgtjbJ8WORJK0IHwdvT9rml3cW6TxL'],
+}
+
 export const files: Array<IMeta> = [
     ifolder2,
     ifolder3,
@@ -71,6 +85,8 @@ export const files: Array<IMeta> = [
     ifile4,
     rootFolder,
     overviewFile,
+    wikiRootFolder,
+    wikiOverviewFile,
 ]
 
 const props: IProps = { fileId: 'ifile4', files }
@@ -94,6 +110,7 @@ describe('Breadcrumbs', () => {
         expect(getBreadcrumbName(ifolder2, files)).toEqual(ifile2)
         expect(getBreadcrumbName(ifolder4, files)).toEqual(ifile4)
         expect(getBreadcrumbName(rootFolder, files)).toEqual(overviewFile)
+        expect(getBreadcrumbName(wikiRootFolder, files)).toEqual(wikiRootFolder)
     })
 
     test('getParents', () => {
