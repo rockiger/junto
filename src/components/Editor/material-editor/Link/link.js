@@ -32,6 +32,7 @@ export function LinkNode({
             )}
             {href && href.startsWith('/page/') ? (
                 <RouterLink
+                    {...attributes}
                     className="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
                     to={href}
                     onClick={ev => {
