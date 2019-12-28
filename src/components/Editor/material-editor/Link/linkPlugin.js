@@ -42,6 +42,7 @@ function LinkPlugin(options) {
         shortcut: `${modifier}+${capitilize(key)}`,
         renderInline(props, editor, next) {
             const { attributes, children, node } = props
+            const { isCollapsed } = editor.value.selection
 
             switch (node.type) {
                 case 'link': {
@@ -50,7 +51,7 @@ function LinkPlugin(options) {
                     const { readOnly } = editor
                     return (
                         <LinkNode
-                            showTooltip={hasLinks(editor)}
+                            showTooltip={hasLinks(editor) && isCollapsed}
                             onClickRemove={ev => {
                                 ev.preventDefault()
                                 editor.command(unwrapLink)
@@ -91,8 +92,8 @@ function LinkPlugin(options) {
                                 }
                             }}
                             attributes={attributes}
-                            href={href}
                             children={children}
+                            href={href}
                             readOnly={readOnly}
                         />
                     )
