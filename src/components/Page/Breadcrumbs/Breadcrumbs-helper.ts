@@ -39,14 +39,19 @@ export function getParents(
  * given folder.
  * @param folder the folder to get the index file from
  * @param files the list of files where the index file is retrieved from
+ * @returns the file to which the name of the file should be derived from
  */
-export function getBreadcrumbName(folder, files) {
+export function getBreadcrumbName(folder: IMetaOrNull, files: Array<IMeta>) {
     if (!folder) return null
+    // if root folder of personal wiki
     if (folder.name === FOLDER_NAME) {
         const result = files.find(
             el => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
         )
         return result
     }
-    return files.find(el => el.id === folder.name)
+    const result = files.find(el => el.id === folder.name)
+    // if the folder doesn't have a corresponding file, it must be
+    // a root folder
+    return result ? result : folder
 }

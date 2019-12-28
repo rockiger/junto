@@ -33,7 +33,6 @@ export const BreadcrumbsBar = (props: IProps) => {
         }
     }, [file, files, setFile, setParents])
 
-    console.log({ file, parents })
     if (parents.length === 0) return null
     return (
         <div id="breadcrumbsBar" className={classes.breadcrumbsBar}>

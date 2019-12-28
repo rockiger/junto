@@ -17,6 +17,10 @@ export function getTitleFromFile(file) {
         }
         return MYHOME
     }
+
+    // The title of a folder that acts as a root to a wiki
+    if (properties && properties.wikiRoot) return name
+
     return name.substr(0, name.length - EXTLENGTH)
 }
 
