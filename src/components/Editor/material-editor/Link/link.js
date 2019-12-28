@@ -22,7 +22,7 @@ export function LinkNode({
                 position: 'relative',
             }}
         >
-            {showTooltip && (
+            {showTooltip && !readOnly && (
                 <LinkTooltip
                     href={href}
                     onClickEdit={onClickEdit}
