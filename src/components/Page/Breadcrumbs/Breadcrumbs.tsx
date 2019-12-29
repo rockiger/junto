@@ -15,7 +15,6 @@ import { useStyles } from './Breadcrumbs.styles'
  */
 export const BreadcrumbsBar = (props: IProps) => {
     const { fileId } = props
-    //@ts-ignore
     const [files] = useGlobal('initialFiles')
     const [file, setFile] = useState<IMetaOrNull>(null)
     const [parents, setParents] = useState<Array<IMeta>>([])

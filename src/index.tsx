@@ -1,30 +1,14 @@
 import React, { setGlobal } from 'reactn'
 import ReactDOM from 'react-dom'
+import { State } from 'reactn/default'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import addReactNDevTools from 'reactn-devtools'
+
 addReactNDevTools()
 
-interface GlobalState {
-    isCreatingNewFile: boolean
-    rootFolderId: null | string
-    isFileListLoading: boolean
-    isSearchFieldActive: boolean
-    isSignedIn: boolean
-    isSigningIn: boolean
-    goToNewFile: boolean
-    oldSearchTerm: '' | string
-    redirect: boolean
-    searchTerm: '' | string
-    searchValue: '' | string // The value in the searchfield
-    files: any[]
-    initialFiles: any[]
-    isInitialFileListLoading: boolean
-    backgroundUpdate: boolean
-}
-
-const initialState: GlobalState = {
+const initialState: State = {
     isCreatingNewFile: false,
     rootFolderId: null,
     isFileListLoading: false,
