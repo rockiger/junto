@@ -9,7 +9,6 @@ import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
 import { CreateNewWikiModal } from './CreateNewWikiModal'
 
 export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
-    //@ts-ignore
     const [, setBackgroundUpdate] = useGlobal('backgroundUpdate')
     const [isCreatingNewFile, setIsCreatingNewFile] = useGlobal(
         //@ts-ignore
