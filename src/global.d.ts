@@ -13,9 +13,20 @@ declare module 'reactn/default' {
         redirect: boolean
         searchTerm: '' | string
         searchValue: '' | string // The value in the searchfield
-        files: any[]
-        initialFiles: any[]
+        files: IFile[]
+        initialFiles: IFile[]
         isInitialFileListLoading: boolean
         backgroundUpdate: boolean
+    }
+
+    export interface IFile {
+        id: string
+        name: string
+        parents: Array<string> // the id of the parrent of a file
+        mimeType: 'application/vnd.google-apps.folder' | 'application/json'
+        shared?: boolean
+        ownedByMe?: boolean
+        properties: { [key: string]: any }
+        [key: string]: any
     }
 }
