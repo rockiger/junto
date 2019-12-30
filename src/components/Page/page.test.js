@@ -28,9 +28,9 @@ describe('Page', () => {
     })
 
     test('getuserRole', () => {
-        expect(getUserRole('', [], '')).toBe('reader')
+        expect(getUserRole('', [], '')).toBe('owner')
         expect(getUserRole('abeiab', files, 'scholzc79@gmail.com')).toBe(
-            'reader'
+            'owner'
         )
         expect(
             getUserRole(

@@ -42,7 +42,9 @@ setGlobal({
 })
 
 it('Text in in headline', () => {
-    const { getByText, debug } = render(<FileList />)
+    const { getByText, debug } = render(
+        <FileList files={files} title={'Your Work'} />
+    )
 
     expect(getByText(/Your Work/i).textContent).toBe('Your Work')
 })
