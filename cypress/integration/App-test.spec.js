@@ -16,7 +16,7 @@ describe('complete e to e test', () => {
             .click()
 
         cy.wait(1000)
-        cy.contains('Welcome to your personal wiki')
+        cy.contains('Welcome to your wiki')
 
         cy.get('input[aria-label="Search"]').click()
         cy.get('#SearchAutocomplet__list')
