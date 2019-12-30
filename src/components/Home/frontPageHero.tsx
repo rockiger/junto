@@ -59,12 +59,12 @@ export default function FrontPageHero() {
                                 src={page01}
                             />
                         </p>
-                        <p style={{ alignItems: 'center', display: 'flex' }}>
+                        <div style={{ alignItems: 'center', display: 'flex' }}>
                             <GoogleButton />
                             <strong style={{ marginLeft: 6 }}>
                                 - it's free!
                             </strong>
-                        </p>
+                        </div>
                         <p>
                             <b>Disclaimer:</b> We are still in beta.
                         </p>
@@ -303,7 +303,7 @@ export default function FrontPageHero() {
                     Get started with Fulcrum?
                 </h2>
 
-                <p
+                <div
                     style={{
                         alignItems: 'center',
                         display: 'flex',
@@ -311,7 +311,7 @@ export default function FrontPageHero() {
                     }}
                 >
                     <GoogleButton />
-                </p>
+                </div>
             </Container>
             <footer className={styles.footer}>
                 <Container>
