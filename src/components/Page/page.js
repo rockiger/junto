@@ -191,6 +191,7 @@ export default class Page extends React.Component {
                 canEdit={this.state.canEdit}
                 fileId={this.state.fileId}
                 fileLoaded={this.state.fileLoaded}
+                fileName={this.state.fileName}
                 initialValue={this.state.initialContent}
                 inputRef={this.inputRef}
                 ref={this.editorRef}
