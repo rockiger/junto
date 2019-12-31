@@ -10,7 +10,7 @@ import {
     ShareButton,
 } from 'components/pageButtons'
 import { Event } from 'components/Tracking'
-import { API_KEY } from 'lib/constants'
+import { API_KEY, OVERVIEW_NAME } from 'lib/constants'
 
 import MaterialEditor from './material-editor'
 import {
@@ -27,6 +27,7 @@ const EditorLogic = React.forwardRef(
             canEdit,
             fileId,
             fileLoaded,
+            fileName,
             initialValue,
             inputRef,
             setEditorDelta,
@@ -63,10 +64,13 @@ const EditorLogic = React.forwardRef(
             }
             window.addEventListener('keydown', onKeyDown)
 
+            const breadcrumbHeight = fileName === OVERVIEW_NAME ? 0 : 37
             if (readOnly) {
-                setHeight('calc(100vh - 65px - 57px - 37px)')
+                setHeight(`calc(100vh - 65px - 57px - ${breadcrumbHeight}px)`)
             } else {
-                setHeight('calc(100vh - 65px - 57px - 37px - 43px)')
+                setHeight(
+                    `calc(100vh - 65px - 57px - ${breadcrumbHeight}px - 43px)`
+                )
                 setTimeout(() => {
                     if (editorRef.current) editorRef.current.focus()
                 }, 100)
