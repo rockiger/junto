@@ -9,7 +9,8 @@ import { EXTLENGTH, MYHOME, OVERVIEW_NAME } from './constants'
  * @returns {string}
  */
 export function getTitleFromFile(file) {
-    const { name, properties = {} } = file
+    const { name = '', properties = {} } = file
+    if (!name) return ''
     if (name === OVERVIEW_NAME) {
         const { pageName } = properties
         if (pageName) {
