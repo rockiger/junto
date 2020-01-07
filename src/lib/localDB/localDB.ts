@@ -50,7 +50,7 @@ export async function addPage(page: IPage): Promise<string> {
     return result
 }
 
-export async function changePage(page: IPage): Promise<string> {
+export async function putPage(page: IPage): Promise<string> {
     const result = await localDB.pages.put(page)
     return result
 }
