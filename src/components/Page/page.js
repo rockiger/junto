@@ -24,6 +24,7 @@ import { getTitleFromFile } from 'lib/helper'
 import { FlexInput } from 'components/FlexInput'
 
 import { BreadcrumbsBar } from './Breadcrumbs'
+import { getPageById, putPage } from 'lib/localDB'
 
 export default class Page extends React.Component {
     constructor(props) {
@@ -50,7 +51,8 @@ export default class Page extends React.Component {
         if (
             this.props.isSignedIn &&
             !this.state.fileLoaded &&
-            !this.state.fileLoading
+            !this.state.fileLoading &&
+            this.global.files.length > 0
         ) {
             this.setState({ fileLoading: true }, () => {
                 this.loadEditorContent()
@@ -63,7 +65,10 @@ export default class Page extends React.Component {
         }
 
         // when going from one page to the next, we check if the parmeter in the url changed
-        if (prevProps.match.params.id !== this.props.match.params.id) {
+        if (
+            prevProps.match.params.id !== this.props.match.params.id &&
+            this.global.files.length > 0
+        ) {
             this.setGlobal({ goToNewFile: false })
             this.setState(
                 {
@@ -75,16 +80,56 @@ export default class Page extends React.Component {
         }
     }
 
+    async downloadFileContent(fileId) {
+        try {
+            const fileContent = await downloadFile(fileId)
+            return fileContent
+        } catch (err) {
+            console.log({ err })
+            const body = err.body ? JSON.parse(err.body) : {}
+            const { error = {} } = body
+            if (error.message === 'Invalid Credentials') {
+                try {
+                    await refreshSession()
+                    this.loadEditorContent()
+                } catch (err) {
+                    alert(`Couldn't refresh session:`)
+                    console.log({ err })
+                }
+            } else {
+                alert(`Couldn't load file`)
+                console.log({ error })
+            }
+            return undefined
+        }
+    }
+
     loadEditorContent = async ev => {
-        if (this.state.fileId) {
-            try {
-                const fileContent = await downloadFile(this.state.fileId)
-                const fileDescription = await getFileDescription(
-                    this.state.fileId
-                )
-                console.log(fileDescription)
+        const { fileId } = this.state
+        if (fileId) {
+            let fileContent
+            const fileDescription = this.global.files.find(
+                el => el.id === fileId
+            )
+            if (true) {
                 const pageHead = getTitleFromFile(fileDescription)
 
+                // get local page content from localDB if present and up to date
+                const page = await getPageById(fileId)
+                console.log(page)
+                if (page && page.editedTime >= fileDescription.modifiedTime) {
+                    console.log(page.editTime)
+                    fileContent = page.content
+                } else {
+                    console.log('Need to look for file in server')
+                    fileContent = await this.downloadFileContent(fileId)
+                    await putPage({
+                        id: fileId,
+                        content: fileContent,
+                        editedTime: fileDescription.modifiedTime,
+                        modifieddTime: fileDescription.modifiedTime,
+                    })
+                }
                 this.setState({
                     canEdit: fileDescription.capabilities.canEdit,
                     initialContent: fileContent ? fileContent : '',
@@ -93,22 +138,6 @@ export default class Page extends React.Component {
                     fileName: fileDescription.name,
                     pageHead,
                 })
-            } catch (err) {
-                console.log({ err })
-                const body = err.body ? JSON.parse(err.body) : {}
-                const { error = {} } = body
-                if (error.message === 'Invalid Credentials') {
-                    try {
-                        await refreshSession()
-                        this.loadEditorContent()
-                    } catch (err) {
-                        alert(`Couldn't refresh session:`)
-                        console.log({ err })
-                    }
-                } else {
-                    alert(`Couldn't load file`)
-                    console.log({ error })
-                }
             }
         } else {
             Router.push('/')
