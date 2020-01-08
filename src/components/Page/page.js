@@ -110,34 +110,32 @@ export default class Page extends React.Component {
             const fileDescription = this.global.files.find(
                 el => el.id === fileId
             )
-            if (true) {
-                const pageHead = getTitleFromFile(fileDescription)
+            const pageHead = getTitleFromFile(fileDescription)
 
-                // get local page content from localDB if present and up to date
-                const page = await getPageById(fileId)
-                console.log(page)
-                if (page && page.editedTime >= fileDescription.modifiedTime) {
-                    console.log(page.editTime)
-                    fileContent = page.content
-                } else {
-                    console.log('Need to look for file in server')
-                    fileContent = await this.downloadFileContent(fileId)
-                    await putPage({
-                        id: fileId,
-                        content: fileContent,
-                        editedTime: fileDescription.modifiedTime,
-                        modifieddTime: fileDescription.modifiedTime,
-                    })
-                }
-                this.setState({
-                    canEdit: fileDescription.capabilities.canEdit,
-                    initialContent: fileContent ? fileContent : '',
-                    fileLoaded: true,
-                    fileLoading: false,
-                    fileName: fileDescription.name,
-                    pageHead,
+            // get local page content from localDB if present and up to date
+            const page = await getPageById(fileId)
+            console.log(page)
+            if (page && page.editedTime >= fileDescription.modifiedTime) {
+                console.log(page.editTime)
+                fileContent = page.content
+            } else {
+                console.log('Need to look for file in server')
+                fileContent = await this.downloadFileContent(fileId)
+                await putPage({
+                    id: fileId,
+                    content: fileContent,
+                    editedTime: fileDescription.modifiedTime,
+                    modifieddTime: fileDescription.modifiedTime,
                 })
             }
+            this.setState({
+                canEdit: fileDescription.capabilities.canEdit,
+                initialContent: fileContent ? fileContent : '',
+                fileLoaded: true,
+                fileLoading: false,
+                fileName: fileDescription.name,
+                pageHead,
+            })
         } else {
             Router.push('/')
         }
