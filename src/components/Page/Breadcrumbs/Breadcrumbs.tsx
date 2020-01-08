@@ -41,11 +41,12 @@ export const BreadcrumbsBar = (props: IProps) => {
                 id="breadcrumbs"
                 separator={<NavigateNextIcon />}
             >
-                {parents.map(el => {
+                {parents.map((el, index) => {
                     let title = getTitleFromFile(el)
                     if (title) {
                         return (
                             <Link
+                                key={index}
                                 className={classes.link}
                                 to={`/page/${el.id}/`}
                             >
