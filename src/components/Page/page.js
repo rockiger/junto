@@ -9,7 +9,6 @@ import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
 import {
     renameFile,
     downloadFile,
-    getFileDescription,
     refreshSession,
     updateMetadata,
 } from 'lib/gdrive'
