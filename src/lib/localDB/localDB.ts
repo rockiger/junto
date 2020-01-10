@@ -9,7 +9,7 @@ if (process.env.JEST_WORKER_ID) {
 export interface IPage {
     id: string
 
-    content: { [key: string]: any }
+    content: string
     // The last time the page is edited in the browser (RFC 3339 date-time).
     editedTime: string
     // The last time the file was modified (RFC 3339 date-time).

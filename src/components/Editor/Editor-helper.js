@@ -5,6 +5,7 @@ import { updateFile } from 'lib/gdrive'
 import { getExtFromFileName, getTitleFromFile } from 'lib/helper'
 
 import { EXT } from 'lib/constants'
+import { putPage } from 'lib/localDB'
 
 /**
  *
@@ -45,13 +46,17 @@ export function initStorage(initialValue, localStorageId) {
  *
  * @param {string} fileId
  * @param {object} initialValue
+ *
+ * @return a filedescription with the minium of id and modifiedTime
  */
 export async function save(fileId, initialValue) {
     console.log('save()')
     const newValue = localStorage.getItem(fileId) || ''
     if (initialValue === newValue) {
         console.log('SAME SAME')
-        return
+        return new Promise((resolve, reject) =>
+            resolve({ modifiedTime: undefined })
+        )
     }
 
     // Extract text from document
@@ -64,13 +69,55 @@ export async function save(fileId, initialValue) {
     console.log(text) */
 
     try {
-        await updateFile(fileId, newValue)
+        const fileDescription = await updateFile(fileId, newValue)
+        await putPage({
+            id: fileId,
+            content: newValue,
+            editedTime: String(fileDescription.modifiedTime),
+            modifiedTime: String(fileDescription.modifiedTime),
+        })
         console.log('save:', fileId)
+        return fileDescription
     } catch (err) {
+        const date = new Date().toISOString()
+        await putPage({
+            id: fileId,
+            content: newValue,
+            editedTime: date,
+            modifiedTime: date,
+        })
         alert(
-            `Couldn't save file with id: ${fileId}.\nPlease copy the content and reload the page.`
+            `Couldn't save file with id: ${fileId}. to Google Drive.\nWe created a local copy.\nPlease copy the content to be save and reload the page.`
         )
         console.log("save: Couldn't save file with id:", fileId)
         console.log('Error:', err)
+        return { id: fileId, modifiedTime: date }
     }
 }
+
+export const updateModifiedTimeInGlobalState = (
+    id,
+    modifiedByMeTime,
+    files,
+    setFiles,
+    initialFiles,
+    setInitialFiles
+) => {
+    const change = {
+        modifiedByMeTime,
+    }
+    console.log(modifiedByMeTime)
+    const newFiles = updateModifiedTimeItem(files, id, change)
+    const newInitialFiles = updateModifiedTimeItem(initialFiles, id, change)
+    setFiles(newFiles)
+    setInitialFiles(newInitialFiles)
+}
+
+const updateModifiedTimeItem = (items, id, change) =>
+    items.map(item => {
+        if (item.id === id) {
+            return { ...item, ...change }
+        } else {
+            return item
+        }
+    })

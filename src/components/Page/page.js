@@ -125,7 +125,7 @@ export default class Page extends React.Component {
                     id: fileId,
                     content: fileContent,
                     editedTime: fileDescription.modifiedTime,
-                    modifieddTime: fileDescription.modifiedTime,
+                    modifiedTime: fileDescription.modifiedTime,
                 })
             }
             this.setState({
