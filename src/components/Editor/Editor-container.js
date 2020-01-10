@@ -17,6 +17,7 @@ import {
     convertFilesToAutocompletItems,
     initStorage,
     save,
+    updateModifiedTimeInGlobalState,
 } from './Editor-helper'
 
 const isSaveHotkey = isHotkey('mod+Enter')
@@ -35,7 +36,8 @@ const EditorLogic = React.forwardRef(
         },
         editorRef
     ) => {
-        const [files] = useGlobal('initialFiles')
+        const [files, setFiles] = useGlobal('files')
+        const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
         const { search } = useLocation()
         const [readOnly, setReadOnly] = useState(
             search === '?edit' ? false : true
@@ -47,7 +49,7 @@ const EditorLogic = React.forwardRef(
         const initialState = Value.fromJSON(JSON.parse(initialValue))
 
         useEffect(() => {
-            function onKeyDown(ev) {
+            async function onKeyDown(ev) {
                 if (ev.key === 'e' && readOnly === true) {
                     ev.stopPropagation()
                     ev.preventDefault()
@@ -57,7 +59,7 @@ const EditorLogic = React.forwardRef(
                 } else if (isSaveHotkey(ev) && readOnly === false) {
                     ev.stopPropagation()
                     ev.preventDefault()
-                    save(fileId, initialValue)
+                    await saveToDriveAndLocalDB(fileId, initialValue)
                     setReadOnly(true)
                     Event('Editor', 'Deactivate Editor')
                 }
@@ -82,23 +84,44 @@ const EditorLogic = React.forwardRef(
             // eslint-disable-next-line
         }, [readOnly])
 
-        useEffect(() => {
-            return () => {
-                if (currentEditor && !currentEditor.state.readOnly) {
-                    console.log('useEffect for save') // check if gets fired to often
-                    save(fileId, initialValue)
+        useEffect(
+            () => {
+                return async () => {
+                    if (currentEditor && !currentEditor.state.readOnly) {
+                        console.log('useEffect for save') // check if gets fired to often
+                        await saveToDriveAndLocalDB(fileId, initialValue)
+                    }
                 }
-            }
-        }, [currentEditor, fileId, initialValue])
+            },
+            // eslint-disable-next-line
+            [currentEditor, fileId, initialValue]
+        )
 
         useEffect(() => {
             initStorage(initialValue, fileId)
             // eslint-disable-next-line
         }, [])
 
-        useEffect(() => {}, [files, fileId])
+        useEffect(() => {}, [initialFiles, fileId])
 
-        function onClickToggleButton(ev) {
+        async function saveToDriveAndLocalDB(fileId, initialValue) {
+            console.log('saveToDriveAndLocalDB')
+            const { modifiedTime = undefined } = await save(
+                fileId,
+                initialValue
+            )
+            if (modifiedTime) {
+                updateModifiedTimeInGlobalState(
+                    fileId,
+                    modifiedTime,
+                    files,
+                    setFiles,
+                    initialFiles,
+                    setInitialFiles
+                )
+            }
+        }
+        async function onClickToggleButton(ev) {
             ev.preventDefault()
             ev.stopPropagation()
             if (readOnly === true) {
@@ -106,18 +129,18 @@ const EditorLogic = React.forwardRef(
                 setTimeout(() => editorRef.current.focus(), 100)
                 Event('Editor', 'Activate Editor')
             } else if (readOnly === false) {
-                save(fileId, initialValue)
+                await saveToDriveAndLocalDB(fileId, initialValue)
                 setReadOnly(true)
                 Event('Editor', 'Deactivate Editor')
             }
         }
-        function onChange({ value }, setValue, oldValue) {
+        async function onChange({ value }, setValue, oldValue) {
             if (value.document !== oldValue.document) {
                 // check, if we really need to save changes
                 const content = JSON.stringify(value.toJSON())
                 localStorage.setItem(fileId, content)
                 if (readOnly) {
-                    save(fileId, initialValue)
+                    await saveToDriveAndLocalDB(fileId, initialValue)
                 }
             }
             setValue(value)
@@ -154,7 +177,7 @@ const EditorLogic = React.forwardRef(
                 <MaterialEditor
                     apiKey={API_KEY}
                     initialValue={initialState}
-                    items={convertFilesToAutocompletItems(files)}
+                    items={convertFilesToAutocompletItems(initialFiles)}
                     onChangeHandler={onChange}
                     onKeyDownHandler={onKeyDownEditor}
                     ref={editorRef}
@@ -169,12 +192,12 @@ const EditorLogic = React.forwardRef(
                     }}
                 />
                 <Beforeunload
-                    onBeforeunload={() => {
+                    onBeforeunload={async () => {
                         if (
                             editorRef.current &&
                             !!editorRef.current.state.readOnly
                         ) {
-                            save(fileId, initialValue)
+                            await saveToDriveAndLocalDB(fileId, initialValue)
                         }
                     }}
                 />
