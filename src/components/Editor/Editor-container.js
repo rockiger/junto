@@ -3,6 +3,7 @@ import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
+import { debounce } from 'lodash'
 
 import {
     PageButtons,
@@ -135,13 +136,16 @@ const EditorLogic = React.forwardRef(
             }
         }
         async function onChange({ value }, setValue, oldValue) {
-            if (value.document !== oldValue.document) {
-                // check, if we really need to save changes
-                const content = JSON.stringify(value.toJSON())
-                localStorage.setItem(fileId, content)
-                if (readOnly) {
-                    await saveToDriveAndLocalDB(fileId, initialValue)
+            const changeLocalStorage = debounce(() => {
+                if (value.document !== oldValue.document) {
+                    // check, if we really need to save changes
+                    const content = JSON.stringify(value.toJSON())
+                    localStorage.setItem(fileId, content)
                 }
+            }, 300)
+            changeLocalStorage()
+            if (readOnly) {
+                await saveToDriveAndLocalDB(fileId, initialValue)
             }
             setValue(value)
         }
