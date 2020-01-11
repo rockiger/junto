@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import propTypes from 'prop-types'
 import { Block, Value } from 'slate'
 import DeepTable from 'slate-deep-table'
+import SoftBreak from 'slate-soft-break'
 
 import { EditorComponent } from './Editor-component'
 import { onPaste } from './htmlSerializer'
@@ -24,6 +25,7 @@ const plugins = [
     imagePlugin,
     drivePlugin,
     DeepTable(),
+    SoftBreak({ shift: true }),
     markdownShortcuts,
 ]
 
