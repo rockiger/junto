@@ -9,6 +9,7 @@ import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
 import {
     renameFile,
     downloadFile,
+    getFileDescription,
     refreshSession,
     updateMetadata,
 } from 'lib/gdrive'
@@ -107,9 +108,11 @@ export default class Page extends React.Component {
         const { fileId } = this.state
         if (fileId) {
             let fileContent
-            const fileDescription = this.global.files.find(
-                el => el.id === fileId
-            )
+            let fileDescription = this.global.files.find(el => el.id === fileId)
+
+            if (!fileDescription)
+                fileDescription = await getFileDescription(this.state.fileId)
+
             const pageHead = getTitleFromFile(fileDescription)
 
             // get local page content from localDB if present and up to date
