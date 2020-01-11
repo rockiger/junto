@@ -40,6 +40,7 @@
         "slate-deep-table": "^0.9.6",
         "slate-html-serializer": "^0.8.10",
         "slate-react": "0.22.9",
+        "slate-soft-break": "^0.9.0",
         "typescript": "^3.6.4"
     },
     "scripts": {
