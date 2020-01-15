@@ -178,6 +178,7 @@ const Periods = ({ files, sortBy }) => {
  */
 const FileListComponent = props => {
     const { emptyMessage, files, searchTerm, setSortBy, sortBy, title } = props
+    document.title = `${searchTerm ? 'Search Result' : title} – Fulcrum.wiki`
     return (
         <div className="filelist">
             {setSortBy && (
