@@ -78,6 +78,11 @@ export default class Page extends React.Component {
                 this.loadEditorContent
             )
         }
+
+        // Change title if pageHead changed
+        if (prevState.pageHead !== this.state.pageHead) {
+            document.title = `${this.state.pageHead} – Fulcrum.wiki`
+        }
     }
 
     async downloadFileContent(fileId) {

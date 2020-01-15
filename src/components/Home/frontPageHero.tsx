@@ -15,6 +15,7 @@ import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
 
 export default function FrontPageHero() {
+    document.title = 'Fulcrum.wiki #1 knowledge base for made for Google Drive'
     const styles = useStyles()
     return (
         <>
