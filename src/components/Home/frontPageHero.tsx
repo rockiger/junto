@@ -15,7 +15,7 @@ import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
 
 export default function FrontPageHero() {
-    document.title = 'Fulcrum.wiki #1 knowledge base for made for Google Drive'
+    document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
     const styles = useStyles()
     return (
         <>
@@ -37,7 +37,10 @@ export default function FrontPageHero() {
                         }}
                     >
                         <h1>
-                            Your wiki made for{' '}
+                            Effortless.
+                            <br />
+                            Organized.
+                            <br />
                             <img
                                 alt=""
                                 src={GoogleDriveLogo}
@@ -47,12 +50,20 @@ export default function FrontPageHero() {
                                     position: 'relative',
                                 }}
                             />
+                            .
                         </h1>
+                        <p>
+                            <b>Capture</b> knowledge. <b>Find</b> information
+                            faster. <b>Share</b> your ideas with others.
+                            Projects, Meeting notes, marketing plans -
+                            everything <b>saved in your Google Drive</b>.
+                        </p>
                         <p>
                             Google Keep™ is too simplistic? Google Docs™ sucks
                             for reading and organizing your team's knowledge?
+                            <br />
+                            <b>Then Fulcrum is for you!</b>
                         </p>
-                        <p>Then Fulcrum is for you!</p>
                         <p className={styles.sm}>
                             <img
                                 className={styles.shadow}
