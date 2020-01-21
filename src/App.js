@@ -51,7 +51,7 @@ class App extends React.Component {
                                     apiKey={API_KEY}
                                     discoveryDocs={DISCOVERY_DOCS}
                                     scope={SCOPES}
-                                    buttonText="Login"
+                                    buttonText="Use it free"
                                 />
                             </Navbar>
                         </header>
