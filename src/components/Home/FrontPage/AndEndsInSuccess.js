@@ -37,14 +37,14 @@ export const AndEndsInSuccess = () => {
                         headline="Find information faster"
                         icon={MagnifyIcon}
                     >
-                        <strong>Organinze your records</strong> like your
+                        <strong>Organize your records</strong> like your
                         personal Wikipedia. <strong>Link, group and tag</strong>{' '}
                         your content or{' '}
-                        <strong>use the Google powered search</strong> to find
+                        <strong>use the Google-powered search</strong> to find
                         all your records fast.
                     </Reason>
                     <Reason headline="Share Your Work" icon={ShareVariantIcon}>
-                        You <strong>created</strong> some{' '}
+                        Did you <strong>create</strong> some{' '}
                         <strong>awesome piece</strong> of content?{' '}
                         <strong>Share it</strong> with others, that{' '}
                         <strong>they can enjoy</strong> your hard work.
