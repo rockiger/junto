@@ -1,16 +1,16 @@
 //@ts-check
 import React from 'react'
-import { Container, Grid, Link, Paper, Typography } from '@material-ui/core'
+import { Container, Grid, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import GoogleIcon from 'components/googleIcon'
-
-import { HasAPlan } from './FrontPage/HasAPlan'
 import { AndEndsInSuccess } from './FrontPage/AndEndsInSuccess'
+import { GoogleButton } from './FrontPage/GoogleButton'
+import { HasAPlan } from './FrontPage/HasAPlan'
+import { HasAProblem } from './FrontPage/HasAProblem'
+import { Testimonials } from './FrontPage/Testimonials'
 
 import gsuiteIntegrations from 'static/img/gsuite-integrations.png'
 import instantSearch from 'static/img/instant-search.png'
-import logo from 'static/logo.svg'
 import page01 from 'static/img/page01.png'
 import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
@@ -56,14 +56,10 @@ export default function FrontPageHero() {
                         <p>
                             <b>Capture</b> knowledge. <b>Find</b> information
                             faster. <b>Share</b> your ideas with others.
-                            Projects, Meeting notes, marketing plans -
-                            everything <b>saved in your Google Drive</b>.
                         </p>
                         <p>
-                            Google Keep™ is too simplistic? Google Docs™ sucks
-                            for reading and organizing your team's knowledge?
-                            <br />
-                            <b>Then Fulcrum is for you!</b>
+                            Projects, Meeting notes, marketing plans -
+                            everything <b>saved in your Google Drive</b>.
                         </p>
                         <p className={styles.sm}>
                             <img
@@ -100,6 +96,10 @@ export default function FrontPageHero() {
                     </Grid>
                 </Grid>
             </Container>
+            <div className={styles.callToAction}>
+                <GoogleButton />
+            </div>
+            <HasAProblem />
             <AndEndsInSuccess />
             <Container className={styles.container} maxWidth={false}>
                 <Grid container spacing={3}>
@@ -178,7 +178,7 @@ export default function FrontPageHero() {
                             important work instantly.
                         </p>
                         <p>
-                            <strong>Don't waste your time</strong> with
+                            <strong>Don't waste your time</strong>
                             searching. Find what you are looking for with a
                             powerful search - just like you expect from any
                             other Google product.
@@ -234,18 +234,9 @@ export default function FrontPageHero() {
                     </Grid>
                 </Grid>
             </Container>
+            <Testimonials />
             <HasAPlan />
             <Container maxWidth="sm">
-                <div
-                    className="hero-logo"
-                    style={{ paddingTop: 0, textAlign: 'center' }}
-                >
-                    <img src={logo} alt="Fulcrum Logo" style={{ width: 64 }} />
-                </div>
-                <h2 style={{ margin: '2rem 0', textAlign: 'center' }}>
-                    Get started with Fulcrum?
-                </h2>
-
                 <div
                     style={{
                         alignItems: 'center',
@@ -312,50 +303,6 @@ export default function FrontPageHero() {
     )
 }
 
-const GoogleButton = () => (
-    <Paper
-        className="SignInWithGoogle"
-        onClick={() => {
-            const button = document.getElementById('authorize_button') || null
-            if (button) button.click()
-        }}
-        style={{
-            alignItems: 'center',
-            backgroundColor: 'var(--primary-color)',
-            border: '1px solid var(--primary-color)',
-            borderRadius: 2,
-            cursor: 'pointer',
-            display: 'flex',
-            height: 40,
-            width: 'fit-content',
-        }}
-    >
-        <div
-            style={{
-                alignItems: 'center',
-                backgroundColor: 'white',
-                borderRadius: '1',
-                display: 'flex',
-                height: '100%',
-                paddingLeft: 12,
-                paddingRight: 12,
-            }}
-        >
-            <GoogleIcon active="true" />
-        </div>
-        <div
-            style={{
-                color: 'white',
-                fontWeight: 500,
-                paddingLeft: 12,
-                paddingRight: 16,
-            }}
-        >
-            Sign in with Google
-        </div>
-    </Paper>
-)
-
 export const useStyles = makeStyles(theme => {
     return {
         shadow: {
@@ -369,6 +316,14 @@ export const useStyles = makeStyles(theme => {
             padding: '3rem 6%',
             [theme.breakpoints.up('sm')]: {
                 padding: '8rem 6%',
+            },
+        },
+        callToAction: {
+            bottom: 20,
+            position: 'fixed',
+            right: 20,
+            [theme.breakpoints.down('sm')]: {
+                display: 'none',
             },
         },
         container: {
