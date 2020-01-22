@@ -130,9 +130,9 @@ const EditorLogic = React.forwardRef(
                 setTimeout(() => editorRef.current.focus(), 100)
                 Event('Editor', 'Activate Editor')
             } else if (readOnly === false) {
-                await saveToDriveAndLocalDB(fileId, initialValue)
                 setReadOnly(true)
                 Event('Editor', 'Deactivate Editor')
+                await saveToDriveAndLocalDB(fileId, initialValue)
             }
         }
         async function onChange({ value }, setValue, oldValue) {
