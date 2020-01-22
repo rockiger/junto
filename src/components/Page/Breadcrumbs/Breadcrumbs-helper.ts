@@ -26,7 +26,7 @@ export function getParents(
     files: Array<IMeta>
 ): Array<IMeta> {
     // The overview of a wiki shouldn't have a parent
-    if (!file || file.name === OVERVIEW_NAME) return []
+    if (!file || file.name === OVERVIEW_NAME || !file.parents) return []
     const parentFolder = getMetaById(file.parents[0], files)
     const parentFile = getBreadcrumbName(parentFolder, files)
     if (!parentFolder || !parentFile) return []
