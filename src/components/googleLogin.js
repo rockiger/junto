@@ -4,8 +4,7 @@
 
 import React from 'reactn'
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
+import { Button, IconButton } from '@material-ui/core'
 
 import LogoutIcon from 'mdi-react/LogoutIcon'
 
@@ -256,16 +255,17 @@ export default class GoogleLogin extends React.Component {
             )
         } else {
             return (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    edge="end"
-                    id="authorize_button"
-                    className="action"
-                    onClick={this.handleAuthClick}
-                >
-                    {this.props.buttonText}
-                </Button>
+                <span>
+                    <Button
+                        color="primary"
+                        edge="end"
+                        id="authorize_button"
+                        className="action"
+                        onClick={this.handleAuthClick}
+                    >
+                        {this.props.buttonText}
+                    </Button>
+                </span>
             )
         }
     }
