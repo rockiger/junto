@@ -26,7 +26,7 @@ export const HasAPlan = () => {
                         position="1"
                     >
                         Simply sign up with your Google Account. Click "Sign in
-                        with Google", accept the permission and we will create
+                        with Google", accept the permissions and we will create
                         your personal wiki. No further registration steps are
                         necessary.
                     </Step>
