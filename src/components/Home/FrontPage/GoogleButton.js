@@ -18,6 +18,7 @@ export const GoogleButton = () => (
             cursor: 'pointer',
             display: 'flex',
             height: 40,
+            maxWidth: 214,
             width: 'fit-content',
         }}
     >
