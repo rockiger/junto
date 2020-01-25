@@ -90,7 +90,6 @@
     },
     "jest": {},
     "reactSnap": {
-        "headless": false,
         "port": 3000
     }
 }
