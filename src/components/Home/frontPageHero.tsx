@@ -1,6 +1,6 @@
 //@ts-check
 import React from 'react'
-import { Container, Grid, Link, Typography } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { AndEndsInSuccess } from './FrontPage/AndEndsInSuccess'
@@ -14,6 +14,7 @@ import instantSearch from 'static/img/instant-search.png'
 import page01 from 'static/img/page01.png'
 import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
+import { Footer } from 'components/staticPages'
 
 export default function FrontPageHero() {
     document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
@@ -247,27 +248,7 @@ export default function FrontPageHero() {
                     <GoogleButton />
                 </div>
             </Container>
-            <footer className={styles.footer}>
-                <Container>
-                    <Grid container>
-                        <Grid item sm={2} xs={12}>
-                            <Typography color="textSecondary">
-                                <strong>© Fulcrum</strong>
-                            </Typography>
-                        </Grid>
-                        <Grid item sm={10} xs={12}>
-                            <Link
-                                className={styles.footerLink}
-                                color="textSecondary"
-                                href="https://rockiger.com/en/privacy/"
-                                target="blank"
-                            >
-                                Privacy
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </footer>
+            <Footer />
             <style>{`
             body {
                 overflow-y: auto;
