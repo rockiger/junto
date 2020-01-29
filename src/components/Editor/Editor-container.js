@@ -60,8 +60,8 @@ const EditorLogic = React.forwardRef(
                 } else if (isSaveHotkey(ev) && readOnly === false) {
                     ev.stopPropagation()
                     ev.preventDefault()
-                    await saveToDriveAndLocalDB(fileId, initialValue)
                     setReadOnly(true)
+                    await saveToDriveAndLocalDB(fileId, initialValue)
                     Event('Editor', 'Deactivate Editor')
                 }
             }
