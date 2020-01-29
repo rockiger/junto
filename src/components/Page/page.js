@@ -7,7 +7,7 @@ import { Chip } from '@material-ui/core'
 import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
 
 import {
-    renameFile,
+    renameFile as renameFileInGdrive,
     downloadFile,
     getFileDescription,
     refreshSession,
@@ -19,8 +19,8 @@ import { PageView } from 'components/Tracking'
 
 import Spinner from 'components/spinner'
 
-import { EXT, OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
-import { getTitleFromFile } from 'lib/helper'
+import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
+import { getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
 import { FlexInput } from 'components/FlexInput'
 
 import { BreadcrumbsBar } from './Breadcrumbs'
@@ -154,14 +154,16 @@ export default class Page extends React.Component {
     }
 
     onBlurInput = async ev => {
-        if (!this.state.pageHead) {
-            this.state.pageHead = 'Untitled page'
+        const { fileId } = this.state
+        let { pageHead } = this.state
+        if (!pageHead) {
+            pageHead = 'Untitled page'
+            this.setState({ pageHead })
         }
 
-        if (this.state.fileName !== this.state.pageHead + EXT) {
-            this.setState({ fileName: this.state.pageHead })
-            await renameFile(this.state.fileId, this.state.pageHead + EXT)
-            this.setGlobal({ backgroundUpdate: true })
+        const fileName = getFileNameFromTitle(pageHead)
+        if (this.state.fileName !== fileName) {
+            this.renameFile(fileId, fileName)
         }
     }
 
@@ -184,6 +186,35 @@ export default class Page extends React.Component {
         ev.stopPropagation()
     }
 
+    /**
+     * Renames the file in the global state and in Google Drive
+     *
+     * @param {string} - the id of the of the file
+     * @param {string} - the new name
+     */
+    renameFile = async (id, name) => {
+        const change = { name }
+
+        this.setState({ fileName: name })
+        this.setGlobal(global => {
+            const renameFileItem = (items, id, change) => {
+                return items.map(item => {
+                    if (item.id === id) {
+                        return { ...item, ...change }
+                    } else {
+                        return item
+                    }
+                })
+            }
+            const files = renameFileItem(global.files, id, change)
+            const initialFiles = renameFileItem(global.initialFiles, id, change)
+            return {
+                files,
+                initialFiles,
+            }
+        })
+        await renameFileInGdrive(this.state.fileId, name)
+    }
     updateViewedByMeDate = () => {
         const { fileId } = this.state
         const now = new Date().toISOString()
@@ -193,7 +224,7 @@ export default class Page extends React.Component {
             viewedByMeTime: now,
         }
 
-        // Update the current state
+        // Update the global state
         this.setGlobal(global => {
             const updateViewByMeDateItem = (items, id, change) =>
                 items.map(item => {
