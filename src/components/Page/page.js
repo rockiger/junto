@@ -24,6 +24,7 @@ import { getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
 import { FlexInput } from 'components/FlexInput'
 
 import { BreadcrumbsBar } from './Breadcrumbs'
+import { filesUpdater } from 'lib/helper'
 import { getPageById, putPage } from 'lib/localDB'
 
 export default class Page extends React.Component {
@@ -196,25 +197,14 @@ export default class Page extends React.Component {
         const change = { name }
 
         this.setState({ fileName: name })
-        this.setGlobal(global => {
-            const renameFileItem = (items, id, change) => {
-                return items.map(item => {
-                    if (item.id === id) {
-                        return { ...item, ...change }
-                    } else {
-                        return item
-                    }
-                })
-            }
-            const files = renameFileItem(global.files, id, change)
-            const initialFiles = renameFileItem(global.initialFiles, id, change)
-            return {
-                files,
-                initialFiles,
-            }
-        })
+        this.setGlobal(filesUpdater(change, this.global, id))
         await renameFileInGdrive(this.state.fileId, name)
     }
+
+    /**
+     * Updates the the viewedByMe and viewedByMeTime properties
+     * in the global state and in Google Drive
+     */
     updateViewedByMeDate = () => {
         const { fileId } = this.state
         const now = new Date().toISOString()
@@ -225,31 +215,12 @@ export default class Page extends React.Component {
         }
 
         // Update the global state
-        this.setGlobal(global => {
-            const updateViewByMeDateItem = (items, id, change) =>
-                items.map(item => {
-                    if (item.id === id) {
-                        return { ...item, ...change }
-                    } else {
-                        return item
-                    }
-                })
-
-            const files = updateViewByMeDateItem(global.files, fileId, change)
-            const initialFiles = updateViewByMeDateItem(
-                global.initialFiles,
-                fileId,
-                change
-            )
-            return {
-                files,
-                initialFiles,
-            }
-        })
+        this.setGlobal(filesUpdater(change, this.global, fileId))
 
         // Update the file on Google Drive
-        updateMetadata(this.state.fileId, { viewedByMeTime: now })
+        updateMetadata(fileId, { viewedByMeTime: now })
     }
+
     render() {
         let editor = (
             <Editor

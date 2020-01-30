@@ -1,5 +1,5 @@
 // @ts-check
-import { EXTLENGTH, MYHOME, OVERVIEW_NAME } from './constants'
+import { EXT, EXTLENGTH, MYHOME, OVERVIEW_NAME } from '../constants'
 
 /**
  * Creates the title based on the name and the pageName-property of a file.
@@ -27,6 +27,10 @@ export function getTitleFromFile(file) {
 
 export function getExtFromFileName(filename) {
     return filename.substr(filename.length - EXTLENGTH)
+}
+
+export function getFileNameFromTitle(title) {
+    return title + EXT
 }
 
 export function isMobileDevice() {
