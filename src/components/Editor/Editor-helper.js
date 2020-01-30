@@ -44,6 +44,8 @@ export function initStorage(initialValue, localStorageId) {
 
 /**
  *
+ * Saves the content of the file if neccessary
+ *
  * @param {string} fileId
  * @param {object} initialValue
  *
@@ -58,15 +60,6 @@ export async function save(fileId, initialValue) {
             resolve({ modifiedTime: undefined })
         )
     }
-
-    // Extract text from document
-    /* const document = Document.create(JSON.parse(newValue).document)
-    const text = document
-        .getTexts()
-        .reduce((acc, currVal, currIndex, array) => {
-            return `${acc} ${currVal.getText()}`
-        }, '')
-    console.log(text) */
 
     try {
         const fileDescription = await updateFile(fileId, newValue)
