@@ -4,6 +4,7 @@ import { isCodeHotkey } from 'is-hotkey'
 
 import { CodeBlock, CodeBlockLine } from './CodeNode'
 import { capitalize, replaceMod, toggleBlock } from '../Block'
+import { isEnterWithoutControlOrCommand } from '../utils/keyboard-utils'
 
 export const codeBlockPlugin = CodePlugin()
 
@@ -16,7 +17,13 @@ function CodePlugin() {
         onKeyDown(event, editor, next) {
             const { value } = editor
             const { startBlock } = value
-            if (event.key === 'Enter' && startBlock.type === 'code') {
+            const keyboardEvent = {
+                key: event.key,
+                blockType: startBlock.type,
+                ctrlKey: event.ctrlKey,
+                metaKey: event.metaKey,
+            }
+            if (isEnterWithoutControlOrCommand('code', keyboardEvent)) {
                 editor.insertText('\n')
                 return
             } else if (event.key === 'Tab' && startBlock.type === 'code') {
