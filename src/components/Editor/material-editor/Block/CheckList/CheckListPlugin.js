@@ -1,5 +1,6 @@
 import React from 'react'
 import { CheckListItem } from './CheckListNode'
+import { isEnterWithoutControlOrCommand } from '../../utils/keyboard-utils'
 
 export const checkListPlugin = {
     renderBlock(props, editor, next) {
@@ -26,13 +27,15 @@ export const checkListPlugin = {
 
     onKeyDown(event, editor, next) {
         const { value } = editor
+        const { startBlock } = value
 
-        if (
-            event.key === 'Enter' &&
-            value.startBlock.type === 'check-list-item' &&
-            !event.ctrlKey &&
-            !event.metaKey
-        ) {
+        const keyboardEvent = {
+            key: event.key,
+            blockType: startBlock.type,
+            ctrlKey: event.ctrlKey,
+            metaKey: event.metaKey,
+        }
+        if (isEnterWithoutControlOrCommand('code', keyboardEvent)) {
             editor.splitBlock().setBlocks({ data: { checked: false } })
             return
         }
