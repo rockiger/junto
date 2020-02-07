@@ -8,6 +8,14 @@ import addReactNDevTools from 'reactn-devtools'
 
 addReactNDevTools()
 
+// Remove console from production builds
+if (process.env.NODE_ENV !== 'development') {
+    function noop() {}
+    console.log = noop
+    console.warn = noop
+    console.error = noop
+}
+
 const initialState: State = {
     isCreatingNewFile: false,
     rootFolderId: null,
