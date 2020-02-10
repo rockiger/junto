@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal } from 'reactn'
+import React, { useDispatch, useEffect, useGlobal } from 'reactn'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
@@ -10,9 +10,10 @@ import Search from './Search'
 
 const Navbar = props => {
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
-    const [, setOldSearchTerm] = useGlobal('oldSearchTerm')
     const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
     const [searchValue, setSearchValue] = useGlobal('searchValue')
+
+    const clearSearch = useDispatch('clearSearch')
 
     const classes = useStyles()
 
@@ -25,13 +26,6 @@ const Navbar = props => {
         setSearchTerm(searchValue)
         setIsSearchFieldActive(false)
         props.history.push('/')
-    }
-
-    const clearSearch = () => {
-        setSearchValue(searchTerm)
-        setOldSearchTerm(searchTerm)
-        setSearchTerm('')
-        setIsSearchFieldActive(false)
     }
 
     if (props.isSignedIn) {
