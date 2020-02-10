@@ -1,6 +1,6 @@
 // @ts-check
 
-import React, { useGlobal } from 'reactn'
+import React, { useDispatch } from 'reactn'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
@@ -29,8 +29,7 @@ import { ButtonMenu } from 'components/ButtonMenu'
  */
 const FileListPartial = props => {
     const { files, sortBy } = props
-    // @ts-ignore
-    const [, setSearchTerm] = useGlobal('searchTerm')
+    const clearSearch = useDispatch('clearSearch')
     const classes = useStyles()
     return (
         <List className="filelist-list">
@@ -60,7 +59,7 @@ const FileListPartial = props => {
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
                                 className={classes.link}
-                                onClick={() => setSearchTerm('')}
+                                onClick={() => clearSearch()}
                                 to={`/page/${file.id}`}
                             >
                                 <ListItemIcon className={classes.icon}>
