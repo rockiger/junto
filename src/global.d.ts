@@ -7,7 +7,13 @@ declare module 'reactn/default' {
             dispatch: Dispatch
         ) => Pick<
             State,
-            ['files', 'isSearchFieldActive', 'oldSearchTerm', 'searchTearm']
+            [
+                'files',
+                'isSearchFieldActive',
+                'oldSearchTerm',
+                'searchTerm',
+                'searchValue'
+            ]
         >
     }
 
