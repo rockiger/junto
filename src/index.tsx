@@ -1,7 +1,7 @@
 import React, { addReducers, setGlobal } from 'reactn'
 import { hydrate, render } from 'react-dom'
 import { State } from 'reactn/default'
-import './index.css'
+import './index.scss'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import addReactNDevTools from 'reactn-devtools'

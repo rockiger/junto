@@ -80,7 +80,6 @@ const Reason = ({ body, children, headline, icon, ...props }) => {
     )
 }
 export const useStyles = makeStyles(theme => {
-    console.log(theme.palette)
     return {
         reasonWrapper: {
             color: 'white',

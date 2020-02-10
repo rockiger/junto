@@ -1,11 +1,9 @@
 // @ts-nocheck
 import React from 'reactn'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { JssProvider } from 'react-jss'
-import { create } from 'jss'
-import preset from 'jss-preset-default'
+
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { ThemeProvider } from '@material-ui/styles'
+import { StylesProvider, ThemeProvider } from '@material-ui/styles'
 
 import { CreateNewWiki } from 'components/CreateNewWiki'
 import { Drive } from './components/Drive/index'
@@ -28,6 +26,8 @@ import {
 
 import './App.css'
 
+console.log(THEME)
+
 class App extends React.Component {
     componentDidMount() {
         initGA('UA-151325933-1')
@@ -45,143 +45,136 @@ class App extends React.Component {
     render() {
         return (
             <ThemeProvider theme={THEME}>
-                <Router>
-                    <CssBaseline />
-                    <div className="App">
-                        <header className="App-header">
-                            <Navbar isSignedIn={this.global.isSignedIn}>
-                                <GoogleLogin
-                                    clientId={CLIENT_ID}
-                                    apiKey={API_KEY}
-                                    discoveryDocs={DISCOVERY_DOCS}
-                                    scope={SCOPES}
-                                    buttonText="Login"
-                                />
-                            </Navbar>
-                        </header>
-                        <main className="App-main">
-                            {this.global.isSignedIn && (
-                                <aside className="App-sidebar">
-                                    <Sidebar
-                                        goToNewFile={this.global.goToNewFile}
-                                        setGoToNewFile={this.setGoToNewFile}
+                <StylesProvider injectFirst>
+                    <Router>
+                        <CssBaseline />
+                        <div className="App">
+                            <header className="App-header">
+                                <Navbar isSignedIn={this.global.isSignedIn}>
+                                    <GoogleLogin
+                                        clientId={CLIENT_ID}
+                                        apiKey={API_KEY}
+                                        discoveryDocs={DISCOVERY_DOCS}
+                                        scope={SCOPES}
+                                        buttonText="Login"
                                     />
-                                </aside>
-                            )}
-                            <div className="App-main-content">
-                                <Route
-                                    exact
-                                    path="/"
-                                    render={props => (
-                                        <Home
-                                            {...props}
-                                            isCreatingNewFile={
-                                                this.global.isCreatingNewFile
-                                            }
-                                            isSignedIn={this.global.isSignedIn}
-                                            isSigningIn={
-                                                this.global.isSigningIn
+                                </Navbar>
+                            </header>
+                            <main className="App-main">
+                                {this.global.isSignedIn && (
+                                    <aside className="App-sidebar">
+                                        <Sidebar
+                                            goToNewFile={
+                                                this.global.goToNewFile
                                             }
                                             setGoToNewFile={this.setGoToNewFile}
                                         />
-                                    )}
-                                />
-                                <Route
-                                    exact
-                                    path="/page/:id"
-                                    render={props => (
-                                        <Page
-                                            {...props}
-                                            isCreatingNewFile={
-                                                this.global.isCreatingNewFile
-                                            }
-                                            isSignedIn={this.global.isSignedIn}
-                                            isSigningIn={
-                                                this.global.isSigningIn
-                                            }
-                                            setGoToNewFile={this.setGoToNewFile}
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    exact
-                                    path="/shared-with-me"
-                                    render={props => (
-                                        <SharedWithMe
-                                            {...props}
-                                            isCreatingNewFile={
-                                                this.global.isCreatingNewFile
-                                            }
-                                            isSignedIn={this.global.isSignedIn}
-                                            isSigningIn={
-                                                this.global.isSigningIn
-                                            }
-                                            setGoToNewFile={this.setGoToNewFile}
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    exact
-                                    path="/drive/"
-                                    render={props => <Drive />}
-                                />
-                                <Route
-                                    exact
-                                    path="/new/"
-                                    render={props => (
-                                        <CreateNewWiki
-                                            isSignedIn={this.global.isSignedIn}
-                                            isSigningIn={
-                                                this.global.isSigningIn
-                                            }
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    exact
-                                    path="/privacy-policy"
-                                    render={props => <PrivacyPolicy />}
-                                />
-                                <Route
-                                    exact
-                                    path="/terms-of-service"
-                                    render={props => <TermsOfService />}
-                                />
-                            </div>
-                        </main>
-                    </div>
-                </Router>
+                                    </aside>
+                                )}
+                                <div className="App-main-content">
+                                    <Route
+                                        exact
+                                        path="/"
+                                        render={props => (
+                                            <Home
+                                                {...props}
+                                                isCreatingNewFile={
+                                                    this.global
+                                                        .isCreatingNewFile
+                                                }
+                                                isSignedIn={
+                                                    this.global.isSignedIn
+                                                }
+                                                isSigningIn={
+                                                    this.global.isSigningIn
+                                                }
+                                                setGoToNewFile={
+                                                    this.setGoToNewFile
+                                                }
+                                            />
+                                        )}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/page/:id"
+                                        render={props => (
+                                            <Page
+                                                {...props}
+                                                isCreatingNewFile={
+                                                    this.global
+                                                        .isCreatingNewFile
+                                                }
+                                                isSignedIn={
+                                                    this.global.isSignedIn
+                                                }
+                                                isSigningIn={
+                                                    this.global.isSigningIn
+                                                }
+                                                setGoToNewFile={
+                                                    this.setGoToNewFile
+                                                }
+                                            />
+                                        )}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/shared-with-me"
+                                        render={props => (
+                                            <SharedWithMe
+                                                {...props}
+                                                isCreatingNewFile={
+                                                    this.global
+                                                        .isCreatingNewFile
+                                                }
+                                                isSignedIn={
+                                                    this.global.isSignedIn
+                                                }
+                                                isSigningIn={
+                                                    this.global.isSigningIn
+                                                }
+                                                setGoToNewFile={
+                                                    this.setGoToNewFile
+                                                }
+                                            />
+                                        )}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/drive/"
+                                        render={props => <Drive />}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/new/"
+                                        render={props => (
+                                            <CreateNewWiki
+                                                isSignedIn={
+                                                    this.global.isSignedIn
+                                                }
+                                                isSigningIn={
+                                                    this.global.isSigningIn
+                                                }
+                                            />
+                                        )}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/privacy-policy"
+                                        render={props => <PrivacyPolicy />}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/terms-of-service"
+                                        render={props => <TermsOfService />}
+                                    />
+                                </div>
+                            </main>
+                        </div>
+                    </Router>
+                </StylesProvider>
             </ThemeProvider>
         )
     }
 }
 
-// Create own name generator for css-classes to dodge conflicts in
-// prerenderes versions. Otherwise we have totally unexspected
-// behavior with our styling.
-// https://github.com/stereobooster/react-snap/issues/99
-
-const createGenerateClassName = () => {
-    let counter = 0
-    return (rule, sheet) =>
-        `c${Math.random()
-            .toString(36)
-            .substring(2, 4) +
-            Math.random()
-                .toString(36)
-                .substring(2, 4)}-${rule.key}-${counter++}`
-}
-
-const jss = create(preset())
-// Custom Material-UI class name generator for better debug and performance.
-jss.options.createGenerateClassName = createGenerateClassName
-
-function AppWidthCustomClassNames() {
-    return (
-        <JssProvider jss={jss}>
-            <App />
-        </JssProvider>
-    )
-}
-
-export default AppWidthCustomClassNames
+export default App

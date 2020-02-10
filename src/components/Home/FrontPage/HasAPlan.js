@@ -84,7 +84,6 @@ const Step = ({ body, children, headline, position, ...props }) => {
     )
 }
 export const useStyles = makeStyles(theme => {
-    console.log(theme.palette)
     return {
         stepWrapper: {
             padding: '5rem',

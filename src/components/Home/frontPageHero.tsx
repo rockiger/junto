@@ -16,13 +16,15 @@ import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
 import { Footer } from 'components/staticPages'
 
+import './front-page-hero.scss'
+
 export default function FrontPageHero() {
     document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
     const styles = useStyles()
     return (
         <>
             <Container
-                className={styles.heroContainer}
+                className="hero-container"
                 maxWidth={false}
                 style={{ backgroundColor: '#f7f7f7' }}
             >
@@ -249,37 +251,6 @@ export default function FrontPageHero() {
                 </div>
             </Container>
             <Footer />
-            <style>{`
-            body {
-                overflow-y: auto;
-                font-size: 1rem;
-            }
-            .App-main {
-                padding: 0;
-                margin-top: 57px;
-            }
-            .hero-container {
-                padding: 8rem 6%
-            }
-            .SignInWithGoogle:hover {
-                background-color: rgb(46, 93, 170) !important;
-            }
-            .SignInWithGoogle svg{
-                height: 18px;
-                width: 18px;
-            }
-            
-            .hero-logo {
-                padding-top: 80px;
-                margin-bottom: 20px;
-            }
-            
-            h1, h2 {
-                font-size: 42px;
-                font-weight: 500;
-                line-height: 1.2
-            }
-            `}</style>
         </>
     )
 }
@@ -292,12 +263,6 @@ export const useStyles = makeStyles(theme => {
             boxShadow:
                 '0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14) , 0px 3px 3px -2px rgba(0, 0, 0, 0.12)',
             maxWidth: '100%',
-        },
-        heroContainer: {
-            padding: '3rem 6%',
-            [theme.breakpoints.up('sm')]: {
-                padding: '8rem 6%',
-            },
         },
         callToAction: {
             bottom: 20,
