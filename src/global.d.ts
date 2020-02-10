@@ -1,6 +1,16 @@
 import 'reactn'
 
 declare module 'reactn/default' {
+    export interface Reducers {
+        clearSearch: (
+            global: State,
+            dispatch: Dispatch
+        ) => Pick<
+            State,
+            ['files', 'isSearchFieldActive', 'oldSearchTerm', 'searchTearm']
+        >
+    }
+
     export interface State {
         isCreatingNewFile: boolean
         rootFolderId: null | string

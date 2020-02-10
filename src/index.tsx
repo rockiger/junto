@@ -1,4 +1,4 @@
-import React, { setGlobal } from 'reactn'
+import React, { addReducer, setGlobal } from 'reactn'
 import { hydrate, render } from 'react-dom'
 import { State } from 'reactn/default'
 import './index.css'
@@ -15,6 +15,14 @@ if (process.env.NODE_ENV !== 'development') {
     console.warn = noop
     console.error = noop
 }
+
+// When the increment reducer is called, increment the global value by X.
+addReducer('clearSearch', (global, dispatch, x = 1) => ({
+    files: [...global.initialFiles],
+    isSearchFieldActive: false,
+    oldSearchTerm: '',
+    searchTerm: '',
+}))
 
 const initialState: State = {
     isCreatingNewFile: false,
