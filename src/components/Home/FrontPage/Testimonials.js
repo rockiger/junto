@@ -35,7 +35,6 @@ export const Testimonials = () => {
 }
 
 export const useStyles = makeStyles(theme => {
-    console.log(theme.palette)
     return {
         wrapper: {
             color: 'white',
