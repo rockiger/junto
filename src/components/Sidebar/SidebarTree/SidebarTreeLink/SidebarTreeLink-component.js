@@ -15,6 +15,7 @@ export function SidebarTreeLinkComponent(props) {
         isExpanded,
         label,
         linkStyle,
+        onClick,
         onCLickAddButton,
         onClickTreeButton,
         onMouseEnter,
@@ -28,6 +29,7 @@ export function SidebarTreeLinkComponent(props) {
     return (
         <Link
             className={classes.link}
+            onClick={onClick}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             to={`/page/${pageId}`}
