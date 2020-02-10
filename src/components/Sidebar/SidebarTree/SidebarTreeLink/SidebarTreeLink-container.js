@@ -1,4 +1,4 @@
-import React, { useGlobal, useState } from 'reactn'
+import React, { useDispatch, useGlobal, useState } from 'reactn'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import { SidebarTreeLinkComponent } from './SidebarTreeLink-component'
@@ -11,11 +11,11 @@ import { EMPTYVALUE, UNTITLEDFILE } from '../../../../lib/constants'
 export function SidebarTreeLink(props) {
     const { isExpanded, label, level, pageId, parentId, setExpanded } = props
 
+    const clearSearch = useDispatch('clearSearch')
     const [initialFiles] = useGlobal('initialFiles')
     const [, setGoToNewFile] = useGlobal('goToNewFile')
     const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
     const [, setBackgroundUpdate] = useGlobal('backgroundUpdate')
-    const [, setSearchTerm] = useGlobal('searchTerm')
 
     const [showAddButton, setShowAddButton] = useState(false)
 
@@ -58,7 +58,6 @@ export function SidebarTreeLink(props) {
             console.log(result)
 
             setGoToNewFile(true)
-            setSearchTerm('')
             setIsCreatingNewFile(false)
             setBackgroundUpdate(true)
             history.push(`/page/${newFileId}?edit`)
@@ -70,6 +69,7 @@ export function SidebarTreeLink(props) {
 
     function onClickTreeButton(ev) {
         ev.preventDefault()
+        ev.stopPropagation()
         setExpanded(!isExpanded)
     }
 
@@ -92,6 +92,7 @@ export function SidebarTreeLink(props) {
                 color: currentPageId === pageId ? 'var(--primary-color)' : '',
                 paddingLeft: level * 16,
             }}
+            onClick={clearSearch}
             onCLickAddButton={onCLickAddButton}
             onClickTreeButton={onClickTreeButton}
             onMouseEnter={onMouseEnter}
