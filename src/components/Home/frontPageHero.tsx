@@ -260,6 +260,9 @@ export default function FrontPageHero() {
                     overflow-y: auto !important;
                     font-size: 1rem;
                 }
+                .App-main {
+                    padding: 0;
+                }
             `}</style>
         </>
     )
