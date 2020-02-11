@@ -7,12 +7,13 @@ import {
     MenuItem,
     MenuList,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
 import { getTitleFromFile, getExtFromFileName, sortByDate } from 'lib/helper'
 import { EXT } from 'lib/constants'
+
+import styles from './search-autocomplete.module.scss'
 
 export const SearchAutocomplete = ({
     clearSearch,
@@ -27,8 +28,6 @@ export const SearchAutocomplete = ({
     submitSelected,
     width,
 }) => {
-    const classes = useStyles()
-
     useEffect(() => {
         setFilteredFiles(
             files
@@ -80,7 +79,7 @@ export const SearchAutocomplete = ({
     return (
         <Paper
             elevation={1}
-            className={classes.root}
+            className={styles.root}
             style={{
                 top: height ? height + 1 : 49,
             }}
@@ -90,15 +89,16 @@ export const SearchAutocomplete = ({
                     const filename = getTitleFromFile(file)
                     return (
                         <MenuItem
-                            selected={index === selectedRow}
+                            className={styles.MenuItem}
                             key={file.id}
+                            selected={index === selectedRow}
                         >
                             <Link
-                                className={classes.link}
+                                className={styles.link}
                                 onClick={() => setTimeout(clearSearch, 100)}
                                 to={`/page/${file.id}`}
                             >
-                                <ListItemIcon className={classes.icon}>
+                                <ListItemIcon className={styles.icon}>
                                     <FileDocumentIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={filename} />
@@ -112,48 +112,3 @@ export const SearchAutocomplete = ({
 }
 
 export default withRouter(SearchAutocomplete)
-
-function useStyles() {
-    const useStyles = makeStyles(theme => {
-        return {
-            root: {
-                position: 'absolute',
-                borderRadius: 8,
-                borderTopLeftRadius: 0,
-                borderTopRightRadius: 0,
-                flexDirection: 'column',
-                flexGrow: 1,
-                display: 'flex',
-                marginRight: 16,
-                marginLeft: 0,
-                overflow: 'hidden',
-                padding: '2px 4px',
-                width: '100%',
-                left: 0,
-                [theme.breakpoints.down('sm')]: {
-                    borderBottomLeftRadius: 0,
-                    borderBottomRightRadius: 0,
-                    height: 'calc(100vh - 46px)',
-                    marginLeft: -theme.spacing(2),
-                    width: '100vw',
-                },
-            },
-            icon: {
-                color: theme.palette.primary.main,
-                //minWidth: theme.spacing(4),
-            },
-            link: {
-                color: theme.palette.text.primary,
-                display: 'flex',
-                flexGrow: 1,
-                textDecoration: 'none',
-                alignItems: 'center',
-            },
-            listitem: {
-                padding: 0,
-                paddingRight: theme.spacing(2),
-            },
-        }
-    })
-    return useStyles()
-}
