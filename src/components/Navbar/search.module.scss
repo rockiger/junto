@@ -1,0 +1,76 @@
+@import 'index.scss';
+
+.search {
+    @media (min-width: $md) {
+        border-radius: 8px;
+        background-color: #f1f3f4;
+        flex-grow: 1;
+        display: flex;
+        height: 3rem;
+        margin-right: 1rem;
+        margin-left: 0;
+        max-width: 720px;
+        position: relative;
+        width: 100%;
+    }
+}
+
+.SearchIcon {
+    margin-top: 1px;
+    margin-left: 5px;
+    height: 40px;
+    width: 40px;
+    @media (max-width: $md - 1) {
+        display: none;
+        width: 3.5rem;
+        height: 100%;
+        margin-top: 5px;
+        position: absolute;
+        pointer-events: none;
+        justify-content: center;
+    }
+    @media (min-width: $sm) and (max-width: $md - 1) {
+        margin-top: 0;
+        align-items: center;
+    }
+}
+
+.input_root {
+    color: inherit;
+    width: 100%;
+}
+
+.active {
+    @media (max-width: $md - 1) {
+        width: 100vw;
+        height: 56px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: $common-white;
+        z-index: 1000;
+        padding-left: 64px;
+        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+            0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+            0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+    }
+}
+
+.backIcon {
+    @media (max-width: $md - 1) {
+        left: 20px;
+        position: fixed;
+        top: 12px;
+        z-index: 10001;
+    }
+    @media (min-width: $md) {
+        display: none;
+    }
+}
+
+.input_input {
+    color: $common-black;
+    width: 100%;
+    transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    padding: 6px 8px 8px;
+}
