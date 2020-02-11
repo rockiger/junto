@@ -6,7 +6,10 @@ import GoogleDocsIcon from 'mdi-react/FileDocumentIcon'
 export const whyFulcrum = () => {
     return (
         <Container>
-            <h2 style={{ margin: '80px auto', textAlign: 'center' }}>
+            <h2
+                className="frontpage__header"
+                style={{ margin: '80px auto', textAlign: 'center' }}
+            >
                 Why Fulcrum?
             </h2>
             <Grid container spacing={3}>

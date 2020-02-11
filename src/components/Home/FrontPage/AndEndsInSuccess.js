@@ -11,18 +11,27 @@ export const AndEndsInSuccess = () => {
     return (
         <Container className="reason-wrapper" maxWidth={false}>
             <Container>
-                <h2
+                <div
                     style={{
-                        color: 'white',
-                        margin: 0,
-                        marginBottom: '2rem',
-                        textAlign: 'center',
+                        alignItems: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
                     }}
                 >
-                    Manage your knowledge.
-                    <br />
-                    Have your records always ready.
-                </h2>
+                    <h2
+                        className="frontpage__header"
+                        style={{
+                            color: 'white',
+                            margin: 0,
+                            marginBottom: '2rem',
+                            textAlign: 'center',
+                        }}
+                    >
+                        Manage your knowledge.
+                        <br />
+                        Have your records always ready.
+                    </h2>
+                </div>
                 <Grid container spacing={10}>
                     <Reason
                         headline="Capture Knowledge"

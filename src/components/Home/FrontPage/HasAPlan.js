@@ -9,10 +9,9 @@ export const HasAPlan = () => {
         <Container className="step__wrapper" maxWidth={false}>
             <Container align="center">
                 <h2
+                    className="frontpage__header"
                     style={{
-                        margin: 0,
-                        marginBottom: '2rem',
-                        maxWidth: '50%',
+                        margin: '2rem 0',
                         textAlign: 'center',
                     }}
                 >

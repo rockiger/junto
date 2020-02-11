@@ -12,7 +12,7 @@ export const AndMeetsAGuide = ({}) => {
             style={{ backgroundColor: '#f7f7f7' }}
         >
             <Container>
-                <h2>
+                <h2 className="frontpage__header">
                     Your knowledge management should make you smarter. Like an
                     assistent that never sleeps.
                 </h2>
