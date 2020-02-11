@@ -3,10 +3,12 @@ import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import logo from '../../static/logo_48.svg'
-import { makeStyles } from '@material-ui/core/styles'
 import { AppBar, Paper, Typography, Toolbar } from '@material-ui/core'
 
 import Search from './Search'
+
+import styles from './navbar.module.scss'
+console.log('styles', styles)
 
 const Navbar = props => {
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
@@ -14,8 +16,6 @@ const Navbar = props => {
     const [searchValue, setSearchValue] = useGlobal('searchValue')
 
     const clearSearch = useDispatch('clearSearch')
-
-    const classes = useStyles()
 
     useEffect(() => {
         if (searchValue !== searchTerm) setSearchValue(searchTerm)
@@ -30,23 +30,19 @@ const Navbar = props => {
 
     if (props.isSignedIn) {
         return (
-            <AppBar className={classes.appBarSignedIn} color="default">
-                <Paper className={classes.card}>
-                    <Toolbar className={classes.toolbar} variant="dense">
-                        <div className={classes.titleWrapper}>
-                            <Link
-                                className={classes.logoWrapper}
-                                onClick={() => clearSearch()}
-                                to="/"
-                            >
+            <AppBar className={styles.AppBar__signedIn} color="default">
+                <Paper className={styles.card}>
+                    <Toolbar className={styles.Toolbar} variant="dense">
+                        <div className={styles.title_wrapper}>
+                            <Link onClick={() => clearSearch()} to="/">
                                 <img
-                                    className={classes.logo}
+                                    className={styles.logo}
                                     src={logo}
                                     alt="App logo"
                                 />
                             </Link>
                             <Link
-                                className={classes.titleSignedIn}
+                                className={styles.title__signedIn}
                                 onClick={() => clearSearch()}
                                 to="/"
                             >
@@ -60,7 +56,7 @@ const Navbar = props => {
                             </Link>
                         </div>
                         <Search clearSearch={clearSearch} submit={submit} />
-                        <div className={classes.grow} />
+                        <div className={styles.grow} />
                         <div>{props.children}</div>
                     </Toolbar>
                 </Paper>
@@ -68,19 +64,19 @@ const Navbar = props => {
         )
     } else {
         return (
-            <AppBar className={classes.appBar} color="default">
-                <Toolbar className={classes.toolbar}>
-                    <div className={classes.titleWrapper}>
-                        <Link className={classes.logoWrapper} to="/">
+            <AppBar className={styles.AppBar} color="default">
+                <Toolbar className={styles.toolbar}>
+                    <div className={styles.title_wrapper}>
+                        <Link to="/">
                             <img
-                                className={classes.logo}
+                                className={styles.logo}
                                 src={logo}
                                 alt="App logo"
                             />
                         </Link>
-                        <Link className={classes.title} to="/">
+                        <Link className={styles.title} to="/">
                             <Typography
-                                className={classes.title}
+                                className={styles.title}
                                 color="textPrimary"
                                 variant="h6"
                                 noWrap
@@ -89,7 +85,7 @@ const Navbar = props => {
                             </Typography>
                         </Link>
                     </div>
-                    <div className={classes.grow} />
+                    <div className={styles.grow} />
 
                     <div>{props.children}</div>
                 </Toolbar>
@@ -100,74 +96,4 @@ const Navbar = props => {
 export default withRouter(Navbar)
 Navbar.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
-}
-
-function useStyles() {
-    const useStyles = makeStyles(theme => {
-        return {
-            grow: {
-                flexGrow: 1,
-            },
-            appBar: {
-                background: 'white',
-                borderBottom: `1px solid ${theme.palette.grey['A100']}`,
-                boxShadow: 'none',
-            },
-            appBarSignedIn: {
-                background: 'white',
-                boxShadow: 'none',
-                [theme.breakpoints.up('md')]: {
-                    borderBottom: `1px solid ${theme.palette.grey['A100']}`,
-                },
-            },
-            card: {
-                marginBottom: theme.spacing(1),
-                marginLeft: theme.spacing(2),
-                marginRight: theme.spacing(2),
-                marginTop: theme.spacing(1),
-                [theme.breakpoints.up('md')]: {
-                    margin: 0,
-                    boxShadow: 'none',
-                },
-            },
-            toolbar: {
-                [theme.breakpoints.up('md')]: {
-                    minHeight: 64,
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                },
-            },
-            menuButton: {
-                paddingLeft: 0,
-            },
-            logoWrapper: {},
-            logo: {
-                maxHeight: 24,
-                marginRight: theme.spacing(1.5),
-                [theme.breakpoints.up('md')]: {
-                    maxHeight: 40,
-                },
-            },
-            titleWrapper: {
-                display: 'flex',
-                color: '#5f6368',
-                alignItems: 'center',
-                [theme.breakpoints.up('md')]: {
-                    minWidth: 236,
-                },
-            },
-            titleSignedIn: {
-                display: 'none',
-                [theme.breakpoints.up('md')]: {
-                    display: 'block',
-                    textDecoration: 'none',
-                },
-            },
-            title: {
-                display: 'block',
-                textDecoration: 'none',
-            },
-        }
-    })
-    return useStyles()
 }
