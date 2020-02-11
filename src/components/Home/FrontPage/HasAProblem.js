@@ -1,16 +1,13 @@
 import React from 'react'
 import { Container, Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
 import { GoogleButton } from './GoogleButton'
 
 import assistant from 'static/img/assistant.jpg'
 
 export const HasAProblem = () => {
-    const styles = useStyles()
-
     return (
-        <Container className={styles.heroContainer}>
+        <Container className="hero-container">
             <Grid container spacing={3}>
                 <Grid
                     item
@@ -50,7 +47,7 @@ export const HasAProblem = () => {
                     <GoogleButton />
                 </Grid>
                 <Grid
-                    className={styles.md}
+                    className="md"
                     item
                     xs={12}
                     sm={5}
@@ -61,7 +58,7 @@ export const HasAProblem = () => {
                 >
                     <img
                         alt="Fulcrum Page"
-                        className={styles.shadow}
+                        className="shadow"
                         src={assistant}
                     />
                 </Grid>
@@ -69,22 +66,3 @@ export const HasAProblem = () => {
         </Container>
     )
 }
-
-export const useStyles = makeStyles(theme => {
-    return {
-        heroContainer: {
-            padding: '3rem 6%',
-            [theme.breakpoints.up('sm')]: {
-                padding: '8rem 6%',
-            },
-        },
-
-        shadow: {
-            border: '1px solid #eee',
-            borderRadius: '.5rem',
-            boxShadow:
-                '0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14) , 0px 3px 3px -2px rgba(0, 0, 0, 0.12)',
-            maxWidth: '100%',
-        },
-    }
-})

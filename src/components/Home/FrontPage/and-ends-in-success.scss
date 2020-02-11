@@ -1,0 +1,30 @@
+@import 'index.scss';
+
+.icon {
+    fill: $common-white;
+}
+.icon-wrapper {
+    align-items: center;
+    border-width: 4px;
+    border-radius: 50%;
+    border-color: $common-white;
+    border-style: solid;
+    display: flex;
+    height: 96px;
+    justify-content: center;
+    margin-top: 3rem;
+    text-align: center;
+    width: 96px;
+}
+
+.reason-wrapper {
+    color: white;
+    background-color: $primary-main;
+    padding: 5rem;
+}
+
+.reason {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}

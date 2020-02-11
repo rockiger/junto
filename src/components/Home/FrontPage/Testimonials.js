@@ -1,17 +1,17 @@
 import React from 'react'
 import { Avatar, Container, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
 import henryLevins from 'static/img/Henry_Levins.jpg'
 
+import './testimonials.scss'
+
 export const Testimonials = () => {
-    const styles = useStyles()
     return (
-        <Container className={styles.wrapper} maxWidth={false}>
+        <Container className="testimonials-wrapper" maxWidth={false}>
             <Container align="center">
                 <Avatar
                     alt="Henry Levins"
-                    className={styles.largeImg}
+                    className="testimonials__large-img"
                     src={henryLevins}
                 />
                 <blockquote
@@ -33,17 +33,3 @@ export const Testimonials = () => {
         </Container>
     )
 }
-
-export const useStyles = makeStyles(theme => {
-    return {
-        wrapper: {
-            color: 'white',
-            backgroundColor: 'rgba(66, 133, 244, 1)',
-            padding: '5rem',
-        },
-        largeImg: {
-            height: 128,
-            width: 128,
-        },
-    }
-})

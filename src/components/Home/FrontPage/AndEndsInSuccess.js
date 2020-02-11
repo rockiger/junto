@@ -1,15 +1,15 @@
 import React from 'react'
 import { Container, Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
 import BookPlusMultipleIcon from 'mdi-react/BookPlusMultipleIcon'
 import MagnifyIcon from 'mdi-react/MagnifyIcon'
 import ShareVariantIcon from 'mdi-react/ShareVariantIcon'
 
+import './and-ends-in-success.scss'
+
 export const AndEndsInSuccess = () => {
-    const styles = useStyles()
     return (
-        <Container className={styles.reasonWrapper} maxWidth={false}>
+        <Container className="reason-wrapper" maxWidth={false}>
             <Container>
                 <h2
                     style={{
@@ -57,11 +57,10 @@ export const AndEndsInSuccess = () => {
 
 const Reason = ({ body, children, headline, icon, ...props }) => {
     const Icon = icon
-    const styles = useStyles()
     return (
-        <Grid className={styles.reason} item sm={4} xs={12}>
-            <div className={styles.iconWrapper}>
-                <Icon className={styles.icon} size={48} />
+        <Grid className="reason" item sm={4} xs={12}>
+            <div className="icon-wrapper">
+                <Icon className="icon" size={48} />
             </div>
             <Typography
                 align="center"
@@ -79,33 +78,3 @@ const Reason = ({ body, children, headline, icon, ...props }) => {
         </Grid>
     )
 }
-export const useStyles = makeStyles(theme => {
-    return {
-        reasonWrapper: {
-            color: 'white',
-            backgroundColor: 'rgba(66, 133, 244, 1)',
-            padding: '5rem',
-        },
-        reason: {
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        icon: {
-            fill: 'white',
-        },
-        iconWrapper: {
-            alignItems: 'center',
-            borderWidth: 4,
-            borderRadius: '50%',
-            borderColor: 'white',
-            borderStyle: 'solid',
-            display: 'flex',
-            height: 96,
-            justifyContent: 'center',
-            marginTop: '3rem',
-            textAlign: 'center',
-            width: 96,
-        },
-    }
-})

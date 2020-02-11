@@ -1,7 +1,6 @@
 //@ts-check
 import React from 'react'
 import { Container, Grid } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
 import { AndEndsInSuccess } from './FrontPage/AndEndsInSuccess'
 import { GoogleButton } from './FrontPage/GoogleButton'
@@ -20,7 +19,6 @@ import './front-page-hero.scss'
 
 export default function FrontPageHero() {
     document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
-    const styles = useStyles()
     return (
         <>
             <Container
@@ -64,9 +62,9 @@ export default function FrontPageHero() {
                             Projects, Meeting notes, marketing plans -
                             everything <b>saved in your Google Drive</b>.
                         </p>
-                        <p className={styles.sm}>
+                        <p className="sm">
                             <img
-                                className={styles.shadow}
+                                className="shadow"
                                 alt="Fulcrum Page"
                                 src={page01}
                             />
@@ -82,7 +80,7 @@ export default function FrontPageHero() {
                         </p>
                     </Grid>
                     <Grid
-                        className={styles.md}
+                        className="md"
                         item
                         xs={12}
                         sm={6}
@@ -92,19 +90,19 @@ export default function FrontPageHero() {
                         }}
                     >
                         <img
-                            className={styles.shadow}
+                            className="shadow"
                             alt="Fulcrum Page"
                             src={page01}
                         />
                     </Grid>
                 </Grid>
             </Container>
-            <div className={styles.callToAction}>
+            <div className="call-to-action">
                 <GoogleButton />
             </div>
             <HasAProblem />
             <AndEndsInSuccess />
-            <Container className={styles.container} maxWidth={false}>
+            <Container className="frontpage-container" maxWidth={false}>
                 <Grid container spacing={3}>
                     <Grid
                         item
@@ -161,7 +159,7 @@ export default function FrontPageHero() {
                     </Grid>
                 </Grid>
             </Container>
-            <Container className={styles.container} maxWidth={false}>
+            <Container className="frontpage-container" maxWidth={false}>
                 <Grid container spacing={3}>
                     <Grid
                         item
@@ -254,54 +252,3 @@ export default function FrontPageHero() {
         </>
     )
 }
-
-export const useStyles = makeStyles(theme => {
-    return {
-        shadow: {
-            border: '1px solid #eee',
-            borderRadius: '.5rem',
-            boxShadow:
-                '0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14) , 0px 3px 3px -2px rgba(0, 0, 0, 0.12)',
-            maxWidth: '100%',
-        },
-        callToAction: {
-            bottom: 20,
-            position: 'fixed',
-            right: 20,
-            [theme.breakpoints.down('sm')]: {
-                display: 'none',
-            },
-        },
-        container: {
-            margin: '3rem 0',
-            padding: '0 6%',
-            [theme.breakpoints.up('sm')]: {
-                margin: '8rem 0',
-                padding: '0 6%',
-            },
-        },
-        footer: {
-            marginTop: 'auto',
-            padding: '5rem 1rem 1rem',
-        },
-        footerLink: {
-            margin: '4px 16px',
-        },
-        md: {
-            display: 'none',
-            [theme.breakpoints.up('sm')]: {
-                display: 'flex',
-            },
-        },
-        sm: {
-            [theme.breakpoints.up('sm')]: {
-                display: 'none',
-            },
-        },
-        whyIconContainer: {
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-        },
-    }
-})
