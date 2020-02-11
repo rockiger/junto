@@ -253,6 +253,14 @@ export default function FrontPageHero() {
                 </div>
             </Container>
             <Footer />
+            <style>{` 
+                /* Needed, because we can't change the class of the body element
+                   declaratively from react */
+                body {
+                    overflow-y: auto !important;
+                    font-size: 1rem;
+                }
+            `}</style>
         </>
     )
 }
