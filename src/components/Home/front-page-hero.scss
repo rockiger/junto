@@ -1,10 +1,5 @@
 @import 'index.scss';
 
-.App-main {
-    padding: 0 !important;
-    margin-top: 57px !important;
-}
-
 body {
     overflow-y: auto !important;
     font-size: 1rem;
@@ -28,18 +23,20 @@ body {
     }
 }
 
-h1,
-h2 {
+.frontpage__header {
     font-size: 42px;
     font-weight: 500;
     line-height: 1.2;
+    max-width: 45rem;
 }
 .hero-logo {
     padding-top: 80px;
     margin-bottom: 20px;
 }
 .hero-container {
-    padding: 3rem 6%;
+    padding: 3rem 2rem;
+    margin-top: -0.5rem;
+
     @media (min-width: $sm) {
         padding: 8rem 6%;
     }
@@ -65,6 +62,7 @@ h2 {
         0px 3px 4px 0px rgba(0, 0, 0, 0.14),
         0px 3px 3px -2px rgba(0, 0, 0, 0.12);
     max-width: 100%;
+    width: max-content;
 }
 
 .SignInWithGoogle:hover {

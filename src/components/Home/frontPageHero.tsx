@@ -38,7 +38,7 @@ export default function FrontPageHero() {
                             paddingRight: '2rem',
                         }}
                     >
-                        <h1>
+                        <h1 className="frontpage__header">
                             Effortless.
                             <br />
                             Organized.
@@ -137,7 +137,7 @@ export default function FrontPageHero() {
                             paddingLeft: '2rem',
                         }}
                     >
-                        <h2>
+                        <h2 className="frontpage__header">
                             Build great looking pages - all saved in your Google
                             Drive
                         </h2>
@@ -171,7 +171,9 @@ export default function FrontPageHero() {
                             paddingRight: '2rem',
                         }}
                     >
-                        <h2>Easily find & navigate your work</h2>
+                        <h2 className="frontpage__header">
+                            Easily find & navigate your work
+                        </h2>
                         <p>
                             Always stay on top of your work. Organize your{' '}
                             <strong>work in different Drives</strong> and create
@@ -203,7 +205,9 @@ export default function FrontPageHero() {
                             paddingLeft: '1rem',
                         }}
                     >
-                        <h2>Work seamlessly with your G Suite</h2>
+                        <h2 className="frontpage__header">
+                            Work seamlessly with your G Suite
+                        </h2>
                         <p>
                             Fulcrum allows you to <strong>connect</strong> your{' '}
                             <strong>
