@@ -2,12 +2,13 @@ import React, { useGlobal, useEffect, useRef, useState } from 'reactn'
 import useDimensions from 'react-use-dimensions'
 
 import { IconButton, InputBase, Paper } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 import SearchIcon from 'mdi-react/SearchIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 
 import SearchAutocomplete from './SearchAutocomplete'
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
+
+import styles from './search.module.scss'
 
 export const Search = ({ clearSearch, submit }) => {
     const [files] = useGlobal('files')
@@ -22,7 +23,6 @@ export const Search = ({ clearSearch, submit }) => {
 
     const [searchRef, { height, width }] = useDimensions()
     const inputRef = useRef(null)
-    const classes = useStyles()
 
     useEffect(() => {
         if (!isSearchFieldActive) setSelectedRow(null)
@@ -48,7 +48,7 @@ export const Search = ({ clearSearch, submit }) => {
 
     return (
         <Paper
-            className={classes.search}
+            className={styles.search}
             elevation={isSearchFieldActive ? 1 : 0}
             ref={searchRef}
             style={{
@@ -62,7 +62,7 @@ export const Search = ({ clearSearch, submit }) => {
         >
             <IconButton
                 aria-label="Search"
-                className={classes.searchIcon}
+                className={styles.SearchIcon}
                 onClick={submit}
                 size="small"
             >
@@ -71,7 +71,7 @@ export const Search = ({ clearSearch, submit }) => {
             {isSearchFieldActive && (
                 <IconButton
                     aria-label="Clear search"
-                    className={classes.backIcon}
+                    className={styles.backIcon}
                     onClick={clearSearch}
                     size="small"
                 >
@@ -82,9 +82,9 @@ export const Search = ({ clearSearch, submit }) => {
                 placeholder="Search Fulcrum"
                 classes={{
                     root: isSearchFieldActive
-                        ? `${classes.inputRoot} ${classes.active}`
-                        : classes.inputRoot,
-                    input: classes.inputInput,
+                        ? `${styles.input_root} ${styles.active}`
+                        : styles.input_root,
+                    input: styles.input_input,
                 }}
                 inputProps={{ 'aria-label': 'Search' }}
                 onClick={() => setIsSearchFieldActive(true)}
@@ -141,7 +141,7 @@ export const Search = ({ clearSearch, submit }) => {
             {searchValue && (
                 <IconButton
                     aria-label="Clear search"
-                    className={classes.searchIcon}
+                    className={styles.SearchIcon}
                     onClick={clearSearch}
                     size="small"
                 >
@@ -167,83 +167,3 @@ export const Search = ({ clearSearch, submit }) => {
 }
 
 export default Search
-
-function useStyles() {
-    const useStyles = makeStyles(theme => {
-        return {
-            search: {
-                [theme.breakpoints.up('md')]: {
-                    borderRadius: 8,
-                    backgroundColor: '#f1f3f4',
-                    flexGrow: 1,
-                    display: 'flex',
-                    height: theme.spacing(6),
-                    marginRight: theme.spacing(2),
-                    marginLeft: 0,
-                    maxWidth: 720,
-                    position: 'relative',
-                    width: '100%',
-                },
-            },
-            searchIcon: {
-                marginTop: 1,
-                marginLeft: 5,
-                height: 40,
-                width: 40,
-                [theme.breakpoints.down('sm')]: {
-                    display: 'none',
-                    width: theme.spacing(7),
-                    height: '100%',
-                    [theme.breakpoints.up('md')]: {
-                        marginTop: 0,
-                        alignItems: 'center',
-                    },
-                    marginTop: 5,
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    //display: 'flex',
-                    justifyContent: 'center',
-                },
-            },
-            inputRoot: {
-                color: 'inherit',
-                width: '100%',
-            },
-            active: {
-                [theme.breakpoints.down('sm')]: {
-                    width: '100vw',
-                    height: 56,
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    background: 'white',
-                    zIndex: 1000,
-                    paddingLeft: 64,
-                    boxShadow:
-                        '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)',
-                },
-            },
-            backIcon: {
-                [theme.breakpoints.down('sm')]: {
-                    left: 20,
-                    position: 'fixed',
-                    top: 12,
-                    zIndex: 10001,
-                },
-                [theme.breakpoints.up('md')]: {
-                    display: 'none',
-                },
-            },
-            inputInput: {
-                color: 'black',
-                paddingBottom: theme.spacing(1),
-                paddingLeft: theme.spacing(1),
-                paddingRight: theme.spacing(1),
-                paddingTop: 6,
-                transition: theme.transitions.create('width'),
-                width: '100%',
-            },
-        }
-    })
-    return useStyles()
-}
