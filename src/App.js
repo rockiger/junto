@@ -26,8 +26,6 @@ import {
 
 import './App.css'
 
-console.log(THEME)
-
 class App extends React.Component {
     componentDidMount() {
         initGA('UA-151325933-1')

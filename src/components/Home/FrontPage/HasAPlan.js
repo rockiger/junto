@@ -1,13 +1,12 @@
 import React from 'react'
 import { Avatar, Container, Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
 import RayStartArrowIcon from 'mdi-react/RayStartArrowIcon'
 
+import './has-a-plan.scss'
 export const HasAPlan = () => {
-    const styles = useStyles()
     return (
-        <Container className={styles.stepWrapper} maxWidth={false}>
+        <Container className="step__wrapper" maxWidth={false}>
             <Container align="center">
                 <h2
                     style={{
@@ -50,10 +49,9 @@ export const HasAPlan = () => {
 }
 
 const Step = ({ body, children, headline, position, ...props }) => {
-    const styles = useStyles()
     return (
-        <Grid className={styles.step} item sm={4} xs={12}>
-            <div className={styles.iconWrapper}>
+        <Grid className="step" item sm={4} xs={12}>
+            <div className="step__icon-wrapper">
                 <Avatar
                     style={{
                         backgroundColor: 'var(--primary-color)',
@@ -79,35 +77,7 @@ const Step = ({ body, children, headline, position, ...props }) => {
             <Typography align="center" component="p">
                 {children}
             </Typography>
-            <RayStartArrowIcon style={{ fill: 'var(--primary-color)' }} />
+            <RayStartArrowIcon className="step__icon" />
         </Grid>
     )
 }
-export const useStyles = makeStyles(theme => {
-    return {
-        stepWrapper: {
-            padding: '5rem',
-        },
-        step: {
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        icon: {
-            fill: 'white',
-        },
-        iconWrapper: {
-            alignItems: 'center',
-            borderWidth: 4,
-            borderRadius: '50%',
-            borderColor: 'white',
-            borderStyle: 'solid',
-            display: 'flex',
-            height: 96,
-            justifyContent: 'center',
-            marginTop: '3rem',
-            textAlign: 'center',
-            width: 96,
-        },
-    }
-})

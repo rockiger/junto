@@ -1,12 +1,11 @@
 import React from 'react'
 import { Container, Grid, Link, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-// import { Link } from 'react-router-dom'
+
+import './footer-link.scss'
 
 export const Footer = () => {
-    const styles = useStyles()
     return (
-        <footer className={styles.footer}>
+        <footer className="footer">
             <Container>
                 <Grid container>
                     <Grid item sm={2} xs={12}>
@@ -29,32 +28,9 @@ export const Footer = () => {
 }
 
 const FooterLink = ({ children, to }) => {
-    const styles = useStyles()
     return (
-        <Link
-            className={styles.footerLink}
-            to={to}
-            color="textSecondary"
-            href={to}
-        >
+        <Link className="footer__link" to={to} color="textSecondary" href={to}>
             {children}
         </Link>
     )
 }
-
-const useStyles = makeStyles(theme => {
-    return {
-        footer: {
-            marginTop: 'auto',
-            padding: '5rem 1rem 1rem',
-        },
-        footerLink: {
-            color: theme.palette.text.secondary,
-            margin: '4px 16px',
-            textDecoration: 'none',
-            '&:hover': {
-                textDecoration: 'underline',
-            },
-        },
-    }
-})
