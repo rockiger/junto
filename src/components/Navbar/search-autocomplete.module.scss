@@ -1,0 +1,41 @@
+@import 'index.scss';
+
+.icon {
+    color: $primary-main;
+}
+
+.link {
+    color: $text-primary;
+    display: flex;
+    flex-grow: 1;
+    text-decoration: none;
+    align-items: center;
+}
+
+.MenuItem {
+    display: flex;
+    padding: 0.4rem 1rem;
+}
+
+.root {
+    position: absolute;
+    border-radius: 8px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    flex-direction: column;
+    flex-grow: 1;
+    display: flex;
+    margin-right: 16px;
+    margin-left: 0;
+    overflow: hidden;
+    padding: 2px 4px;
+    width: 100%;
+    left: 0;
+    @media (max-width: $md - 1) {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        height: calc(100vh - 46px);
+        margin-left: -1rem;
+        width: 100vw;
+    }
+}
