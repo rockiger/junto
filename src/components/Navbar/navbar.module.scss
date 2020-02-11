@@ -1,0 +1,65 @@
+@import 'index.scss';
+
+.AppBar {
+    background: white;
+    border-bottom: 1px solid $grey-A100;
+    box-shadow: none;
+}
+
+.AppBar__signedIn {
+    background: white;
+    box-shadow: none;
+    @media (min-width: $md) {
+        border-bottom: 1px solid $grey-A100;
+    }
+}
+
+.card {
+    margin: 0.5rem 1rem;
+    @media (min-width: $md) {
+        margin: 0;
+        box-shadow: none;
+    }
+}
+
+.grow {
+    flex-grow: 1;
+}
+
+.logo {
+    max-height: 24px;
+    margin-right: 0.75rem;
+    @media (min-width: $md) {
+        max-height: 40px;
+    }
+}
+
+.title {
+    display: block;
+    text-decoration: none;
+}
+
+.title__signedIn {
+    display: none;
+    @media (min-width: $md) {
+        display: block;
+        text-decoration: none;
+    }
+}
+
+.title_wrapper {
+    display: flex;
+    color: #5f6368;
+    align-items: center;
+    @media (min-width: $md) {
+        min-width: 236px;
+    }
+}
+
+.Toolbar {
+    @media (min-width: $md) {
+        min-height: 64px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
