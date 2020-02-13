@@ -1,9 +1,10 @@
 @import '_base.scss';
 
-.search {
+.Search {
     @media (min-width: $md) {
+        align-items: center;
         border-radius: 8px;
-        background-color: #f1f3f4;
+        background-color: $background-alternative;
         flex-grow: 1;
         display: flex;
         height: 3rem;
@@ -15,7 +16,36 @@
     }
 }
 
-.SearchIcon {
+.Search__active {
+    background: $common-white;
+    border: 1px solid transparent;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: rgba(65, 69, 73, 0.3) 0px 1px 1px 0px,
+        rgba(65, 69, 73, 0.15) 0px 1px 3px 1px;
+}
+
+.Search_end,
+.Search_middle,
+.Search_start {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.Search_end {
+    width: 49px;
+}
+.Search_middle {
+    align-items: flex-start;
+    flex-grow: 1;
+}
+
+.Search_start {
+    padding: 0 5px;
+    width: 56px;
+}
+.Search_Icon {
     margin-top: 1px;
     margin-left: 5px;
     height: 40px;
@@ -33,6 +63,18 @@
         margin-top: 0;
         align-items: center;
     }
+}
+
+.Search_input {
+    background-color: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 1rem;
+    height: auto;
+    margin: 0px;
+    outline: none;
+    padding: 0px;
+    width: 100%;
 }
 
 .input_root {

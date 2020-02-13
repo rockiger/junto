@@ -3,11 +3,12 @@
 .Navbar {
     border-bottom: 1px solid #d5d5d5;
     display: flex;
-    height: calc(100% - 1px);
+    height: 100%;
 }
 
 .Navbar_actions,
-.Navbar_logoContainer {
+.Navbar_logoContainer,
+.Navbar_spacer {
     align-items: center;
     display: flex;
 }
