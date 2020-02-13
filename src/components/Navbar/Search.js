@@ -1,20 +1,23 @@
 import React, { useGlobal, useEffect, useRef, useState } from 'reactn'
 import useDimensions from 'react-use-dimensions'
+import classNames from 'classnames'
+import { InputBase } from '@material-ui/core'
 
-import { IconButton, InputBase, Paper } from '@material-ui/core'
+import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 import SearchIcon from 'mdi-react/SearchIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 
-import SearchAutocomplete from './SearchAutocomplete'
-import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
+import IconButton from 'components/icon-button'
 
+import SearchAutocomplete from './SearchAutocomplete'
 import styles from './search.module.scss'
 
 export const Search = ({ clearSearch, submit }) => {
     const [files] = useGlobal('files')
-    const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
+    /* const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         'isSearchFieldActive'
-    )
+    ) */
+    const [isSearchFieldActive, setIsSearchFieldActive] = [true, () => {}]
     const [searchValue, setSearchValue] = useGlobal('searchValue')
 
     const [selectedRow, setSelectedRow] = useState(null)
@@ -47,107 +50,102 @@ export const Search = ({ clearSearch, submit }) => {
     }, [isSearchFieldActive])
 
     return (
-        <Paper
-            className={styles.search}
-            elevation={isSearchFieldActive ? 1 : 0}
+        <div
+            className={classNames(
+                styles.Search,
+                isSearchFieldActive && styles.Search__active
+            )}
             ref={searchRef}
-            style={{
-                backgroundColor: isSearchFieldActive ? 'white' : null,
-                borderBottomLeftRadius:
-                    isSearchFieldActive && filteredFiles.length > 0 ? 0 : null,
-                borderBottomRightRadius:
-                    isSearchFieldActive && filteredFiles.length > 0 ? 0 : null,
-                padding: '2px 4px',
-            }}
         >
-            <IconButton
-                aria-label="Search"
-                className={styles.SearchIcon}
-                onClick={submit}
-                size="small"
-            >
-                <SearchIcon />
-            </IconButton>
-            {isSearchFieldActive && (
+            <div className={styles.Search_start}>
                 <IconButton
-                    aria-label="Clear search"
-                    className={styles.backIcon}
-                    onClick={clearSearch}
+                    aria-label="Search"
+                    className={styles.Search_Icon}
+                    onClick={submit}
                     size="small"
                 >
-                    <ArrowLeftIcon />
+                    <SearchIcon />
                 </IconButton>
-            )}
-            <InputBase
-                placeholder="Search Fulcrum"
-                classes={{
-                    root: isSearchFieldActive
-                        ? `${styles.input_root} ${styles.active}`
-                        : styles.input_root,
-                    input: styles.input_input,
-                }}
-                inputProps={{ 'aria-label': 'Search' }}
-                onClick={() => setIsSearchFieldActive(true)}
-                onFocus={() => setIsSearchFieldActive(true)}
-                onBlur={() =>
-                    setTimeout(() => setIsSearchFieldActive(false), 100)
-                }
-                onChange={ev => {
-                    setSearchValue(ev.target.value)
-                    setSelectedRow(null)
-                }}
-                onKeyDown={ev => {
-                    const border = Math.min(6, filteredFiles.length - 1)
-                    if (ev.key === 'Enter') {
-                        ev.preventDefault()
-                        if (selectedRow === null) {
-                            submit()
-                        } else {
-                            setSubmitSelected(true)
-                        }
-                    } else if (ev.key === 'Escape') {
-                        ev.preventDefault()
-                        clearSearch()
-                    } else if (ev.key === 'ArrowDown') {
-                        ev.preventDefault()
-                        if (filteredFiles.length < 1) {
-                            setSelectedRow(null)
-                        } else if (selectedRow === null) {
-                            setSelectedRow(0)
-                        } else if (selectedRow === border) {
-                            setSelectedRow(null)
-                        } else {
-                            setSelectedRow(selectedRow + 1)
-                        }
-                    } else if (ev.key === 'ArrowUp') {
-                        ev.preventDefault()
-                        if (filteredFiles.length < 1) {
-                            setSelectedRow(null)
-                        } else if (selectedRow === null) {
-                            setSelectedRow(border)
-                        } else if (selectedRow === 0) {
-                            setSelectedRow(null)
-                        } else {
-                            setSelectedRow(selectedRow - 1)
-                        }
-                    } else {
-                        if (isSearchFieldActive) ev.stopPropagation()
+                {isSearchFieldActive && (
+                    <IconButton
+                        aria-label="Clear search"
+                        className={styles.backIcon}
+                        onClick={clearSearch}
+                        size="small"
+                    >
+                        <ArrowLeftIcon />
+                    </IconButton>
+                )}
+            </div>
+            <div className={styles.Search_middle}>
+                <input
+                    arial-label="Search Fulcrum"
+                    placeholder="Search Fulcrum"
+                    className={styles.Search_input}
+                    onClick={() => setIsSearchFieldActive(true)}
+                    onFocus={() => setIsSearchFieldActive(true)}
+                    onBlur={() =>
+                        setTimeout(() => setIsSearchFieldActive(false), 100)
                     }
-                }}
-                readOnly={!isSearchFieldActive}
-                ref={inputRef}
-                value={searchValue}
-            />
-            {searchValue && (
-                <IconButton
-                    aria-label="Clear search"
-                    className={styles.SearchIcon}
-                    onClick={clearSearch}
-                    size="small"
-                >
-                    <CloseIcon />
-                </IconButton>
-            )}
+                    onChange={ev => {
+                        setSearchValue(ev.target.value)
+                        setSelectedRow(null)
+                    }}
+                    onKeyDown={ev => {
+                        const border = Math.min(6, filteredFiles.length - 1)
+                        if (ev.key === 'Enter') {
+                            ev.preventDefault()
+                            if (selectedRow === null) {
+                                submit()
+                            } else {
+                                setSubmitSelected(true)
+                            }
+                        } else if (ev.key === 'Escape') {
+                            ev.preventDefault()
+                            clearSearch()
+                        } else if (ev.key === 'ArrowDown') {
+                            ev.preventDefault()
+                            if (filteredFiles.length < 1) {
+                                setSelectedRow(null)
+                            } else if (selectedRow === null) {
+                                setSelectedRow(0)
+                            } else if (selectedRow === border) {
+                                setSelectedRow(null)
+                            } else {
+                                setSelectedRow(selectedRow + 1)
+                            }
+                        } else if (ev.key === 'ArrowUp') {
+                            ev.preventDefault()
+                            if (filteredFiles.length < 1) {
+                                setSelectedRow(null)
+                            } else if (selectedRow === null) {
+                                setSelectedRow(border)
+                            } else if (selectedRow === 0) {
+                                setSelectedRow(null)
+                            } else {
+                                setSelectedRow(selectedRow - 1)
+                            }
+                        } else {
+                            if (isSearchFieldActive) ev.stopPropagation()
+                        }
+                    }}
+                    readOnly={!isSearchFieldActive}
+                    ref={inputRef}
+                    value={searchValue}
+                />
+            </div>
+            <div className={styles.Search_end}>
+                {searchValue && (
+                    <IconButton
+                        aria-label="Clear search"
+                        className={styles.SearchIcon}
+                        onClick={clearSearch}
+                        size="small"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                )}
+            </div>
             {isSearchFieldActive && (
                 <SearchAutocomplete
                     clearSearch={clearSearch}
@@ -162,7 +160,7 @@ export const Search = ({ clearSearch, submit }) => {
                     width={width}
                 />
             )}
-        </Paper>
+        </div>
     )
 }
 
