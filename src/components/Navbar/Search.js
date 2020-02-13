@@ -1,7 +1,6 @@
 import React, { useGlobal, useEffect, useRef, useState } from 'reactn'
 import useDimensions from 'react-use-dimensions'
 import classNames from 'classnames'
-import { InputBase } from '@material-ui/core'
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 import SearchIcon from 'mdi-react/SearchIcon'
@@ -14,10 +13,11 @@ import styles from './search.module.scss'
 
 export const Search = ({ clearSearch, submit }) => {
     const [files] = useGlobal('files')
-    /* const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
+    const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         'isSearchFieldActive'
-    ) */
-    const [isSearchFieldActive, setIsSearchFieldActive] = [true, () => {}]
+    )
+    // For testing
+    // const [isSearchFieldActive, setIsSearchFieldActive] = [true, () => {}]
     const [searchValue, setSearchValue] = useGlobal('searchValue')
 
     const [selectedRow, setSelectedRow] = useState(null)

@@ -10,7 +10,6 @@ import Main from './main'
 import Sidebar from './sidebar'
 
 import styles from './app.module.scss'
-import { white, transparent } from 'material-ui/styles/colors'
 
 export default function App() {
     const [isSignedIn] = useGlobal('isSignedIn')

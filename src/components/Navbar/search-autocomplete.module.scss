@@ -1,36 +1,20 @@
 @import '_base.scss';
 
-.icon {
-    color: $primary-main;
-}
-
-.link {
-    color: $text-primary;
-    display: flex;
-    flex-grow: 1;
-    text-decoration: none;
-    align-items: center;
-}
-
-.MenuItem {
-    display: flex;
-    padding: 0.4rem 1rem;
-}
-
-.root {
-    position: absolute;
+.SearchAutocomplete {
+    background-color: $common-white;
     border-radius: 8px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    display: flex;
     flex-direction: column;
     flex-grow: 1;
-    display: flex;
-    margin-right: 16px;
-    margin-left: 0;
+    left: -1px;
+    margin: 0;
     overflow: hidden;
-    padding: 2px 4px;
-    width: 100%;
-    left: 0;
+    padding: 1px;
+    position: absolute;
+    box-shadow: $shadow-1;
+    width: calc(100% + 2px);
     @media (max-width: $md - 1) {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
@@ -38,4 +22,34 @@
         margin-left: -1rem;
         width: 100vw;
     }
+}
+
+.SearcAutocomplete_MenuItem_icon,
+.SearcAutocomplete_MenuItem_Link,
+.SearchAutocomplete_MenuItem {
+    align-items: center;
+    display: flex;
+}
+
+.SearchAutocomplete_MenuItem {
+    display: flex;
+    height: 56px;
+    &:hover,
+    &__selected {
+        background-color: $grey-200;
+    }
+}
+
+.SearcAutocomplete_MenuItem_icon {
+    color: $primary-main;
+    flex-direction: column;
+    width: 56px;
+}
+
+.SearcAutocomplete_MenuItem_Link {
+    color: $text-primary;
+    display: flex;
+    flex-grow: 1;
+    text-decoration: none;
+    align-items: center;
 }

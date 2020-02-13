@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import {
-    Paper,
-    ListItemIcon,
-    ListItemText,
-    MenuItem,
-    MenuList,
-} from '@material-ui/core'
+import classNames from 'classnames'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
@@ -77,37 +71,50 @@ export const SearchAutocomplete = ({
     window.files = files
     if (filteredFiles.length < 1) return null
     return (
-        <Paper
+        <div
             elevation={1}
-            className={styles.root}
+            className={styles.SearchAutocomplete}
             style={{
-                top: height ? height + 1 : 49,
+                top: height || 48,
             }}
         >
-            <MenuList id="SearchAutocomplet__list">
+            <div
+                class={styles.SearchAutocomplete_MenuList}
+                id="SearchAutocomplete_MenuList"
+            >
                 {filteredFiles.slice(0, 7).map((file, index) => {
                     const filename = getTitleFromFile(file)
                     return (
-                        <MenuItem
-                            className={styles.MenuItem}
+                        <div
+                            className={classNames(
+                                styles.SearchAutocomplete_MenuItem,
+                                index === selectedRow &&
+                                    styles.SearchAutocomplete_MenuItem__selected
+                            )}
                             key={file.id}
                             selected={index === selectedRow}
                         >
                             <Link
-                                className={styles.link}
+                                className={
+                                    styles.SearcAutocomplete_MenuItem_Link
+                                }
                                 onClick={() => setTimeout(clearSearch, 100)}
                                 to={`/page/${file.id}`}
                             >
-                                <ListItemIcon className={styles.icon}>
+                                <div
+                                    className={
+                                        styles.SearcAutocomplete_MenuItem_icon
+                                    }
+                                >
                                     <FileDocumentIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={filename} />
+                                </div>
+                                <div>{filename}</div>
                             </Link>
-                        </MenuItem>
+                        </div>
                     )
                 })}
-            </MenuList>
-        </Paper>
+            </div>
+        </div>
     )
 }
 
