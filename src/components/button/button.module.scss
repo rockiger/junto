@@ -1,0 +1,22 @@
+@import '_base.scss';
+
+.Button {
+    background-color: $primary-main;
+    color: $primary-contrastText;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 400;
+    width: fit-content;
+    transition-delay: 0s;
+    transition-duration: 300ms;
+    transition-property: background-color;
+    transition-timing-function: ease-out;
+    border-radius: 4px;
+    padding: 0.5rem 1.125rem;
+    &:hover {
+        background-color: $primary-dark;
+    }
+}
