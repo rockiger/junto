@@ -1,4 +1,39 @@
-@import 'index.scss';
+@import '_base.scss';
+
+.Navbar {
+    border-bottom: 1px solid #d5d5d5;
+    display: flex;
+    height: calc(100% - 1px);
+}
+
+.Navbar_actions,
+.Navbar_logoContainer {
+    align-items: center;
+    display: flex;
+}
+
+.Navbar_actions {
+    padding-right: 1.5rem;
+}
+.Navbar_logo {
+    max-height: 24px;
+    margin-right: 0.75rem;
+    @media (min-width: $md) {
+        max-height: 40px;
+    }
+}
+.Navbar_logoContainer {
+    color: $text-primary;
+    font-size: 1.25rem;
+    font-weight: 400;
+    padding-left: 1.5rem;
+    text-decoration: none;
+    width: $sidebar-width;
+}
+
+.Navbar_spacer {
+    flex-grow: 1;
+}
 
 .AppBar {
     background: white;
@@ -24,14 +59,6 @@
 
 .grow {
     flex-grow: 1;
-}
-
-.logo {
-    max-height: 24px;
-    margin-right: 0.75rem;
-    @media (min-width: $md) {
-        max-height: 40px;
-    }
 }
 
 .title {
