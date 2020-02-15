@@ -1,43 +1,27 @@
 //@ts-check
 import React from 'react'
-import { Container, Grid } from '@material-ui/core'
 
-import { AndEndsInSuccess } from './FrontPage/AndEndsInSuccess'
-import { GoogleButton } from './FrontPage/GoogleButton'
-import { HasAPlan } from './FrontPage/HasAPlan'
-import { HasAProblem } from './FrontPage/HasAProblem'
-import { Testimonials } from './FrontPage/Testimonials'
+import { AndEndsInSuccess } from './AndEndsInSuccess'
+import { GoogleButton } from './GoogleButton'
+import { HasAPlan } from './HasAPlan'
+import { HasAProblem } from './HasAProblem'
+import { Testimonials } from './Testimonials'
 
 import gsuiteIntegrations from 'static/img/gsuite-integrations.png'
 import instantSearch from 'static/img/instant-search.png'
 import page01 from 'static/img/page01.png'
 import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
-import { Footer } from 'components/staticPages'
 
-import './front-page-hero.scss'
+import './front-page.scss'
 
-export default function FrontPageHero() {
+export default function FrontPage() {
     document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
     return (
         <>
-            <Container
-                className="hero-container"
-                maxWidth={false}
-                style={{ backgroundColor: '#f7f7f7' }}
-            >
-                <Grid container spacing={3}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            paddingRight: '2rem',
-                        }}
-                    >
+            <div className="hero" style={{ backgroundColor: '#f7f7f7' }}>
+                <div className="columns">
+                    <div className="col">
                         <h1 className="frontpage__header">
                             Effortless.
                             <br />
@@ -69,7 +53,12 @@ export default function FrontPageHero() {
                                 src={page01}
                             />
                         </p>
-                        <div style={{ alignItems: 'center', display: 'flex' }}>
+                        <div
+                            style={{
+                                alignItems: 'center',
+                                display: 'flex',
+                            }}
+                        >
                             <GoogleButton />
                             <strong style={{ marginLeft: 6 }}>
                                 - it's free!
@@ -78,40 +67,30 @@ export default function FrontPageHero() {
                         <p>
                             <b>Disclaimer:</b> We are still in beta.
                         </p>
-                    </Grid>
-                    <Grid
-                        className="md"
-                        item
-                        xs={12}
-                        sm={6}
-                        style={{
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                        }}
-                    >
+                    </div>
+                    <div className="md col">
                         <img
                             className="shadow"
                             alt="Fulcrum Page"
                             src={page01}
                         />
-                    </Grid>
-                </Grid>
-            </Container>
+                    </div>
+                </div>
+            </div>
             <div className="call-to-action">
                 <GoogleButton />
             </div>
             <HasAProblem />
             <AndEndsInSuccess />
-            <Container className="frontpage-container" maxWidth={false}>
-                <Grid container spacing={3}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
+            <div className="frontpage-container">
+                <div style={{ display: 'flex' }}>
+                    <div
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
+                            width: '50%',
+                            maxWidth: '50%',
                         }}
                     >
                         <img
@@ -125,16 +104,15 @@ export default function FrontPageHero() {
                                 maxWidth: '100%',
                             }}
                         />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
+                    </div>
+                    <div
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
                             paddingLeft: '2rem',
+                            width: '50%',
+                            maxWidth: '50%',
                         }}
                     >
                         <h2 className="frontpage__header">
@@ -156,19 +134,20 @@ export default function FrontPageHero() {
                             create is saved on your Drives.{' '}
                             <strong>Nothing is saved on our servers.</strong>
                         </p>
-                    </Grid>
-                </Grid>
-            </Container>
-            <Container className="frontpage-container" maxWidth={false}>
-                <Grid container spacing={3}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
+                    </div>
+                </div>
+            </div>
+            <div className="frontpage-container">
+                <div className="columns">
+                    <div
+                        className="col"
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
                             paddingRight: '2rem',
+                            width: '50%',
+                            maxWidth: '50%',
+                            justifyContent: 'start',
                         }}
                     >
                         <h2 className="frontpage__header">
@@ -194,15 +173,16 @@ export default function FrontPageHero() {
                                 width: '100%',
                             }}
                         />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
+                    </div>
+                    <div
+                        className="col"
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            paddingLeft: '1rem',
+                            paddingLeft: '2rem',
+                            width: '50%',
+                            maxWidth: '50%',
+                            justifyContent: 'start',
                         }}
                     >
                         <h2 className="frontpage__header">
@@ -236,23 +216,23 @@ export default function FrontPageHero() {
                                 width: '100%',
                             }}
                         />
-                    </Grid>
-                </Grid>
-            </Container>
+                    </div>
+                </div>
+            </div>
             <Testimonials />
             <HasAPlan />
-            <Container maxWidth="sm">
+            <div>
                 <div
                     style={{
                         alignItems: 'center',
                         display: 'flex',
                         flexDirection: 'column',
+                        marginBottom: '5rem',
                     }}
                 >
                     <GoogleButton />
                 </div>
-            </Container>
-            <Footer />
+            </div>
             <style>{` 
                 /* Needed, because we can't change the class of the body element
                    declaratively from react */

@@ -1,4 +1,5 @@
+@import '_base.scss';
 .Footer {
+    background-color: $background-alternative;
     grid-area: footer;
-    background-color: blue;
 }

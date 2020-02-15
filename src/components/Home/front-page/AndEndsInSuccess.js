@@ -1,5 +1,4 @@
 import React from 'react'
-import { Container, Grid, Typography } from '@material-ui/core'
 
 import BookPlusMultipleIcon from 'mdi-react/BookPlusMultipleIcon'
 import MagnifyIcon from 'mdi-react/MagnifyIcon'
@@ -9,8 +8,11 @@ import './and-ends-in-success.scss'
 
 export const AndEndsInSuccess = () => {
     return (
-        <Container className="reason-wrapper" maxWidth={false}>
-            <Container>
+        <div className="reason-wrapper">
+            <div
+                className="hero hero__max1280"
+                style={{ paddingLeft: 0, paddingRight: 0 }}
+            >
                 <div
                     style={{
                         alignItems: 'center',
@@ -32,7 +34,7 @@ export const AndEndsInSuccess = () => {
                         Have your records always ready.
                     </h2>
                 </div>
-                <Grid container spacing={10}>
+                <div className="columns">
                     <Reason
                         headline="Capture Knowledge"
                         icon={BookPlusMultipleIcon}
@@ -58,32 +60,32 @@ export const AndEndsInSuccess = () => {
                         <strong>Share it</strong> with others, that{' '}
                         <strong>they can enjoy</strong> your hard work.
                     </Reason>
-                </Grid>
-            </Container>
-        </Container>
+                </div>
+            </div>
+        </div>
     )
 }
 
 const Reason = ({ body, children, headline, icon, ...props }) => {
     const Icon = icon
     return (
-        <Grid className="reason" item sm={4} xs={12}>
+        <div className="reason col" item sm={4} xs={12}>
             <div className="icon-wrapper">
                 <Icon className="icon" size={48} />
             </div>
-            <Typography
+            <h3
                 align="center"
                 color="inherit"
                 component="h3"
                 gutterBottom
-                style={{ marginTop: '2rem' }}
+                style={{ color: 'white', fontSize: '2rem', marginTop: '2rem' }}
                 variant="h4"
             >
                 {headline}
-            </Typography>
-            <Typography align="center" component="p">
+            </h3>
+            <p align="center" component="p">
                 {children}
-            </Typography>
-        </Grid>
+            </p>
+        </div>
     )
 }

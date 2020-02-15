@@ -1,5 +1,4 @@
 import React from 'react'
-import { Avatar, Container, Typography } from '@material-ui/core'
 
 import henryLevins from 'static/img/Henry_Levins.jpg'
 
@@ -7,13 +6,11 @@ import './testimonials.scss'
 
 export const Testimonials = () => {
     return (
-        <Container className="testimonials-wrapper" maxWidth={false}>
-            <Container align="center">
-                <Avatar
-                    alt="Henry Levins"
-                    className="testimonials__large-img"
-                    src={henryLevins}
-                />
+        <div className="testimonials-wrapper">
+            <div align="center">
+                <div className="testimonials__large-img">
+                    <img alt="Henry Levins" src={henryLevins} />
+                </div>
                 <blockquote
                     style={{
                         borderLeft: 'none',
@@ -24,12 +21,12 @@ export const Testimonials = () => {
                     Finally, a way to make sense of all the content in my Google
                     Drive.
                 </blockquote>
-                <Typography variant="caption">
+                <cite>
                     Henry Levens
                     <br />
                     CEO, Acuserv
-                </Typography>
-            </Container>
-        </Container>
+                </cite>
+            </div>
+        </div>
     )
 }

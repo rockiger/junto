@@ -1,13 +1,12 @@
 import React from 'react'
-import { Avatar, Container, Grid, Typography } from '@material-ui/core'
 
 import RayStartArrowIcon from 'mdi-react/RayStartArrowIcon'
 
 import './has-a-plan.scss'
 export const HasAPlan = () => {
     return (
-        <Container className="step__wrapper" maxWidth={false}>
-            <Container align="center">
+        <div className="step__wrapper" maxWidth={false}>
+            <div align="center">
                 <h2
                     className="frontpage__header"
                     style={{
@@ -18,7 +17,7 @@ export const HasAPlan = () => {
                     3 Steps to being effortlessly organized in your Google
                     Drive.
                 </h2>
-                <Grid container spacing={10}>
+                <div className="columns hero__max1280">
                     <Step
                         headline="Sign in with your Google Account"
                         position="1"
@@ -41,42 +40,39 @@ export const HasAPlan = () => {
                         to collaborate with others? Create more wikis where you
                         need them from Google Drive - Shared Drives included.
                     </Step>
-                </Grid>
-            </Container>
-        </Container>
+                </div>
+            </div>
+        </div>
     )
 }
 
 const Step = ({ body, children, headline, position, ...props }) => {
     return (
-        <Grid className="step" item sm={4} xs={12}>
+        <div className="step col" style={{ justifyContent: 'start' }}>
             <div className="step__icon-wrapper">
-                <Avatar
+                <div
                     style={{
-                        backgroundColor: 'var(--primary-color)',
+                        alignItems: 'center',
+                        color: 'white',
+                        backgroundColor: '#4285f4',
+                        borderRadius: '50%',
+                        display: 'flex',
                         height: 96,
+                        justifyContent: 'center',
+                        minWidth: 96,
                         width: 96,
                     }}
                 >
-                    <Typography component="span" variant="h3">
+                    <div style={{ fontSize: '3rem', fontWeight: 400 }}>
                         {position}
-                    </Typography>
-                </Avatar>
+                    </div>
+                </div>
             </div>
-            <Typography
-                align="center"
-                color="inherit"
-                component="h4"
-                gutterBottom
-                style={{ marginTop: '2rem' }}
-                variant="h6"
-            >
-                {headline}
-            </Typography>
-            <Typography align="center" component="p">
+            <h4 style={{ fontSize: '1.25rem' }}>{headline}</h4>
+            <p align="center" component="p">
                 {children}
-            </Typography>
+            </p>
             <RayStartArrowIcon className="step__icon" />
-        </Grid>
+        </div>
     )
 }

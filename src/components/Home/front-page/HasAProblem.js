@@ -1,5 +1,4 @@
 import React from 'react'
-import { Container, Grid, Typography } from '@material-ui/core'
 
 import { GoogleButton } from './GoogleButton'
 
@@ -7,23 +6,13 @@ import assistant from 'static/img/assistant.jpg'
 
 export const HasAProblem = () => {
     return (
-        <Container className="hero-container">
-            <Grid container spacing={3}>
-                <Grid
-                    item
-                    xs={12}
-                    sm={7}
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        paddingRight: '2rem',
-                    }}
-                >
-                    <Typography color="inherit" componentent="h2" variant="h4">
+        <div className="hero hero__max1280">
+            <div className="columns">
+                <div className="col" style={{ maxWidth: 640 }}>
+                    <h2>
                         Your knowledge management should make you look smart.
                         Like an assistant that always has your back.
-                    </Typography>
+                    </h2>
                     <p>Have you felt frustrated by your note-taking app?</p>
                     <ul style={{ marginTop: 0 }}>
                         <li>
@@ -45,8 +34,8 @@ export const HasAProblem = () => {
                         </li>
                     </ul>
                     <GoogleButton />
-                </Grid>
-                <Grid
+                </div>
+                <div
                     className="md"
                     item
                     xs={12}
@@ -61,8 +50,8 @@ export const HasAProblem = () => {
                         className="shadow"
                         src={assistant}
                     />
-                </Grid>
-            </Grid>
-        </Container>
+                </div>
+            </div>
+        </div>
     )
 }
