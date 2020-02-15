@@ -4,11 +4,11 @@ export const useStyles = makeStyles(theme => {
     return {
         link: {
             alignItems: 'center',
-            borderRadius: '0 var(--border-radius) var(--border-radius) 0',
+            borderRadius: '0 66px 66px 0',
             display: 'flex',
             flexGrow: 1,
             textDecoration: 'none',
-            color: 'var(--link-color)',
+            color: '#3c4043',
             fontSize: '1rem',
             padding: '.25rem',
             height: '2rem',

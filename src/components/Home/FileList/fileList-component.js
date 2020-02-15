@@ -60,9 +60,13 @@ const FileListPartial = props => {
                             <Link
                                 className={classes.link}
                                 onClick={() => clearSearch()}
+                                style={{ color: '#3c4043' }}
                                 to={`/page/${file.id}`}
                             >
-                                <ListItemIcon className={classes.icon}>
+                                <ListItemIcon
+                                    style={{ color: '#4285f4' }}
+                                    className={classes.icon}
+                                >
                                     <FileDocumentIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={filename} />
@@ -218,7 +222,7 @@ const FileListComponent = props => {
             </div>
             <style>{`
                     .filelist h1 {
-                        border-bottom: 1px solid var(--border-color);
+                        border-bottom: 1px solid #dadce0;
                         font-size: 1.5rem;
                         font-weight: 400;
                         margin: 0;
@@ -234,13 +238,13 @@ const FileListComponent = props => {
                         font-size: 1rem;
                     }
                     .filelist-list a {
-                        border-radius: var(--border-radius);
-                        color: var(--link-color);
+                        border-radius: 66px;
+                        color: #4285f4;
                         font-size: 1rem;
                         padding: .5rem 1rem .5rem .75rem;
                     }
                     .filelist-list a:hover {
-                        background-color: var(--hover-bg-color);
+                        background-color: #e8f0fe;
                         text-decoration: none;
                     }
                     .filelist-list a img, .filelist-list a span {

@@ -69,7 +69,7 @@ class LinkAutocomplete extends React.Component {
                             backgroundColor: highlighted
                                 ? '#eee'
                                 : 'transparent',
-                            color: 'var(--link-color)',
+                            color: '#4285f4',
                             display: 'block',
                             padding: '.5rem .25rem',
                             cursor: 'pointer',
