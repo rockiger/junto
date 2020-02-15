@@ -4,8 +4,15 @@
     color: white;
     background-color: rgba(66, 133, 244, 1);
     padding: 5rem;
+    cite {
+        font-style: normal;
+    }
 }
 .testimonials__large-img {
+    border-radius: 50%;
     height: 128px;
     width: 128px;
+    img {
+        border-radius: 50%;
+    }
 }

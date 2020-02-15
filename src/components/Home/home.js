@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Spinner from 'components/spinner'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 
-import FrontPageHero from './frontPageHero'
+import FrontPage from './front-page'
 import FileList from './FileList'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
@@ -50,7 +50,7 @@ function Home(props) {
             </div>
         )
     } else {
-        return <FrontPageHero />
+        return <FrontPage />
     }
 }
 Home.propTypes = {

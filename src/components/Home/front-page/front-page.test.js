@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import renderer from 'react-test-renderer'
 
-import FrontPageHero from './frontPageHero'
+import FrontPageHero from './front-page'
 
 describe('FrontPageHero', () => {
     it('renders without crashing', () => {

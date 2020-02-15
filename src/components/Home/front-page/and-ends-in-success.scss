@@ -20,10 +20,6 @@
 .reason-wrapper {
     color: white;
     background-color: $primary-main;
-    padding: 5rem 0;
-    @media (min-width: $md) {
-        padding: 5rem;
-    }
 }
 
 .reason {

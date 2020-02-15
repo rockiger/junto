@@ -8,7 +8,7 @@
         'header'
         'main'
         'footer';
-    grid-template-rows: 64px;
+    grid-template-rows: 64px auto auto;
 }
 
 .App__isSignedIn {

@@ -1,9 +1,13 @@
 @import '_base.scss';
 
 .Navbar {
+    background-color: $common-white;
     border-bottom: 1px solid #d5d5d5;
     display: flex;
-    height: 100%;
+    height: 64px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
 }
 
 .Navbar_actions,
