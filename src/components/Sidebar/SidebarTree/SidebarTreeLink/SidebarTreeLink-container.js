@@ -87,9 +87,8 @@ export function SidebarTreeLink(props) {
             isExpanded={isExpanded}
             label={label}
             linkStyle={{
-                backgroundColor:
-                    currentPageId === pageId ? 'var(--hover-bg-color)' : '',
-                color: currentPageId === pageId ? 'var(--primary-color)' : '',
+                backgroundColor: currentPageId === pageId ? '#e8f0fe' : '',
+                color: currentPageId === pageId ? '#4285f4' : '',
                 paddingLeft: level * 16,
             }}
             onClick={clearSearch}
@@ -98,7 +97,7 @@ export function SidebarTreeLink(props) {
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             openButtonStyle={{
-                color: currentPageId === pageId ? 'var(--primary-color)' : '',
+                color: currentPageId === pageId ? '#4285f4' : '',
                 flexShrink: 0,
                 margin: '0 3px',
                 padding: 0,

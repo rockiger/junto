@@ -18,13 +18,8 @@ export const SidebarItem = props => {
             onClick={clearSearch}
             style={{
                 backgroundColor:
-                    pathname === '/shared-with-me'
-                        ? 'var(--hover-bg-color)'
-                        : '',
-                color:
-                    pathname === '/shared-with-me'
-                        ? 'var(--primary-color)'
-                        : '',
+                    pathname === '/shared-with-me' ? '#e8f0fe' : '',
+                color: pathname === '/shared-with-me' ? '#4285f4' : '',
             }}
             to="/shared-with-me"
         >
@@ -32,7 +27,7 @@ export const SidebarItem = props => {
                 style={{
                     color:
                         pathname === '/shared-with-me'
-                            ? 'var(--primary-color)'
+                            ? '#4285f4'
                             : 'rgba(0, 0, 0, 0.54)',
                 }}
             />

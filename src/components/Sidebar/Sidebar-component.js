@@ -64,7 +64,7 @@ const SidebarRenderer = props => {
                         height: 48px;
                         letter-spacing: 0.15px;
                         line-height: 22px;
-                        margin: 0 0 0 calc(1rem - 5px);
+                        margin: 1rem 0 0 calc(1rem - 5px);
                         min-width: 120px;
                         padding: 0 1rem;
                         text-transform: none;
