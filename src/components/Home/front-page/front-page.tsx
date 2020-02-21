@@ -46,7 +46,10 @@ export default function FrontPage() {
                             Projects, Meeting notes, marketing plans -
                             everything <b>saved in your Google Drive</b>.
                         </p>
-                        <p className="sm">
+                        <p
+                            className="show__lg
+                        "
+                        >
                             <img
                                 className="shadow"
                                 alt="Fulcrum Page"
@@ -68,7 +71,7 @@ export default function FrontPage() {
                             <b>Disclaimer:</b> We are still in beta.
                         </p>
                     </div>
-                    <div className="md col">
+                    <div className="col hidden__lg">
                         <img
                             className="shadow"
                             alt="Fulcrum Page"
@@ -83,16 +86,8 @@ export default function FrontPage() {
             <HasAProblem />
             <AndEndsInSuccess />
             <div className="frontpage-container">
-                <div style={{ display: 'flex' }}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            width: '50%',
-                            maxWidth: '50%',
-                        }}
-                    >
+                <div className="columns">
+                    <div className="col">
                         <img
                             alt=""
                             src={page02}
@@ -105,16 +100,7 @@ export default function FrontPage() {
                             }}
                         />
                     </div>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            paddingLeft: '2rem',
-                            width: '50%',
-                            maxWidth: '50%',
-                        }}
-                    >
+                    <div className="col">
                         <h2 className="frontpage__header">
                             Build great looking pages - all saved in your Google
                             Drive
@@ -139,17 +125,7 @@ export default function FrontPage() {
             </div>
             <div className="frontpage-container">
                 <div className="columns">
-                    <div
-                        className="col"
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            paddingRight: '2rem',
-                            width: '50%',
-                            maxWidth: '50%',
-                            justifyContent: 'start',
-                        }}
-                    >
+                    <div className="col">
                         <h2 className="frontpage__header">
                             Easily find & navigate your work
                         </h2>
@@ -177,11 +153,6 @@ export default function FrontPage() {
                     <div
                         className="col"
                         style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            paddingLeft: '2rem',
-                            width: '50%',
-                            maxWidth: '50%',
                             justifyContent: 'start',
                         }}
                     >

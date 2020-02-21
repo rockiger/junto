@@ -10,18 +10,23 @@
 }
 
 .columns {
-    display: flex;
-    margin-left: -1.5rem;
-    margin-right: -1.5rem;
-    margin-top: -1.5rem;
-    .col {
+    @media (min-width: $lg) {
         display: flex;
-        flex-basis: 0;
-        flex-direction: column;
-        flex-grow: 1;
-        flex-shrink: 1;
-        justify-content: center;
-        padding: 1.5rem;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        margin-top: -1.5rem;
+        .col {
+            display: flex;
+            flex-basis: 0;
+            flex-direction: column;
+            flex-grow: 1;
+            flex-shrink: 1;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+    }
+    .col {
+        margin: 0 auto;
     }
 }
 
@@ -58,15 +63,61 @@
     }
 }
 
-.md {
+.hidden {
     display: none;
-    @media (min-width: $sm) {
+    &__sm {
+        @media (max-width: $sm - 1) {
+            display: none;
+        }
+    }
+    &__md {
+        @media (max-width: $md - 1) {
+            display: none;
+        }
+    }
+    &__lg {
+        @media (max-width: $lg - 1) {
+            display: none;
+        }
+    }
+}
+
+.show {
+    display: inherit;
+    &__sm {
+        display: none;
+        @media (max-width: $sm - 1) {
+            display: inherit;
+        }
+    }
+    &__md {
+        display: none;
+        @media (max-width: $md - 1) {
+            display: inherit;
+        }
+    }
+    &__lg {
+        display: none;
+        @media (max-width: $lg - 1) {
+            display: inherit;
+        }
+    }
+}
+.md {
+    @media (min-width: $md) {
         display: flex;
+        &.hidden {
+            display: none;
+        }
     }
 }
 
 .sm {
     @media (min-width: $sm) {
+        display: none;
+    }
+
+    &.hidden {
         display: none;
     }
 }

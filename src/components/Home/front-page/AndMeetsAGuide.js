@@ -6,18 +6,18 @@ export const AndMeetsAGuide = ({}) => {
     const styles = useStyles()
 
     return (
-        <Container
+        <div
             className={styles.heroContainer}
             maxWidth={false}
             style={{ backgroundColor: '#f7f7f7' }}
         >
-            <Container>
+            <div>
                 <h2 className="frontpage__header">
                     Your knowledge management should make you smarter. Like an
                     assistent that never sleeps.
                 </h2>
-            </Container>
-        </Container>
+            </div>
+        </div>
     )
 }
 
