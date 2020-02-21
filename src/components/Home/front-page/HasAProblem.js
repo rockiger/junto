@@ -47,9 +47,17 @@ export const HasAProblem = () => {
                 >
                     <img
                         alt="Fulcrum Page"
-                        className="shadow"
+                        className="HasAProblem__assistant shadow"
                         src={assistant}
                     />
+                    <style>
+                        {`
+                            @media screen and (max-width: 1279px) {
+                            .HasAProblem__assistant {
+                                    margin-top: 2rem;
+                                }
+                            }`}
+                    </style>
                 </div>
             </div>
         </div>

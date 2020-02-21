@@ -20,10 +20,14 @@
 .reason-wrapper {
     color: white;
     background-color: $primary-main;
+    @media (max-width: $lg - 1) {
+        padding: 0 1rem;
+    }
 }
 
 .reason {
     align-items: center;
     display: flex;
     flex-direction: column;
+    max-width: $sm;
 }
