@@ -1,8 +1,9 @@
 @import './static/styles/breakpoints';
 @import './static/styles/palette';
 
+$border-radius-pill: 66px;
 $shadow-1: rgba(65, 69, 73, 0.3) 0px 1px 1px 0px,
-    rgba(65, 69, 73, 0.15) 0px 1px 3px 1px;
+rgba(65, 69, 73, 0.15) 0px 1px 3px 1px;
 $sidebar-width: 256px;
 $container-width-large: 1280px;
-$border-radius-pill: 66px;
+$search-border-radius: 8px;

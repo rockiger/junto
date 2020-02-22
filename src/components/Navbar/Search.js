@@ -1,6 +1,7 @@
 import React, { useGlobal, useEffect, useRef, useState } from 'reactn'
 import useDimensions from 'react-use-dimensions'
 import classNames from 'classnames'
+import { isEmpty } from 'lodash'
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 import SearchIcon from 'mdi-react/SearchIcon'
@@ -53,7 +54,10 @@ export const Search = ({ clearSearch, submit }) => {
         <div
             className={classNames(
                 styles.Search,
-                isSearchFieldActive && styles.Search__active
+                isSearchFieldActive && styles.Search__active,
+                isSearchFieldActive &&
+                    isEmpty(filteredFiles) &&
+                    styles.Search__active__empty
             )}
             ref={searchRef}
         >
@@ -146,6 +150,9 @@ export const Search = ({ clearSearch, submit }) => {
                     </IconButton>
                 )}
             </div>
+            {isSearchFieldActive && (
+                <div className={styles.Search_mobileSearchCover} />
+            )}
             {isSearchFieldActive && (
                 <SearchAutocomplete
                     clearSearch={clearSearch}

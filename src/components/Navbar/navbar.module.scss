@@ -19,6 +19,9 @@
 
 .Navbar_actions {
     padding-right: 1.5rem;
+    @media (max-width: $md - 1) {
+        padding-right: 0.5rem;
+    }
 }
 .Navbar_logo {
     max-height: 24px;
@@ -34,6 +37,9 @@
     padding-left: 1.5rem;
     text-decoration: none;
     width: $sidebar-width;
+    @media (max-width: $md - 1) {
+        display: none;
+    }
 }
 
 .Navbar_spacer {
