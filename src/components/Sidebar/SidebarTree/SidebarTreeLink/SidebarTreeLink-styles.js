@@ -7,6 +7,9 @@ export const useStyles = makeStyles(theme => {
             flexShrink: 0,
             marginLeft: 3,
             padding: 0,
+            [theme.breakpoints.down('md')]: {
+                display: 'none',
+            },
         },
         link: {
             alignItems: 'center',

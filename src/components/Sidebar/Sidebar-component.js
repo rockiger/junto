@@ -1,7 +1,5 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Fab } from '@material-ui/core'
-import AddIcon from 'mdi-react/AddIcon'
 
 import { isMobileDevice } from 'lib/helper'
 import { SidebarSharedDrives } from './SidebarSharedDrives'
@@ -13,7 +11,7 @@ const SidebarRenderer = props => {
     const classes = useStyles()
     return (
         <>
-            {isMobileDevice() && (
+            {/* {isMobileDevice() && (
                 <Fab
                     arial-label="Add"
                     className={classes.fab}
@@ -22,7 +20,7 @@ const SidebarRenderer = props => {
                 >
                     <AddIcon className={classes.addIcon} />
                 </Fab>
-            )}
+            )} */}
             <div className={classes.sidebar}>
                 {!isMobileDevice() && (
                     <div
@@ -41,13 +39,12 @@ const SidebarRenderer = props => {
                         New Page
                     </div>
                 )}
-                {!isMobileDevice() && (
-                    <div className="Sidebar-Navigation" id="Sidebar-Navigation">
-                        <SidebarTree />
-                        <SidebarSharedDrives />
-                        <SidebarItem />
-                    </div>
-                )}
+
+                <div className="Sidebar-Navigation" id="Sidebar-Navigation">
+                    <SidebarTree />
+                    <SidebarSharedDrives />
+                    <SidebarItem />
+                </div>
                 <style>{`
                     .Sidebar-newButton {
                         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302),
