@@ -44,6 +44,7 @@ const initialState: State = {
     redirect: false,
     searchTerm: '',
     searchValue: '', // The value in the searchfield
+    showSidebarOnMobile: false,
     files: [],
     initialFiles: [],
     isInitialFileListLoading: false,

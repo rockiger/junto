@@ -18,4 +18,9 @@
     grid-template-columns: 256px 1fr;
     grid-template-rows: 64px 1fr;
     height: 100vh;
+    @media (max-width: $md-max) {
+        grid-template-areas:
+            'header  header'
+            'main main';
+    }
 }

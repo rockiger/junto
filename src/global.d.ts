@@ -29,6 +29,7 @@ declare module 'reactn/default' {
         redirect: boolean
         searchTerm: '' | string
         searchValue: '' | string // The value in the searchfield
+        showSidebarOnMobile: boolean
         files: IFile[]
         initialFiles: IFile[]
         isInitialFileListLoading: boolean

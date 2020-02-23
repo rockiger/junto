@@ -37,11 +37,21 @@
     padding-left: 1.5rem;
     text-decoration: none;
     width: $sidebar-width;
-    @media (max-width: $md - 1) {
-        display: none;
+    &__isSignedIn {
+        @media (max-width: $md - 1) {
+            display: none;
+        }
     }
 }
 
+.Navbar_menu {
+    display: none;
+    padding: 0 0.5rem;
+    @media (max-width: $md-max) {
+        display: flex;
+        align-items: center;
+    }
+}
 .Navbar_spacer {
     flex-grow: 1;
 }
