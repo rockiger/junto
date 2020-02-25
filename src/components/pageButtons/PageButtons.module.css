@@ -2,5 +2,12 @@
     position: fixed;
     right: 0;
     top: 71px;
-    padding-right: 24px;
+    padding-right: 28px;
+}
+
+@media screen and (max-width: 930px) {
+    .pageButtons {
+        padding-right: 12px;
+        top: 67px;
+    }
 }
