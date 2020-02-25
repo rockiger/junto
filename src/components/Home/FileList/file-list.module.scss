@@ -1,0 +1,21 @@
+@import '_base.scss';
+
+.FileList_content {
+    overflow-y: auto;
+    height: calc((100vh - 65px) - 56px);
+    @media (max-width: $md-max) {
+        padding-left: 0.5rem;
+    }
+}
+
+.FileList_tagline {
+    margin-top: 1rem;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.sortCriteria {
+    @media (max-width: $md-max) {
+        display: none;
+    }
+}
