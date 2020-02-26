@@ -4,10 +4,10 @@ import classNames from 'classnames'
 import styles from './icon-button.module.scss'
 
 interface Props {
-    ariaLabel: string
+    ariaLabel?: string
     children: ReactElement
-    className: string
-    onClick: () => void
+    className?: string
+    onClick?: () => void
 }
 
 export default function Button({
