@@ -50,6 +50,18 @@ export function getBreadcrumbName(folder: IMetaOrNull, files: Array<IMeta>) {
         )
         return result
     }
+    // if root of a wiki
+    console.log('wiki', folder.name, folder.properties)
+    if (folder.properties && folder.properties.wikiRoot) {
+        const result = files.find(
+            el =>
+                el.name === OVERVIEW_NAME &&
+                el.parents.includes(folder.id) &&
+                el.properties &&
+                el.properties.pageName === folder.name
+        )
+        return result
+    }
     const result = files.find(el => el.id === folder.name)
     // if the folder doesn't have a corresponding file, it must be
     // a root folder
