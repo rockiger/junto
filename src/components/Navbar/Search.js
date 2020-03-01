@@ -38,8 +38,7 @@ export const Search = ({ clearSearch, submit }) => {
                 ev.stopPropagation()
                 ev.preventDefault()
                 setIsSearchFieldActive(true)
-                console.log('/')
-                inputRef.current.click()
+                inputRef.current.focus()
             }
         }
         window.addEventListener('keydown', onKeyDown)
