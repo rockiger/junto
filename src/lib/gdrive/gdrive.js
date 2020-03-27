@@ -70,16 +70,6 @@ export function init() {
  * [{driveId, driveVersion, name, ifid}]
  */
 export function listFiles(searchTerm = '', orderBy = '') {
-    function formatResult(response) {
-        var stories = []
-        for (var i = 0; i < response.files.length; i++) {
-            const file = response.files[i]
-            //stories.push(formatFileDescription(file));
-            stories.push(file)
-        }
-        return stories
-    }
-
     let order = ''
     let q = `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`
     if (!searchTerm && orderBy) {
@@ -90,8 +80,8 @@ export function listFiles(searchTerm = '', orderBy = '') {
         gapi.client.drive.files
             .list({
                 corpora: 'allDrives',
-                pageSize: 300,
-                fields: 'files(' + fileFields + ')',
+                pageSize: 999,
+                fields: 'files(' + fileFields + '), nextPageToken',
                 includeItemsFromAllDrives: true,
                 orderBy: order,
                 q,
@@ -99,6 +89,40 @@ export function listFiles(searchTerm = '', orderBy = '') {
             })
             .execute(response => resolve(formatResult(response)))
     })
+}
+
+/**
+ * Get all stories available on the Google Drive. Never rejects
+ *
+ * @method listFiles
+ * @return {Promise|Array} A promise of the result that
+ * returns an array of file descriptions:
+ * [{driveId, driveVersion, name, ifid}]
+ */
+export async function listFilesChunked(searchTerm = '', orderBy = '') {
+    let files = []
+    let order = ''
+    let pageToken = ''
+    let q = `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`
+    if (!searchTerm && orderBy) {
+        q = 'trashed=false'
+        order = orderBy
+    }
+    while (typeof pageToken !== 'undefined') {
+        const response = await gapi.client.drive.files.list({
+            corpora: 'allDrives',
+            pageToken: pageToken,
+            fields: 'files(' + fileFields + '), nextPageToken',
+            includeItemsFromAllDrives: true,
+            orderBy: order,
+            q,
+            supportsAllDrives: true,
+        })
+        pageToken = response.result.nextPageToken
+        files = [...files, ...response.result.files]
+        //pageToken = undefined
+    }
+    return files
 }
 
 /**
@@ -412,4 +436,17 @@ export function refreshSession() {
         .getAuthInstance()
         .currentUser.get()
         .reloadAuthResponse()
+}
+
+// helpers
+
+function formatResult(response) {
+    console.log(response)
+    var stories = []
+    for (var i = 0; i < response.files.length; i++) {
+        const file = response.files[i]
+        //stories.push(formatFileDescription(file));
+        stories.push(file)
+    }
+    return stories
 }

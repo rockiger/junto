@@ -9,7 +9,7 @@ import { Button, IconButton } from '@material-ui/core'
 import LogoutIcon from 'mdi-react/LogoutIcon'
 
 import {
-    listFiles,
+    listFilesChunked as listFiles,
     createFile,
     updateFile,
     getFolderId,
