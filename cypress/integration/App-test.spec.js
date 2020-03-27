@@ -19,7 +19,7 @@ describe('complete e to e test', () => {
         cy.contains('Welcome to your wiki')
 
         cy.get('input[aria-label="Search"]').click()
-        cy.get('#SearchAutocomplet__list')
+        cy.get('#SearchAutocomplete__MenuList')
             .find('li')
             .first()
             .contains('My Fulcrum')

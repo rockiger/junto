@@ -1,6 +1,22 @@
 import 'reactn'
 
 declare module 'reactn/default' {
+    export interface Reducers {
+        clearSearch: (
+            global: State,
+            dispatch: Dispatch
+        ) => Pick<
+            State,
+            [
+                'files',
+                'isSearchFieldActive',
+                'oldSearchTerm',
+                'searchTerm',
+                'searchValue'
+            ]
+        >
+    }
+
     export interface State {
         isCreatingNewFile: boolean
         rootFolderId: null | string
@@ -13,6 +29,7 @@ declare module 'reactn/default' {
         redirect: boolean
         searchTerm: '' | string
         searchValue: '' | string // The value in the searchfield
+        showSidebarOnMobile: boolean
         files: IFile[]
         initialFiles: IFile[]
         isInitialFileListLoading: boolean

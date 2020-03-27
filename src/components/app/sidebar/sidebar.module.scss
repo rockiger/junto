@@ -1,0 +1,34 @@
+@import '_base.scss';
+
+.Sidebar {
+    grid-area: sidebar;
+    @media (max-width: $md-max) {
+        background: $common-white;
+        grid-area: unset;
+        height: 100vh;
+        left: calc(-100vw - 56px);
+        overflow: auto;
+        position: fixed;
+        transition: left 0.3s ease-out;
+        width: calc(100vw - 56px);
+        z-index: 1000;
+        &__show {
+            left: 0;
+        }
+        &_overlay {
+            background-color: $common-black;
+            display: none;
+            height: 100vh;
+            opacity: 0;
+            position: fixed;
+            right: 0px;
+            width: 100vw;
+            z-index: 1000;
+            transition: opacity 0.3s linear;
+            &__show {
+                display: block;
+                opacity: 0.5;
+            }
+        }
+    }
+}

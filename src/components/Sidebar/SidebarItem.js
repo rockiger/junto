@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useDispatch } from 'reactn'
 import { Link, useLocation } from 'react-router-dom'
 import { Tooltip } from '@material-ui/core'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
@@ -6,22 +6,20 @@ import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 import { useStyles } from './SidebarItem-styles'
 
 export const SidebarItem = props => {
-    const classes = useStyles()
+    const clearSearch = useDispatch('clearSearch')
     const location = useLocation()
+    const classes = useStyles()
+
     const { pathname } = location
 
     return (
         <Link
             className={classes.link}
+            onClick={clearSearch}
             style={{
                 backgroundColor:
-                    pathname === '/shared-with-me'
-                        ? 'var(--hover-bg-color)'
-                        : '',
-                color:
-                    pathname === '/shared-with-me'
-                        ? 'var(--primary-color)'
-                        : '',
+                    pathname === '/shared-with-me' ? '#e8f0fe' : '',
+                color: pathname === '/shared-with-me' ? '#4285f4' : '',
             }}
             to="/shared-with-me"
         >
@@ -29,7 +27,7 @@ export const SidebarItem = props => {
                 style={{
                     color:
                         pathname === '/shared-with-me'
-                            ? 'var(--primary-color)'
+                            ? '#4285f4'
                             : 'rgba(0, 0, 0, 0.54)',
                 }}
             />

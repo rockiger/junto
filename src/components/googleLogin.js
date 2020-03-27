@@ -4,7 +4,8 @@
 
 import React from 'reactn'
 import PropTypes from 'prop-types'
-import { Button, IconButton } from '@material-ui/core'
+import IconButton from 'components/icon-button'
+import Button from 'components/button'
 
 import LogoutIcon from 'mdi-react/LogoutIcon'
 

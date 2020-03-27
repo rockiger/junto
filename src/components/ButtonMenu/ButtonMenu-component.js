@@ -21,14 +21,14 @@ export function ButtonMenuComponent({
     onSelect,
     selectable,
 }) {
-    const styles = useStyles()
+    const classes = useStyles()
 
     return (
         <span>
             <Button
                 aria-controls="button-menu"
                 aria-haspopup="true"
-                className={Boolean(anchorEl) ? styles.active : null}
+                className={Boolean(anchorEl) ? classes.active : null}
                 onClick={onClick}
             >
                 {children}

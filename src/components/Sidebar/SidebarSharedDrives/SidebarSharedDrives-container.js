@@ -35,8 +35,16 @@ function filterSharedDrives(files) {
         file =>
             file.name === OVERVIEW_NAME &&
             file.properties &&
-            file.properties.pageName
+            file.properties.pageName &&
+            file.parents[0] &&
+            isParentFolderNotDeleted(file, files)
         // file.teamDriveId
         // TODO && parent[0] is
     )
+}
+
+function isParentFolderNotDeleted(childFile, files) {
+    const parentId = childFile.parents[0]
+    const parents = files.filter(file => file.id === parentId)
+    return parents[0] && parents[0].trashed === false
 }

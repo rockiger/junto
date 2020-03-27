@@ -8,15 +8,15 @@
 }
 
 body {
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 .App-main {
     margin-top: 64px;
     display: flex;
-    padding: 0 16px;
+    padding: 0 1rem;
 }
-@media screen and (min-width: 960px) {
+@media screen and (min-width: 959px) {
     .App-main {
         padding: 0;
     }

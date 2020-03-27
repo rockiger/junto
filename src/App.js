@@ -1,11 +1,9 @@
 // @ts-nocheck
 import React from 'reactn'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { JssProvider } from 'react-jss'
-import { create } from 'jss'
-import preset from 'jss-preset-default'
+
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { ThemeProvider } from '@material-ui/styles'
+import { StylesProvider, ThemeProvider } from '@material-ui/styles'
 
 import { CreateNewWiki } from 'components/CreateNewWiki'
 import { Drive } from './components/Drive/index'
@@ -156,32 +154,4 @@ class App extends React.Component {
     }
 }
 
-// Create own name generator for css-classes to dodge conflicts in
-// prerenderes versions. Otherwise we have totally unexspected
-// behavior with our styling.
-// https://github.com/stereobooster/react-snap/issues/99
-
-const createGenerateClassName = () => {
-    let counter = 0
-    return (rule, sheet) =>
-        `c${Math.random()
-            .toString(36)
-            .substring(2, 4) +
-            Math.random()
-                .toString(36)
-                .substring(2, 4)}-${rule.key}-${counter++}`
-}
-
-const jss = create(preset())
-// Custom Material-UI class name generator for better debug and performance.
-jss.options.createGenerateClassName = createGenerateClassName
-
-function AppWidthCustomClassNames() {
-    return (
-        <JssProvider jss={jss}>
-            <App />
-        </JssProvider>
-    )
-}
-
-export default AppWidthCustomClassNames
+export default App

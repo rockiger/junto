@@ -43,15 +43,44 @@ export function getParents(
  */
 export function getBreadcrumbName(folder: IMetaOrNull, files: Array<IMeta>) {
     if (!folder) return null
-    // if root folder of personal wiki
-    if (folder.name === FOLDER_NAME) {
-        const result = files.find(
-            el => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
-        )
-        return result
+    if (isPersonalRoot(folder)) {
+        return findPersonalWikiRootFile(files, folder)
     }
-    const result = files.find(el => el.id === folder.name)
+    if (isWikiRoot(folder)) {
+        return findWikiRootFile(files, folder)
+    }
+    const result = findWikiFile(files, folder)
     // if the folder doesn't have a corresponding file, it must be
     // a root folder
     return result ? result : folder
+}
+
+function findWikiFile(files: IMeta[], folder: IMeta) {
+    return files.find(el => el.id === folder.name)
+}
+
+function findWikiRootFile(files: IMeta[], folder: IMeta) {
+    const result = files.find(
+        el =>
+            el.name === OVERVIEW_NAME &&
+            el.parents.includes(folder.id) &&
+            el.properties &&
+            el.properties.pageName === folder.name
+    )
+    return result
+}
+
+function findPersonalWikiRootFile(files: IMeta[], folder: IMeta) {
+    const result = files.find(
+        el => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
+    )
+    return result
+}
+
+function isWikiRoot(folder: IMeta) {
+    return folder.properties && folder.properties.wikiRoot
+}
+
+function isPersonalRoot(folder: IMeta) {
+    return folder.name === FOLDER_NAME
 }

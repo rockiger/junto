@@ -1,8 +1,8 @@
-import React, { setGlobal } from 'reactn'
+import React, { addReducers, setGlobal } from 'reactn'
 import { hydrate, render } from 'react-dom'
 import { State } from 'reactn/default'
-import './index.css'
-import App from './App'
+import './index.scss'
+import App from 'components/app'
 import * as serviceWorker from './serviceWorker'
 import addReactNDevTools from 'reactn-devtools'
 
@@ -16,6 +16,22 @@ if (process.env.NODE_ENV !== 'development') {
     console.error = noop
 }
 
+addReducers({
+    clearSearch: async (global, dispatch) => {
+        await dispatch.clearSearchMeta()
+        await dispatch.clearSearchFiles()
+    },
+    clearSearchFiles: (global, dispatch) => ({
+        files: [...global.initialFiles],
+    }),
+    clearSearchMeta: (global, dispatch) => ({
+        isSearchFieldActive: false,
+        oldSearchTerm: '',
+        searchTerm: '',
+        searchValue: '',
+    }),
+})
+
 const initialState: State = {
     isCreatingNewFile: false,
     rootFolderId: null,
@@ -28,6 +44,7 @@ const initialState: State = {
     redirect: false,
     searchTerm: '',
     searchValue: '', // The value in the searchfield
+    showSidebarOnMobile: false,
     files: [],
     initialFiles: [],
     isInitialFileListLoading: false,

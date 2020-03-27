@@ -1,0 +1,26 @@
+@import '_base.scss';
+
+@import-normalize;
+
+.App {
+    display: grid;
+    grid-template-areas:
+        'header'
+        'main'
+        'footer';
+    grid-template-rows: 64px auto auto;
+}
+
+.App__isSignedIn {
+    grid-template-areas:
+        'header  header'
+        'sidebar main';
+    grid-template-columns: 256px 1fr;
+    grid-template-rows: 64px 1fr;
+    height: 100vh;
+    @media (max-width: $md-max) {
+        grid-template-areas:
+            'header  header'
+            'main main';
+    }
+}

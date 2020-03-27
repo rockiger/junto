@@ -1,44 +1,28 @@
 //@ts-check
 import React from 'react'
-import { Container, Grid } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
-import { AndEndsInSuccess } from './FrontPage/AndEndsInSuccess'
-import { GoogleButton } from './FrontPage/GoogleButton'
-import { HasAPlan } from './FrontPage/HasAPlan'
-import { HasAProblem } from './FrontPage/HasAProblem'
-import { Testimonials } from './FrontPage/Testimonials'
+import { AndEndsInSuccess } from './AndEndsInSuccess'
+import { GoogleButton } from './GoogleButton'
+import { HasAPlan } from './HasAPlan'
+import { HasAProblem } from './HasAProblem'
+import { Testimonials } from './Testimonials'
 
 import gsuiteIntegrations from 'static/img/gsuite-integrations.png'
 import instantSearch from 'static/img/instant-search.png'
 import page01 from 'static/img/page01.png'
 import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
-import { Footer } from 'components/staticPages'
 
-export default function FrontPageHero() {
+import './front-page.scss'
+
+export default function FrontPage() {
     document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
-    const styles = useStyles()
     return (
         <>
-            <Container
-                className={styles.heroContainer}
-                maxWidth={false}
-                style={{ backgroundColor: '#f7f7f7' }}
-            >
-                <Grid container spacing={3}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            paddingRight: '2rem',
-                        }}
-                    >
-                        <h1>
+            <div className="hero" style={{ backgroundColor: '#f7f7f7' }}>
+                <div className="columns">
+                    <div className="col">
+                        <h1 className="frontpage__header">
                             Effortless.
                             <br />
                             Organized.
@@ -62,14 +46,22 @@ export default function FrontPageHero() {
                             Projects, Meeting notes, marketing plans -
                             everything <b>saved in your Google Drive</b>.
                         </p>
-                        <p className={styles.sm}>
+                        <p
+                            className="show__lg
+                        "
+                        >
                             <img
-                                className={styles.shadow}
+                                className="shadow"
                                 alt="Fulcrum Page"
                                 src={page01}
                             />
                         </p>
-                        <div style={{ alignItems: 'center', display: 'flex' }}>
+                        <div
+                            style={{
+                                alignItems: 'center',
+                                display: 'flex',
+                            }}
+                        >
                             <GoogleButton />
                             <strong style={{ marginLeft: 6 }}>
                                 - it's free!
@@ -78,42 +70,24 @@ export default function FrontPageHero() {
                         <p>
                             <b>Disclaimer:</b> We are still in beta.
                         </p>
-                    </Grid>
-                    <Grid
-                        className={styles.md}
-                        item
-                        xs={12}
-                        sm={6}
-                        style={{
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                        }}
-                    >
+                    </div>
+                    <div className="col hidden__lg">
                         <img
-                            className={styles.shadow}
+                            className="shadow"
                             alt="Fulcrum Page"
                             src={page01}
                         />
-                    </Grid>
-                </Grid>
-            </Container>
-            <div className={styles.callToAction}>
+                    </div>
+                </div>
+            </div>
+            <div className="call-to-action">
                 <GoogleButton />
             </div>
             <HasAProblem />
             <AndEndsInSuccess />
-            <Container className={styles.container} maxWidth={false}>
-                <Grid container spacing={3}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                        }}
-                    >
+            <div className="frontpage-container">
+                <div className="columns">
+                    <div className="col">
                         <img
                             alt=""
                             src={page02}
@@ -125,19 +99,9 @@ export default function FrontPageHero() {
                                 maxWidth: '100%',
                             }}
                         />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            paddingLeft: '2rem',
-                        }}
-                    >
-                        <h2>
+                    </div>
+                    <div className="col">
+                        <h2 className="frontpage__header">
                             Build great looking pages - all saved in your Google
                             Drive
                         </h2>
@@ -156,22 +120,15 @@ export default function FrontPageHero() {
                             create is saved on your Drives.{' '}
                             <strong>Nothing is saved on our servers.</strong>
                         </p>
-                    </Grid>
-                </Grid>
-            </Container>
-            <Container className={styles.container} maxWidth={false}>
-                <Grid container spacing={3}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            paddingRight: '2rem',
-                        }}
-                    >
-                        <h2>Easily find & navigate your work</h2>
+                    </div>
+                </div>
+            </div>
+            <div className="frontpage-container">
+                <div className="columns">
+                    <div className="col">
+                        <h2 className="frontpage__header">
+                            Easily find & navigate your work
+                        </h2>
                         <p>
                             Always stay on top of your work. Organize your{' '}
                             <strong>work in different Drives</strong> and create
@@ -192,18 +149,16 @@ export default function FrontPageHero() {
                                 width: '100%',
                             }}
                         />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
+                    </div>
+                    <div
+                        className="col"
                         style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            paddingLeft: '1rem',
+                            justifyContent: 'start',
                         }}
                     >
-                        <h2>Work seamlessly with your G Suite</h2>
+                        <h2 className="frontpage__header">
+                            Work seamlessly with your G Suite
+                        </h2>
                         <p>
                             Fulcrum allows you to <strong>connect</strong> your{' '}
                             <strong>
@@ -232,111 +187,34 @@ export default function FrontPageHero() {
                                 width: '100%',
                             }}
                         />
-                    </Grid>
-                </Grid>
-            </Container>
+                    </div>
+                </div>
+            </div>
             <Testimonials />
             <HasAPlan />
-            <Container maxWidth="sm">
+            <div>
                 <div
                     style={{
                         alignItems: 'center',
                         display: 'flex',
                         flexDirection: 'column',
+                        marginBottom: '5rem',
                     }}
                 >
                     <GoogleButton />
                 </div>
-            </Container>
-            <Footer />
-            <style>{`
-            body {
-                overflow-y: auto;
-                font-size: 1rem;
-            }
-            .App-main {
-                padding: 0;
-                margin-top: 57px;
-            }
-            .hero-container {
-                padding: 8rem 6%
-            }
-            .SignInWithGoogle:hover {
-                background-color: rgb(46, 93, 170) !important;
-            }
-            .SignInWithGoogle svg{
-                height: 18px;
-                width: 18px;
-            }
-            
-            .hero-logo {
-                padding-top: 80px;
-                margin-bottom: 20px;
-            }
-            
-            h1, h2 {
-                font-size: 42px;
-                font-weight: 500;
-                line-height: 1.2
-            }
+            </div>
+            <style>{` 
+                /* Needed, because we can't change the class of the body element
+                   declaratively from react */
+                body {
+                    overflow-y: auto !important;
+                    font-size: 1rem;
+                }
+                .App-main {
+                    padding: 0;
+                }
             `}</style>
         </>
     )
 }
-
-export const useStyles = makeStyles(theme => {
-    return {
-        shadow: {
-            border: '1px solid #eee',
-            borderRadius: '.5rem',
-            boxShadow:
-                '0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14) , 0px 3px 3px -2px rgba(0, 0, 0, 0.12)',
-            maxWidth: '100%',
-        },
-        heroContainer: {
-            padding: '3rem 6%',
-            [theme.breakpoints.up('sm')]: {
-                padding: '8rem 6%',
-            },
-        },
-        callToAction: {
-            bottom: 20,
-            position: 'fixed',
-            right: 20,
-            [theme.breakpoints.down('sm')]: {
-                display: 'none',
-            },
-        },
-        container: {
-            margin: '3rem 0',
-            padding: '0 6%',
-            [theme.breakpoints.up('sm')]: {
-                margin: '8rem 0',
-                padding: '0 6%',
-            },
-        },
-        footer: {
-            marginTop: 'auto',
-            padding: '5rem 1rem 1rem',
-        },
-        footerLink: {
-            margin: '4px 16px',
-        },
-        md: {
-            display: 'none',
-            [theme.breakpoints.up('sm')]: {
-                display: 'flex',
-            },
-        },
-        sm: {
-            [theme.breakpoints.up('sm')]: {
-                display: 'none',
-            },
-        },
-        whyIconContainer: {
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-        },
-    }
-})

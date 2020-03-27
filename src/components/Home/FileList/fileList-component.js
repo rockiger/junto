@@ -1,6 +1,6 @@
 // @ts-check
 
-import React, { useGlobal } from 'reactn'
+import React, { useDispatch } from 'reactn'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
@@ -12,6 +12,8 @@ import { EXT } from 'lib/constants'
 import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { PageButtons } from 'components/pageButtons'
 import { ButtonMenu } from 'components/ButtonMenu'
+
+import styles from './file-list.module.scss'
 
 /** @typedef {{id: string, mimeType: string, name: string, modifiedByMeTime: string, trashed: boolean, viewedByMeTime: string}} File */
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
@@ -29,8 +31,7 @@ import { ButtonMenu } from 'components/ButtonMenu'
  */
 const FileListPartial = props => {
     const { files, sortBy } = props
-    // @ts-ignore
-    const [, setSearchTerm] = useGlobal('searchTerm')
+    const clearSearch = useDispatch('clearSearch')
     const classes = useStyles()
     return (
         <List className="filelist-list">
@@ -60,10 +61,14 @@ const FileListPartial = props => {
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
                                 className={classes.link}
-                                onClick={() => setSearchTerm('')}
+                                onClick={() => clearSearch()}
+                                style={{ color: '#3c4043' }}
                                 to={`/page/${file.id}`}
                             >
-                                <ListItemIcon className={classes.icon}>
+                                <ListItemIcon
+                                    style={{ color: '#4285f4' }}
+                                    className={classes.icon}
+                                >
                                     <FileDocumentIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={filename} />
@@ -79,7 +84,7 @@ const PeriodList = ({ files, headline, sortBy }) => {
     if (files.length > 0) {
         return (
             <>
-                <div className="filelist-tagline">{headline}</div>
+                <div className={styles.FileList_tagline}>{headline}</div>
                 <FileListPartial files={files} sortBy={sortBy} />
             </>
         )
@@ -183,7 +188,10 @@ const FileListComponent = props => {
         <div className="filelist">
             {setSortBy && (
                 <PageButtons>
-                    <strong style={{ fontWeight: 500, marginRight: '.5rem' }}>
+                    <strong
+                        className={styles.sortCriteria}
+                        style={{ fontWeight: 500, marginRight: '.5rem' }}
+                    >
                         {sortBy === 'viewedByMeTime'
                             ? 'Last opened by me'
                             : 'Last modified by me'}
@@ -210,7 +218,7 @@ const FileListComponent = props => {
                 </PageButtons>
             )}
             <h1>{searchTerm ? 'Search Result' : title}</h1>
-            <div className="filelist-content">
+            <div className={styles.FileList_content}>
                 {/* 
                 // @ts-ignore */}
                 {props.isLoading && <Spinner />}
@@ -219,29 +227,20 @@ const FileListComponent = props => {
             </div>
             <style>{`
                     .filelist h1 {
-                        border-bottom: 1px solid var(--border-color);
+                        border-bottom: 1px solid #dadce0;
                         font-size: 1.5rem;
                         font-weight: 400;
                         margin: 0;
                         padding: .5rem;
                     }
-                    .filelist-content {
-                        overflow-y: auto;
-                        height: calc((100vh - 65px) - 56px);
-                    }
-                    .filelist-tagline {
-                        margin-top: 1rem;
-                        font-weight: 500;
-                        font-size: 1rem;
-                    }
                     .filelist-list a {
-                        border-radius: var(--border-radius);
-                        color: var(--link-color);
+                        border-radius: 66px;
+                        color: #4285f4;
                         font-size: 1rem;
                         padding: .5rem 1rem .5rem .75rem;
                     }
                     .filelist-list a:hover {
-                        background-color: var(--hover-bg-color);
+                        background-color: #e8f0fe;
                         text-decoration: none;
                     }
                     .filelist-list a img, .filelist-list a span {

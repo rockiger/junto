@@ -1,0 +1,22 @@
+@import '_base.scss';
+
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    max-width: $container-width-large;
+    padding: 2.5rem 2rem;
+}
+.footer__link {
+    color: $text-secondary;
+    margin: 4px 16px;
+    text-decoration: none;
+    &:hover {
+        color: $text-primary;
+        text-decoration: underline;
+    }
+}
+
+.footer__logo {
+    margin-right: 2rem;
+}

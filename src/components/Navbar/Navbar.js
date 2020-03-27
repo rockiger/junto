@@ -1,20 +1,27 @@
-import React, { useEffect, useGlobal } from 'reactn'
+import React, { useDispatch, useEffect, useGlobal } from 'reactn'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
+
+import IconButton from 'components/icon-button'
+import MenuIcon from 'mdi-react/MenuIcon'
 
 import logo from '../../static/logo_48.svg'
-import { makeStyles } from '@material-ui/core/styles'
-import { AppBar, Paper, Typography, Toolbar } from '@material-ui/core'
 
 import Search from './Search'
 
+import styles from './navbar.module.scss'
+
 const Navbar = props => {
+    const [isSignedIn] = useGlobal('isSignedIn')
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
-    const [, setOldSearchTerm] = useGlobal('oldSearchTerm')
     const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
     const [searchValue, setSearchValue] = useGlobal('searchValue')
+    const [showSidebarOnMobile, setShowSidebarOnMobile] = useGlobal(
+        'showSidebarOnMobile'
+    )
 
-    const classes = useStyles()
+    const clearSearch = useDispatch('clearSearch')
 
     useEffect(() => {
         if (searchValue !== searchTerm) setSearchValue(searchTerm)
@@ -26,154 +33,41 @@ const Navbar = props => {
         setIsSearchFieldActive(false)
         props.history.push('/')
     }
-
-    const clearSearch = () => {
-        setSearchValue(searchTerm)
-        setOldSearchTerm(searchTerm)
-        setSearchTerm('')
-        setIsSearchFieldActive(false)
-    }
-
-    if (props.isSignedIn) {
-        return (
-            <AppBar className={classes.appBarSignedIn} color="default">
-                <Paper className={classes.card}>
-                    <Toolbar className={classes.toolbar} variant="dense">
-                        <div className={classes.titleWrapper}>
-                            <Link
-                                className={classes.logoWrapper}
-                                onClick={() => clearSearch()}
-                                to="/"
-                            >
-                                <img
-                                    className={classes.logo}
-                                    src={logo}
-                                    alt="App logo"
-                                />
-                            </Link>
-                            <Link
-                                className={classes.titleSignedIn}
-                                onClick={() => clearSearch()}
-                                to="/"
-                            >
-                                <Typography
-                                    color="textPrimary"
-                                    variant="h6"
-                                    noWrap
-                                >
-                                    Fulcrum
-                                </Typography>
-                            </Link>
-                        </div>
-                        <Search clearSearch={clearSearch} submit={submit} />
-                        <div className={classes.grow} />
-                        <div>{props.children}</div>
-                    </Toolbar>
-                </Paper>
-            </AppBar>
-        )
-    } else {
-        return (
-            <AppBar className={classes.appBar} color="default">
-                <Toolbar className={classes.toolbar}>
-                    <div className={classes.titleWrapper}>
-                        <Link className={classes.logoWrapper} to="/">
-                            <img
-                                className={classes.logo}
-                                src={logo}
-                                alt="App logo"
-                            />
-                        </Link>
-                        <Link className={classes.title} to="/">
-                            <Typography
-                                className={classes.title}
-                                color="textPrimary"
-                                variant="h6"
-                                noWrap
-                            >
-                                Fulcrum Wiki
-                            </Typography>
-                        </Link>
-                    </div>
-                    <div className={classes.grow} />
-
-                    <div>{props.children}</div>
-                </Toolbar>
-            </AppBar>
-        )
-    }
+    return (
+        <div className={styles.Navbar}>
+            {isSignedIn && (
+                <div className={styles.Navbar_menu}>
+                    <IconButton
+                        id=""
+                        onClick={() => {
+                            setShowSidebarOnMobile(!showSidebarOnMobile)
+                        }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </div>
+            )}
+            <Link
+                className={classNames(
+                    styles.Navbar_logoContainer,
+                    isSignedIn && styles.Navbar_logoContainer__isSignedIn
+                )}
+                to="/"
+            >
+                <img className={styles.Navbar_logo} src={logo} alt="App logo" />
+                <div className={styles.Navbar_title}>Fulcrum Wiki</div>
+            </Link>
+            <div className={styles.Navbar_spacer}>
+                {props.isSignedIn && (
+                    <Search clearSearch={clearSearch} submit={submit} />
+                )}
+            </div>
+            <div className={styles.Navbar_actions}>{props.children}</div>
+        </div>
+    )
 }
+
 export default withRouter(Navbar)
 Navbar.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
-}
-
-function useStyles() {
-    const useStyles = makeStyles(theme => {
-        return {
-            grow: {
-                flexGrow: 1,
-            },
-            appBar: {
-                background: 'white',
-                borderBottom: `1px solid ${theme.palette.grey['A100']}`,
-                boxShadow: 'none',
-            },
-            appBarSignedIn: {
-                background: 'white',
-                boxShadow: 'none',
-                [theme.breakpoints.up('md')]: {
-                    borderBottom: `1px solid ${theme.palette.grey['A100']}`,
-                },
-            },
-            card: {
-                marginBottom: theme.spacing(1),
-                marginLeft: theme.spacing(2),
-                marginRight: theme.spacing(2),
-                marginTop: theme.spacing(1),
-                [theme.breakpoints.up('md')]: {
-                    margin: 0,
-                    boxShadow: 'none',
-                },
-            },
-            toolbar: {
-                [theme.breakpoints.up('md')]: {
-                    minHeight: 64,
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                },
-            },
-            menuButton: {
-                paddingLeft: 0,
-            },
-            logoWrapper: {},
-            logo: {
-                maxHeight: 24,
-                marginRight: theme.spacing(1.5),
-                [theme.breakpoints.up('md')]: {
-                    maxHeight: 40,
-                },
-            },
-            titleWrapper: {
-                display: 'flex',
-                color: '#5f6368',
-                alignItems: 'center',
-                [theme.breakpoints.up('md')]: {
-                    minWidth: 236,
-                },
-            },
-            titleSignedIn: {
-                display: 'none',
-                [theme.breakpoints.up('md')]: {
-                    display: 'block',
-                    textDecoration: 'none',
-                },
-            },
-            title: {
-                display: 'block',
-                textDecoration: 'none',
-            },
-        }
-    })
-    return useStyles()
 }

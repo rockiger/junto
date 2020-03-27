@@ -4,7 +4,7 @@ export const useStyles = makeStyles(theme => {
     return {
         active: {
             color: theme.palette.primary.main,
-            backgroundColor: 'var(--hover-bg-color)',
+            backgroundColor: '#e8f0fe',
         },
     }
 })

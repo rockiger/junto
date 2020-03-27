@@ -1,13 +1,10 @@
 import React from 'react'
-import { Container } from '@material-ui/core'
-
-import { Footer } from './Footer'
 
 export function TermsOfService() {
     document.title = 'Terms Of Service - Fulcrum.wiki'
     return (
         <>
-            <Container maxWidth="md">
+            <div className="container container__max1280">
                 <h1>Terms of Service</h1>
                 <h2>1. Terms</h2>
                 By using the Tablao add-on, you are agreeing to be bound by
@@ -86,8 +83,7 @@ export function TermsOfService() {
                 >
                     GetTerms.io
                 </a>
-            </Container>
-            <Footer />
+            </div>
             <style>{`
             body {
                 overflow-y: auto;
