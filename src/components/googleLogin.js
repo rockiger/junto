@@ -1,6 +1,6 @@
 // look into https://github.com/anthonyjgrove/react-google-login for more information
 // and posibilitys with google authentication
-/* global gapi */
+/* global gapi, firebase */
 
 import React from 'reactn'
 import PropTypes from 'prop-types'
@@ -78,7 +78,7 @@ export default class GoogleLogin extends React.Component {
                 () => {
                     this.onSuccess()
                 },
-                error => {
+                (error) => {
                     this.onFailure(error)
                 }
             )
@@ -90,6 +90,9 @@ export default class GoogleLogin extends React.Component {
         // Handle the initial sign-in state.
         this.updateSigninStatus(
             window.gapi.auth2.getAuthInstance().isSignedIn.get()
+        )
+        addSignIn(
+            gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()
         )
     }
 
@@ -212,7 +215,7 @@ export default class GoogleLogin extends React.Component {
         }
     }
 
-    onFailure = error => {
+    onFailure = (error) => {
         alert(`We couldn't sign you in. Please reload your app and try again.`)
         console.log(JSON.stringify(error, null, 2))
         this.setState({ isSigningIn: false })
@@ -222,7 +225,7 @@ export default class GoogleLogin extends React.Component {
      *  Called when the signed in status changes, to update the UI
      *  appropriately. After a sign-in, the API is called.
      */
-    updateSigninStatus = isSignedIn => {
+    updateSigninStatus = (isSignedIn) => {
         console.log({ isSignedIn })
         this.setGlobal({ isSignedIn, isSigningIn: false })
         if (isSignedIn && !this.global.isFileListLoading) this.initFiles()
@@ -231,16 +234,16 @@ export default class GoogleLogin extends React.Component {
     /**
      *  Sign in the user upon button click.
      */
-    handleAuthClick = event => {
+    handleAuthClick = (event) => {
         this.setGlobal({ isSigningIn: true })
         window.gapi.auth2
             .getAuthInstance()
             .signIn()
             .then(
-                user => {
+                (user) => {
                     console.log(user)
                 },
-                err => {
+                (err) => {
                     // end signingIn because breakup of process
                     this.setGlobal({ isSigningIn: false })
                 }
@@ -278,6 +281,44 @@ export default class GoogleLogin extends React.Component {
 function handleSignoutClick(event) {
     window.gapi.auth2.getAuthInstance().signOut()
     event.preventDefault()
+}
+
+/**
+ * Add Sign In do database
+ * @param {obeject} profile - the basic probfile of the user
+ */
+function addSignIn(profile) {
+    // Your web app's Firebase configuration
+
+    var firebaseConfig = {
+        apiKey: 'AIzaSyBFOb4rpamVzanv8TcFn05fTb6bo4DZbVU',
+        authDomain: 'fulcrum-users.firebaseapp.com',
+        databaseURL: 'https://fulcrum-users.firebaseio.com',
+        projectId: 'fulcrum-users',
+        storageBucket: 'fulcrum-users.appspot.com',
+        messagingSenderId: '841108083969',
+        appId: '1:841108083969:web:4ddf31eeec6e2da20f7700',
+        measurementId: 'G-3T6B47CFLG',
+    }
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig)
+
+    const db = firebase.firestore()
+    db.collection('users')
+        .add({
+            email: profile.getEmail(),
+            first: profile.getGivenName(),
+            last: profile.getFamilyName(),
+            avatar: profile.getImageUrl(),
+            created: new Date(),
+        })
+        .then(function (docRef) {
+            console.log('Document written with ID: ', docRef.id)
+        })
+        .catch(function (error) {
+            console.error('Error adding document: ', error)
+        })
 }
 
 GoogleLogin.propTypes = {

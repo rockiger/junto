@@ -51,7 +51,7 @@ export function isLoaded() {
  * @return {Promise}
  */
 export function init() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         gapi.load('client', () =>
             gapi.client.load('drive', 'v3', () => {
                 clientLoaded = true
@@ -87,7 +87,7 @@ export function listFiles(searchTerm = '', orderBy = '') {
                 q,
                 supportsAllDrives: true,
             })
-            .execute(response => resolve(formatResult(response)))
+            .execute((response) => resolve(formatResult(response)))
     })
 }
 
@@ -254,8 +254,8 @@ export function createFileWithContent(name, ifid, data) {
                 body: multipartRequestBody,
             })
             .then(
-                response => resolve(formatFileDescription(response.result)),
-                error => resolve(formatFileDescription())
+                (response) => resolve(formatFileDescription(response.result)),
+                (error) => resolve(formatFileDescription())
             )
     })
 }
@@ -277,7 +277,7 @@ export function getFileDescription(driveId) {
                 includeItemsFromAllDrives: true,
                 supportsAllDrives: true,
             })
-            .execute(response => resolve(formatFileDescription(response)))
+            .execute((response) => resolve(formatFileDescription(response)))
     })
 }
 
@@ -296,7 +296,6 @@ export async function getFolderId(name = 'Fulcrum Documents') {
             pageSize: 10,
             fields: 'nextPageToken, files(id, name)',
         })
-        console.log(result)
         const resultBody = JSON.parse(result.body)
         if (resultBody.files.length > 0) return resultBody.files[0].id
     } catch (err) {
@@ -319,7 +318,7 @@ export function downloadFile(driveId) {
                 fileId: driveId,
                 alt: 'media',
             })
-            .then(data => resolve(data.body), reject)
+            .then((data) => resolve(data.body), reject)
     })
 }
 
@@ -342,7 +341,7 @@ export function renameFile(driveId, newName, supportsAllDrives = true) {
                 supportsAllDrives,
             })
             .then(
-                response => resolve(formatFileDescription(response.result)),
+                (response) => resolve(formatFileDescription(response.result)),
                 reject
             )
     })
@@ -366,7 +365,7 @@ export function updateMetadata(driveId, metadata) {
                 fields: fileFields,
             })
             .then(
-                response => resolve(formatFileDescription(response.result)),
+                (response) => resolve(formatFileDescription(response.result)),
                 reject
             )
     })
@@ -413,7 +412,7 @@ export function updateFile(driveId, newData, supportsAllDrives = true) {
                 body: newData,
             })
             .then(
-                response => resolve(formatFileDescription(response.result)),
+                (response) => resolve(formatFileDescription(response.result)),
                 reject
             )
     })
@@ -427,15 +426,12 @@ export function updateFile(driveId, newData, supportsAllDrives = true) {
  * a story description: {driveId, driveVersion, name, ifid}
  */
 export function refreshSession() {
-    const isTokenValid = function() {
+    const isTokenValid = function () {
         var token = gapi.auth.getToken()
         return token && Date.now() < token.expires_at
     }
     console.log(isTokenValid())
-    return gapi.auth2
-        .getAuthInstance()
-        .currentUser.get()
-        .reloadAuthResponse()
+    return gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse()
 }
 
 // helpers
