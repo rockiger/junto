@@ -1,6 +1,6 @@
 import React from 'reactn'
 
-import IconButton from 'components/icon-button'
+import IconButton from 'components/gsuite-components/icon-button'
 
 import styles from './button-menu.module.scss'
 

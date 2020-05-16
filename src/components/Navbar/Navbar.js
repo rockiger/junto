@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import IconButton from 'components/icon-button'
+import IconButton from 'components/gsuite-components/icon-button'
 import MenuIcon from 'mdi-react/MenuIcon'
 
 import logo from '../../static/logo_48.svg'
@@ -12,7 +12,7 @@ import Search from './Search'
 
 import styles from './navbar.module.scss'
 
-const Navbar = props => {
+const Navbar = (props) => {
     const [isSignedIn] = useGlobal('isSignedIn')
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
     const [searchTerm, setSearchTerm] = useGlobal('searchTerm')

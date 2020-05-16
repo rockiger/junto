@@ -2,6 +2,7 @@ import React, { useGlobal } from 'reactn'
 
 import Navbar from 'components/Navbar'
 import GoogleLogin from 'components/googleLogin'
+import { Help } from 'components/help'
 
 import styles from './header.module.scss'
 
@@ -13,6 +14,7 @@ export default function Header(props: any) {
     return (
         <div className={styles.Header}>
             <Navbar isSignedIn={isSignedIn}>
+                <Help />
                 <GoogleLogin
                     clientId={CLIENT_ID}
                     apiKey={API_KEY}

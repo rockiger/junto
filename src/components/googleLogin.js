@@ -4,8 +4,8 @@
 
 import React from 'reactn'
 import PropTypes from 'prop-types'
-import IconButton from 'components/icon-button'
-import Button from 'components/button'
+import IconButton from 'components/gsuite-components/icon-button'
+import Button from 'components/gsuite-components/button'
 
 import LogoutIcon from 'mdi-react/LogoutIcon'
 

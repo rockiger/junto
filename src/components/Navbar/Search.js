@@ -7,7 +7,7 @@ import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 import SearchIcon from 'mdi-react/SearchIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 
-import IconButton from 'components/icon-button'
+import IconButton from 'components/gsuite-components/icon-button'
 
 import SearchAutocomplete from './SearchAutocomplete'
 import styles from './search.module.scss'
@@ -90,11 +90,11 @@ export const Search = ({ clearSearch, submit }) => {
                     onBlur={() =>
                         setTimeout(() => setIsSearchFieldActive(false), 100)
                     }
-                    onChange={ev => {
+                    onChange={(ev) => {
                         setSearchValue(ev.target.value)
                         setSelectedRow(null)
                     }}
-                    onKeyDown={ev => {
+                    onKeyDown={(ev) => {
                         const border = Math.min(6, filteredFiles.length - 1)
                         if (ev.key === 'Enter') {
                             ev.preventDefault()

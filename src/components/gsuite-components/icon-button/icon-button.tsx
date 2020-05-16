@@ -8,6 +8,7 @@ interface Props {
     children: ReactElement
     className?: string
     onClick?: () => void
+    selected?: boolean
 }
 
 export default function Button({
@@ -15,15 +16,20 @@ export default function Button({
     children,
     className,
     onClick,
+    selected,
 }: Props): ReactElement {
     return (
         <div
             arial-label={ariaLabel}
-            className={classNames(styles.IconButton, className)}
+            className={classNames(
+                styles.IconButton,
+                className,
+                selected && styles.IconButton__selected
+            )}
             onClick={onClick}
             role="button"
         >
-            <div className={styles.IconButton_wrapper}>{children}</div>
+            <div className={styles.IconButton_inner}>{children}</div>
         </div>
     )
 }
