@@ -9,8 +9,12 @@
     flex-direction: column;
     max-height: calc(100% - 4rem);
     font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-    transform: translate(0%, -2%);
     width: calc(100% - 4rem);
+    @media (max-width: $md-max) {
+        display: block;
+        width: 100%;
+        max-height: none;
+    }
     &_content {
         flex-grow: 1;
         overflow-y: auto;
@@ -61,4 +65,11 @@
     top: 0;
     width: 100vw;
     z-index: 100000000;
+    @media (max-width: $md-max) {
+        background-color: rgba(0, 0, 0, 0);
+        position: absolute;
+        display: block;
+        align-items: start;
+        justify-content: start;
+    }
 }

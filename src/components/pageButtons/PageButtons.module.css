@@ -2,7 +2,7 @@
     position: fixed;
     right: 0;
     top: 71px;
-    padding-right: 28px;
+    padding-right: 24px;
 }
 
 @media screen and (max-width: 930px) {
