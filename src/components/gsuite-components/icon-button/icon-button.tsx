@@ -7,7 +7,7 @@ interface Props {
     ariaLabel?: string
     children: ReactElement
     className?: string
-    onClick?: () => void
+    onClick?: any
     selected?: boolean
 }
 
