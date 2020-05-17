@@ -30,7 +30,7 @@
         align-items: center;
         display: flex;
         height: 64px;
-        padding: 0 1rem 0 1.5rem;
+        padding: 0 1rem 0 2rem;
         &_title {
             -webkit-font-smoothing: antialiased;
             flex-grow: 1;
@@ -51,6 +51,9 @@
     }
     &__xl {
         max-width: 1920px;
+    }
+    &__fullHeight {
+        height: 100%;
     }
 }
 

@@ -52,7 +52,7 @@ const ExpansionPaneelDetails = withStyles((theme) => ({
 
 export default function CustomizedExpansionPanels() {
     return (
-        <div>
+        <>
             <h1 className={s.header}>Fulcrum FAQ</h1>
             <ExpansionPanel classes={{ root: s.ExpansionPanel }} square>
                 <ExpansionPanelSummary
@@ -111,6 +111,6 @@ export default function CustomizedExpansionPanels() {
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
-        </div>
+        </>
     )
 }

@@ -14,6 +14,7 @@ export default Modal
  * @property {any[]} [buttons]
  * @property {any} children
  * @property {function} closeModal
+ * @property {boolean} fullHeight
  * @property {boolean} isOpen
  * @property {('xs'|'sm'|'md'|'lg'|'xl'|false)} [maxWidth]
  * @property {function} onRequestClose
@@ -28,6 +29,7 @@ function Modal({
     buttons,
     children,
     closeModal,
+    fullHeight = false,
     isOpen,
     maxWidth = false,
     title,
@@ -42,6 +44,7 @@ function Modal({
             contentLabel="onRequestClose Example"
             onRequestClose={closeModal}
             className={classNames(s.Modal, {
+                [s.Modal__fullHeight]: fullHeight,
                 [s[`Modal__${maxWidth}`]]: maxWidth,
             })}
             overlayClassName={s.Overlay}
