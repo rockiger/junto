@@ -10,6 +10,12 @@ export function FAQ() {
             <div className="container container__max640">
                 <FulcrumFaq />
             </div>
+            <style>{`
+                body {
+                    overflow-y: auto;
+                    font-size: 1rem;
+                }
+            `}</style>
         </>
     )
 }

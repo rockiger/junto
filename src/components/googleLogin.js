@@ -304,21 +304,23 @@ function addSignIn(profile) {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig)
 
-    const db = firebase.firestore()
-    db.collection('users')
-        .add({
-            email: profile.getEmail(),
-            first: profile.getGivenName(),
-            last: profile.getFamilyName(),
-            avatar: profile.getImageUrl(),
-            created: new Date(),
-        })
-        .then(function (docRef) {
-            console.log('Document written with ID: ', docRef.id)
-        })
-        .catch(function (error) {
-            console.error('Error adding document: ', error)
-        })
+    if (profile) {
+        const db = firebase.firestore()
+        db.collection('users')
+            .add({
+                email: profile.getEmail(),
+                first: profile.getGivenName(),
+                last: profile.getFamilyName(),
+                avatar: profile.getImageUrl(),
+                created: new Date(),
+            })
+            .then(function (docRef) {
+                console.log('Document written with ID: ', docRef.id)
+            })
+            .catch(function (error) {
+                console.error('Error adding document: ', error)
+            })
+    }
 }
 
 GoogleLogin.propTypes = {
