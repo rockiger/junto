@@ -18,9 +18,9 @@ export const Footer = () => {
     )
 }
 
-const FooterLink = ({ children, to }) => {
+export const FooterLink = ({ children, title, to }) => {
     return (
-        <a className="footer__link col" href={to}>
+        <a className="footer__link col" href={to} title={title}>
             {children}
         </a>
     )

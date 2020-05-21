@@ -7,7 +7,7 @@ import { Drive } from 'components/Drive/index'
 import Home from 'components/Home'
 import Page from 'components/Page'
 import { SharedWithMe } from 'components/SharedWithMe'
-import { PrivacyPolicy, TermsOfService } from 'components/staticPages'
+import { PrivacyPolicy, TermsOfService, FAQ } from 'components/staticPages'
 import styles from './main.module.scss'
 
 export default function Main(props: any): ReactElement {
@@ -57,7 +57,7 @@ export default function Main(props: any): ReactElement {
                     />
                 )}
             />
-            <Route exact path="/drive/" render={props => <Drive />} />
+            <Route exact path="/drive/" render={(props) => <Drive />} />
             <Route
                 exact
                 path="/new/"
@@ -68,6 +68,7 @@ export default function Main(props: any): ReactElement {
                     />
                 )}
             />
+            <Route exact path="/faq" render={(props: any) => <FAQ />} />
             <Route
                 exact
                 path="/privacy-policy"

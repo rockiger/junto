@@ -1,12 +1,6 @@
 import React from 'react'
 
-import {
-    Modal,
-    Tab,
-    Tabs,
-    TabList,
-    TabPanel,
-} from 'components/gsuite-components'
+import { Tab, Tabs, TabList, TabPanel } from 'components/gsuite-components'
 
 import { FulcrumFaq } from './fulcrum-faq'
 import { EditorShortcuts } from './editor-shortcuts'

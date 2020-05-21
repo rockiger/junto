@@ -13,7 +13,7 @@ import Sidebar from './components/Sidebar'
 import Home from './components/Home'
 import Page from './components/Page'
 import { SharedWithMe } from 'components/SharedWithMe'
-import { PrivacyPolicy, TermsOfService } from 'components/staticPages'
+import { FAQ, PrivacyPolicy, TermsOfService } from 'components/staticPages'
 import { initGA, setGA } from './components/Tracking'
 
 import {
@@ -154,6 +154,11 @@ class App extends React.Component {
                                                 }
                                             />
                                         )}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/faq"
+                                        render={(props) => <div>Test</div>}
                                     />
                                     <Route
                                         exact
