@@ -1,7 +1,7 @@
 import React, { useGlobal, useState } from 'reactn'
 import PropTypes from 'prop-types'
 
-import Spinner from 'components/spinner'
+import Spinner from 'components/gsuite-components/spinner'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 
 import FrontPage from './front-page'
@@ -26,7 +26,7 @@ function Home(props) {
      * @param {SortBy} sortBy
      * @returns {void}
      */
-    const setSortByAndLocalStorage = sortBy => {
+    const setSortByAndLocalStorage = (sortBy) => {
         console.log({ sortBy })
         setSortBy(sortBy)
         //@ts-ignore

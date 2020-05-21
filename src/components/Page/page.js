@@ -17,7 +17,7 @@ import {
 import Editor from 'components/Editor'
 import { PageView } from 'components/Tracking'
 
-import Spinner from 'components/spinner'
+import Spinner from 'components/gsuite-components/spinner'
 
 import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
 import { getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
@@ -110,11 +110,13 @@ export default class Page extends React.Component {
         }
     }
 
-    loadEditorContent = async ev => {
+    loadEditorContent = async (ev) => {
         const { fileId } = this.state
         if (fileId) {
             let fileContent
-            let fileDescription = this.global.files.find(el => el.id === fileId)
+            let fileDescription = this.global.files.find(
+                (el) => el.id === fileId
+            )
 
             if (!fileDescription)
                 fileDescription = await getFileDescription(this.state.fileId)
@@ -150,11 +152,11 @@ export default class Page extends React.Component {
         }
     }
 
-    setEditorDelta = editorDelta => {
+    setEditorDelta = (editorDelta) => {
         this.setState({ editorDelta })
     }
 
-    onBlurInput = async ev => {
+    onBlurInput = async (ev) => {
         const { fileId } = this.state
         let { pageHead } = this.state
         if (!pageHead) {
@@ -168,11 +170,11 @@ export default class Page extends React.Component {
         }
     }
 
-    onChangeInput = ev => {
+    onChangeInput = (ev) => {
         this.setState({ pageHead: ev.target.value })
     }
 
-    onKeyDownInput = ev => {
+    onKeyDownInput = (ev) => {
         switch (ev.key) {
             case `ArrowDown`:
             case `Tab`:
@@ -345,13 +347,13 @@ Page.propTypes = {
  * @param {string} userEmail
  */
 export function getUserRole(fileId, files, userEmail) {
-    const fileMeta = files.find(file => file.id === fileId)
+    const fileMeta = files.find((file) => file.id === fileId)
     console.log(fileMeta)
     /** @type {'organizer' | 'owner' | 'fileOrganizer' | 'writer' | 'commenter' | 'reader'} */
     let userRole = 'owner'
     if (fileMeta && fileMeta.permissions) {
         const userPermission = fileMeta.permissions.find(
-            el => el.emailAddress === userEmail
+            (el) => el.emailAddress === userEmail
         )
         if (userPermission) userRole = userPermission.role
     }

@@ -2,7 +2,7 @@ import React, { useGlobal } from 'reactn'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 
-import Spinner from 'components/spinner'
+import Spinner from 'components/gsuite-components/spinner'
 
 import FileList from 'components/Home/FileList'
 
@@ -34,7 +34,7 @@ SharedWithMe.propTypes = {
 }
 
 function filterSharedWithMe(files) {
-    const filtered = files.filter(file => {
+    const filtered = files.filter((file) => {
         return file.shared === true && file.ownedByMe === false
     })
     return filtered

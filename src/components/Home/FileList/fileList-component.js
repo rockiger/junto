@@ -7,7 +7,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalIcon'
 
-import Spinner from 'components/spinner'
+import Spinner from 'components/gsuite-components/spinner'
 import { EXT } from 'lib/constants'
 import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { PageButtons } from 'components/pageButtons'
@@ -29,14 +29,14 @@ import styles from './file-list.module.scss'
  *
  * @param {Props} props
  */
-const FileListPartial = props => {
+const FileListPartial = (props) => {
     const { files, sortBy } = props
     const clearSearch = useDispatch('clearSearch')
     const classes = useStyles()
     return (
         <List className="filelist-list">
             {files
-                .filter(file => {
+                .filter((file) => {
                     return shouldFileDisplay(file)
                 })
                 .sort((file1, file2) => {
@@ -55,7 +55,7 @@ const FileListPartial = props => {
                     }
                     return result
                 })
-                .map(file => {
+                .map((file) => {
                     const filename = getTitleFromFile(file)
                     return (
                         <ListItem className={classes.listitem} key={file.id}>
@@ -100,7 +100,7 @@ const PeriodList = ({ files, headline, sortBy }) => {
 
 const Periods = ({ files, sortBy }) => {
     const createFilter = (older, younger = new Date()) => {
-        return file => {
+        return (file) => {
             // @ts-ignore
             const date = parseInt(Date.parse(file[sortBy]))
 
@@ -181,7 +181,7 @@ const Periods = ({ files, sortBy }) => {
  *
  * @param {FileListComponentProps} props
  */
-const FileListComponent = props => {
+const FileListComponent = (props) => {
     const { emptyMessage, files, searchTerm, setSortBy, sortBy, title } = props
     document.title = `${searchTerm ? 'Search Result' : title} – Fulcrum.wiki`
     return (
@@ -254,7 +254,7 @@ const FileListComponent = props => {
 export default FileListComponent
 
 function useStyles() {
-    const useStyles = makeStyles(theme => {
+    const useStyles = makeStyles((theme) => {
         return {
             icon: {
                 color: theme.palette.primary.main,

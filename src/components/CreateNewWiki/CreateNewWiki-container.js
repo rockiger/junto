@@ -2,7 +2,7 @@
 import React, { useEffect, useGlobal, useRef } from 'reactn'
 import { useHistory, useLocation } from 'react-router'
 
-import Spinner from 'components/spinner'
+import Spinner from 'components/gsuite-components/spinner'
 import { createFile, createNewWiki, updateFile } from 'lib/gdrive'
 import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
 
@@ -96,7 +96,7 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
  * @param {string} search
  * @returns { {folderId: string, action: string, userId: string } | null}
  */
-export const getState = search => {
+export const getState = (search) => {
     const urlParams = new URLSearchParams(search)
 
     const stateString = urlParams.get('state')

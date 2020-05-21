@@ -3,7 +3,7 @@ import React, { useGlobal } from 'reactn'
 import { useStyles } from './SidebarTree-styles'
 import { SidebarTreeItem } from './SidebarTreeItem'
 import { getOverviewFileId, sortFilesByName } from './SidebarTree-helper'
-import Spinner from '../../spinner'
+import Spinner from '../../gsuite-components/spinner'
 import { MYHOME } from '../../../lib/constants'
 
 export const SidebarTreeComponent = ({ rootFolderId, files }) => {
