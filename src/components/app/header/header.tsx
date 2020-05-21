@@ -14,7 +14,7 @@ export default function Header(props: any) {
     return (
         <div className={styles.Header}>
             <Navbar isSignedIn={isSignedIn}>
-                <Help />
+                {isSignedIn && <Help />}
                 <GoogleLogin
                     clientId={CLIENT_ID}
                     apiKey={API_KEY}
