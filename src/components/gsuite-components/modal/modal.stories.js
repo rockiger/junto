@@ -23,6 +23,7 @@ storiesOf('Modal', module)
                 <Modal
                     isOpen={isOpen}
                     closeModal={() => setIsOpen(false)}
+                    fullHeight
                     title="Help"
                 >
                     <ModalContent />

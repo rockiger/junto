@@ -11,7 +11,8 @@ interface Props {
     selected?: boolean
 }
 
-export default function Button({
+export { IconButton }
+export default function IconButton({
     ariaLabel,
     children,
     className,

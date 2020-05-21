@@ -2,12 +2,15 @@ import React, { ReactElement } from 'react'
 
 import styles from './button.module.scss'
 
+export { Button }
+export default Button
+
 interface Props {
     children: ReactElement
     primary?: boolean
 }
 
-export default function Button({ children, ...props }: Props): ReactElement {
+function Button({ children, ...props }: Props): ReactElement {
     return (
         <div {...props} className={styles.Button}>
             {children}
