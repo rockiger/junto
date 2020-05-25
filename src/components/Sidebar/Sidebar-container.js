@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 import {
-    getIdByName,
     getPageId,
     getParentFolderId,
+    getParentFolderIdOfNewFile,
     isPage,
 } from './Sidebar-helper'
 import { createFile, updateFile, createNewWiki } from '../../lib/gdrive'
@@ -13,13 +13,13 @@ import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
 import SidebarRenderer from './Sidebar-component'
 
 class Sidebar extends React.Component {
-    onClickNewButton = async ev => {
+    onClickNewButton = async (ev) => {
         this.setGlobal({ isCreatingNewFile: true })
         let parentFolderIdOfNewFile
         console.log(isPage(this.props.location))
         if (isPage(this.props.location)) {
             const pageId = getPageId(this.props.location)
-            parentFolderIdOfNewFile = getIdByName(
+            parentFolderIdOfNewFile = getParentFolderIdOfNewFile(
                 pageId,
                 this.global.initialFiles
             )
