@@ -12,10 +12,10 @@ export function GlobalShortcuts() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    {/* <tr>
                         <td>Create a new page</td>
                         <td>c</td>
-                    </tr>
+                    </tr> */}
                     <tr>
                         <td>Edit the current page</td>
                         <td>e</td>
