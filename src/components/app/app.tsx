@@ -1,6 +1,6 @@
 import React, { useEffect, useGlobal } from 'reactn'
 import { BrowserRouter as Router } from 'react-router-dom'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 import { initGA, setGA } from 'components/Tracking'
 
@@ -21,7 +21,7 @@ export default function App() {
 
     return (
         <div
-            className={classNames(styles.App, {
+            className={clsx(styles.App, {
                 [styles.App__isSignedIn]: isSignedIn,
             })}
         >

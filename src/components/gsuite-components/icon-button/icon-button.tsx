@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 import styles from './icon-button.module.scss'
 
@@ -22,7 +22,7 @@ export default function IconButton({
     return (
         <div
             arial-label={ariaLabel}
-            className={classNames(
+            className={clsx(
                 styles.IconButton,
                 className,
                 selected && styles.IconButton__selected

@@ -97,7 +97,7 @@
 
 .title_wrapper {
     display: flex;
-    color: #5f6368;
+    color: $button-grey;
     align-items: center;
     @media (min-width: $md) {
         min-width: 236px;

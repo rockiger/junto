@@ -1,7 +1,7 @@
 import React, { useDispatch, useEffect, useGlobal } from 'reactn'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 import IconButton from 'components/gsuite-components/icon-button'
 import MenuIcon from 'mdi-react/MenuIcon'
@@ -48,7 +48,7 @@ const Navbar = (props) => {
                 </div>
             )}
             <Link
-                className={classNames(
+                className={clsx(
                     styles.Navbar_logoContainer,
                     isSignedIn && styles.Navbar_logoContainer__isSignedIn
                 )}

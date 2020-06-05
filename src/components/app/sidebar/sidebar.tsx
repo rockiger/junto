@@ -1,5 +1,5 @@
 import React, { useGlobal } from 'reactn'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 import SidebarContent from 'components/Sidebar'
 
@@ -12,14 +12,14 @@ export default function Sidebar(props: any) {
     return (
         <>
             <div
-                className={classNames(
+                className={clsx(
                     styles.Sidebar_overlay,
                     showSidebarOnMobile && styles.Sidebar_overlay__show
                 )}
                 onClick={() => setShowSidebarOnMobile(false)}
             />
             <div
-                className={classNames(
+                className={clsx(
                     styles.Sidebar,
                     showSidebarOnMobile && styles.Sidebar__show
                 )}

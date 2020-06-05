@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
@@ -25,10 +25,10 @@ export const SearchAutocomplete = ({
     useEffect(() => {
         setFilteredFiles(
             files
-                .filter(file =>
+                .filter((file) =>
                     file.name.toLowerCase().includes(searchValue.toLowerCase())
                 )
-                .filter(file => {
+                .filter((file) => {
                     const ext = getExtFromFileName(file.name)
                     return ext === EXT
                 })
@@ -86,7 +86,7 @@ export const SearchAutocomplete = ({
                     const filename = getTitleFromFile(file)
                     return (
                         <div
-                            className={classNames(
+                            className={clsx(
                                 styles.SearchAutocomplete_MenuItem,
                                 index === selectedRow &&
                                     styles.SearchAutocomplete_MenuItem__selected

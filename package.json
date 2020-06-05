@@ -13,7 +13,7 @@
         "@types/react-dom": "^16.9.3",
         "@types/react-router": "^5.1.2",
         "@types/react-router-dom": "^5.1.2",
-        "classnames": "^2.2.6",
+        "clsx": "^1.1.1",
         "dexie": "^2.0.4",
         "image-extensions": "^1.1.0",
         "immutable": "^4.0.0-rc.12",

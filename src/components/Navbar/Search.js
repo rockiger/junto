@@ -1,6 +1,6 @@
 import React, { useGlobal, useEffect, useRef, useState } from 'reactn'
 import useDimensions from 'react-use-dimensions'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
@@ -51,7 +51,7 @@ export const Search = ({ clearSearch, submit }) => {
 
     return (
         <div
-            className={classNames(
+            className={clsx(
                 styles.Search,
                 isSearchFieldActive && styles.Search__active,
                 isSearchFieldActive &&
