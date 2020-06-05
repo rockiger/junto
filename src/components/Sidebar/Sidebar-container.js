@@ -29,10 +29,11 @@ class Sidebar extends React.Component {
                     this.global.initialFiles
                 )
                 try {
-                    parentFolderIdOfNewFile = await createNewWiki(
-                        pageId,
-                        parentFolderId
-                    )
+                    parentFolderIdOfNewFile = await createNewWiki({
+                        name: pageId,
+                        parentId: parentFolderId,
+                        isWikiRoot: false,
+                    })
                 } catch (err) {
                     this.setGlobal({ isCreatingNewFile: false })
                     console.log(err)

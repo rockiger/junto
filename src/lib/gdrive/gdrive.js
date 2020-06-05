@@ -164,28 +164,35 @@ export async function createFile(
 }
 
 /**
+ * @typedef CreateNewWikiParams
+ * @property {string} [name]
+ * @property {string|null} [parentId]
+ * @property {boolean} [supportsAllDrives]
+ * @property {string} [description]
+ * @property {boolean} [isWikiRoot]
+ */
+/**
  * Creates a new (wiki) folder in the base directory
  *
  * @method createNewWiki
- * @param {String} name Name of the new wiki on Google Drive
- * @return {String} An id of the created file
+ * @param {CreateNewWikiParams} [opts]
+ * @return {string} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export async function createNewWiki(
+export async function createNewWiki({
+    description = '',
+    isWikiRoot = true,
     name = 'Fulcrum Documents',
     parentId = null,
     supportsAllDrives = true,
-    description = ''
-) {
+} = {}) {
     const fileMetadata = {
         name: name,
         mimeType: 'application/vnd.google-apps.folder',
-        properties: {
-            wikiRoot: true,
-        },
     }
     if (parentId) fileMetadata.parents = [parentId]
     if (description) fileMetadata.description = description
+    if (isWikiRoot) fileMetadata.properties = { wikiRoot: true }
 
     try {
         const result = await gapi.client.drive.files.create({

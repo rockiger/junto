@@ -39,12 +39,12 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                         // Create wiki folder with extra meta data and overview file
                         // Show spinner
                         setIsCreatingNewFile(true)
-                        const newRootFolderId = await createNewWiki(
+                        const newRootFolderId = await createNewWiki({
                             name,
-                            folderId,
-                            true,
-                            description
-                        )
+                            parentId: folderId,
+                            supportsAllDrives: true,
+                            description,
+                        })
                         const newFileId = await createFile(
                             OVERVIEW_NAME,
                             newRootFolderId,

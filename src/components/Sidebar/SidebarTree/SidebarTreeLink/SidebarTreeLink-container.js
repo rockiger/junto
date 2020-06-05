@@ -33,10 +33,11 @@ export function SidebarTreeLink(props) {
         if (!parentFolderIdOfNewFile) {
             const parentFolderId = getParentFolderId(pageId, initialFiles)
             try {
-                parentFolderIdOfNewFile = await createNewWiki(
-                    pageId,
-                    parentFolderId
-                )
+                parentFolderIdOfNewFile = await createNewWiki({
+                    name: pageId,
+                    parentId: parentFolderId,
+                    isWikiRoot: false,
+                })
             } catch (err) {
                 setIsCreatingNewFile(false)
                 console.log(err)
