@@ -17,9 +17,7 @@ export default function Help(props) {
             </IconButton>
             {isOpen && (
                 <Modal
-                    aria-labelledby="scroll-dialog-title"
-                    aria-describedby="scroll-dialog-description"
-                    closeModal={() => setIsOpen(false)}
+                    onClose={() => setIsOpen(false)}
                     isOpen={isOpen}
                     fullHeight
                     maxWidth="lg"

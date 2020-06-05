@@ -7,7 +7,7 @@ import Button from './button'
 
 storiesOf('Button', module)
     .addDecorator(withKnobs)
-    .addDecorator(story => (
+    .addDecorator((story) => (
         <div
             style={{
                 display: 'flex',
@@ -22,6 +22,13 @@ storiesOf('Button', module)
         return (
             <>
                 <Button>Sign up</Button>
+            </>
+        )
+    })
+    .add('primary', () => {
+        return (
+            <>
+                <Button primary>Sign up</Button>
             </>
         )
     })

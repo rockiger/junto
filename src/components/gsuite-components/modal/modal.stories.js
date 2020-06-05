@@ -22,7 +22,7 @@ storiesOf('Modal', module)
                 <button onClick={() => setIsOpen(true)}>Open Modal</button>
                 <Modal
                     isOpen={isOpen}
-                    closeModal={() => setIsOpen(false)}
+                    onClose={() => setIsOpen(false)}
                     fullHeight
                     title="Help"
                 >
@@ -39,7 +39,7 @@ storiesOf('Modal', module)
                 <Modal
                     isOpen={isOpen}
                     maxWidth="xs"
-                    closeModal={() => setIsOpen(false)}
+                    onClose={() => setIsOpen(false)}
                     title="Help"
                 >
                     <ModalContent />
@@ -55,7 +55,7 @@ storiesOf('Modal', module)
                 <Modal
                     isOpen={isOpen}
                     maxWidth="sm"
-                    closeModal={() => setIsOpen(false)}
+                    onClose={() => setIsOpen(false)}
                     title="Help"
                 >
                     <ModalContent />
@@ -71,7 +71,7 @@ storiesOf('Modal', module)
                 <Modal
                     isOpen={isOpen}
                     maxWidth="md"
-                    closeModal={() => setIsOpen(false)}
+                    onClose={() => setIsOpen(false)}
                     title="Help"
                 >
                     <ModalContent />
@@ -87,7 +87,7 @@ storiesOf('Modal', module)
                 <Modal
                     isOpen={isOpen}
                     maxWidth="lg"
-                    closeModal={() => setIsOpen(false)}
+                    onClose={() => setIsOpen(false)}
                     title="Help"
                 >
                     <ModalContent />
@@ -103,7 +103,7 @@ storiesOf('Modal', module)
                 <Modal
                     isOpen={isOpen}
                     maxWidth="xl"
-                    closeModal={() => setIsOpen(false)}
+                    onClose={() => setIsOpen(false)}
                     title="Help"
                 >
                     <ModalContent />

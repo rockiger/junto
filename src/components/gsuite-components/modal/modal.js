@@ -1,7 +1,7 @@
 //@ts-check
 import React from 'react'
 import ReactModal from 'react-modal'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import CloseIcon from 'mdi-react/CloseIcon'
 
 import IconButton from '../icon-button'
@@ -13,22 +13,21 @@ export default Modal
  * @typedef ModalProps
  * @property {any[]} [buttons]
  * @property {any} children
- * @property {function} closeModal
- * @property {boolean} fullHeight
- * @property {boolean} isOpen
+ * @property {function} onClose
+ * @property {boolean} [fullHeight=false]
+ * @property {boolean} [isOpen=true]
  * @property {('xs'|'sm'|'md'|'lg'|'xl'|false)} [maxWidth]
  * @property {function} onRequestClose
  * @property {string} title
  */
 
 /**
- *
  * @param {ModalProps} props
  */
 function Modal({
     buttons,
     children,
-    closeModal,
+    onClose,
     fullHeight = false,
     isOpen,
     maxWidth = false,
@@ -37,13 +36,14 @@ function Modal({
 }) {
     ReactModal.setAppElement('#root')
 
+    console.log(fullHeight)
     return (
         <ReactModal
             {...rest}
             isOpen={isOpen}
             contentLabel="onRequestClose Example"
-            onRequestClose={closeModal}
-            className={classNames(s.Modal, {
+            onRequestClose={onClose}
+            className={clsx(s.Modal, {
                 [s.Modal__fullHeight]: fullHeight,
                 [s[`Modal__${maxWidth}`]]: maxWidth,
             })}
@@ -51,13 +51,17 @@ function Modal({
         >
             <div className={s.Modal_header}>
                 <div className={s.Modal_header_title}>{title}</div>
-                <IconButton onClick={closeModal}>
+                <IconButton onClick={onClose}>
                     <CloseIcon />
                 </IconButton>
             </div>
             <div className={s.Modal_sidebar}></div>
             <div className={s.Modal_content}>{children}</div>
-            {buttons && <div className={s.Modal_footer}></div>}
+            {buttons && (
+                <div className={s.Modal_footer}>
+                    {buttons.map((button) => button)}
+                </div>
+            )}
         </ReactModal>
     )
 }
