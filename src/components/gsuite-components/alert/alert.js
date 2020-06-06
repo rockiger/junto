@@ -11,8 +11,8 @@ export { Alert }
 /**
  * @typedef AlertExtraProps
  * @property {string} [cancelLabel]
- * @property {function} onClose
- * @property {function} [onOk]
+ * @property {(ev) => void} onClose
+ * @property {(ev) => void} [onOk]
  * @property {string} [okLabel]
  */
 
