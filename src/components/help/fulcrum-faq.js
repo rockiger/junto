@@ -7,7 +7,6 @@ export { FulcrumFaq }
 function FulcrumFaq() {
     return (
         <>
-            <h1>Fulcrum FAQ</h1>
             <h2>How can I delete single pages?</h2>
             <p>
                 Right now, it is not possible to delete single pages from
@@ -21,26 +20,63 @@ function FulcrumFaq() {
             <p>
                 Right now, it is not possible to delete all sub-pages from
                 Fulcrum itself. To delete them you need to find the folder with
-                the same name of your page in your Google Drive. You find it at
-                the end of the page URL, e.g.
-                https://www.fulcrum.wiki/page/[page-Id].
+                the same name as your page ID in your Google Drive. You find the
+                page ID at the end of the page URL, e.g.{' '}
+                <i>https://www.fulcrum.wiki/page/[page-ID]</i>.
             </p>
-
-            <h2>How can I move wikis?</h2>
+            <h2>How can I move wikis in Google Drive?</h2>
             <p>
-                To move a wiki in your Google Drive you can simply&nbsp;move its
-                folder. For <strong>My Wiki</strong> the folder name is{' '}
-                <strong>Fulcrum Documents</strong>. For all other wikis it is
+                To move a wiki in your Google Drive you can simply move its
+                folder. For <strong>My Wiki</strong>, the folder name is{' '}
+                <strong>Fulcrum Documents</strong>. For all other wikis, it is
                 the same as the name of the wiki.
             </p>
-
+            <h2>How can I move pages?</h2>
+            <p>
+                You can move wiki pages via <strong>Google Drive</strong>.
+                Unfortunately, this is a bit tedious right now. You need to find
+                the file, you want to move, in Google Drive and move it to the
+                right folder. Then you can move this file to the target folder.{' '}
+            </p>
+            <p>
+                To find that folder you need to search for a folder with the
+                same name as the page ID of your target page. You find the page
+                ID at the end of the page URL, e.g.{' '}
+                <i>https://www.fulcrum.wiki/page/[page-ID]</i>.
+            </p>
+            <p>
+                We are working on this feature right, that you don't have to
+                engage in this tedious process.
+            </p>
+            <h2>How can I rename wikis or the root page of a wiki?</h2>
+            <p>
+                Right now, this is not possible. You can't rename{' '}
+                <strong>My Fulcrum</strong> nor the name of a wiki. We are
+                working on this feature, which will make it possible.
+            </p>
+            <h2>How do I create a new (shared) wiki?</h2>
+            <p>
+                To add a new wiki, you have to add it from Google Drive. Simply
+                navigate to the folder on your personal or shared drive where
+                you want to add the new wiki.{' '}
+            </p>
+            <p>
+                Then click the "<strong>New</strong>" button and then on "
+                <strong>More </strong>> <strong>Fulcrum Wiki</strong>". In the
+                occurring dialog give your wiki a name and you are good to go.{' '}
+            </p>
+            <p>
+                You can add as many wikis in different places as you want. But
+                please don't create new wikis in folders that are already used
+                as wikis!
+            </p>
             <h2>
                 I can not share pages. The share dialog always shows an error or
                 is blank.
             </h2>
             <p>
                 For the Google share dialog to function properly you need to
-                deactivate your ad blocker.&nbsp;
+                deactivate your ad blocker.{' '}
             </p>
             <p>The share dialog doesn't work on Shared Drives.</p>
             <h2>I have another question. Where can I get help?</h2>
@@ -53,6 +89,7 @@ function FulcrumFaq() {
                             '_blank'
                         )
                     }
+                    primary
                     style={{ display: 'inline' }}
                 >
                     Ask Question
