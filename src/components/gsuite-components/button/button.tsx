@@ -8,6 +8,7 @@ export default Button
 
 interface Props {
     children: ReactElement | string
+    onClick?: (ev) => void
     primary?: boolean
 }
 

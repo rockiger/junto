@@ -13,7 +13,7 @@ export default Modal
  * @typedef ModalProps
  * @property {any[]} [buttons]
  * @property {any} children
- * @property {function} onClose
+ * @property {(ev) => void} onClose
  * @property {boolean} [fullHeight=false]
  * @property {boolean} [isOpen=true]
  * @property {('xs'|'sm'|'md'|'lg'|'xl'|false)} [maxWidth]
