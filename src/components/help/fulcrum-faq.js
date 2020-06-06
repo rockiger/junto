@@ -66,6 +66,19 @@ function FulcrumFaq() {
                 occurring dialog give your wiki a name and you are good to go.{' '}
             </p>
             <p>
+                <img
+                    className="shadow"
+                    src={process.env.PUBLIC_URL + '/img/Create New Wiki 1.png'}
+                />
+            </p>
+
+            <p>
+                <img
+                    className="shadow"
+                    src={process.env.PUBLIC_URL + '/img/Create New Wiki 2.png'}
+                />
+            </p>
+            <p>
                 You can add as many wikis in different places as you want. But
                 please don't create new wikis in folders that are already used
                 as wikis!
