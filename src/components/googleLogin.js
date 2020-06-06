@@ -265,6 +265,7 @@ export default class GoogleLogin extends React.Component {
                         edge="end"
                         id="authorize_button"
                         className="action"
+                        primary
                         onClick={this.handleAuthClick}
                     >
                         {this.props.buttonText}
