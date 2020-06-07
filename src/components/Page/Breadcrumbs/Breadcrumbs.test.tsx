@@ -1,8 +1,9 @@
 import React, { setGlobal } from 'reactn'
 import ReactDOM from 'react-dom'
+import { IFile, IFileOrNull } from 'reactn/default'
 
 import { BreadcrumbsBar } from './Breadcrumbs'
-import { IMeta, IMetaOrNull, IProps } from './Breadcrumbs.d'
+import { IProps } from './Breadcrumbs.d'
 import {
     getMetaById,
     getParents,
@@ -10,73 +11,73 @@ import {
 } from './Breadcrumbs-helper'
 import { OVERVIEW_NAME, FOLDER_NAME } from 'lib/constants'
 
-const ifolder1: IMetaOrNull = null
-const ifolder2: IMetaOrNull = {
+const ifolder1: IFileOrNull = null
+const ifolder2: IFileOrNull = {
     id: 'xvlc',
     name: 'ifolder2',
     mimeType: 'application/vnd.google-apps.folder',
     parents: ['uiae'],
 }
-const ifolder3: IMetaOrNull = {
+const ifolder3: IFileOrNull = {
     id: 'uiae',
     name: 'ifolder3',
     mimeType: 'application/vnd.google-apps.folder',
     parents: ['üöäp'],
 }
-const ifolder4: IMetaOrNull = {
+const ifolder4: IFileOrNull = {
     id: 'üöäp',
     name: 'ifolder4',
     mimeType: 'application/vnd.google-apps.folder',
     parents: ['nrtd'],
 }
-const ifile2: IMetaOrNull = {
+const ifile2: IFileOrNull = {
     id: 'ifolder2',
     name: 'ifile2',
     mimeType: 'application/json',
     parents: [],
 }
-const ifile3: IMetaOrNull = {
+const ifile3: IFileOrNull = {
     id: 'ifolder3',
     name: 'ifile3',
     mimeType: 'application/json',
     parents: [],
 }
-const ifile4: IMetaOrNull = {
+const ifile4: IFileOrNull = {
     id: 'ifolder4',
     name: 'ifile4',
     mimeType: 'application/json',
     parents: [],
 }
 
-const rootFolder: IMetaOrNull = {
+const rootFolder: IFileOrNull = {
     id: 'snrt',
     name: FOLDER_NAME,
     mimeType: 'application/vnd.google-apps.folder',
     parents: [],
 }
 
-const overviewFile: IMetaOrNull = {
+const overviewFile: IFileOrNull = {
     id: '45',
     name: OVERVIEW_NAME,
     mimeType: 'application/json',
     parents: ['snrt'],
 }
 
-const wikiRootFolder: IMetaOrNull = {
+const wikiRootFolder: IFileOrNull = {
     id: '19-OgtjbJ8WORJK0IHwdvT9rml3cW6TxL',
     name: 'Team2',
     mimeType: 'application/vnd.google-apps.folder',
     parents: [],
 }
 
-const wikiOverviewFile: IMetaOrNull = {
+const wikiOverviewFile: IFileOrNull = {
     id: 'euinaerndiuare',
     name: OVERVIEW_NAME,
     mimeType: 'application/json',
     parents: ['19-OgtjbJ8WORJK0IHwdvT9rml3cW6TxL'],
 }
 
-export const files: Array<IMeta> = [
+export const files: Array<IFile> = [
     ifolder2,
     ifolder3,
     ifolder4,

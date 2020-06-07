@@ -52,11 +52,23 @@ export const filesUpdaterHelper = (
     files: IFile[],
     id: string
 ) => {
-    return files.map(item => {
+    return files.map((item) => {
         if (item.id === id) {
             return { ...item, ...change }
         } else {
             return item
         }
     })
+}
+
+/**
+ * Retrieve the meta information of a given file
+ * @param fileId the id of the file
+ * @param files the list of files where the the meta information are retrieved from
+ * @returns the meta information ot the file
+ */
+export function getMetaById(fileId: String, files: Array<IFile>): IFile | null {
+    const meta = files.find((el: IFile) => el.id === fileId)
+    if (meta) return meta
+    return null
 }

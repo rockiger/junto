@@ -1,12 +1,13 @@
 import React, { useEffect, useGlobal, useState } from 'reactn'
 import { Link } from 'react-router-dom'
+import { IFile, IFileOrNull } from 'reactn/default'
 import { Breadcrumbs, Typography } from '@material-ui/core'
 import NavigateNextIcon from 'mdi-react/NavigateNextIcon'
 
 import { getTitleFromFile } from 'lib/helper'
 
 import { getMetaById, getParents } from './Breadcrumbs-helper'
-import { IMeta, IMetaOrNull, IProps } from './Breadcrumbs.d'
+import { IProps } from './Breadcrumbs.d'
 import { useStyles } from './Breadcrumbs.styles'
 
 /**
@@ -16,8 +17,8 @@ import { useStyles } from './Breadcrumbs.styles'
 export const BreadcrumbsBar = (props: IProps) => {
     const { fileId } = props
     const [files] = useGlobal('initialFiles')
-    const [file, setFile] = useState<IMetaOrNull>(null)
-    const [parents, setParents] = useState<Array<IMeta>>([])
+    const [file, setFile] = useState<IFileOrNull>(null)
+    const [parents, setParents] = useState<Array<IFile>>([])
     const classes = useStyles()
 
     useEffect(() => {

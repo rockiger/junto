@@ -43,7 +43,9 @@ declare module 'reactn/default' {
         mimeType: 'application/vnd.google-apps.folder' | 'application/json'
         shared?: boolean
         ownedByMe?: boolean
-        properties: { [key: string]: any }
+        properties?: { [key: string]: any }
         [key: string]: any
     }
+
+    export type IFileOrNull = IFile | null
 }

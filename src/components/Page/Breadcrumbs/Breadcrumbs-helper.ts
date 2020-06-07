@@ -1,18 +1,8 @@
-import { IMeta, IMetaOrNull } from './Breadcrumbs.d'
+import { IFile, IFileOrNull } from 'reactn/default'
 import { FOLDER_NAME, OVERVIEW_NAME } from 'lib/constants'
+import { getMetaById } from 'lib/helper'
 
-/**
- * Retrieve the meta information of a given file
- * @param fileId the id of the file
- * @param files the list of files where the the meta information are retrieved from
- * @returns the meta information ot the file
- */
-export function getMetaById(fileId: String, files: Array<IMeta>): IMetaOrNull {
-    const meta = files.find((el: IMeta) => el.id === fileId)
-    if (meta) return meta
-    return null
-}
-
+export { getMetaById, getParents, getBreadcrumbName }
 /**
  * Constructs an array of parent files of a given file. A parent file is the file
  * where the id of the file is equal to the name of the parent folder of the
@@ -21,10 +11,7 @@ export function getMetaById(fileId: String, files: Array<IMeta>): IMetaOrNull {
  * @param files the list of files where the parents are retrieved from
  * @returns the list of parents ordered with the farthest parent first
  */
-export function getParents(
-    file: IMetaOrNull,
-    files: Array<IMeta>
-): Array<IMeta> {
+function getParents(file: IFileOrNull, files: Array<IFile>): Array<IFile> {
     // The overview of a wiki shouldn't have a parent
     if (!file || file.name === OVERVIEW_NAME || !file.parents) return []
     const parentFolder = getMetaById(file.parents[0], files)
@@ -41,7 +28,7 @@ export function getParents(
  * @param files the list of files where the index file is retrieved from
  * @returns the file to which the name of the file should be derived from
  */
-export function getBreadcrumbName(folder: IMetaOrNull, files: Array<IMeta>) {
+function getBreadcrumbName(folder: IFileOrNull, files: Array<IFile>) {
     if (!folder) return null
     if (isPersonalRoot(folder)) {
         return findPersonalWikiRootFile(files, folder)
@@ -55,13 +42,13 @@ export function getBreadcrumbName(folder: IMetaOrNull, files: Array<IMeta>) {
     return result ? result : folder
 }
 
-function findWikiFile(files: IMeta[], folder: IMeta) {
-    return files.find(el => el.id === folder.name)
+function findWikiFile(files: IFile[], folder: IFile) {
+    return files.find((el) => el.id === folder.name)
 }
 
-function findWikiRootFile(files: IMeta[], folder: IMeta) {
+function findWikiRootFile(files: IFile[], folder: IFile) {
     const result = files.find(
-        el =>
+        (el) =>
             el.name === OVERVIEW_NAME &&
             el.parents.includes(folder.id) &&
             el.properties &&
@@ -70,17 +57,17 @@ function findWikiRootFile(files: IMeta[], folder: IMeta) {
     return result
 }
 
-function findPersonalWikiRootFile(files: IMeta[], folder: IMeta) {
+function findPersonalWikiRootFile(files: IFile[], folder: IFile) {
     const result = files.find(
-        el => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
+        (el) => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
     )
     return result
 }
 
-function isWikiRoot(folder: IMeta) {
+function isWikiRoot(folder: IFile) {
     return folder.properties && folder.properties.wikiRoot
 }
 
-function isPersonalRoot(folder: IMeta) {
+function isPersonalRoot(folder: IFile) {
     return folder.name === FOLDER_NAME
 }
