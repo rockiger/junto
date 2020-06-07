@@ -67,6 +67,7 @@ function FulcrumFaq() {
             </p>
             <p>
                 <img
+                    alt="Create New Wiki 1/2"
                     className="shadow"
                     src={process.env.PUBLIC_URL + '/img/Create New Wiki 1.png'}
                 />
@@ -74,6 +75,7 @@ function FulcrumFaq() {
 
             <p>
                 <img
+                    alt="Create New Wiki 2/2"
                     className="shadow"
                     src={process.env.PUBLIC_URL + '/img/Create New Wiki 2.png'}
                 />

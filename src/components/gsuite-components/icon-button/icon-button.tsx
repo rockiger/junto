@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import clsx from 'clsx'
-
-import styles from './icon-button.module.scss'
+import { Tooltip } from 'components/gsuite-components/tooltip'
+import s from './icon-button.module.scss'
 
 interface Props {
     ariaLabel?: string
@@ -9,6 +9,7 @@ interface Props {
     className?: string
     onClick?: any
     selected?: boolean
+    tooltip?: string
 }
 
 export { IconButton }
@@ -18,19 +19,22 @@ export default function IconButton({
     className,
     onClick,
     selected,
+    tooltip,
 }: Props): ReactElement {
     return (
-        <div
-            arial-label={ariaLabel}
-            className={clsx(
-                styles.IconButton,
-                className,
-                selected && styles.IconButton__selected
-            )}
-            onClick={onClick}
-            role="button"
-        >
-            <div className={styles.IconButton_inner}>{children}</div>
-        </div>
+        <Tooltip content={tooltip}>
+            <div
+                arial-label={ariaLabel}
+                className={clsx(
+                    s.IconButton,
+                    className,
+                    selected && s.IconButton__selected
+                )}
+                onClick={onClick}
+                role="button"
+            >
+                <div className={s.IconButton_inner}>{children}</div>
+            </div>
+        </Tooltip>
     )
 }

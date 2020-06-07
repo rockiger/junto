@@ -12,7 +12,12 @@ export default function Help(props) {
 
     return (
         <>
-            <IconButton id="HelpButton" onClick={toggle} selected={isOpen}>
+            <IconButton
+                id="HelpButton"
+                onClick={toggle}
+                selected={isOpen}
+                tooltip="Show Help"
+            >
                 <HelpIcon />
             </IconButton>
             {isOpen && (
