@@ -9175,9 +9175,9 @@ md5.js@^1.3.4:
     safe-buffer "^5.1.2"
 
 mdi-react@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/mdi-react/-/mdi-react-6.1.0.tgz#eb53447dff0aef899d95fb951f00216ec6b2c63f"
-  integrity sha512-k/Tu204ok5ouabcrC8/9CaekseMQ+CAhHCVi7Wr9Au5qW9UkxkW/TNSKEpDImEQ2nOAXieQTawYkddNlNfxE9w==
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/mdi-react/-/mdi-react-6.7.0.tgz#d291f919b5f0f99cbbeac111f2c9ca5184607b6b"
+  integrity sha512-Xpl3bXh4Nmuufoll8ejtErsDd0v/Ty+Je+qC9V3owriFUQZno91F/f0CkAdQj9fRqWY+LwjhFcWii+3lFFGKvQ==
 
 mdn-data@2.0.4:
   version "2.0.4"
