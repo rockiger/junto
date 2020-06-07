@@ -7,6 +7,7 @@ interface Props {
     ariaLabel?: string
     children: ReactElement
     className?: string
+    id?: string
     onClick?: any
     selected?: boolean
     tooltip?: string

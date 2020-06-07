@@ -17,7 +17,6 @@ export default Modal
  * @property {boolean} [fullHeight=false]
  * @property {boolean} [isOpen=true]
  * @property {('xs'|'sm'|'md'|'lg'|'xl'|false)} [maxWidth]
- * @property {function} onRequestClose
  * @property {string} title
  */
 

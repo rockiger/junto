@@ -3,7 +3,6 @@ import React from 'react'
 
 import { Modal } from '../modal'
 
-import styles from './alert.module.scss'
 import Button from '../button'
 
 export { Alert }
@@ -17,7 +16,6 @@ export { Alert }
  */
 
 /**
- *
  * @param {import('../modal/modal').ModalProps & AlertExtraProps} props
  */
 export default function Alert({

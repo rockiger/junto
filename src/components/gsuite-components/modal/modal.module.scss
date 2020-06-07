@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     max-height: calc(100% - 4rem);
-    font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    outline: thin dotted;
     width: calc(100% - 4rem);
     @media (max-width: $md-max) {
         display: block;
