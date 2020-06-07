@@ -20,10 +20,12 @@ export default function IconButton({
     onClick,
     selected,
     tooltip,
+    ...rest
 }: Props): ReactElement {
     return (
         <Tooltip content={tooltip}>
-            <div
+            <button
+                {...rest}
                 arial-label={ariaLabel}
                 className={clsx(
                     s.IconButton,
@@ -31,10 +33,9 @@ export default function IconButton({
                     selected && s.IconButton__selected
                 )}
                 onClick={onClick}
-                role="button"
             >
                 <div className={s.IconButton_inner}>{children}</div>
-            </div>
+            </button>
         </Tooltip>
     )
 }

@@ -1,11 +1,12 @@
 @import '_base.scss';
 
 .IconButton {
+    background-color: transparent;
     border: 1px solid transparent;
     box-sizing: border-box;
     color: $grey-700;
     cursor: pointer;
-    display: inline-block;
+    display: inline-flex;
     margin: 0;
     outline: none;
     -webkit-tap-highlight-color: transparent;

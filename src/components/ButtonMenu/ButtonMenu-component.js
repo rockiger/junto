@@ -30,6 +30,7 @@ export function ButtonMenuComponent({
                 aria-haspopup="true"
                 className={Boolean(anchorEl) ? classes.active : null}
                 onClick={onClick}
+                tooltip="Sort options"
             >
                 {children}
             </Button>
@@ -49,7 +50,7 @@ export function ButtonMenuComponent({
                     horizontal: 'center',
                 }}
             >
-                {items.map(el => (
+                {items.map((el) => (
                     <MenuItem key={el.key} onClick={() => onSelect(el.handler)}>
                         {selectable && el.active && (
                             <ListItemIcon style={{ minWidth: '2.25rem' }}>

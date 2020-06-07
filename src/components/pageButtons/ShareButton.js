@@ -16,6 +16,7 @@ export function ShareButton({ fileId }) {
             onClick={() => {
                 window.share.showSettingsDialog()
             }}
+            tooltip="Share page"
         >
             <AccountPlusIcon />
         </Button>

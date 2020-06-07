@@ -22,6 +22,7 @@ function Tooltip({ children, content }) {
         <TooltipBase
             arrow={false}
             content={content}
+            direction="down"
             hoverDelay={500}
             isOpen={!content ? false : undefined}
             mouseOutDelay={200}
