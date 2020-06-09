@@ -1,6 +1,6 @@
 import { IFile, IFileOrNull } from 'reactn/default'
 import { FOLDER_NAME, OVERVIEW_NAME } from 'lib/constants'
-import { getMetaById } from 'lib/helper'
+import { getMetaById, isWikiRootFolder as isWikiRoot } from 'lib/helper'
 
 export { getMetaById, getParents, getBreadcrumbName }
 /**
@@ -62,10 +62,6 @@ function findPersonalWikiRootFile(files: IFile[], folder: IFile) {
         (el) => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
     )
     return result
-}
-
-function isWikiRoot(folder: IFile) {
-    return folder.properties && folder.properties.wikiRoot
 }
 
 function isPersonalRoot(folder: IFile) {

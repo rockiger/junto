@@ -1,5 +1,9 @@
 import { sortByDate, getTitleFromFile } from './helper'
-import { filesUpdaterHelper, filesUpdater } from './globalStateHelper'
+import {
+    filesUpdaterHelper,
+    filesUpdater,
+    hasChildren,
+} from './globalStateHelper'
 import { EXT, OVERVIEW_NAME, MYHOME } from '../constants'
 
 describe('Helper', () => {
@@ -70,5 +74,18 @@ describe('globalStateHelper', () => {
             initialFiles: [{ id: 1, name: 'Marco' }],
         }
         expect(filesUpdater(change1, global1, id1)).toEqual(expected1)
+    })
+    test('hasChildren', () => {
+        const files = [
+            { id: '1', name: 'parent' },
+            { id: '2', name: '1' },
+            { id: '3', name: 'noparent' },
+            { id: '4', name: 'child', parents: ['2'] },
+            { id: '5', name: 'noparentWithFolder' },
+            { id: '6', name: '5' },
+        ]
+        expect(hasChildren('1', files)).toBe(true)
+        expect(hasChildren('3', files)).toBe(false)
+        expect(hasChildren('5', files)).toBe(false)
     })
 })

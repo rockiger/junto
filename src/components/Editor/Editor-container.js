@@ -20,6 +20,7 @@ import {
     save,
     updateModifiedTimeInGlobalState,
 } from './Editor-helper'
+import ArchiveButton from 'components/archive/archive-button'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -150,7 +151,7 @@ const EditorLogic = React.forwardRef(
             setValue(value)
         }
 
-        const onKeyDown = ev => {
+        const onKeyDown = (ev) => {
             if (!readOnly) {
                 if (isSaveHotkey(ev)) return
                 ev.stopPropagation()
@@ -169,15 +170,16 @@ const EditorLogic = React.forwardRef(
         // TODO: Move to editor-component
         return (
             <div onKeyDown={onKeyDown}>
-                <PageButtons>
-                    {canEdit && <ShareButton fileId={fileId} />}
-                    {canEdit && (
+                {canEdit && (
+                    <PageButtons>
+                        <ShareButton fileId={fileId} />
+                        <ArchiveButton fileId={fileId} />
                         <ToggleReadOnlyButton
                             readOnly={readOnly}
                             onClick={onClickToggleButton}
                         />
-                    )}
-                </PageButtons>
+                    </PageButtons>
+                )}
                 <MaterialEditor
                     apiKey={API_KEY}
                     initialValue={initialState}

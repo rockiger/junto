@@ -9,7 +9,7 @@ export { Tooltip }
 
 /**
  * @typedef TooltipProps
- * @property {string|undefined} content
+ * @property {string|undefined} [content]
  * @property {React.ReactElement} children
  */
 

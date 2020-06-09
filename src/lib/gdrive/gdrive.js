@@ -37,7 +37,7 @@ let clientLoaded = false
  * Never rejects
  *
  * @method init
- * @return {Promise}
+ * @return {boolean}
  */
 export function isLoaded() {
     return clientLoaded
@@ -357,7 +357,7 @@ export function renameFile(driveId, newName, supportsAllDrives = true) {
 /**
  * Changes the metadata of the file on Google Drive. Can reject
  *
- * @method renameFile
+ * @method updateMetadata
  * @param {String} driveId Google Drive file identifier
  * @param {object} metadata New metadata that will be displayed in drive
  * @return {Promise|Object} A promise of the result that returns

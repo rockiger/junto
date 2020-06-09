@@ -31,11 +31,11 @@ export default function Alert({
         <Modal
             {...rest}
             buttons={[
-                <Button onClick={onClose} primary={!onOk}>
+                <Button key="close" onClick={onClose} primary={!onOk}>
                     {onOk ? cancelLabel : 'Close'}
                 </Button>,
                 onOk ? (
-                    <Button primary onClick={onOk}>
+                    <Button key="ok" primary onClick={onOk}>
                         {okLabel}
                     </Button>
                 ) : null,

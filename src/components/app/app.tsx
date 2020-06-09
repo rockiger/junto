@@ -1,7 +1,7 @@
 import React, { useEffect, useGlobal } from 'reactn'
 import { BrowserRouter as Router } from 'react-router-dom'
 import clsx from 'clsx'
-
+import { SnackbarProvider } from 'notistack'
 import { initGA, setGA } from 'components/Tracking'
 
 import Footer from './footer'
@@ -25,12 +25,14 @@ export default function App() {
                 [styles.App__isSignedIn]: isSignedIn,
             })}
         >
-            <Router>
-                <Header />
-                {isSignedIn && <Sidebar />}
-                <Main />
-                {!isSignedIn && <Footer />}
-            </Router>
+            <SnackbarProvider maxSnack={3}>
+                <Router>
+                    <Header />
+                    {isSignedIn && <Sidebar />}
+                    <Main />
+                    {!isSignedIn && <Footer />}
+                </Router>
+            </SnackbarProvider>
         </div>
     )
 }

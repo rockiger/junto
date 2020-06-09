@@ -37,13 +37,19 @@ declare module 'reactn/default' {
     }
 
     export interface IFile {
+        description?: string
         id: string
         name: string
         parents: Array<string> // the id of the parrent of a file
         mimeType: 'application/vnd.google-apps.folder' | 'application/json'
         shared?: boolean
         ownedByMe?: boolean
-        properties?: { [key: string]: any }
+        properties?: {
+            archived?: 'false' | 'true'
+            pageName?: string
+            wikiRoot?: 'false' | 'true'
+            [key: string]: any
+        }
         [key: string]: any
     }
 
