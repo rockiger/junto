@@ -1,15 +1,17 @@
 //@ts-check
 import React, { useGlobal, useState } from 'reactn'
 
-import ArchiveIcon from 'mdi-react/ArchiveArrowDownOutlineIcon'
+import ArchiveIconDown from 'mdi-react/ArchiveArrowDownOutlineIcon'
+import ArchiveIconUp from 'mdi-react/ArchiveArrowUpIcon'
 import { useSnackbar } from 'notistack'
 
 import { Alert, IconButton } from 'components/gsuite-components'
 import {
+    filesUpdater,
     getMetaById,
     hasChildren,
+    isArchived,
     isWikiRootFile,
-    filesUpdater,
 } from 'lib/helper'
 
 import s from './archive-button.module.scss'
@@ -33,6 +35,7 @@ function ArchiveButton({ fileId }) {
     const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const [alert, setAlert] = useState(initialAlert)
+    const file = getMetaById(fileId, initialFiles)
 
     return (
         <div className={s.ArchiveButton}>
@@ -40,9 +43,15 @@ function ArchiveButton({ fileId }) {
                 id="HelpButton"
                 onClick={onClickIconButton}
                 selected={alert.isOpen}
-                tooltip="Archive page"
+                tooltip={
+                    file && isArchived(file) ? 'Restore page' : 'Archive page'
+                }
             >
-                <ArchiveIcon />
+                {file && isArchived(file) ? (
+                    <ArchiveIconUp />
+                ) : (
+                    <ArchiveIconDown />
+                )}
             </IconButton>
             {alert && (
                 <Alert

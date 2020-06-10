@@ -6,6 +6,7 @@ export {
     filesUpdaterHelper,
     getMetaById,
     hasChildren,
+    isArchived,
     isWikiRootFile,
     isWikiRootFolder,
 }
@@ -92,13 +93,21 @@ function hasChildren(fileId: string, files: IFile[]) {
     return false
 }
 
+function hasProperty(file: IFile, property: string, question: any = 'true') {
+    return (
+        file.properties &&
+        file.properties[property] &&
+        file.properties[property] === question
+    )
+}
+
+function isArchived(file: IFile) {
+    return hasProperty(file, 'isArchived')
+}
+
 function isWikiRootFile(file: IFile) {
     return file.name === OVERVIEW_NAME
 }
 function isWikiRootFolder(folder: IFile) {
-    return (
-        folder.properties &&
-        folder.properties.wikiRoot &&
-        folder.properties.wikiRoot === 'true'
-    )
+    return hasProperty(folder, 'wikiRoot')
 }
