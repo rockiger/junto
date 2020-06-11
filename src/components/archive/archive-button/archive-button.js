@@ -41,7 +41,11 @@ function ArchiveButton({ fileId }) {
         <div className={s.ArchiveButton}>
             <IconButton
                 id="HelpButton"
-                onClick={onClickIconButton}
+                onClick={
+                    file && isArchived(file)
+                        ? onClickUnArchiveButton
+                        : onClickArchiveButton
+                }
                 selected={alert.isOpen}
                 tooltip={
                     file && isArchived(file) ? 'Restore page' : 'Archive page'
@@ -68,7 +72,7 @@ function ArchiveButton({ fileId }) {
         </div>
     )
 
-    function onClickIconButton() {
+    function onClickArchiveButton() {
         const file = getMetaById(fileId, initialFiles)
         if (!file) return //something went wrong
         if (isWikiRootFile(file)) {
@@ -92,6 +96,32 @@ function ArchiveButton({ fileId }) {
         }
     }
 
+    function onClickUnArchiveButton() {
+        const file = getMetaById(fileId, initialFiles)
+        if (!file) return //something went wrong
+        if (isWikiRootFile(file)) {
+            //!
+            setAlert({
+                buttonText: 'Archive wiki',
+                content:
+                    'Do you want to archive this wiki? All pages in this wiki will be archived. The action can be undone.',
+                isOpen: true,
+                title: 'Archive wiki?',
+            })
+        } else if (hasChildren(fileId, initialFiles)) {
+            //!
+            setAlert({
+                buttonText: 'Archive page',
+                content: `All pages below this page will move one step up in the page
+                hierachy. They will not be archived. This movement of children con not be undone.`,
+                isOpen: true,
+                title: 'Archive page?',
+            })
+        } else {
+            unArchiveSinglePageWithoutChilds(file)
+        }
+    }
+
     function archiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
@@ -105,6 +135,23 @@ function ArchiveButton({ fileId }) {
         setInitialFiles(updatedFiles.initialFiles)
         updateMetadata(file.id, { properties: newProperties })
         enqueueSnackbar('Page archived.', {
+            autoHideDuration: 5000,
+        })
+    }
+
+    function unArchiveSinglePageWithoutChilds(file) {
+        console.log('archive page')
+        const { properties } = file
+        const newProperties = { ...properties, isArchived: false }
+        const updatedFiles = filesUpdater(
+            { properties: newProperties },
+            global,
+            file.id
+        )
+        setFiles(updatedFiles.files)
+        setInitialFiles(updatedFiles.initialFiles)
+        updateMetadata(file.id, { properties: newProperties })
+        enqueueSnackbar('Page restored.', {
             autoHideDuration: 5000,
         })
     }
