@@ -1,5 +1,6 @@
 //@ts-check
-import { EXT, OVERVIEW_NAME } from '../../../lib/constants'
+import { EXT, OVERVIEW_NAME } from 'lib/constants'
+import { isArchived } from 'lib/helper'
 
 /**
  *
@@ -8,7 +9,7 @@ import { EXT, OVERVIEW_NAME } from '../../../lib/constants'
  * @returns {string | null}
  */
 export function getFolderId(fileId, files) {
-    const folder = files.find(file => file.name === fileId)
+    const folder = files.find((file) => file.name === fileId)
     return folder ? folder.id : null
 }
 
@@ -20,7 +21,7 @@ export function getFolderId(fileId, files) {
  */
 export function getOverviewFileId(files, rootFolderId) {
     const overview = files.find(
-        file =>
+        (file) =>
             file.name === OVERVIEW_NAME && file.parents.includes(rootFolderId)
     )
     if (overview) return overview.id
@@ -35,7 +36,7 @@ export function getOverviewFileId(files, rootFolderId) {
  */
 export function filterChildFiles(folderId, files) {
     if (folderId)
-        return files.filter(file => {
+        return files.filter((file) => {
             try {
                 return file.parents && file.parents.includes(folderId)
             } catch (err) {
@@ -60,7 +61,8 @@ export function shouldFileDisplay(file, parentId) {
         name.endsWith(EXT) &&
         parents &&
         parents.includes(parentId) &&
-        trashed === false
+        trashed === false &&
+        !isArchived(file)
     )
 }
 
