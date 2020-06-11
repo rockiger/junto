@@ -5,6 +5,7 @@ import { Redirect } from 'react-router'
 import Spinner from 'components/gsuite-components/spinner'
 
 import FileList from 'components/Home/FileList'
+import { isArchived } from 'lib/helper'
 
 function SharedWithMe(props) {
     const { isSignedIn, isSigningIn } = props
@@ -35,7 +36,11 @@ SharedWithMe.propTypes = {
 
 function filterSharedWithMe(files) {
     const filtered = files.filter((file) => {
-        return file.shared === true && file.ownedByMe === false
+        return (
+            file.shared === true &&
+            file.ownedByMe === false &&
+            !isArchived(file)
+        )
     })
     return filtered
 }

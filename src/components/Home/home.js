@@ -6,6 +6,7 @@ import { LOCALSTORAGE_NAME } from 'lib/constants'
 
 import FrontPage from './front-page'
 import FileList from './FileList'
+import { isArchived } from 'lib/helper'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 
@@ -37,7 +38,7 @@ function Home(props) {
         return (
             <FileList
                 emptyMessage="There are no files in this view."
-                files={files}
+                files={filterIsNotArchived(files)}
                 sortBy={sortBy}
                 setSortBy={setSortByAndLocalStorage}
                 title="Your Work"
@@ -53,6 +54,14 @@ function Home(props) {
         return <FrontPage />
     }
 }
+
+function filterIsNotArchived(files) {
+    const filtered = files.filter((file) => {
+        return !isArchived(file)
+    })
+    return filtered
+}
+
 Home.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
     isSigningIn: PropTypes.bool.isRequired,
