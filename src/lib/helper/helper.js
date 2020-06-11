@@ -42,8 +42,8 @@ export function isMobileDevice() {
 
 /**
  *
- * @param {string} date1 ISO String of a Date
- * @param {string} date2 ISO String of a Date
+ * @param {string | undefined} date1 ISO String of a Date
+ * @param {string | undefined} date2 ISO String of a Date
  *
  * @returns {number} indicates if date1 is smaller (-1), date2 is smaller (1), is equal (0)
  */
@@ -54,8 +54,10 @@ export function sortByDate(date1, date2) {
         return 1
     } else if (date1 && !date2) {
         return -1
+        //@ts-ignore
     } else if (date1 < date2) {
         return 1
+        //@ts-ignore
     } else if (date1 > date2) {
         return -1
     } else {

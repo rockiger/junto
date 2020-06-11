@@ -1,36 +1,45 @@
 // @ts-check
-import React from 'reactn'
+import React, { useEffect, useGlobal } from 'reactn'
 import { PageView } from 'components/Tracking'
 
 import FileListComponent from './fileList-component'
 
-/** @typedef {{sortBy: 'modifiedByMeTime' | 'viewedByMeTime' | 'sharedWithMeTime'}} SortBy */
+export { FileList }
+export default FileList
 
-// @ts-ignore
-export default class FileList extends React.Component {
-    componentDidMount() {
-        PageView()
-    }
+/** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
 
-    render() {
-        // @ts-ignore
-        const { isFileListLoading, searchTerm } = this.global
-        // @ts-ignore
-        const { emptyMessage, files, sortBy, setSortBy, title } = this.props
-        return (
-            <FileListComponent
-                emptyMessage={
-                    searchTerm
-                        ? 'None of your files matched this search.'
-                        : emptyMessage
-                }
-                files={files}
-                isLoading={isFileListLoading}
-                searchTerm={searchTerm}
-                setSortBy={setSortBy}
-                sortBy={sortBy}
-                title={title}
-            />
-        )
-    }
+/**
+ * @typedef FileListProps
+ * @property {string} [emptyMessage]
+ * @property {import('reactn/default').IFile[]} files
+ * @property {SortBy} [sortBy]
+ * @property {()=>{}} [setSortBy]
+ * @property {string} title
+ */
+
+/**
+ * @param {FileListProps} props
+ */
+function FileList({ emptyMessage, files, sortBy, setSortBy, title }) {
+    const [isFileListLoading] = useGlobal('isFileListLoading')
+    const [searchTerm] = useGlobal('searchTerm')
+
+    useEffect(() => PageView(), [])
+
+    return (
+        <FileListComponent
+            emptyMessage={
+                searchTerm
+                    ? 'None of your files matched this search.'
+                    : emptyMessage
+            }
+            files={files}
+            isLoading={isFileListLoading}
+            searchTerm={searchTerm}
+            setSortBy={setSortBy}
+            sortBy={sortBy}
+            title={title}
+        />
+    )
 }

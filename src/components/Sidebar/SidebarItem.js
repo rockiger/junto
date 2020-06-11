@@ -1,11 +1,19 @@
+//@ts-check
 import React, { useDispatch } from 'reactn'
 import { Link, useLocation } from 'react-router-dom'
-import { Tooltip } from '@material-ui/core'
-import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
+import { Tooltip } from 'components/gsuite-components'
 
 import { useStyles } from './SidebarItem-styles'
 
-export const SidebarItem = props => {
+/**
+ * @typedef SidebarItemProps
+ * @property {any}    icon the icon
+ * @property {string} name the link name
+ * @property {string} path the path to compare activeness agains
+ * @property {string} [tooltip] tooltip text
+ */
+
+export const SidebarItem = ({ icon: Icon, name, path, tooltip }) => {
     const clearSearch = useDispatch('clearSearch')
     const location = useLocation()
     const classes = useStyles()
@@ -13,25 +21,24 @@ export const SidebarItem = props => {
     const { pathname } = location
 
     return (
-        <Link
-            className={classes.link}
-            onClick={clearSearch}
-            style={{
-                backgroundColor:
-                    pathname === '/shared-with-me' ? '#e8f0fe' : '',
-                color: pathname === '/shared-with-me' ? '#4285f4' : '',
-            }}
-            to="/shared-with-me"
-        >
-            <AccountMultipleOutlineIcon
+        <Tooltip content={tooltip ? tooltip : name}>
+            <Link
+                className={classes.link}
+                onClick={clearSearch}
                 style={{
-                    color:
-                        pathname === '/shared-with-me'
-                            ? '#4285f4'
-                            : 'rgba(0, 0, 0, 0.54)',
+                    backgroundColor: pathname === path ? '#e8f0fe' : '',
+                    color: pathname === path ? '#4285f4' : '',
                 }}
-            />
-            <Tooltip title="Shared With Me" enterDelay={200} leaveDelay={200}>
+                to={path}
+            >
+                <Icon
+                    style={{
+                        color:
+                            pathname === path
+                                ? '#4285f4'
+                                : 'rgba(0, 0, 0, 0.54)',
+                    }}
+                />
                 <div
                     style={{
                         flexGrow: 1,
@@ -43,9 +50,9 @@ export const SidebarItem = props => {
                         whiteSpace: 'nowrap',
                     }}
                 >
-                    Shared With Me
+                    {name}
                 </div>
-            </Tooltip>
-        </Link>
+            </Link>
+        </Tooltip>
     )
 }

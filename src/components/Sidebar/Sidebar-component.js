@@ -1,4 +1,6 @@
 import React from 'react'
+import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
+import ArchiveOutlineIcon from 'mdi-react/ArchiveOutlineIcon'
 
 import { isMobileDevice } from 'lib/helper'
 import { SidebarSharedDrives } from './SidebarSharedDrives'
@@ -8,7 +10,7 @@ import { SidebarItem } from './SidebarItem'
 import styles from './sidebar.module.scss'
 window.isMobileDevice = isMobileDevice
 
-const SidebarRenderer = props => {
+const SidebarRenderer = (props) => {
     return (
         <>
             {/* {isMobileDevice() && (
@@ -46,7 +48,18 @@ const SidebarRenderer = props => {
                 >
                     <SidebarTree />
                     <SidebarSharedDrives />
-                    <SidebarItem />
+                    <SidebarItem
+                        icon={AccountMultipleOutlineIcon}
+                        name="Shared With Me"
+                        path="/shared-with-me"
+                        tooltip="Files shared with me"
+                    />
+                    <SidebarItem
+                        icon={ArchiveOutlineIcon}
+                        name="Archive"
+                        path="/archive"
+                        tooltip="Archived files"
+                    />
                 </div>
             </div>
         </>

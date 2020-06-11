@@ -15,7 +15,7 @@ import { ButtonMenu } from 'components/ButtonMenu'
 
 import styles from './file-list.module.scss'
 
-/** @typedef {{id: string, mimeType: string, name: string, modifiedByMeTime: string, trashed: boolean, viewedByMeTime: string}} File */
+/** @typedef {import('reactn/default').IFile} File */
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
 
 /**
@@ -178,7 +178,6 @@ const Periods = ({ files, sortBy }) => {
  */
 
 /**
- *
  * @param {FileListComponentProps} props
  */
 const FileListComponent = (props) => {
@@ -276,7 +275,7 @@ function useStyles() {
 }
 
 /**
- * @param {{mimeType: string, name: string, trashed: boolean}} file
+ * @param {File} file
  */
 function shouldFileDisplay(file) {
     const { mimeType, name, trashed } = file

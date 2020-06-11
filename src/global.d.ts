@@ -42,6 +42,7 @@ declare module 'reactn/default' {
         name: string
         parents: Array<string> // the id of the parrent of a file
         mimeType: 'application/vnd.google-apps.folder' | 'application/json'
+        modifiedByMeTime?: string
         shared?: boolean
         ownedByMe?: boolean
         properties?: {
@@ -50,6 +51,8 @@ declare module 'reactn/default' {
             wikiRoot?: 'false' | 'true'
             [key: string]: any
         }
+        trashed: boolean
+        viewedByMeTime?: string
         [key: string]: any
     }
 

@@ -2,6 +2,7 @@ import React, { useGlobal } from 'reactn'
 import { ReactElement } from 'react'
 import { Route } from 'react-router-dom'
 
+import { ArchivePage } from 'components/archive'
 import { CreateNewWiki } from 'components/CreateNewWiki'
 import { Drive } from 'components/Drive/index'
 import Home from 'components/Home'
@@ -31,6 +32,12 @@ export default function Main(props: any): ReactElement {
                     />
                 )}
             />
+            <Route exact path="/archive">
+                <ArchivePage
+                    isSignedIn={isSignedIn}
+                    isSigningIn={isSigningIn}
+                />
+            </Route>
             <Route
                 exact
                 path="/page/:id"
@@ -69,6 +76,7 @@ export default function Main(props: any): ReactElement {
                 )}
             />
             <Route exact path="/faq" render={(props: any) => <FAQ />} />
+
             <Route
                 exact
                 path="/privacy-policy"

@@ -1,2 +1,2 @@
-export {default} from './archive'
-export * from './archive'
+export * from './archive-button'
+export * from './archive-page'
