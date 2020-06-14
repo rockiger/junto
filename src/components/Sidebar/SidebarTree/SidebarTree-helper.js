@@ -1,6 +1,6 @@
 //@ts-check
 import { EXT, OVERVIEW_NAME } from 'lib/constants'
-import { isArchived } from 'lib/helper'
+import { isArchived, getMetaById, isFolder, isPage } from 'lib/helper'
 
 /**
  *
@@ -9,8 +9,24 @@ import { isArchived } from 'lib/helper'
  * @returns {string | null}
  */
 export function getFolderId(fileId, files) {
-    const folder = files.find((file) => file.name === fileId)
-    return folder ? folder.id : null
+    const folder = files.find(file => file.name === fileId)
+    if (folder) {
+        // folder has Children
+        const children = files.filter(
+            file => file.parents && file.parents.includes(folder.id)
+        )
+        // minimum of one children is not Archived
+        if (children.length > 0) {
+            for (const child of children) {
+                const hasChildThatCounts =
+                    child &&
+                    (isPage(child) || isFolder(child)) &&
+                    !isArchived(child)
+                if (hasChildThatCounts) return folder.id
+            }
+        }
+    }
+    return null
 }
 
 /**
@@ -21,7 +37,7 @@ export function getFolderId(fileId, files) {
  */
 export function getOverviewFileId(files, rootFolderId) {
     const overview = files.find(
-        (file) =>
+        file =>
             file.name === OVERVIEW_NAME && file.parents.includes(rootFolderId)
     )
     if (overview) return overview.id
@@ -36,7 +52,7 @@ export function getOverviewFileId(files, rootFolderId) {
  */
 export function filterChildFiles(folderId, files) {
     if (folderId)
-        return files.filter((file) => {
+        return files.filter(file => {
             try {
                 return file.parents && file.parents.includes(folderId)
             } catch (err) {
