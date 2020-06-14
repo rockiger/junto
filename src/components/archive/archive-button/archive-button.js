@@ -62,7 +62,7 @@ function ArchiveButton({ fileId }) {
                     isOpen={alert.isOpen}
                     okLabel={alert.buttonText}
                     onClose={onClose}
-                    onOk={onClose}
+                    onOk={alert.onOk}
                     maxWidth="sm"
                     title={alert.title}
                 >
@@ -78,10 +78,29 @@ function ArchiveButton({ fileId }) {
         if (isWikiRootFile(file)) {
             setAlert({
                 buttonText: 'Archive wiki',
-                content:
-                    'Do you want to archive this wiki? All pages in this wiki will be archived. The action can be undone.',
+                content: (
+                    <>
+                        <p>
+                            Do you want to archive this wiki? All pages in this
+                            wiki will be archived.
+                        </p>
+                        <p>
+                            Archiving this wiki will remove it from the site
+                            navigation, to clear up the navigation and make it
+                            easier to find relevant content.
+                        </p>
+                        <p>
+                            If you need the content from this space at later
+                            time, you can restore the space anytime.
+                        </p>
+                    </>
+                ),
                 isOpen: true,
-                title: 'Archive wiki?',
+                onOk: () => {
+                    archiveSinglePageWithoutChilds(file)
+                    setAlert(initialAlert)
+                },
+                title: 'Archive whole wiki?',
             })
         } else if (hasChildren(fileId, initialFiles)) {
             setAlert({
@@ -89,6 +108,7 @@ function ArchiveButton({ fileId }) {
                 content: `All pages below this page will move one step up in the page
                 hierachy. They will not be archived. This movement of children con not be undone.`,
                 isOpen: true,
+                onOk: () => {}, //!
                 title: 'Archive page?',
             })
         } else {
@@ -102,11 +122,15 @@ function ArchiveButton({ fileId }) {
         if (isWikiRootFile(file)) {
             //!
             setAlert({
-                buttonText: 'Archive wiki',
+                buttonText: 'Restore wiki',
                 content:
-                    'Do you want to archive this wiki? All pages in this wiki will be archived. The action can be undone.',
+                    'Do you want to restore this wiki? All pages in this wiki will be restored, unless they were archived seperately.',
                 isOpen: true,
-                title: 'Archive wiki?',
+                onOk: () => {
+                    unArchiveSinglePageWithoutChilds(file)
+                    setAlert(initialAlert)
+                },
+                title: 'Restore whole wiki?',
             })
         } else if (hasChildren(fileId, initialFiles)) {
             //!
@@ -115,6 +139,7 @@ function ArchiveButton({ fileId }) {
                 content: `All pages below this page will move one step up in the page
                 hierachy. They will not be archived. This movement of children con not be undone.`,
                 isOpen: true,
+                onOk: () => {}, //!
                 title: 'Archive page?',
             })
         } else {
@@ -125,7 +150,7 @@ function ArchiveButton({ fileId }) {
     function archiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
-        const newProperties = { ...properties, isArchived: true }
+        const newProperties = { ...properties, isArchived: 'true' }
         const updatedFiles = filesUpdater(
             { properties: newProperties },
             global,
@@ -161,7 +186,23 @@ function ArchiveButton({ fileId }) {
     }
 }
 
-const initialAlert = { buttonText: '', content: '', isOpen: false, title: '' }
+/**
+ * @typedef Alert
+ * @property {string} buttonText
+ * @property {React.ReactNode} content
+ * @property {boolean} isOpen
+ * @property {() => void} onOk
+ * @property {string} title
+ */
+
+/** @type {Alert} */
+const initialAlert = {
+    buttonText: '',
+    content: '',
+    isOpen: false,
+    onOk: () => {},
+    title: '',
+}
 // Warning if has child pages
 /* Diese Seite hat untergeordnete Seiten
 Alle unter "Child 2" geschachtelten Seiten bleiben in der Seitenhierarchie erhalten. */

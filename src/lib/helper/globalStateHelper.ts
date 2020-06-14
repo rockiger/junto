@@ -55,7 +55,7 @@ const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
  * @param id - the file to update
  */
 const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
-    return files.map((item) => {
+    return files.map(item => {
         if (item.id === id) {
             return { ...item, ...change }
         } else {
@@ -82,11 +82,11 @@ function getMetaById(fileId: String, files: Array<IFile>): IFile | null {
  * @param files - the files to check
  */
 function hasChildren(fileId: string, files: IFile[]) {
-    const folder = files.find((file) => file.name === fileId)
+    const folder = files.find(file => file.name === fileId)
     if (folder) {
         return Boolean(
             files.filter(
-                (file) => file.parents && file.parents.includes(folder.id)
+                file => file.parents && file.parents.includes(folder.id)
             ).length
         )
     }
@@ -94,15 +94,16 @@ function hasChildren(fileId: string, files: IFile[]) {
 }
 
 function hasProperty(file: IFile, property: string, question: any = 'true') {
-    return (
+    return Boolean(
         file.properties &&
-        file.properties[property] &&
-        file.properties[property] === question
+            file.properties[property] &&
+            file.properties[property] === question
     )
 }
 
 function isArchived(file: IFile) {
-    return hasProperty(file, 'isArchived')
+    const result = hasProperty(file, 'isArchived')
+    return result
 }
 
 function isWikiRootFile(file: IFile) {

@@ -3,7 +3,7 @@ import { OVERVIEW_NAME } from 'lib/constants'
 
 import { SidebarTreeItem } from '../SidebarTree/SidebarTreeItem'
 import { useStyles } from '../SidebarTree/SidebarTree-styles'
-import { getTitleFromFile } from 'lib/helper'
+import { getTitleFromFile, isArchived } from 'lib/helper'
 
 export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
@@ -37,7 +37,8 @@ function filterSharedDrives(files) {
             file.properties &&
             file.properties.pageName &&
             file.parents[0] &&
-            isParentFolderNotDeleted(file, files)
+            isParentFolderNotDeleted(file, files) &&
+            !isArchived(file)
         // file.teamDriveId
         // TODO && parent[0] is
     )
