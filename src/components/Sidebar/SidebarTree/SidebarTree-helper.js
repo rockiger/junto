@@ -12,19 +12,18 @@ export function getFolderId(fileId, files) {
     const folder = files.find(file => file.name === fileId)
     if (folder) {
         // folder has Children
-        const children = files.filter(
-            file => file.parents && file.parents.includes(folder.id)
-        )
-        // minimum of one children is not Archived
-        if (children.length > 0) {
-            for (const child of children) {
-                const hasChildThatCounts =
-                    child &&
-                    (isPage(child) || isFolder(child)) &&
-                    !isArchived(child)
-                if (hasChildThatCounts) return folder.id
+        const children = files.filter(file => {
+            return file.parents && file.parents.includes(folder.id)
+        })
+
+        for (const child of children) {
+            const hasChildThatCounts =
+                (isPage(child) || isFolder(child)) && !isArchived(child)
+            if (hasChildThatCounts) {
+                return folder.id
             }
         }
+        return folder.id
     }
     return null
 }
