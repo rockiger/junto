@@ -5,7 +5,7 @@ import 'index.scss'
 import { Tab, Tabs, TabList, TabPanel } from './tabs'
 
 storiesOf('Tabs', module)
-    .addDecorator((story) => (
+    .addDecorator(story => (
         <div
             style={{
                 border: '1px solid rgba(0,0,0, 0.2',
@@ -18,6 +18,39 @@ storiesOf('Tabs', module)
         return (
             <>
                 <Tabs>
+                    <TabList>
+                        <Tab>Selection</Tab>
+                        <Tab>Go to</Tab>
+                        <Tab>Application</Tab>
+                        <Tab>Create</Tab>
+                        <Tab>Upload</Tab>
+                        <Tab>Menus</Tab>
+                        <Tab>Actions</Tab>
+                    </TabList>
+
+                    <TabPanel>
+                        <TabContent />
+                    </TabPanel>
+                    <TabPanel>
+                        <TabContent />
+                    </TabPanel>
+                    <TabPanel>
+                        <TabContent />
+                    </TabPanel>
+                    <TabPanel>
+                        <TabContent />
+                    </TabPanel>
+                    <TabPanel>
+                        <TabContent />
+                    </TabPanel>
+                </Tabs>
+            </>
+        )
+    })
+    .add('vertical', () => {
+        return (
+            <>
+                <Tabs vertical>
                     <TabList>
                         <Tab>Selection</Tab>
                         <Tab>Go to</Tab>

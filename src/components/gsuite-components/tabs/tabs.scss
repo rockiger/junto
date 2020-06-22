@@ -1,10 +1,10 @@
 @import '_base.scss';
 
-.react-tabs {
+.react-tabs-vertical {
     display: flex;
     -webkit-tap-highlight-color: transparent;
 
-    &__tab-list {
+    .react-tabs__tab-list {
         display: flex;
         border-right: 1px solid $border-color;
         flex: 0 0 192px;
@@ -16,7 +16,7 @@
         padding: 0;
     }
 
-    &__tab {
+    .react-tabs__tab {
         display: inline-block;
         border-bottom: none;
         bottom: -1px;
@@ -42,16 +42,18 @@
             border-color: hsl(208, 99%, 50%);
             outline: none;
         }
+
         &:hover {
             background: $hover-background;
         }
     }
 
-    &__tab-panel {
+    .react-tabs__tab-panel {
         display: none;
         height: 100%;
         padding: 0 1rem 0 1.5rem;
-        & > *:first-child {
+
+        &>*:first-child {
             padding-top: 0;
             margin-top: 0;
         }

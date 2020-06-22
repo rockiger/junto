@@ -1,3 +1,4 @@
+export { Tab, TabList, TabPanel } from 'react-tabs'
 export * from './tabs'
 
 /**

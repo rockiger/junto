@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Tab, Tabs, TabList, TabPanel } from 'components/gsuite-components'
+import { Tab, TabList, TabPanel, Tabs } from 'components/gsuite-components'
 
 import { FulcrumFaq } from './fulcrum-faq'
 import { EditorShortcuts } from './editor-shortcuts'
@@ -10,7 +10,7 @@ import { GlobalShortcuts } from './global-shortcuts'
 export { HelpDialogContent }
 export default function HelpDialogContent({ setIsOpen, isOpen }) {
     return (
-        <Tabs>
+        <Tabs vertical>
             <TabList>
                 <Tab>Fulcrum FAQ</Tab>
                 <Tab>Shortcuts</Tab>
