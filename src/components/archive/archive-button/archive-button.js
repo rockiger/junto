@@ -15,7 +15,7 @@ import {
 } from 'lib/helper'
 
 import s from './archive-button.module.scss'
-import { updateMetadata } from 'lib/gdrive'
+import { updateMetadata, moveFile } from 'lib/gdrive'
 
 export default ArchiveButton
 export { ArchiveButton }
@@ -33,7 +33,7 @@ function ArchiveButton({ fileId }) {
     const [global] = useGlobal()
     const [, setFiles] = useGlobal('files')
     const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [alert, setAlert] = useState(initialAlert)
     const file = getMetaById(fileId, initialFiles)
 
@@ -106,10 +106,13 @@ function ArchiveButton({ fileId }) {
             setAlert({
                 buttonText: 'Archive page',
                 content: `All pages below this page will move one step up in the page
-                hierachy. They will not be archived. This movement of children con not be undone.`,
+                hierachy. They will not be archived. This movement of children can not be undone.`,
                 isOpen: true,
-                onOk: () => {}, //!
-                title: 'Archive page?',
+                onOk: () => {
+                    archiveSinglePageWithChildren(file)
+                    setAlert(initialAlert)
+                },
+                title: 'Archive page with children?',
             })
         } else {
             archiveSinglePageWithoutChilds(file)
@@ -120,7 +123,6 @@ function ArchiveButton({ fileId }) {
         const file = getMetaById(fileId, initialFiles)
         if (!file) return //something went wrong
         if (isWikiRootFile(file)) {
-            //!
             setAlert({
                 buttonText: 'Restore wiki',
                 content:
@@ -133,11 +135,10 @@ function ArchiveButton({ fileId }) {
                 title: 'Restore whole wiki?',
             })
         } else if (hasChildren(fileId, initialFiles)) {
-            //!
             setAlert({
                 buttonText: 'Archive page',
                 content: `All pages below this page will move one step up in the page
-                hierachy. They will not be archived. This movement of children con not be undone.`,
+                hierachy. They will not be archived. This movement of children can not be undone.`,
                 isOpen: true,
                 onOk: () => {}, //!
                 title: 'Archive page?',
@@ -147,7 +148,53 @@ function ArchiveButton({ fileId }) {
         }
     }
 
-    function archiveSinglePageWithoutChilds(file) {
+    async function archiveSinglePageWithChildren(file) {
+        // Change parent of children
+        const newParentFolderId = file.parents ? file.parents[0] : null
+        if (!newParentFolderId) return
+
+        const folder = initialFiles.find(f => f.name === file.id)
+        console.log(folder)
+        if (folder) {
+            const children = initialFiles.filter(
+                f => f.parents && f.parents.includes(folder.id)
+            )
+            console.log(children)
+            let globalTmp = { ...global }
+            for (const child of children) {
+                const newParents = [newParentFolderId]
+                const updatedFiles = filesUpdater(
+                    { parents: newParents },
+                    globalTmp,
+                    child.id
+                )
+                globalTmp = {
+                    ...globalTmp,
+                    files: updatedFiles.files,
+                    initialFiles: updatedFiles.initialFiles,
+                }
+            }
+            setFiles(globalTmp.files)
+            setInitialFiles(globalTmp.initialFiles)
+
+            for (const child of children) {
+                const currentParentFolder = child.parents
+                    ? child.parents[0]
+                    : null
+                if (currentParentFolder) {
+                    await moveFile(
+                        child.id,
+                        currentParentFolder,
+                        newParentFolderId
+                    )
+                }
+            }
+            // Archive SinglePage
+            archiveSinglePageWithoutChilds(file)
+        }
+    }
+
+    async function archiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
         const newProperties = { ...properties, isArchived: 'true' }
@@ -158,13 +205,13 @@ function ArchiveButton({ fileId }) {
         )
         setFiles(updatedFiles.files)
         setInitialFiles(updatedFiles.initialFiles)
-        updateMetadata(file.id, { properties: newProperties })
+        await updateMetadata(file.id, { properties: newProperties })
         enqueueSnackbar('Page archived.', {
             autoHideDuration: 5000,
         })
     }
 
-    function unArchiveSinglePageWithoutChilds(file) {
+    async function unArchiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
         const newProperties = { ...properties, isArchived: false }
@@ -175,7 +222,7 @@ function ArchiveButton({ fileId }) {
         )
         setFiles(updatedFiles.files)
         setInitialFiles(updatedFiles.initialFiles)
-        updateMetadata(file.id, { properties: newProperties })
+        await updateMetadata(file.id, { properties: newProperties })
         enqueueSnackbar('Page restored.', {
             autoHideDuration: 5000,
         })

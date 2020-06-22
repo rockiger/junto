@@ -1,6 +1,6 @@
 //@ts-check
 import { EXT, OVERVIEW_NAME } from 'lib/constants'
-import { isArchived, getMetaById, isFolder, isPage } from 'lib/helper'
+import { isArchived, isFolder, isPage } from 'lib/helper'
 
 /**
  *
@@ -17,9 +17,10 @@ export function getFolderId(fileId, files) {
         })
 
         for (const child of children) {
+            //! this seems still buggy
             const hasChildThatCounts =
                 (isPage(child) || isFolder(child)) && !isArchived(child)
-            if (hasChildThatCounts) {
+            if (!hasChildThatCounts) {
                 return folder.id
             }
         }

@@ -51,7 +51,7 @@ export function isLoaded() {
  * @return {Promise}
  */
 export function init() {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         gapi.load('client', () =>
             gapi.client.load('drive', 'v3', () => {
                 clientLoaded = true
@@ -87,7 +87,7 @@ export function listFiles(searchTerm = '', orderBy = '') {
                 q,
                 supportsAllDrives: true,
             })
-            .execute((response) => resolve(formatResult(response)))
+            .execute(response => resolve(formatResult(response)))
     })
 }
 
@@ -261,8 +261,8 @@ export function createFileWithContent(name, ifid, data) {
                 body: multipartRequestBody,
             })
             .then(
-                (response) => resolve(formatFileDescription(response.result)),
-                (error) => resolve(formatFileDescription())
+                response => resolve(formatFileDescription(response.result)),
+                error => resolve(formatFileDescription())
             )
     })
 }
@@ -284,7 +284,7 @@ export function getFileDescription(driveId) {
                 includeItemsFromAllDrives: true,
                 supportsAllDrives: true,
             })
-            .execute((response) => resolve(formatFileDescription(response)))
+            .execute(response => resolve(formatFileDescription(response)))
     })
 }
 
@@ -325,7 +325,7 @@ export function downloadFile(driveId) {
                 fileId: driveId,
                 alt: 'media',
             })
-            .then((data) => resolve(data.body), reject)
+            .then(data => resolve(data.body), reject)
     })
 }
 
@@ -348,7 +348,7 @@ export function renameFile(driveId, newName, supportsAllDrives = true) {
                 supportsAllDrives,
             })
             .then(
-                (response) => resolve(formatFileDescription(response.result)),
+                response => resolve(formatFileDescription(response.result)),
                 reject
             )
     })
@@ -372,7 +372,34 @@ export function updateMetadata(driveId, metadata) {
                 fields: fileFields,
             })
             .then(
-                (response) => resolve(formatFileDescription(response.result)),
+                response => resolve(formatFileDescription(response.result)),
+                reject
+            )
+    })
+}
+
+/**
+ * Changes the metadata of the file on Google Drive. Can reject
+ *
+ * @method moveFile
+ * @param {String} driveId id of the file to move
+ * @param {String} sourceId id of the current parent folder
+ * @param {object} targetId id of the new parent folder
+ * @return {Promise|Object} A promise of the result that returns
+ * a file description: {driveId, driveVersion, name, ifid}
+ */
+export function moveFile(driveId, sourceId, targetId) {
+    return new Promise((resolve, reject) => {
+        gapi.client.drive.files
+            .update({
+                fileId: driveId,
+                removeParents: sourceId,
+                addParents: targetId,
+                enforceSingleParent: true,
+                fields: fileFields,
+            })
+            .then(
+                response => resolve(formatFileDescription(response.result)),
                 reject
             )
     })
@@ -419,7 +446,7 @@ export function updateFile(driveId, newData, supportsAllDrives = true) {
                 body: newData,
             })
             .then(
-                (response) => resolve(formatFileDescription(response.result)),
+                response => resolve(formatFileDescription(response.result)),
                 reject
             )
     })
