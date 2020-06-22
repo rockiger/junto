@@ -15,7 +15,7 @@ export default FileList
  * @property {import('reactn/default').IFile[]} files
  * @property {SortBy} [sortBy]
  * @property {()=>{}} [setSortBy]
- * @property {string} title
+ * @property {string} [title]
  */
 
 /**

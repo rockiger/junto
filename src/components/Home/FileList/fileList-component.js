@@ -29,14 +29,14 @@ import styles from './file-list.module.scss'
  *
  * @param {Props} props
  */
-const FileListPartial = (props) => {
+const FileListPartial = props => {
     const { files, sortBy } = props
     const clearSearch = useDispatch('clearSearch')
     const classes = useStyles()
     return (
         <List className="filelist-list">
             {files
-                .filter((file) => {
+                .filter(file => {
                     return shouldFileDisplay(file)
                 })
                 .sort((file1, file2) => {
@@ -55,7 +55,7 @@ const FileListPartial = (props) => {
                     }
                     return result
                 })
-                .map((file) => {
+                .map(file => {
                     const filename = getTitleFromFile(file)
                     return (
                         <ListItem className={classes.listitem} key={file.id}>
@@ -100,7 +100,7 @@ const PeriodList = ({ files, headline, sortBy }) => {
 
 const Periods = ({ files, sortBy }) => {
     const createFilter = (older, younger = new Date()) => {
-        return (file) => {
+        return file => {
             // @ts-ignore
             const date = parseInt(Date.parse(file[sortBy]))
 
@@ -174,13 +174,13 @@ const Periods = ({ files, sortBy }) => {
  * @prop {SortBy} sortBy
  * @prop {string} searchTerm
  * @prop {function} setSortBy
- * @prop {string} title
+ * @prop {string} [title]
  */
 
 /**
  * @param {FileListComponentProps} props
  */
-const FileListComponent = (props) => {
+const FileListComponent = props => {
     const { emptyMessage, files, searchTerm, setSortBy, sortBy, title } = props
     document.title = `${searchTerm ? 'Search Result' : title} – Fulcrum.wiki`
     return (
@@ -216,7 +216,7 @@ const FileListComponent = (props) => {
                     </ButtonMenu>
                 </PageButtons>
             )}
-            <h1>{searchTerm ? 'Search Result' : title}</h1>
+            {title && <h1>{searchTerm ? 'Search Result' : title}</h1>}
             <div className={styles.FileList_content}>
                 {/* 
                 // @ts-ignore */}
@@ -253,7 +253,7 @@ const FileListComponent = (props) => {
 export default FileListComponent
 
 function useStyles() {
-    const useStyles = makeStyles((theme) => {
+    const useStyles = makeStyles(theme => {
         return {
             icon: {
                 color: theme.palette.primary.main,
