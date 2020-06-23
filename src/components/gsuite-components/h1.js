@@ -15,7 +15,6 @@ export default function H1({ children, ...restProps }) {
             </h1>
             <style>{`
                     .gsuiteH1eurni {
-                        border-bottom: 1px solid #dadce0;
                         font-size: 1.5rem;
                         font-weight: 400;
                         margin: 0;
