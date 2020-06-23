@@ -8,7 +8,8 @@ storiesOf('Tabs', module)
     .addDecorator(story => (
         <div
             style={{
-                border: '1px solid rgba(0,0,0, 0.2',
+                border: '1px solid rgba(0,0,0, 0.2)',
+                padding: 16,
             }}
         >
             {story()}
