@@ -2,11 +2,17 @@
 import React, { useGlobal } from 'reactn'
 import { Redirect } from 'react-router'
 
-import Spinner from 'components/gsuite-components/spinner'
+import {
+    Spinner,
+    Tab,
+    Tabs,
+    TabList,
+    TabPanel,
+} from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
 
-import s from './archive-page.module.scss'
 import { isArchived } from 'lib/helper'
+import H1 from 'components/gsuite-components/h1'
 
 export default ArchivePage
 export { ArchivePage }
@@ -25,12 +31,23 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
     if (isSignedIn && !isSigningIn) {
         return (
-            <FileList
-                emptyMessage="Your archive is empty."
-                files={filterIsArchived(files)}
-                sortBy="modifiedByMeTime"
-                title="Archive"
-            />
+            <>
+                <H1>Archive</H1>
+                <Tabs>
+                    <TabList>
+                        <Tab>Pages</Tab>
+                        <Tab>Wikis</Tab>
+                    </TabList>
+                    <TabPanel>
+                        <FileList
+                            emptyMessage="Your archive is empty."
+                            files={filterIsArchived(files)}
+                            sortBy="modifiedByMeTime"
+                        />
+                    </TabPanel>
+                    <TabPanel>Wikis</TabPanel>
+                </Tabs>
+            </>
         )
     } else if (!isSignedIn && isSigningIn) {
         return (
@@ -44,7 +61,7 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
 }
 
 function filterIsArchived(files) {
-    const filtered = files.filter((file) => {
+    const filtered = files.filter(file => {
         return isArchived(file)
     })
     return filtered
