@@ -46,6 +46,12 @@
             border-color: hsl(208, 99%, 50%);
             outline: none;
         }
+
+        &:hover {
+
+            border-bottom: .1875rem solid hsla(215, 79%, 46%, 0.6);
+            color: hsla(215, 79%, 46%, 0.6);
+        }
     }
 
     .react-tabs__tab-panel {
