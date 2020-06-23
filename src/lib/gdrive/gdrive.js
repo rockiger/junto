@@ -370,6 +370,7 @@ export function updateMetadata(driveId, metadata) {
                 fileId: driveId,
                 ...metadata,
                 fields: fileFields,
+                supportsAllDrives: true,
             })
             .then(
                 response => resolve(formatFileDescription(response.result)),
@@ -397,6 +398,7 @@ export function moveFile(driveId, sourceId, targetId) {
                 addParents: targetId,
                 enforceSingleParent: true,
                 fields: fileFields,
+                supportsAllDrives: true,
             })
             .then(
                 response => resolve(formatFileDescription(response.result)),
