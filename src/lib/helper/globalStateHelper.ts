@@ -57,7 +57,13 @@ const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
 const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
     return files.map(item => {
         if (item.id === id) {
-            return { ...item, ...change }
+            const now = new Date().toISOString()
+            return {
+                ...item,
+                ...change,
+                modifiedByMeTime: now,
+                modifiedTime: now,
+            }
         } else {
             return item
         }

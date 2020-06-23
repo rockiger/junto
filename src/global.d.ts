@@ -43,6 +43,7 @@ declare module 'reactn/default' {
         parents: Array<string> // the id of the parrent of a file
         mimeType: 'application/vnd.google-apps.folder' | 'application/json'
         modifiedByMeTime?: string
+        modifiedTime?: string
         shared?: boolean
         ownedByMe?: boolean
         properties?: {
