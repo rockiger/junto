@@ -14,6 +14,7 @@
         "@types/react-router": "^5.1.2",
         "@types/react-router-dom": "^5.1.2",
         "clsx": "^1.1.1",
+        "date-fns": "^2.14.0",
         "dexie": "^2.0.4",
         "image-extensions": "^1.1.0",
         "immutable": "^4.0.0-rc.12",
