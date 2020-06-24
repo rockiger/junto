@@ -1,0 +1,58 @@
+@import '_base.scss';
+
+.Card {
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    width: 312px;
+
+    &:hover {
+        border-color: $selected-color;
+    }
+}
+
+.CardBody,
+.CardFooter,
+.CardHeader {
+    padding: 1rem;
+}
+
+.CardHeader {
+    align-items: center;
+    display: flex;
+
+    &_avatar {
+        align-items: center;
+        background-color: $logo-yellow;
+        border-radius: 100px;
+        color: white;
+        display: flex;
+        font-size: 1.6rem;
+        font-weight: 500;
+        height: 2.5rem;
+        justify-content: center;
+        margin-right: 16px;
+        text-align: center;
+        vertical-align: middle;
+        width: 2.5rem;
+    }
+
+    &_main {
+        &_subtitle {
+            color: $button-grey;
+        }
+
+        &_title {
+            color: black;
+        }
+    }
+}
+
+.CardFooter {
+    align-items: flex-end;
+    color: $button-grey;
+    display: flex;
+}
