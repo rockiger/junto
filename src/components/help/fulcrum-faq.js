@@ -9,19 +9,30 @@ function FulcrumFaq() {
         <>
             <h2>How can I delete single pages?</h2>
             <p>
-                Right now, it is not possible to delete single pages from
-                Fulcrum itself.
+                Right now, it is not possible to delete pages from inside
+                Fulcrum. But you can archive them, which will remove them from
+                your wiki structure and place them in your archive. To archive a
+                page click on the archive icon in the upper right corner of a
+                wiki page.
             </p>
             <p>
-                To delete a page, go to your wiki folder in Google Drive and
-                search for the title of the page and delete it.
+                To delete a page from your Google Drive, go to your wiki folder
+                in Google Drive and search for the title of the page and delete
+                it.
             </p>
             <h2>How can I delete all sub-pages of a page?</h2>
             <p>
                 Right now, it is not possible to delete all sub-pages from
-                Fulcrum itself. To delete them you need to find the folder with
-                the same name as your page ID in your Google Drive. You find the
-                page ID at the end of the page URL, e.g.{' '}
+                inside Fulcrum. But you can archive them, which will remove them
+                from your wiki structure and place them in your archive. To
+                archive a page and it's sub pages click on the archive icon in
+                the upper right corner of the wiki page.
+            </p>
+
+            <p>
+                To remove them from your Google Drive you need to find the
+                folder with the same name as your page ID in your Google Drive.
+                You find the page ID at the end of the page URL, e.g.{' '}
                 <i>https://www.fulcrum.wiki/page/[page-ID]</i>.
             </p>
             <h2>How can I move wikis in Google Drive?</h2>
@@ -111,7 +122,7 @@ function FulcrumFaq() {
                 </Button>
             </p>
             <p>
-                <i>Last modified on May 22, 2020&nbsp;</i>
+                <i>Last modified on June 25, 2020&nbsp;</i>
             </p>
         </>
     )
