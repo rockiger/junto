@@ -10,7 +10,7 @@ import { SidebarItem } from './SidebarItem'
 import styles from './sidebar.module.scss'
 window.isMobileDevice = isMobileDevice
 
-const SidebarRenderer = (props) => {
+const SidebarRenderer = props => {
     return (
         <>
             {/* {isMobileDevice() && (
@@ -52,13 +52,13 @@ const SidebarRenderer = (props) => {
                         icon={AccountMultipleOutlineIcon}
                         name="Shared With Me"
                         path="/shared-with-me"
-                        tooltip="Files shared with me"
+                        tooltip="Pages shared with me"
                     />
                     <SidebarItem
                         icon={ArchiveOutlineIcon}
                         name="Archive"
                         path="/archive"
-                        tooltip="Archived files"
+                        tooltip="Archived files and wikis"
                     />
                 </div>
             </div>
