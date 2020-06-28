@@ -3,7 +3,8 @@ import { EXT, OVERVIEW_NAME } from 'lib/constants'
 import { isArchived, isFolder, isPage } from 'lib/helper'
 
 /**
- *
+ * Produces the child folder for a given file if it exists and it has relevant content.
+ * The child folder has the same name as the id of the given file, if it exists.
  * @param {string} fileId
  * @param {any[]} files
  * @returns {string | null}
@@ -11,20 +12,26 @@ import { isArchived, isFolder, isPage } from 'lib/helper'
 export function getFolderId(fileId, files) {
     const folder = files.find(file => file.name === fileId)
     if (folder) {
-        // folder has Children
+        return folder.id
+        //! This commented code works for the tests, but then the sidebar shows only
+        //  one level of childeren, maybe the problem lies somewhere else. After the
+        //  algorithm book, there could be a new opportunity to create a new tree.
+        /* // folder has Children
         const children = files.filter(file => {
             return file.parents && file.parents.includes(folder.id)
         })
 
         for (const child of children) {
             //! this seems still buggy
-            const hasChildThatCounts =
-                (isPage(child) || isFolder(child)) && !isArchived(child)
-            if (!hasChildThatCounts) {
+            const page = isPage(child)
+            const archived = isArchived(child)
+            const hasChildThatCounts = isPage(child) && !isArchived(child)
+            console.log({ page, archived, hasChildThatCounts })
+            if (hasChildThatCounts) {
+                console.log('return', folder.id)
                 return folder.id
             }
-        }
-        return folder.id
+        } */
     }
     return null
 }
