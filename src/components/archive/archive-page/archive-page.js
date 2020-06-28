@@ -41,6 +41,7 @@ export { ArchivePage }
 function ArchivePage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
     const archivedFiles = filterIsArchived(files)
+    const archivedWikis = filterWikis(archivedFiles)
 
     if (isSignedIn && !isSigningIn) {
         return (
@@ -59,8 +60,13 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                         />
                     </TabPanel>
                     <TabPanel>
+                        {archivedWikis.length === 0 && (
+                            <h2 className={s.emptyMessage}>
+                                Your wiki archive is empty.
+                            </h2>
+                        )}
                         <div style={{ paddingTop: 16 }}>
-                            {filterWikis(archivedFiles).map(f => {
+                            {archivedWikis.map(f => {
                                 const {
                                     id,
                                     properties: { pageName },
