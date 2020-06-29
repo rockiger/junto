@@ -1,17 +1,8 @@
 //@ts-check
 import React, { useGlobal } from 'reactn'
 import { Redirect } from 'react-router'
-import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
-
-import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
-import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
 
 import {
-    Card,
-    CardBody,
-    CardHeader,
-    CardFooter,
     H1,
     Spinner,
     Tab,
@@ -20,10 +11,9 @@ import {
     TabPanel,
 } from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
+import { WikiList } from 'components/wiki-list'
 
 import { isArchived } from 'lib/helper'
-
-import s from './archive-page.module.scss'
 
 export default ArchivePage
 export { ArchivePage }
@@ -41,7 +31,6 @@ export { ArchivePage }
 function ArchivePage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
     const archivedFiles = filterIsArchived(files)
-    const archivedWikis = filterWikis(archivedFiles)
 
     if (isSignedIn && !isSigningIn) {
         return (
@@ -60,64 +49,7 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                         />
                     </TabPanel>
                     <TabPanel>
-                        {archivedWikis.length === 0 && (
-                            <h2 className={s.emptyMessage}>
-                                Your wiki archive is empty.
-                            </h2>
-                        )}
-                        <div style={{ paddingTop: 16 }}>
-                            {archivedWikis.map(f => {
-                                const {
-                                    id,
-                                    properties: { pageName },
-                                    modifiedTime,
-                                    teamDriveId,
-                                    parents,
-                                } = f
-                                const date = format(
-                                    new Date(modifiedTime),
-                                    'MMMM dd, yyyy'
-                                )
-                                const folder = getWikiRootFolder(
-                                    parents[0],
-                                    files
-                                )
-                                const { description } = folder
-                                return (
-                                    <Link to={`/page/${id}`}>
-                                        <Card key={id}>
-                                            <CardHeader
-                                                avatar={pageName[0]}
-                                                subtitle={date}
-                                                title={pageName}
-                                            />
-                                            <CardBody>{description}</CardBody>
-                                            <CardFooter>
-                                                {teamDriveId ? (
-                                                    <>
-                                                        <FolderAccountIcon
-                                                            className={
-                                                                s.FooterIcon
-                                                            }
-                                                        />{' '}
-                                                        Shared Drive
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <FolderGoogleDriveIcon
-                                                            className={
-                                                                s.FooterIcon
-                                                            }
-                                                        />{' '}
-                                                        My Drive
-                                                    </>
-                                                )}{' '}
-                                            </CardFooter>
-                                        </Card>
-                                    </Link>
-                                )
-                            })}
-                        </div>
+                        <WikiList files={archivedFiles} />
                     </TabPanel>
                 </Tabs>
             </>
@@ -140,21 +72,9 @@ function filterIsArchived(files) {
     return filtered
 }
 
-function filterWikis(files) {
-    const filtered = files.filter(file => {
-        return file.properties && file.properties.pageName
-    })
-    return filtered
-}
-
 function filterPages(files) {
     const filtered = files.filter(file => {
         return !file.properties || !file.properties.pageName
     })
     return filtered
-}
-
-function getWikiRootFolder(folderId, files) {
-    const folder = files.find(f => f.id === folderId)
-    return folder
 }
