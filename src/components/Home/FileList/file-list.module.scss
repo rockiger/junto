@@ -1,11 +1,40 @@
 @import '_base.scss';
 
 .FileList_content {
-    overflow-y: auto;
-    height: calc((100vh - 65px) - 56px);
+
+    &__scrollable {
+        overflow-y: auto;
+        height: calc((100vh - 65px) - 56px);
+    }
+
     @media (max-width: $md-max) {
         padding-left: 0.5rem;
     }
+}
+
+.FileList_header {
+    display: flex;
+    align-items: center;
+    padding: 2rem 0 0;
+
+    &:first-child {
+        padding: 0;
+
+        h1 {
+            width: 100%
+        }
+    }
+
+    &_buttons {
+        align-items: center;
+        display: flex;
+        padding-right: 1.5rem;
+    }
+
+    &_title {
+        margin: 0;
+    }
+
 }
 
 .FileList_tagline {

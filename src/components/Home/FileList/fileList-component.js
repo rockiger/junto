@@ -2,18 +2,19 @@
 
 import React, { useDispatch } from 'reactn'
 import { Link } from 'react-router-dom'
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalIcon'
 
-import Spinner from 'components/gsuite-components/spinner'
+import { Spacer, Spinner } from 'components/gsuite-components'
 import { EXT } from 'lib/constants'
 import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { PageButtons } from 'components/pageButtons'
 import { ButtonMenu } from 'components/ButtonMenu'
 
-import styles from './file-list.module.scss'
+import s from './file-list.module.scss'
 
 /** @typedef {import('reactn/default').IFile} File */
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
@@ -84,7 +85,7 @@ const PeriodList = ({ files, headline, sortBy }) => {
     if (files.length > 0) {
         return (
             <>
-                <div className={styles.FileList_tagline}>{headline}</div>
+                <div className={s.FileList_tagline}>{headline}</div>
                 <FileListPartial files={files} sortBy={sortBy} />
             </>
         )
@@ -170,18 +171,32 @@ const Periods = ({ files, sortBy }) => {
  * @typedef {object} FileListComponentProps
  * @prop {string} [emptyMessage]
  * @prop {File[]} files
- * @prop {boolean} isLoading
+ * @prop {boolean} [isLoading]
+ * @prop {boolean} [isScrollable]
  * @prop {SortBy} sortBy
  * @prop {string} searchTerm
  * @prop {function} setSortBy
  * @prop {string} [title]
+ * @prop {'h1'|'h2'|'h3'|'h4'|'h5'|'h6'} [header]
  */
 
 /**
  * @param {FileListComponentProps} props
  */
 const FileListComponent = props => {
-    const { emptyMessage, files, searchTerm, setSortBy, sortBy, title } = props
+    const {
+        emptyMessage,
+        files,
+        header,
+        isLoading,
+        isScrollable = true,
+        searchTerm,
+        setSortBy,
+        sortBy,
+        title,
+    } = props
+    console.log(header)
+    const Header = header ? header : 'h1'
     if (searchTerm || title) {
         document.title = `${
             searchTerm ? 'Search Result' : title
@@ -189,39 +204,51 @@ const FileListComponent = props => {
     }
     return (
         <div className="filelist">
-            {setSortBy && (
-                <PageButtons>
-                    <strong
-                        className={styles.sortCriteria}
-                        style={{ fontWeight: 500, marginRight: '.5rem' }}
-                    >
-                        {sortBy === 'viewedByMeTime'
-                            ? 'Last opened by me'
-                            : 'Last modified by me'}
-                    </strong>
-                    <ButtonMenu
-                        items={[
-                            {
-                                key: 1,
-                                name: 'Last modified by me',
-                                handler: () => setSortBy('modifiedByMeTime'),
-                                active: sortBy === 'modifiedByMeTime',
-                            },
-                            {
-                                key: 2,
-                                name: 'Last opened by me',
-                                handler: () => setSortBy('viewedByMeTime'),
-                                active: sortBy === 'viewedByMeTime',
-                            },
-                        ]}
-                        selectable={true}
-                    >
-                        <SortAlphabeticalIcon />
-                    </ButtonMenu>
-                </PageButtons>
-            )}
-            {title && <h1>{searchTerm ? 'Search Result' : title}</h1>}
-            <div className={styles.FileList_content}>
+            <div className={s.FileList_header}>
+                {title && (
+                    <Header className={s.FileList_header_title}>
+                        {searchTerm ? 'Search Result' : title}
+                    </Header>
+                )}
+                <Spacer />
+                {setSortBy && (
+                    <div className={s.FileList_header_buttons}>
+                        <strong
+                            className={s.sortCriteria}
+                            style={{ fontWeight: 500, marginRight: '.5rem' }}
+                        >
+                            {sortBy === 'viewedByMeTime'
+                                ? 'Last opened by me'
+                                : 'Last modified by me'}
+                        </strong>
+                        <ButtonMenu
+                            items={[
+                                {
+                                    key: 1,
+                                    name: 'Last modified by me',
+                                    handler: () =>
+                                        setSortBy('modifiedByMeTime'),
+                                    active: sortBy === 'modifiedByMeTime',
+                                },
+                                {
+                                    key: 2,
+                                    name: 'Last opened by me',
+                                    handler: () => setSortBy('viewedByMeTime'),
+                                    active: sortBy === 'viewedByMeTime',
+                                },
+                            ]}
+                            selectable={true}
+                        >
+                            <SortAlphabeticalIcon />
+                        </ButtonMenu>
+                    </div>
+                )}
+            </div>
+            <div
+                className={clsx(s.FileList_content, {
+                    isScrollable: s.FileList_content__scrollable,
+                })}
+            >
                 {/* 
                 // @ts-ignore */}
                 {props.isLoading && <Spinner />}
