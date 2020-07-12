@@ -2,7 +2,7 @@
     align-items: center;
     display: flex;
     padding-right: 24px;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 71px;
 }

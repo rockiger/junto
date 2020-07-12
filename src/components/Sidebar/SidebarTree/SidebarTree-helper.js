@@ -1,6 +1,6 @@
 //@ts-check
 import { EXT, OVERVIEW_NAME } from 'lib/constants'
-import { isArchived, isFolder, isPage } from 'lib/helper'
+import { isArchived } from 'lib/helper'
 
 /**
  * Produces the child folder for a given file if it exists and it has relevant content.

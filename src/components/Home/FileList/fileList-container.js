@@ -12,6 +12,9 @@ export default FileList
 /**
  * @typedef FileListProps
  * @property {string} [emptyMessage]
+ * @property {'h1'|'h2'|'h3'|'h4'|'h5'|'h6'} [header]
+ * @property {boolean} [isLoading]
+ * @property {boolean} [isScrollable]
  * @property {import('reactn/default').IFile[]} files
  * @property {SortBy} [sortBy]
  * @property {()=>{}} [setSortBy]
@@ -21,7 +24,7 @@ export default FileList
 /**
  * @param {FileListProps} props
  */
-function FileList({ emptyMessage, files, sortBy, setSortBy, title }) {
+function FileList({ emptyMessage, files, header, sortBy, setSortBy, title }) {
     const [isFileListLoading] = useGlobal('isFileListLoading')
     const [searchTerm] = useGlobal('searchTerm')
 
@@ -35,6 +38,7 @@ function FileList({ emptyMessage, files, sortBy, setSortBy, title }) {
                     : emptyMessage
             }
             files={files}
+            header={header}
             isLoading={isFileListLoading}
             searchTerm={searchTerm}
             setSortBy={setSortBy}

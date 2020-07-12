@@ -11,6 +11,7 @@ import {
     CardBody,
     CardHeader,
     CardFooter,
+    Spinner,
 } from 'components/gsuite-components'
 
 import s from './wiki-list.module.scss'
@@ -19,7 +20,8 @@ export default WikiList
 export { WikiList }
 
 /**
- * @typedef {Object.<string,any>} WikiListProps
+ * @typedef WikiListProps
+ * @property {import('reactn/default').IFile[]} files
  */
 
 /**
@@ -28,15 +30,17 @@ export { WikiList }
  */
 function WikiList({ files }) {
     const [initialFiles] = useGlobal('initialFiles')
-    const archivedWikis = filterWikis(files)
-    console.log(archivedWikis)
+    const [isFileListLoading] = useGlobal('isFileListLoading')
+    const wikis = filterWikis(files)
+    console.log(wikis)
     return (
         <div className={s.WikiList}>
-            {archivedWikis.length === 0 && (
+            {!isFileListLoading && wikis.length === 0 && (
                 <h2 className={s.emptyMessage}>Your wiki archive is empty.</h2>
             )}
+            {isFileListLoading && <Spinner />}
             <div style={{ paddingTop: 16 }}>
-                {archivedWikis.map(f => {
+                {wikis.map(f => {
                     const {
                         id,
                         properties: { pageName },

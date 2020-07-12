@@ -8,14 +8,22 @@
     display: inline-block;
     margin-bottom: 20px;
     margin-right: 20px;
-    width: 312px;
+    width: 256px;
 
     &:hover {
         border-color: $selected-color;
     }
 }
 
-.CardBody,
+.CardBody {
+    height: 1.5rem;
+    line-height: 1.5;
+    overflow: hidden;
+    padding: 0 1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .CardFooter,
 .CardHeader {
     padding: 1rem;
