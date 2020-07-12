@@ -39,7 +39,7 @@ function WikiList({ files }) {
                 <h2 className={s.emptyMessage}>Your wiki archive is empty.</h2>
             )}
             {isFileListLoading && <Spinner />}
-            <div style={{ paddingTop: 16 }}>
+            <div className={s.WikiList_container}>
                 {wikis.map(f => {
                     const {
                         id,
