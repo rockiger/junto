@@ -62,7 +62,10 @@ function Home(props) {
                             }}
                         >
                             <h2>Wikis</h2>
-                            <WikiList files={filterIsNotArchived(files)} />
+                            <WikiList
+                                files={filterIsNotArchived(files)}
+                                isDashboard
+                            />
                             <FileList
                                 emptyMessage="There are no files in this view."
                                 files={filterIsNotArchived(files)}

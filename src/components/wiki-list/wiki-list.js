@@ -1,6 +1,7 @@
 //@ts-check
 import React, { useGlobal } from 'reactn'
 import { Link } from 'react-router-dom'
+import clsx from 'clsx'
 import { format } from 'date-fns'
 
 import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
@@ -22,13 +23,14 @@ export { WikiList }
 /**
  * @typedef WikiListProps
  * @property {import('reactn/default').IFile[]} files
+ * @property {boolean} [isDashboard] - shows only the first row of the wiki list
  */
 
 /**
  * A wiki-list component.
  * @param {WikiListProps} props
  */
-function WikiList({ files }) {
+function WikiList({ files, isDashboard }) {
     const [initialFiles] = useGlobal('initialFiles')
     const [isFileListLoading] = useGlobal('isFileListLoading')
     const wikis = filterWikis(files)
@@ -39,7 +41,12 @@ function WikiList({ files }) {
                 <h2 className={s.emptyMessage}>Your wiki archive is empty.</h2>
             )}
             {isFileListLoading && <Spinner />}
-            <div className={s.WikiList_container}>
+            <div
+                className={clsx(
+                    s.WikiList_container,
+                    isDashboard && s.WikiList_container__isDashboard
+                )}
+            >
                 {wikis.map(f => {
                     const {
                         id,
