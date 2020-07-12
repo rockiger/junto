@@ -72,7 +72,7 @@ function Home(props) {
                                 header="h2"
                                 sortBy={sortBy}
                                 setSortBy={setSortByAndLocalStorage}
-                                title="Pages"
+                                title="Dashboard"
                             />
                         </div>
                     </>

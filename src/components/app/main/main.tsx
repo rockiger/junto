@@ -10,6 +10,7 @@ import Page from 'components/Page'
 import { SharedWithMe } from 'components/SharedWithMe'
 import { PrivacyPolicy, TermsOfService, FAQ } from 'components/staticPages'
 import styles from './main.module.scss'
+import { WikiOverview } from 'components/wiki-overview'
 
 export default function Main(props: any): ReactElement {
     const [isCreatingNewFile] = useGlobal('isCreatingNewFile')
@@ -64,7 +65,7 @@ export default function Main(props: any): ReactElement {
                     />
                 )}
             />
-            <Route exact path="/drive/" render={(props) => <Drive />} />
+            <Route exact path="/drive/" render={props => <Drive />} />
             <Route
                 exact
                 path="/new/"
@@ -87,6 +88,9 @@ export default function Main(props: any): ReactElement {
                 path="/terms-of-service"
                 render={(props: any) => <TermsOfService />}
             />
+            <Route exact path="/wikis">
+                <WikiOverview />
+            </Route>
         </div>
     )
 }
