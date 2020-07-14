@@ -1,5 +1,5 @@
 //@ts-check
-import React, { useGlobal } from 'reactn'
+import React, { useGlobal, useState } from 'reactn'
 
 import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
 
@@ -18,7 +18,8 @@ export { WikiOverview }
  * @param {WikiOverviewProps} props
  */
 function WikiOverview(props) {
-    const [files] = useGlobal('files')
+    const [files] = useGlobal('initialFiles')
+    const [filterString, setFilterString] = useState('')
 
     return (
         <div className={s.WikiOverview}>
@@ -26,11 +27,40 @@ function WikiOverview(props) {
                 <h1 className={s.header_h1}>Wiki Directory</h1>
                 <input
                     className={s.header_input}
-                    type="text"
+                    onChange={ev => setFilterString(ev.target.value)}
                     placeholder="Filter"
+                    type="text"
+                    value={filterString}
                 />
             </div>
-            <WikiList files={filterIsNotArchived(files)} />
+            <WikiList
+                files={filterIsNotArchived(filterSearch(filterString, files))}
+            />
         </div>
     )
+
+    /**
+     *
+     * @param {string} filterString
+     * @param {import('reactn/default').IFile[]} files
+     * @returns {import('reactn/default').IFile[]}
+     */
+    function filterSearch(filterString, files) {
+        if (filterString.length < 3) return files
+
+        return files.filter(f => {
+            const result = `${
+                f.properties && f.properties.pageName
+                    ? f.properties.pageName
+                    : ''
+            } ${f.description ? f.description : ''}`
+            console.log(result)
+            return (
+                result
+                    .trim()
+                    .toLowerCase()
+                    .search(filterString.toLowerCase()) !== -1
+            )
+        })
+    }
 }
