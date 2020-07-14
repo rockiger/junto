@@ -22,7 +22,14 @@ function WikiOverview(props) {
 
     return (
         <div className={s.WikiOverview}>
-            <h1>Wiki Directory</h1>
+            <div className={s.header}>
+                <h1 className={s.header_h1}>Wiki Directory</h1>
+                <input
+                    className={s.header_input}
+                    type="text"
+                    placeholder="Filter"
+                />
+            </div>
             <WikiList files={filterIsNotArchived(files)} />
         </div>
     )

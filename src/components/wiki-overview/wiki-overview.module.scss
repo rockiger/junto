@@ -4,3 +4,20 @@
     height: 100%;
     overflow: auto;
 }
+
+.header {
+    align-items: center;
+    display: flex;
+
+    &_h1 {
+        flex-grow: 1;
+    }
+
+    &_input {
+        border: 1px solid $border-color;
+        border-radius: $common-border-radius;
+        margin-right: 27px;
+        padding: .5rem .75rem;
+        width: 256px;
+    }
+}
