@@ -65,6 +65,7 @@ function Home(props) {
                             <WikiList
                                 files={filterIsNotArchived(files)}
                                 isDashboard
+                                orderBy="date"
                             />
                             <FileList
                                 emptyMessage="There are no files in this view."
