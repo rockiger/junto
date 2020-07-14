@@ -6,7 +6,7 @@ import { LOCALSTORAGE_NAME } from 'lib/constants'
 
 import FrontPage from './front-page'
 import FileList from './FileList'
-import { isArchived } from 'lib/helper'
+import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
 import WikiList from 'components/wiki-list'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
@@ -88,13 +88,6 @@ function Home(props) {
     } else {
         return <FrontPage />
     }
-}
-
-function filterIsNotArchived(files) {
-    const filtered = files.filter(file => {
-        return !isArchived(file)
-    })
-    return filtered
 }
 
 Home.propTypes = {

@@ -4,6 +4,7 @@ import { OVERVIEW_NAME } from 'lib/constants'
 export {
     filesUpdater,
     filesUpdaterHelper,
+    filterIsNotArchived,
     getMetaById,
     hasChildren,
     isArchived,
@@ -68,6 +69,13 @@ const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
             return item
         }
     })
+}
+
+function filterIsNotArchived(files) {
+    const filtered = files.filter(file => {
+        return !isArchived(file)
+    })
+    return filtered
 }
 
 /**
