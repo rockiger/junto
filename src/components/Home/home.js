@@ -13,12 +13,13 @@ const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 
 /** @typedef {{sortBy: 'modifiedByMeTime' | 'viewedByMeTime' | 'sharedWithMeTime'}} SortBy */
 function Home(props) {
-    const [isFileListLoading] = useGlobal('isFileListLoading')
     const { isSignedIn, isSigningIn, isCreatingNewFile } = props
+    const [isFileListLoading] = useGlobal('isFileListLoading')
 
     const sortByLS = localStorage.getItem(localStorageKey)
 
     const [files] = useGlobal('files')
+    const [searchTerm] = useGlobal('searchTerm')
     const [sortBy, setSortBy] = useState(
         sortByLS &&
             (sortByLS === 'modifiedByMeTime' || sortByLS === 'viewedByMeTime')
@@ -53,7 +54,7 @@ function Home(props) {
                                 padding: '.5rem',
                             }}
                         >
-                            Dashboard
+                            {searchTerm ? 'Search results' : 'Dashboard'}
                         </h1>
                         <div
                             style={{
@@ -61,19 +62,23 @@ function Home(props) {
                                 overflowY: 'auto',
                             }}
                         >
-                            <h2>Wikis</h2>
-                            <WikiList
-                                files={filterIsNotArchived(files)}
-                                isDashboard
-                                orderBy="date"
-                            />
+                            {!searchTerm && (
+                                <div>
+                                    <h2>Wikis</h2>
+                                    <WikiList
+                                        files={filterIsNotArchived(files)}
+                                        isDashboard
+                                        orderBy="date"
+                                    />
+                                </div>
+                            )}
                             <FileList
                                 emptyMessage="There are no files in this view."
                                 files={filterIsNotArchived(files)}
                                 header="h2"
                                 sortBy={sortBy}
                                 setSortBy={setSortByAndLocalStorage}
-                                title="Dashboard"
+                                title={searchTerm ? '' : 'Pages'}
                             />
                         </div>
                     </>

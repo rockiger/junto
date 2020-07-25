@@ -203,9 +203,7 @@ const FileListComponent = props => {
         <div className="filelist">
             <div className={s.FileList_header}>
                 {title && (
-                    <Header className={s.FileList_header_title}>
-                        {searchTerm ? 'Search Result' : title}
-                    </Header>
+                    <Header className={s.FileList_header_title}>{title}</Header>
                 )}
                 <Spacer />
                 {setSortBy && (
