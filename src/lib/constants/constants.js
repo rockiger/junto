@@ -1,9 +1,8 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
 // Client ID and API key from the Developer Console
-export const CLIENT_ID =
-    '***REMOVED***'
-export const API_KEY = '***REMOVED***'
+export const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
+export const API_KEY = process.env.REACT_APP_API_KEY
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 export const DISCOVERY_DOCS = [
