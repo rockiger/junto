@@ -21,6 +21,8 @@ export default function Header(props: any) {
                         FAQ
                     </FooterLink>
                 )}
+                {/*
+                //@ts-ignore */}
                 <GoogleLogin
                     clientId={CLIENT_ID}
                     apiKey={API_KEY}
