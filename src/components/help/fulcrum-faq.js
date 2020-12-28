@@ -2,6 +2,9 @@ import React from 'react'
 
 import { Button } from 'components/gsuite-components'
 
+import CreateNewWiki1 from './CreateNewWiki1.png'
+import CreateNewWiki2 from './CreateNewWiki2.png'
+
 export { FulcrumFaq }
 
 function FulcrumFaq() {
@@ -80,7 +83,7 @@ function FulcrumFaq() {
                 <img
                     alt="Create New Wiki 1/2"
                     className="shadow"
-                    src={process.env.PUBLIC_URL + '/img/Create New Wiki 1.png'}
+                    src={CreateNewWiki1}
                 />
             </p>
 
@@ -88,7 +91,7 @@ function FulcrumFaq() {
                 <img
                     alt="Create New Wiki 2/2"
                     className="shadow"
-                    src={process.env.PUBLIC_URL + '/img/Create New Wiki 2.png'}
+                    src={CreateNewWiki2}
                 />
             </p>
             <p>
