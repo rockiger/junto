@@ -47,7 +47,6 @@ const EditorLogic = React.forwardRef(
         const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
         //const editorRef = useRef(null)
 
-        const currentEditor = editorRef.current
         const initialState = Value.fromJSON(JSON.parse(initialValue))
 
         useEffect(() => {
@@ -86,21 +85,12 @@ const EditorLogic = React.forwardRef(
             // eslint-disable-next-line
         }, [readOnly])
 
-        useEffect(
-            () => {
-                return async () => {
-                    if (currentEditor && !currentEditor.state.readOnly) {
-                        console.log('useEffect for save') // check if gets fired to often
-                        await saveToDriveAndLocalDB(fileId, initialValue)
-                    }
-                }
-            },
-            // eslint-disable-next-line
-            [currentEditor, fileId, initialValue]
-        )
-
         useEffect(() => {
             initStorage(initialValue, fileId)
+            return async () => {
+                console.log('useEffect for save') // check if gets fired to often
+                await saveToDriveAndLocalDB(fileId, initialValue)
+            }
             // eslint-disable-next-line
         }, [])
 
@@ -151,7 +141,7 @@ const EditorLogic = React.forwardRef(
             setValue(value)
         }
 
-        const onKeyDown = (ev) => {
+        const onKeyDown = ev => {
             if (!readOnly) {
                 if (isSaveHotkey(ev)) return
                 ev.stopPropagation()
