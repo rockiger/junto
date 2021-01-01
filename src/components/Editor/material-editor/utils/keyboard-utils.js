@@ -16,11 +16,9 @@
  */
 export function isEnterWithoutControlOrCommand(blockType, keyboardEvent) {
     const { key, blockType: TBlock, ctrlKey, metaKey } = keyboardEvent
-    console.log('keyboardevent', keyboardEvent)
 
     const result =
         key === 'Enter' && TBlock === blockType && !ctrlKey && !metaKey
-    console.log('result', result)
 
     return result
 }

@@ -13,7 +13,7 @@ function LinkPlugin(options) {
 
     const isHotkey = isKeyHotkey(`mod+${key}`)
     const modifier = toKeyName('mode') === 'meta' ? '⌘' : 'Ctrl'
-    console.log(modifier)
+    // console.log(modifier)
 
     return {
         onKeyDown(event, editor, next) {

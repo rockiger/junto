@@ -35,7 +35,6 @@ function Modal({
 }) {
     ReactModal.setAppElement('#root')
 
-    console.log(fullHeight)
     return (
         <ReactModal
             {...rest}
@@ -58,7 +57,7 @@ function Modal({
             <div className={s.Modal_content}>{children}</div>
             {buttons && (
                 <div className={s.Modal_footer}>
-                    {buttons.map((button) => button)}
+                    {buttons.map(button => button)}
                 </div>
             )}
         </ReactModal>
