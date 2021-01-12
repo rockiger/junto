@@ -21,6 +21,7 @@ import {
     updateModifiedTimeInGlobalState,
 } from './Editor-helper'
 import ArchiveButton from 'components/archive/archive-button'
+import { History as HistoryButton } from 'components/history/history'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -163,6 +164,7 @@ const EditorLogic = React.forwardRef(
                 {canEdit && (
                     <PageButtons>
                         <ShareButton fileId={fileId} />
+                        <HistoryButton fileId={fileId} />
                         <ArchiveButton fileId={fileId} />
                         <ToggleReadOnlyButton
                             readOnly={readOnly}

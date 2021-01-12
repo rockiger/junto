@@ -126,6 +126,20 @@ export async function listFilesChunked(searchTerm = '', orderBy = '') {
 }
 
 /**
+ * Get all revisions of a file.
+ *
+ * @method listRevisions
+ * @return {Promise|Array} A promise of the result that
+ * returns an array of revision descriptions.
+ */
+export function listRevisions(fileId) {
+    return gapi.client.drive.revisions.list({
+        fileId,
+        fields: '*',
+    })
+}
+
+/**
  * Creates file with name and a parentId.
  *
  * @method createFile
