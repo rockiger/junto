@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { withKnobs, object } from '@storybook/addon-knobs/react'
 
 import { SearchAutocomplete } from './SearchAutocomplete'
 import testState from './testState.js'
@@ -39,7 +38,6 @@ const items = [
 ]
 
 storiesOf('SearchAutocomplete', module)
-    .addDecorator(withKnobs)
     .addDecorator(story => (
         <div style={{ padding: '1rem', border: '1px solid rgba(0,0,0, 0.2' }}>
             {story()}

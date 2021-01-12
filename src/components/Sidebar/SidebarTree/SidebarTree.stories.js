@@ -2,7 +2,6 @@ import React, { setGlobal } from 'reactn'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { withKnobs, object } from '@storybook/addon-knobs/react'
 
 import { SidebarTreeItem } from './SidebarTreeItem'
 import { useStyles } from './SidebarTree-styles'
@@ -11,7 +10,6 @@ import testState from './testState.js'
 import { MYHOME } from '../../../lib/constants'
 
 storiesOf('SidebarTree', module)
-    .addDecorator(withKnobs)
     .addDecorator(story => (
         <div
             style={{

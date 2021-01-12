@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { withKnobs, object } from '@storybook/addon-knobs/react'
 
 import MenuIcon from 'mdi-react/MenuIcon'
 
 import { ButtonMenu } from './ButtonMenu-container'
 
 storiesOf('ButtonMenu', module)
-    .addDecorator(withKnobs)
     .addDecorator(story => (
         <div
             style={{

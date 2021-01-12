@@ -1,6 +1,5 @@
 import React, { setGlobal } from 'reactn'
 import { storiesOf } from '@storybook/react'
-import { withKnobs } from '@storybook/addon-knobs/react'
 
 import { OVERVIEW_NAME, FOLDER_NAME } from 'lib/constants'
 
@@ -69,7 +68,6 @@ export const files = [
 ]
 
 storiesOf('BreadcrumbsBar', module)
-    .addDecorator(withKnobs)
     .addDecorator(story => (
         <div
             style={{

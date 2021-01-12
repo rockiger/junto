@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { withKnobs, object } from '@storybook/addon-knobs/react'
 
 import Button from './button'
 
 storiesOf('Button', module)
-    .addDecorator(withKnobs)
-    .addDecorator((story) => (
+    .addDecorator(story => (
         <div
             style={{
                 display: 'flex',

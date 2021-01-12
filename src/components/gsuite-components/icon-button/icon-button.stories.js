@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { withKnobs, object } from '@storybook/addon-knobs/react'
 
 import IconButton from './icon-button'
 
 import CogOutlineIcon from 'mdi-react/CogOutlineIcon'
 
 storiesOf('IconButton', module)
-    .addDecorator(withKnobs)
-    .addDecorator((story) => (
+    .addDecorator(story => (
         <div
             style={{
                 display: 'flex',
