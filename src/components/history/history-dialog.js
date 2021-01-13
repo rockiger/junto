@@ -46,7 +46,7 @@ export default function HistoryDialogContent({ fileId, setIsOpen, isOpen }) {
                         </div>
 
                         <div>
-                            <small>{rev.lastModifyingUser.displayName}</small>
+                            <small>{rev?.lastModifyingUser?.displayName}</small>
                         </div>
                     </li>
                 ))}
