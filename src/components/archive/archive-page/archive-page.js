@@ -41,14 +41,14 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                         <Tab>Pages</Tab>
                         <Tab>Wikis</Tab>
                     </TabList>
-                    <TabPanel>
+                    <TabPanel style={{ maxHeight: 'calc(100vh - 168px)' }}>
                         <FileList
                             emptyMessage="Your archive is empty."
                             files={filterPages(archivedFiles)}
                             sortBy="modifiedByMeTime"
                         />
                     </TabPanel>
-                    <TabPanel>
+                    <TabPanel style={{ maxHeight: 'calc(100vh - 168px)' }}>
                         <WikiList files={archivedFiles} />
                     </TabPanel>
                 </Tabs>
