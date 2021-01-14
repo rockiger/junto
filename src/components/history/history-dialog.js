@@ -23,9 +23,9 @@ function dialogReducer(state, action) {
                 content: (
                     <>
                         <p>
-                            {action.revisionNo === 0
-                                ? 'The curren revision '
-                                : `Revision ${action.revisionNo} `}
+                            {action.revisionNo === action.revisions.length
+                                ? 'The curren version '
+                                : `Version ${action.revisionNo} `}
                             is about to be permanently deleted.
                         </p>
                         <p>
@@ -36,12 +36,52 @@ function dialogReducer(state, action) {
                 isOpen: true,
                 onOk: async () => {
                     console.log(
-                        'Delete revision',
+                        'Delete version',
                         action.revisionId,
                         action.fileId
                     )
                     try {
                         await deleteRevision(action.fileId, action.revisionId)
+                        return 'Version(s) deleted.'
+                    } catch (err) {
+                        console.error(err)
+                        throw Error('Delete revision error')
+                    }
+                },
+                title: 'Delete forever?',
+            }
+        case 'restore':
+            return {
+                buttonText: 'Restore version and delete younger ones',
+                content: (
+                    <>
+                        <p>
+                            Restore version {action.revisionNo}.{' '}
+                            {action.revisions.length === action.revisionNo + 1
+                                ? `The current version`
+                                : `Versions ${action.revisions.length} - ${
+                                      action.revisionNo + 1
+                                  }`}{' '}
+                            will be permanently deleted.
+                        </p>
+                        <p>
+                            <b>Warning: You can't undo this action.</b>
+                        </p>
+                    </>
+                ),
+                isOpen: true,
+                onOk: async () => {
+                    const revisionsToDelete = action.revisions.slice(
+                        0,
+                        action.revisions.length - action.revisionNo
+                    )
+                    try {
+                        await Promise.all(
+                            revisionsToDelete.map(rev =>
+                                deleteRevision(action.fileId, rev.id)
+                            )
+                        )
+                        return 'Revision restored.'
                     } catch (err) {
                         console.error(err)
                         throw Error('Delete revision error')
@@ -55,12 +95,7 @@ function dialogReducer(state, action) {
 }
 
 export { HistoryDialogContent }
-export default function HistoryDialogContent({
-    fileId,
-    loadEditorContent,
-    setIsOpen,
-    isOpen,
-}) {
+export default function HistoryDialogContent({ fileId }) {
     const [alert, alertDispatch] = useReducer(dialogReducer, initialAlert)
     const [loaded, setLoaded] = useState(false)
     const [revisions, setRevisions] = useState([])
@@ -80,8 +115,8 @@ export default function HistoryDialogContent({
     return (
         <>
             <p>
-                Old versions may be deleted after 30 days or after 100
-                revisionens are stored.
+                Old versions may be deleted after 30 days or after 100 revisions
+                are stored.
             </p>
             {!loaded ? (
                 <Spinner />
@@ -97,6 +132,7 @@ export default function HistoryDialogContent({
                                     fileId={fileId}
                                     revisionId={rev.id}
                                     revisionNo={array.length - index}
+                                    revisions={array}
                                 />
                             )}
                             title={format(
@@ -109,9 +145,7 @@ export default function HistoryDialogContent({
                                     <i>
                                         {index === 0
                                             ? 'Current Version'
-                                            : `Revision ${
-                                                  array.length - index
-                                              }`}
+                                            : `Version ${array.length - index}`}
                                     </i>
                                 </small>
                             </div>
@@ -133,15 +167,15 @@ export default function HistoryDialogContent({
                     onClose={() => alertDispatch({ type: 'close' })}
                     onOk={async () => {
                         try {
-                            await alert.onOk()
-                            enqueueSnackbar('Revision deleted.', {
+                            const message = await alert.onOk()
+                            enqueueSnackbar(message, {
                                 autoHideDuration: 5000,
                             })
                             alertDispatch({ type: 'close' })
                             setLoaded(false)
                             window.location.reload()
                         } catch {
-                            enqueueSnackbar("Couldn't delete revision.", {
+                            enqueueSnackbar('Something went wrong.', {
                                 autoHideDuration: 5000,
                             })
                             alertDispatch({ type: 'close' })
@@ -157,24 +191,36 @@ export default function HistoryDialogContent({
     )
 }
 
-function Menu({ alertDispatch, fileId, revisionId, revisionNo }) {
+function Menu({ alertDispatch, fileId, revisionId, revisionNo, revisions }) {
     return (
         <ButtonMenu
             items={[
-                {
-                    key: 1,
-                    name: 'Restore this revision',
-                    handler: () => console.log('Restore revision', revisionId),
-                },
+                ...(revisionNo === revisions.length
+                    ? []
+                    : [
+                          {
+                              key: 1,
+                              name: 'Restore this version',
+                              handler: () =>
+                                  alertDispatch({
+                                      type: 'restore',
+                                      fileId,
+                                      revisionId,
+                                      revisionNo,
+                                      revisions,
+                                  }),
+                          },
+                      ]),
                 {
                     key: 2,
-                    name: 'Delete this revision',
+                    name: 'Delete this version',
                     handler: () =>
                         alertDispatch({
                             type: 'delete',
                             fileId,
                             revisionId,
                             revisionNo,
+                            revisions,
                         }),
                 },
             ]}
