@@ -5,7 +5,11 @@ import ArchiveIconDown from 'mdi-react/ArchiveArrowDownOutlineIcon'
 import ArchiveIconUp from 'mdi-react/ArchiveArrowUpIcon'
 import { useSnackbar } from 'notistack'
 
-import { Alert, IconButton } from 'components/gsuite-components'
+import { IconButton } from 'components/gsuite-components'
+import {
+    Alert,
+    emptyAlert as initialAlert,
+} from 'components/gsuite-components/alert'
 import {
     filesUpdater,
     getMetaById,
@@ -233,23 +237,6 @@ function ArchiveButton({ fileId }) {
     }
 }
 
-/**
- * @typedef Alert
- * @property {string} buttonText
- * @property {React.ReactNode} content
- * @property {boolean} isOpen
- * @property {() => void} onOk
- * @property {string} title
- */
-
-/** @type {Alert} */
-const initialAlert = {
-    buttonText: '',
-    content: '',
-    isOpen: false,
-    onOk: () => {},
-    title: '',
-}
 // Warning if has child pages
 /* Diese Seite hat untergeordnete Seiten
 Alle unter "Child 2" geschachtelten Seiten bleiben in der Seitenhierarchie erhalten. */

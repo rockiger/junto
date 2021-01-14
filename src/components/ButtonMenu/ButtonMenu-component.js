@@ -45,12 +45,13 @@ export function ButtonMenuComponent({
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={onClose}
+                style={{ zIndex: 1000 }}
                 transformOrigin={{
                     vertical: 'top',
                     horizontal: 'center',
                 }}
             >
-                {items.map((el) => (
+                {items.map(el => (
                     <MenuItem key={el.key} onClick={() => onSelect(el.handler)}>
                         {selectable && el.active && (
                             <ListItemIcon style={{ minWidth: '2.25rem' }}>

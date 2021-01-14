@@ -1,8 +1,10 @@
 import React from 'react'
 import { format } from 'date-fns'
 import { Story, Meta } from '@storybook/react/types-6-0'
+import DotsVerticalIcon from 'mdi-react/DotsVerticalIcon'
 
 import { List, ListItem, ListItemProps, ListProps } from './list'
+import { ButtonMenu } from 'components/ButtonMenu'
 
 export default {
     title: 'List',
@@ -26,26 +28,49 @@ export const ManyItemsSimple = args => (
 )
 
 export const ManyItemsComplex = args => (
-    <List {...args}>
+    <List {...args} divided>
         {data.map((rev, index, array) => (
-            <li key={index}>
-                <div>
-                    <b>{format(new Date(rev.modifiedTime), 'MMMM d, Y, p')}</b>
-                </div>
+            <ListItem
+                active={index === 0}
+                key={index}
+                menu={menu}
+                title={format(new Date(rev.modifiedTime), 'MMMM d, Y, p')}
+            >
                 <div>
                     <small>
-                        {index === 0
-                            ? 'Current Version'
-                            : `Revision ${array.length - index}`}
+                        <i>
+                            {index === 0
+                                ? 'Current Version'
+                                : `Revision ${array.length - index}`}
+                        </i>
                     </small>
                 </div>
 
                 <div>
                     <small>{rev?.lastModifyingUser?.displayName}</small>
                 </div>
-            </li>
+            </ListItem>
         ))}
     </List>
+)
+
+const menu = () => (
+    <ButtonMenu
+        items={[
+            {
+                key: 1,
+                name: 'Restore this revision',
+                handler: () => console.log('Restore revision'),
+            },
+            {
+                key: 2,
+                name: 'Delete this revision',
+                handler: () => console.log('Delete revision'),
+            },
+        ]}
+    >
+        <DotsVerticalIcon />
+    </ButtonMenu>
 )
 
 const data = [

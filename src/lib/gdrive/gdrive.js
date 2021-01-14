@@ -439,6 +439,25 @@ export function deleteFile(driveId) {
 }
 
 /**
+ * Removes removes from drive. Can reject
+ *
+ * @method deleteRevision
+ * @param {String} fileId Google Drive file identifier
+ * @param {String} revisionId The ID of the revision.
+ * @return {Promise} A promise of the result
+ */
+export function deleteRevision(fileId, revisionId) {
+    return new Promise((resolve, reject) => {
+        gapi.client.drive.revisions
+            .delete({
+                fileId,
+                revisionId,
+            })
+            .then(resolve, reject)
+    })
+}
+
+/**
  * Replaces the file content with newData. Can reject
  *
  * @method updateFile

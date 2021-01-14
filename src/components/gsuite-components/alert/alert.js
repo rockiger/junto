@@ -47,3 +47,21 @@ export default function Alert({
         </Modal>
     )
 }
+
+/**
+ * @typedef AlertType
+ * @property {string} buttonText
+ * @property {React.ReactNode} content
+ * @property {boolean} isOpen
+ * @property {() => void} onOk
+ * @property {string} title
+ */
+
+/** @type {AlertType} */
+export const emptyAlert = {
+    buttonText: '',
+    content: '',
+    isOpen: false,
+    onOk: () => {},
+    title: '',
+}

@@ -5,9 +5,14 @@ import { ButtonMenuComponent } from './ButtonMenu-component'
 
 /**
  * @typedef {object} Props
- * @prop {string} children
- * @prop {items} array
+ * @prop {any} children
+ * @prop {array} items
+ * @prop {boolean} [selectable]
  *
+ */
+
+/**
+ * @param {Props} param0
  */
 export function ButtonMenu({ children, items, selectable }) {
     const [anchorEl, setAnchorEl] = useState(null)

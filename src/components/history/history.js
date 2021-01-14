@@ -7,7 +7,7 @@ const HistoryDialog = React.lazy(() => import('./history-dialog'))
 
 export { History }
 
-export default function History({ fileId }) {
+export default function History({ fileId, loadEditorContent }) {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
@@ -36,8 +36,7 @@ export default function History({ fileId }) {
                     >
                         <HistoryDialog
                             fileId={fileId}
-                            isOpen={isOpen}
-                            setIsOpen={setIsOpen}
+                            loadEditorContent={loadEditorContent}
                         />
                     </Suspense>
                 </Modal>
