@@ -99,6 +99,14 @@ function FulcrumFaq() {
                 please don't create new wikis in folders that are already used
                 as wikis!
             </p>
+            <h2>How do I share a wiki?</h2>
+            <p>
+                Sharing wikis is only possible if you have a Google Workspace
+                (former GSuite) account. To create a shared wiki, you have to
+                add it from Google Drive. Navigate to a shared drive of your
+                choosing. The wiki will be available to all members of the
+                shared drive you chose.
+            </p>
             <h2>
                 I can not share pages. The share dialog always shows an error or
                 is blank.

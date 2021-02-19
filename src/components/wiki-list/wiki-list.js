@@ -101,7 +101,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
     )
 }
 
-function filterWikis(files) {
+export function filterWikis(files) {
     const filtered = files.filter(file => {
         return file.properties && file.properties.pageName
     })
@@ -114,7 +114,7 @@ function filterWikis(files) {
  * @param {import('reactn/default').IFile[]} files
  * @returns {import('reactn/default').IFile[]}
  */
-function sortWikisBy(attr = 'name', files) {
+export function sortWikisBy(attr = 'name', files) {
     if (attr === 'name') {
         return sortBy(files, file =>
             file.properties && file.properties.pageName
