@@ -10,25 +10,31 @@ export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
     const classes = useStyles()
     window['initialFiles'] = initialFiles
-    // debugger
     console.log(initialFiles)
-    console.log(filterSharedDrives(initialFiles))
+
     return (
         <ul className={classes.mydrive}>
             <li>
                 <ul className={classes.mydrive}>
-                    {sortWikisBy('name', filterWikis(initialFiles)).map(
-                        (file, index) => (
-                            <SidebarTreeItem
-                                expand={false}
-                                key={index}
-                                files={initialFiles}
-                                label={getTitleFromFile(file)}
-                                level={0}
-                                pageId={file.id}
-                                parentId={file.parents[0]}
-                            />
-                        )
+                    {thread(
+                        '->>',
+                        initialFiles,
+                        filterWikis,
+                        [sortWikisBy, 'name'],
+                        [
+                            map,
+                            (file, index) => (
+                                <SidebarTreeItem
+                                    expand={false}
+                                    key={index}
+                                    files={initialFiles}
+                                    label={getTitleFromFile(file)}
+                                    level={0}
+                                    pageId={file.id}
+                                    parentId={file.parents[0]}
+                                />
+                            ),
+                        ]
                     )}
                 </ul>
             </li>
@@ -55,3 +61,34 @@ function isParentFolderNotDeleted(childFile, files) {
     const parents = files.filter(file => file.id === parentId)
     return parents[0] && parents[0].trashed === false
 }
+
+/**
+ * Evaluates the given forms in order, the result of each form will be add last or first in the next form
+ * @example thread(
+ *             '->',
+ *             arr,
+ *             fn1,
+ *             [fn2, arg2]
+ *          )
+ * @param {'->' | '-->'} threadType --> for thread last and -> for thread first
+ * @param {*} initialValue
+ * @param  {...any} forms
+ * @returns any
+ */
+const thread = (threadType, initialValue, ...forms) => {
+    return forms.reduce((acc, curVal) => {
+        //console.log({ acc, curVal })
+        if (Array.isArray(curVal)) {
+            const [head, ...rest] = curVal
+            //console.log([acc, ...rest])
+            return threadType === '->'
+                ? head.apply(this, [acc, ...rest])
+                : head.apply(this, [...rest, acc])
+        } else {
+            //console.log({ curVal })
+            return curVal(acc)
+        }
+    }, initialValue)
+}
+
+const map = (fn, arr) => arr.map(fn)
