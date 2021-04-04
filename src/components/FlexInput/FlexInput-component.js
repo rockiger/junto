@@ -43,9 +43,10 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
                 .flexInput {
                     border: 1px solid transparent;
                     font: unset;
-                    font-size: 1.5rem;
+                    font-size: 1.2rem;
                     font-weight: 400;
                     padding: 0 calc(.5rem - 1px);
+                    margin: 0 calc(-.5rem + 1px);
                 }
                 .flexInput:hover {
                     border-color: #dadce0;

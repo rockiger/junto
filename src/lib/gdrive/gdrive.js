@@ -80,7 +80,7 @@ export function listFiles(searchTerm = '', orderBy = '') {
         gapi.client.drive.files
             .list({
                 corpora: 'allDrives',
-                pageSize: 999,
+                pageSize: 100,
                 fields: 'files(' + fileFields + '), nextPageToken',
                 includeItemsFromAllDrives: true,
                 orderBy: order,

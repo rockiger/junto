@@ -15,7 +15,7 @@ import { useStyles } from './Breadcrumbs.styles'
  * @param props
  */
 export const BreadcrumbsBar = (props: IProps) => {
-    const { fileId } = props
+    const { children, fileId } = props
     const [files] = useGlobal('initialFiles')
     const [file, setFile] = useState<IFileOrNull>(null)
     const [parents, setParents] = useState<Array<IFile>>([])
@@ -35,7 +35,7 @@ export const BreadcrumbsBar = (props: IProps) => {
 
     if (parents.length === 0) return null
     return (
-        <div id="breadcrumbsBar" className={classes.breadcrumbsBar}>
+        <span id="breadcrumbsBar" className={classes.breadcrumbsBar}>
             <Breadcrumbs
                 aria-label="breadcrumb"
                 className={classes.breadcrumbs}
@@ -58,12 +58,8 @@ export const BreadcrumbsBar = (props: IProps) => {
                         return null
                     }
                 })}
-                {file && file.name && (
-                    <Typography color="textPrimary">
-                        {getTitleFromFile(file)}
-                    </Typography>
-                )}
+                {children}
             </Breadcrumbs>
-        </div>
+        </span>
     )
 }

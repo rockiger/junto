@@ -258,20 +258,24 @@ export default class Page extends React.Component {
                                             <LockOutlineIcon size=".75em" />
                                         </div>
                                     ) : (
+                                                                    <BreadcrumbsBar fileId={this.state.fileId}>
+
+
                                         <FlexInput
                                             id="editorInput"
                                             onBlur={this.onBlurInput}
                                             value={
                                                 this.state.pageHead !==
                                                 'Untitled page'
-                                                    ? this.state.pageHead
-                                                    : ''
+                                                ? this.state.pageHead
+                                                : ''
                                             }
                                             placeholder="Untitled page"
                                             ref={this.inputRef}
                                             onKeyDown={this.onKeyDownInput}
                                             onChange={this.onChangeInput}
-                                        />
+                                            />
+                                            </BreadcrumbsBar>
                                     ))}
                                 {!this.state.canEdit && (
                                     <div
@@ -295,9 +299,6 @@ export default class Page extends React.Component {
                             </h1>
                         )}
                         {this.state.fileLoaded && editor}
-                        {this.state.fileLoaded && (
-                            <BreadcrumbsBar fileId={this.state.fileId} />
-                        )}
                         {!this.state.fileLoaded && <Spinner />}
                     </div>
                     <style>{`

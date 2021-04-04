@@ -12,6 +12,7 @@ export const useStyles = makeStyles(theme => {
         },
         link: {
             color: 'inherit',
+            fontSize: '1.2rem',
             textDecoration: 'none',
             '&:hover': {
                 textDecoration: 'underline',
