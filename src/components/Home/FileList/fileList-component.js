@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
-import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalIcon'
+import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalVariantIcon'
 
 import { Spacer, Spinner } from 'components/gsuite-components'
 import { EXT } from 'lib/constants'
