@@ -1,0 +1,31 @@
+@import '_base.scss';
+
+.LinkButton {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: $grey-700;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1.2rem;
+    margin: 0;
+    outline: none;
+    overflow: visible;
+    padding: .25rem .5rem;
+    position: relative;
+    transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    &:hover {
+        background-color: $background-alternative;
+        border: 1px solid transparent;
+        color: #3c4043;
+    }
+    &__selected {
+        background-color: $selected-background;
+        color: $selected-color;
+    }
+}
