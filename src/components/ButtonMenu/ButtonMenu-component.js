@@ -3,9 +3,13 @@ import React from 'react'
 import { Menu, MenuItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import CheckIcon from 'mdi-react/CheckIcon'
 
-import { Button } from 'components/pageButtons'
-
+import { Button as IconButton } from 'components/pageButtons'
+import { LinkButton } from "components/gsuite-components/link-button";
 import { useStyles } from './Buttno-menu-styles'
+import MenuDownIcon from "mdi-react/MenuDownIcon";
+
+const BUTTONTYPES = {IconButton, LinkButton}
+
 /**
  * @typedef {object} Props
  * @prop {string} children
@@ -14,31 +18,35 @@ import { useStyles } from './Buttno-menu-styles'
  */
 export function ButtonMenuComponent({
     anchorEl,
+    buttonType = 'IconButton',
     children,
     items,
     onClick,
     onClose,
     onSelect,
+    position,
     selectable,
+    tooltip
 }) {
     const classes = useStyles()
-
+    const ButtonComponent = BUTTONTYPES[buttonType]
     return (
         <span>
-            <Button
+            <ButtonComponent
                 aria-controls="button-menu"
                 aria-haspopup="true"
                 className={Boolean(anchorEl) ? classes.active : null}
+                Icon={MenuDownIcon}
                 onClick={onClick}
-                tooltip="Sort options"
+                tooltip={tooltip}
             >
                 {children}
-            </Button>
+            </ButtonComponent>
             <Menu
                 anchorEl={anchorEl}
                 anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'center',
+                    horizontal: position,
                 }}
                 getContentAnchorEl={null}
                 id="button-menu"

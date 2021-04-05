@@ -314,7 +314,7 @@ export default class Page extends React.Component {
                             font-size: 1.5rem;
                             font-weight: 400;
                             margin: 0;
-                            padding: .45rem .5rem .5rem 0;
+                            padding: 0 0.5rem;
                         }                       
                     `}</style>
                 </div>

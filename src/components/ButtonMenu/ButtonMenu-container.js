@@ -5,16 +5,19 @@ import { ButtonMenuComponent } from './ButtonMenu-component'
 
 /**
  * @typedef {object} Props
+ * @prop {'IconButton' | 'LinkButton'} buttonType 
  * @prop {any} children
  * @prop {array} items
+ * @prop {'center' | 'left' | 'right'} [position] 
  * @prop {boolean} [selectable]
+ * @prop {string} [tooltip]
  *
  */
 
 /**
  * @param {Props} param0
  */
-export function ButtonMenu({ children, items, selectable }) {
+export function ButtonMenu({ buttonType, children, items, position='center',selectable, tooltip }) {
     const [anchorEl, setAnchorEl] = useState(null)
 
     const onClick = event => {
@@ -35,11 +38,14 @@ export function ButtonMenu({ children, items, selectable }) {
     return (
         <ButtonMenuComponent
             anchorEl={anchorEl}
+            buttonType={buttonType}
             items={items}
             onClick={onClick}
             onClose={onClose}
             onSelect={onSelect}
+            position={position}
             selectable={selectable}
+            tooltip={tooltip}
         >
             {children}
         </ButtonMenuComponent>

@@ -22,6 +22,7 @@ storiesOf('ButtonMenu', module)
         return (
             <>
                 <ButtonMenu
+                    buttonType="LinkButton"
                     items={[
                         {
                             key: 1,
@@ -39,8 +40,9 @@ storiesOf('ButtonMenu', module)
                             handler: () => console.log('Menu Item 3'),
                         },
                     ]}
+                    position='left'
                 >
-                    <MenuIcon />
+                    Menu
                 </ButtonMenu>
             </>
         )

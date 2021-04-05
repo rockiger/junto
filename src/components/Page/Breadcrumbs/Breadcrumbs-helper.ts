@@ -1,6 +1,6 @@
 import { IFile, IFileOrNull } from 'reactn/default'
-import { FOLDER_NAME, OVERVIEW_NAME } from 'lib/constants'
-import { getMetaById, isWikiRootFolder as isWikiRoot } from 'lib/helper'
+import { EXT, FOLDER_NAME, OVERVIEW_NAME } from 'lib/constants'
+import { getMetaById, isArchived, isWikiRootFolder as isWikiRoot } from 'lib/helper'
 
 export { getMetaById, getParents, getBreadcrumbName }
 /**
@@ -66,4 +66,89 @@ function findPersonalWikiRootFile(files: IFile[], folder: IFile) {
 
 function isPersonalRoot(folder: IFile) {
     return folder.name === FOLDER_NAME
+}
+
+export function getChildren(parent: IFile, files: IFile[]) {
+    const folderId = getParentFolderId(parent, files)
+    return filterChildFiles(folderId,files).filter(el => shouldFileDisplay(el, folderId))
+
+    return files.map(file => {
+                        if (shouldFileDisplay(file, parent.id)) {
+                            return filterChildFiles(
+                                        folderId,
+                                        files
+                                    )
+                            
+                        }
+                        return null
+})}
+
+/**
+ * Produces the child folder for a given file if it exists and it has relevant content.
+ * The child folder has the same name as the id of the given file, if it exists.
+ * @param {string} fileId
+ * @param {any[]} files
+ * @returns {string | null}
+ */
+export function getParentFolderId(file, files) {
+    if (file.name === "_myDrive_overview_please_do_not_touch.gwiki") {
+        return file.parents[0] ?? ''
+    } else {
+        const folder = files.find(el => el.name === file.id)
+    if (folder) {
+        return folder.id
+    }
+}
+    return ''
+}
+
+
+/**
+ *
+ * @param {string} folderId
+ * @param {any[]} files
+ * @returns {any[]}
+ */
+export function filterChildFiles(folderId, files) {
+    if (folderId)
+        return files.filter(file => {
+            try {
+                return file.parents && file.parents.includes(folderId)
+            } catch (err) {
+                console.error(err)
+                console.log(file)
+                return false
+            }
+        })
+    return []
+}
+
+/**
+ *
+ * @param {object} file
+ * @param {string} parentId
+ */
+export function shouldFileDisplay(file, parentId) {
+    const { mimeType, name, parents, trashed } = file
+    return (
+        mimeType === 'application/json' &&
+        name !== OVERVIEW_NAME &&
+        name.endsWith(EXT) &&
+        parents &&
+        parents.includes(parentId) &&
+        trashed === false &&
+        !isArchived(file)
+    )
+}
+
+export function sortFilesByName(files) {
+    return files.sort((a, b) => {
+        if (a.name < b.name) {
+            return -1
+        }
+        if (a.name > b.name) {
+            return 1
+        }
+        return 0
+    })
 }

@@ -1,14 +1,13 @@
-import React, { useEffect, useGlobal, useState } from 'reactn'
-import { Link } from 'react-router-dom'
-import { IFile, IFileOrNull } from 'reactn/default'
-import { Breadcrumbs, Typography } from '@material-ui/core'
+import { useHistory } from "react-router";
+import { Breadcrumbs } from '@material-ui/core'
 import NavigateNextIcon from 'mdi-react/NavigateNextIcon'
 
+import { ButtonMenu } from 'components/ButtonMenu'
 import { getTitleFromFile } from 'lib/helper'
 
-import { getMetaById, getParents } from './Breadcrumbs-helper'
 import { IProps } from './Breadcrumbs.d'
 import { useStyles } from './Breadcrumbs.styles'
+import { useBreadcrumbs } from "./breadcrumbs-hooks";
 
 /**
  * Breadcrumb component that shows the descendents of the given file
@@ -16,22 +15,9 @@ import { useStyles } from './Breadcrumbs.styles'
  */
 export const BreadcrumbsBar = (props: IProps) => {
     const { children, fileId } = props
-    const [files] = useGlobal('initialFiles')
-    const [file, setFile] = useState<IFileOrNull>(null)
-    const [parents, setParents] = useState<Array<IFile>>([])
+    const {parents} = useBreadcrumbs(fileId)
+    const history = useHistory()
     const classes = useStyles()
-
-    useEffect(() => {
-        if (fileId && files.length > 0) {
-            setFile(getMetaById(fileId, files))
-        }
-    }, [fileId, files, setFile])
-
-    useEffect(() => {
-        if (file && files.length > 0) {
-            setParents(getParents(file, files))
-        }
-    }, [file, files, setFile, setParents])
 
     if (parents.length === 0) return null
     return (
@@ -43,16 +29,21 @@ export const BreadcrumbsBar = (props: IProps) => {
                 separator={<NavigateNextIcon />}
             >
                 {parents.map((el, index) => {
-                    let title = getTitleFromFile(el)
+                    let title = getTitleFromFile(el.file)
                     if (title) {
                         return (
-                            <Link
-                                key={index}
-                                className={classes.link}
-                                to={`/page/${el.id}/`}
-                            >
+                            <ButtonMenu key={index} buttonType='LinkButton' items={_.concat([{
+                                key: el.file.id,
+                                name: getTitleFromFile(el.file),
+                                handler: () => history.push(`/page/${el.file.id}`)
+                            }], el.children.map(child => ({
+                                key: child.id,
+                                name: getTitleFromFile(child),
+                                handler: () => history.push(`/page/${child.id}`)
+                            })))}
+                            tooltip={title}>
                                 {title}
-                            </Link>
+                            </ButtonMenu>
                         )
                     } else {
                         return null
