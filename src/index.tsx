@@ -1,5 +1,6 @@
 import React, { addReducers, setGlobal } from 'reactn'
 import { hydrate, render } from 'react-dom'
+import './lib/helper/globals'
 import { State } from 'reactn/default'
 import './index.scss'
 import App from 'components/app'
