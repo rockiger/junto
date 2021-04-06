@@ -4,12 +4,12 @@
     padding-right: 24px;
     position: absolute;
     right: 0;
-    top: 66px;
+    top: 64px;
 }
 
 @media screen and (max-width: 930px) {
     .pageButtons {
         padding-right: 12px;
-        top: 65px;
+        top: 64px;
     }
 }

@@ -71,17 +71,7 @@ function isPersonalRoot(folder: IFile) {
 export function getChildren(parent: IFile, files: IFile[]) {
     const folderId = getParentFolderId(parent, files)
     return filterChildFiles(folderId,files).filter(el => shouldFileDisplay(el, folderId))
-
-    return files.map(file => {
-                        if (shouldFileDisplay(file, parent.id)) {
-                            return filterChildFiles(
-                                        folderId,
-                                        files
-                                    )
-                            
-                        }
-                        return null
-})}
+}
 
 /**
  * Produces the child folder for a given file if it exists and it has relevant content.

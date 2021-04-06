@@ -68,12 +68,11 @@ const EditorLogic = React.forwardRef(
             }
             window.addEventListener('keydown', onKeyDown)
 
-            const breadcrumbHeight = fileName === OVERVIEW_NAME ? 0 : 37
             if (readOnly) {
-                setHeight(`calc(100vh - 65px - 57px - ${breadcrumbHeight}px)`)
+                setHeight(`calc(100vh - 65px - 40px`)
             } else {
                 setHeight(
-                    `calc(100vh - 65px - 57px - ${breadcrumbHeight}px - 43px)`
+                    `calc(100vh - 65px - 40px - 43px)`
                 )
                 setTimeout(() => {
                     if (editorRef.current) editorRef.current.focus()

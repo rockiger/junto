@@ -6,8 +6,9 @@ import { getChildren, getMetaById, getParents } from './Breadcrumbs-helper'
 
 export const useBreadcrumbs = (fileId) => {
   const [files] = useGlobal('initialFiles')
+  const [childPages, setChildren] = useState<IFile[]>([])
   const [file, setFile] = useState<IFileOrNull>(null)
-  const [parents, setParents] = useState<Array<{file: IFile, children: IFile[]}>>([])
+  const [parentPages, setParents] = useState<Array<{file: IFile, children: IFile[]}>>([])
 
   useEffect(() => {
       if (fileId && files.length > 0) {
@@ -27,5 +28,11 @@ export const useBreadcrumbs = (fileId) => {
       }
   }, [file, files])
 
-  return { parents }
+  useEffect(() => {
+    if (!_.isNull(file)) {
+    setChildren(getChildren(file, files))
+    }
+  }, [file, files])
+
+  return { parentPages, childPages}
 }

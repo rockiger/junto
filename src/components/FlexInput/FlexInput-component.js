@@ -13,7 +13,7 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
     } = props
     return (
         <>
-            <input
+            <div style={{padding: '0.25rem 0'}}><input
                 className="flexInput"
                 id={id}
                 onBlur={onBlur}
@@ -26,6 +26,7 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
                 }}
                 value={value}
             />
+            </div>
             <div
                 ref={h1Ref}
                 style={{

@@ -5,7 +5,7 @@ import { ButtonMenuComponent } from './ButtonMenu-component'
 
 /**
  * @typedef {object} Props
- * @prop {'IconButton' | 'LinkButton'} buttonType 
+ * @prop {'IconButton' | 'LinkButton'} [buttonType]
  * @prop {any} children
  * @prop {array} items
  * @prop {'center' | 'left' | 'right'} [position] 

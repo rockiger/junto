@@ -1,6 +1,7 @@
 import { useHistory } from "react-router";
 import { Breadcrumbs } from '@material-ui/core'
 import NavigateNextIcon from 'mdi-react/NavigateNextIcon'
+import FileTreeIcon from "mdi-react/FileTreeIcon";
 
 import { ButtonMenu } from 'components/ButtonMenu'
 import { getTitleFromFile } from 'lib/helper'
@@ -15,11 +16,11 @@ import { useBreadcrumbs } from "./breadcrumbs-hooks";
  */
 export const BreadcrumbsBar = (props: IProps) => {
     const { children, fileId } = props
-    const {parents} = useBreadcrumbs(fileId)
+    const {childPages, parentPages} = useBreadcrumbs(fileId)
     const history = useHistory()
     const classes = useStyles()
 
-    if (parents.length === 0) return null
+    if (parentPages.length === 0) return null
     return (
         <span id="breadcrumbsBar" className={classes.breadcrumbsBar}>
             <Breadcrumbs
@@ -27,8 +28,9 @@ export const BreadcrumbsBar = (props: IProps) => {
                 className={classes.breadcrumbs}
                 id="breadcrumbs"
                 separator={<NavigateNextIcon />}
+                style={{height: 40}}
             >
-                {parents.map((el, index) => {
+                {parentPages.map((el, index) => {
                     let title = getTitleFromFile(el.file)
                     if (title) {
                         return (
@@ -49,7 +51,17 @@ export const BreadcrumbsBar = (props: IProps) => {
                         return null
                     }
                 })}
+                <div style={{display: 'flex'}}>
                 {children}
+                {!_.isEmpty(childPages) ?
+                <ButtonMenu items={childPages.map(child => ({
+                    key: child.id,
+                    name: getTitleFromFile(child),
+                    handler: () => history.push(`/page/${child.id}`)
+                }))}>
+                    <FileTreeIcon />
+                </ButtonMenu> : null}
+                </div>
             </Breadcrumbs>
         </span>
     )
