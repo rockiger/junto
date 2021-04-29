@@ -133,7 +133,7 @@ function FulcrumFaq() {
                 </Button>
             </p>
             <p>
-                <i>Last modified on June 25, 2020&nbsp;</i>
+                <i>Last modified on February 19, 2021&nbsp;</i>
             </p>
         </>
     )
