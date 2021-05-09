@@ -6,6 +6,7 @@ import React from 'reactn'
 import PropTypes from 'prop-types'
 import IconButton from 'components/gsuite-components/icon-button'
 import Button from 'components/gsuite-components/button'
+import { setGA } from 'components/Tracking'
 
 import LogoutIcon from 'mdi-react/LogoutIcon'
 
@@ -310,6 +311,8 @@ function addSignIn(profile) {
     firebase.initializeApp(firebaseConfig)
 
     if (profile) {
+        setGA({ userId: profile.getEmail() })
+
         const db = firebase.firestore()
         db.collection('users')
             .add({
