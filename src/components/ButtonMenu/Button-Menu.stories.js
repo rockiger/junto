@@ -40,7 +40,7 @@ storiesOf('ButtonMenu', module)
                             handler: () => console.log('Menu Item 3'),
                         },
                     ]}
-                    position='left'
+                    position="left"
                 >
                     Menu
                 </ButtonMenu>
@@ -70,6 +70,36 @@ storiesOf('ButtonMenu', module)
                         },
                     ]}
                     selectable={true}
+                >
+                    <MenuIcon />
+                </ButtonMenu>
+            </>
+        )
+    })
+    .add('with icon', () => {
+        return (
+            <>
+                <ButtonMenu
+                    items={[
+                        {
+                            icon: MenuIcon,
+                            key: 1,
+                            name: 'Menu Item 1',
+                            handler: () => console.log('Menu Item 1'),
+                        },
+                        {
+                            icon: MenuIcon,
+                            key: 2,
+                            name: 'Menu Item 2',
+                            handler: () => console.log('Menu Item 2'),
+                        },
+                        {
+                            icon: MenuIcon,
+                            key: 3,
+                            name: 'Menu Item 3',
+                            handler: () => console.log('Menu Item 3'),
+                        },
+                    ]}
                 >
                     <MenuIcon />
                 </ButtonMenu>
