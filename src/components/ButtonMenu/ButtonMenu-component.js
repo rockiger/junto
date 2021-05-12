@@ -64,7 +64,10 @@ export function ButtonMenuComponent({
                     return (
                         <MenuItem
                             key={el.key}
-                            onClick={() => onSelect(el.handler)}
+                            onClick={() => {
+                                onSelect(el.handler)
+                                onClose()
+                            }}
                         >
                             {selectable && el.active && (
                                 <ListItemIcon style={{ minWidth: '2.25rem' }}>

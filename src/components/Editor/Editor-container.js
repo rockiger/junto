@@ -20,8 +20,9 @@ import {
     save,
     updateModifiedTimeInGlobalState,
 } from './Editor-helper'
-import ArchiveButton from 'components/archive/archive-button'
-import { History as HistoryButton } from 'components/history/history'
+import ArchiveMenuEntry from 'components/archive/archive-menu-entry'
+import ButtonMenu from 'components/gsuite-components/button-menu'
+import { PageMenu } from 'components/pageButtons/PageMenu'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -71,9 +72,7 @@ const EditorLogic = React.forwardRef(
             if (readOnly) {
                 setHeight(`calc(100vh - 65px - 40px`)
             } else {
-                setHeight(
-                    `calc(100vh - 65px - 40px - 43px)`
-                )
+                setHeight(`calc(100vh - 65px - 40px - 43px)`)
                 setTimeout(() => {
                     if (editorRef.current) editorRef.current.focus()
                 }, 100)
@@ -162,13 +161,11 @@ const EditorLogic = React.forwardRef(
             <div onKeyDown={onKeyDown}>
                 {canEdit && (
                     <PageButtons>
-                        <ShareButton fileId={fileId} />
-                        <HistoryButton fileId={fileId} />
-                        <ArchiveButton fileId={fileId} />
                         <ToggleReadOnlyButton
                             readOnly={readOnly}
                             onClick={onClickToggleButton}
                         />
+                        <PageMenu fileId={fileId} />
                     </PageButtons>
                 )}
                 <MaterialEditor

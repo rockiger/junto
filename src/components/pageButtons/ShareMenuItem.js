@@ -1,26 +1,19 @@
 /* global gapi */
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import AccountPlusIcon from 'mdi-react/AccountPlusOutlineIcon'
 
-import { Button } from 'components/pageButtons'
-
-export function ShareButton({ fileId }) {
+export function ShareMenuItem({ fileId }) {
     useEffect(() => {
         gapi.load('drive-share', () => initPicker(fileId))
     }, [fileId])
-    return (
-        <Button
-            aria-controls="button-menu"
-            aria-haspopup="true"
-            onClick={() => {
-                window.share.showSettingsDialog()
-            }}
-            tooltip="Share page"
-        >
-            <AccountPlusIcon />
-        </Button>
-    )
+    return {
+        title: 'Share',
+        handler: () => {
+            window.share.showSettingsDialog()
+        },
+        icon: AccountPlusIcon,
+    }
 }
 
 function initPicker(fileId) {
