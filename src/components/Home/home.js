@@ -1,5 +1,6 @@
 import React, { useGlobal, useState } from 'reactn'
 import PropTypes from 'prop-types'
+import FileSearchIcon from 'mdi-react/FileSearchIcon'
 
 import { Spinner } from 'components/gsuite-components'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
@@ -73,7 +74,17 @@ function Home(props) {
                                 </div>
                             )}
                             <FileList
-                                emptyMessage="There are no files in this view."
+                                emptyIcon={FileSearchIcon}
+                                emptyMessage={
+                                    searchTerm
+                                        ? 'None of your pages matched this search.'
+                                        : 'There are no pages in this view.'
+                                }
+                                emptySubline={
+                                    searchTerm
+                                        ? 'Try another search with a broader keyword.'
+                                        : ''
+                                }
                                 files={filterIsNotArchived(files)}
                                 header="h2"
                                 sortBy={sortBy}

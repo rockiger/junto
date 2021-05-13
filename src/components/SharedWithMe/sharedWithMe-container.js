@@ -1,6 +1,7 @@
 import React, { useGlobal } from 'reactn'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
+import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 
 import Spinner from 'components/gsuite-components/spinner'
 
@@ -13,7 +14,9 @@ function SharedWithMe(props) {
     if (isSignedIn && !isSigningIn) {
         return (
             <FileList
-                emptyMessage="You don't have any shared files."
+                emptyIcon={AccountMultipleOutlineIcon}
+                emptyMessage="Pages, others shared with you."
+                emptySubline="If you open wiki pages others shared with from Google Drive they will be shown here."
                 files={filterSharedWithMe(files)}
                 sortBy="sharedWithMeTime"
                 title="Shared With Me"
@@ -35,7 +38,7 @@ SharedWithMe.propTypes = {
 }
 
 function filterSharedWithMe(files) {
-    const filtered = files.filter((file) => {
+    const filtered = files.filter(file => {
         return (
             file.shared === true &&
             file.ownedByMe === false &&

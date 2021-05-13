@@ -8,6 +8,7 @@ import { sortBy } from 'lodash'
 import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
 import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
 
+import { EmptyPlaceholder } from 'components/Home/FileList/EmptyPlaceHolder'
 import {
     Card,
     CardBody,
@@ -17,6 +18,7 @@ import {
 } from 'components/gsuite-components'
 
 import s from './wiki-list.module.scss'
+import CheckboxMultipleBlankOutlineIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
 
 export default WikiList
 export { WikiList }
@@ -39,7 +41,10 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
     return (
         <div className={s.WikiList}>
             {!isFileListLoading && wikis.length === 0 && (
-                <h2 className={s.emptyMessage}>Your wiki archive is empty.</h2>
+                <EmptyPlaceholder
+                    icon={CheckboxMultipleBlankOutlineIcon}
+                    title="Your wiki archive is empty."
+                />
             )}
             {isFileListLoading && <Spinner />}
             <div

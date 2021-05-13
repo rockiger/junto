@@ -14,6 +14,7 @@ import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { ButtonMenu } from 'components/ButtonMenu'
 
 import s from './file-list.module.scss'
+import { EmptyPlaceholder } from './EmptyPlaceHolder'
 
 /** @typedef {import('reactn/default').IFile} File */
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
@@ -168,7 +169,9 @@ const Periods = ({ files, sortBy }) => {
 
 /**
  * @typedef {object} FileListComponentProps
+ * @property {MdiReactIconComponentType} [emptyIcon]
  * @prop {string} [emptyMessage]
+ * @prop {string} [emptySubline]
  * @prop {File[]} files
  * @prop {boolean} [isLoading]
  * @prop {boolean} [isScrollable]
@@ -184,7 +187,9 @@ const Periods = ({ files, sortBy }) => {
  */
 const FileListComponent = props => {
     const {
+        emptyIcon,
         emptyMessage,
+        emptySubline,
         files,
         header,
         searchTerm,
@@ -248,7 +253,13 @@ const FileListComponent = props => {
                 // @ts-ignore */}
                 {props.isLoading && <Spinner />}
                 {!props.isLoading && <Periods files={files} sortBy={sortBy} />}
-                {files.length === 0 && <h2>{emptyMessage}</h2>}
+                {files.length === 0 && !props.isLoading && (
+                    <EmptyPlaceholder
+                        icon={emptyIcon}
+                        subline={emptySubline}
+                        title={emptyMessage}
+                    />
+                )}
             </div>
             <style>{`
                     .filelist h1 {
