@@ -110,13 +110,11 @@ export default class Page extends React.Component {
         }
     }
 
-    loadEditorContent = async (ev) => {
+    loadEditorContent = async ev => {
         const { fileId } = this.state
         if (fileId) {
             let fileContent
-            let fileDescription = this.global.files.find(
-                (el) => el.id === fileId
-            )
+            let fileDescription = this.global.files.find(el => el.id === fileId)
 
             if (!fileDescription)
                 fileDescription = await getFileDescription(this.state.fileId)
@@ -152,11 +150,11 @@ export default class Page extends React.Component {
         }
     }
 
-    setEditorDelta = (editorDelta) => {
+    setEditorDelta = editorDelta => {
         this.setState({ editorDelta })
     }
 
-    onBlurInput = async (ev) => {
+    onBlurInput = async ev => {
         const { fileId } = this.state
         let { pageHead } = this.state
         if (!pageHead) {
@@ -170,11 +168,11 @@ export default class Page extends React.Component {
         }
     }
 
-    onChangeInput = (ev) => {
+    onChangeInput = ev => {
         this.setState({ pageHead: ev.target.value })
     }
 
-    onKeyDownInput = (ev) => {
+    onKeyDownInput = ev => {
         switch (ev.key) {
             case `ArrowDown`:
             case `Tab`:
@@ -258,24 +256,24 @@ export default class Page extends React.Component {
                                             <LockOutlineIcon size=".75em" />
                                         </div>
                                     ) : (
-                                                                    <BreadcrumbsBar fileId={this.state.fileId}>
-
-
-                                        <FlexInput
-                                            id="editorInput"
-                                            onBlur={this.onBlurInput}
-                                            value={
-                                                this.state.pageHead !==
-                                                'Untitled page'
-                                                ? this.state.pageHead
-                                                : ''
-                                            }
-                                            placeholder="Untitled page"
-                                            ref={this.inputRef}
-                                            onKeyDown={this.onKeyDownInput}
-                                            onChange={this.onChangeInput}
+                                        <BreadcrumbsBar
+                                            fileId={this.state.fileId}
+                                        >
+                                            <FlexInput
+                                                id="editorInput"
+                                                onBlur={this.onBlurInput}
+                                                value={
+                                                    this.state.pageHead !==
+                                                    'Untitled page'
+                                                        ? this.state.pageHead
+                                                        : ''
+                                                }
+                                                placeholder="Untitled page"
+                                                ref={this.inputRef}
+                                                onKeyDown={this.onKeyDownInput}
+                                                onChange={this.onChangeInput}
                                             />
-                                            </BreadcrumbsBar>
+                                        </BreadcrumbsBar>
                                     ))}
                                 {!this.state.canEdit && (
                                     <div
@@ -348,13 +346,13 @@ Page.propTypes = {
  * @param {string} userEmail
  */
 export function getUserRole(fileId, files, userEmail) {
-    const fileMeta = files.find((file) => file.id === fileId)
+    const fileMeta = files.find(file => file.id === fileId)
     console.log(fileMeta)
     /** @type {'organizer' | 'owner' | 'fileOrganizer' | 'writer' | 'commenter' | 'reader'} */
     let userRole = 'owner'
     if (fileMeta && fileMeta.permissions) {
         const userPermission = fileMeta.permissions.find(
-            (el) => el.emailAddress === userEmail
+            el => el.emailAddress === userEmail
         )
         if (userPermission) userRole = userPermission.role
     }

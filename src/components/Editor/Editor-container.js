@@ -12,6 +12,8 @@ import {
 } from 'components/pageButtons'
 import { Event } from 'components/Tracking'
 import { API_KEY, OVERVIEW_NAME } from 'lib/constants'
+import { filesUpdater, getMetaById } from 'lib/helper'
+import { updateMetadata } from 'lib/gdrive'
 
 import MaterialEditor from './material-editor'
 import {
@@ -20,9 +22,8 @@ import {
     save,
     updateModifiedTimeInGlobalState,
 } from './Editor-helper'
-import ArchiveMenuEntry from 'components/archive/archive-menu-entry'
-import ButtonMenu from 'components/gsuite-components/button-menu'
 import { PageMenu } from 'components/pageButtons/PageMenu'
+import { ToggleStarredButton } from 'components/pageButtons/ToggleStarredButton'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -156,6 +157,32 @@ const EditorLogic = React.forwardRef(
             return next()
         }
 
+        const star = async fileId => {
+            console.log('star page')
+            const updatedFiles = filesUpdater(
+                { starred: true },
+                { files, initialFiles },
+                fileId
+            )
+            setFiles(updatedFiles.files)
+            setInitialFiles(updatedFiles.initialFiles)
+            //!
+            await updateMetadata(fileId, { starred: true })
+        }
+
+        const unstar = async fileId => {
+            console.log('unstar page')
+            const updatedFiles = filesUpdater(
+                { starred: false },
+                { files, initialFiles },
+                fileId
+            )
+            setFiles(updatedFiles.files)
+            setInitialFiles(updatedFiles.initialFiles)
+            //!
+            await updateMetadata(fileId, { starred: false })
+        }
+
         // TODO: Move to editor-component
         return (
             <div onKeyDown={onKeyDown}>
@@ -164,6 +191,20 @@ const EditorLogic = React.forwardRef(
                         <ToggleReadOnlyButton
                             readOnly={readOnly}
                             onClick={onClickToggleButton}
+                        />
+                        <ToggleStarredButton
+                            isStarred={
+                                getMetaById(fileId, initialFiles)['starred']
+                            }
+                            onClick={() => {
+                                if (
+                                    getMetaById(fileId, initialFiles)['starred']
+                                ) {
+                                    unstar(fileId)
+                                } else {
+                                    star(fileId)
+                                }
+                            }}
                         />
                         <PageMenu fileId={fileId} />
                     </PageButtons>
