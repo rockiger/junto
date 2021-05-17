@@ -24,11 +24,15 @@ export function ShareButton({ fileId }) {
 }
 
 function initPicker(fileId) {
-    const oauthToken = gapi.auth2
-        .getAuthInstance()
-        .currentUser.get()
-        .getAuthResponse().access_token
-    window.share = new gapi.drive.share.ShareClient()
-    window.share.setOAuthToken(oauthToken)
-    window.share.setItemIds([fileId])
+    try {
+        const oauthToken = gapi.auth2
+            .getAuthInstance()
+            .currentUser.get()
+            .getAuthResponse().access_token
+        window.share = new gapi.drive.share.ShareClient()
+        window.share.setOAuthToken(oauthToken)
+        window.share.setItemIds([fileId])
+    } catch (e) {
+        console.error(e)
+    }
 }
