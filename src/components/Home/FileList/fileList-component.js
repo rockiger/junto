@@ -4,7 +4,9 @@ import React, { useDispatch } from 'reactn'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
+import { Chip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+
 import {
     IconButton,
     List,
@@ -21,6 +23,7 @@ import { Spacer, Spinner } from 'components/gsuite-components'
 import { EXT } from 'lib/constants'
 import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { ButtonMenu } from 'components/ButtonMenu'
+import { isArchived } from 'lib/helper'
 
 import s from './file-list.module.scss'
 import { EmptyPlaceholder } from './EmptyPlaceHolder'
@@ -82,7 +85,19 @@ const FileListPartial = props => {
                                 >
                                     <FileDocumentIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={filename} />
+                                <ListItemText
+                                    primary={
+                                        <>
+                                            {filename}{' '}
+                                            {isArchived(file) && (
+                                                <Chip
+                                                    label="archived"
+                                                    size="small"
+                                                />
+                                            )}
+                                        </>
+                                    }
+                                />
                                 {file.starred && (
                                     <StarIcon style={{ color: '#fbbc05' }} />
                                 )}
@@ -217,7 +232,6 @@ const FileListComponent = props => {
             searchTerm ? 'Search Result' : title
         } – Fulcrum.wiki`
     }
-    console.log(files)
     return (
         <div className="filelist">
             <div className={s.FileList_header}>

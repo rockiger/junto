@@ -14,12 +14,16 @@ import {
     CardBody,
     CardHeader,
     CardFooter,
+    Spacer,
     Spinner,
 } from 'components/gsuite-components'
-import { OVERVIEW_NAME } from 'lib/constants'
-
-import s from './wiki-list.module.scss'
+import ArchiveIcon from 'mdi-react/ArchiveIcon'
 import CheckboxMultipleBlankOutlineIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
+import StarIcon from 'mdi-react/StarIcon'
+
+import { OVERVIEW_NAME } from 'lib/constants'
+import { isArchived } from 'lib/helper'
+import s from './wiki-list.module.scss'
 
 export default WikiList
 export { WikiList }
@@ -69,8 +73,10 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         modifiedTime,
                         teamDriveId,
                         parents,
+                        starred,
                         viewedByMeTime,
                     } = f
+                    const archived = isArchived(f)
                     //@ts-ignore
                     const date = format(
                         //@ts-ignore
@@ -82,8 +88,11 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         <WikiCard
                             id={id}
                             date={date}
-                            pageName={pageName}
                             description=""
+                            isArchived={archived}
+                            isStarred={starred}
+                            key={id}
+                            pageName={pageName}
                             teamDriveId={teamDriveId}
                         />
                     )
@@ -99,8 +108,11 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                             ),
                             'MMMM dd, yyyy'
                         )}
-                        pageName="My Fulcrum"
                         description=""
+                        isArchived={isArchived(myFulcrum)}
+                        isStarred={myFulcrum.starred}
+                        key={myFulcrum.id}
+                        pageName="My Fulcrum"
                         teamDriveId=""
                     />
                 )}
@@ -142,7 +154,15 @@ function getWikiRootFolder(folderId, files) {
     return folder
 }
 
-function WikiCard({ id, date, pageName, description, teamDriveId }) {
+function WikiCard({
+    id,
+    date,
+    description,
+    isArchived,
+    isStarred,
+    pageName,
+    teamDriveId,
+}) {
     return (
         <Link key={id} to={`/page/${id}`}>
             <Card>
@@ -163,7 +183,10 @@ function WikiCard({ id, date, pageName, description, teamDriveId }) {
                             <FolderGoogleDriveIcon className={s.FooterIcon} />{' '}
                             My Drive
                         </>
-                    )}{' '}
+                    )}
+                    <Spacer />
+                    {isArchived && <ArchiveIcon />}
+                    {isStarred && <StarIcon style={{ color: '#fbbc05' }} />}
                 </CardFooter>
             </Card>
         </Link>

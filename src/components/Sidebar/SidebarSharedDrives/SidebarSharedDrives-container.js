@@ -5,6 +5,7 @@ import { SidebarTreeItem } from '../SidebarTree/SidebarTreeItem'
 import { useStyles } from '../SidebarTree/SidebarTree-styles'
 import { getTitleFromFile, isArchived } from 'lib/helper'
 import { filterWikis, sortWikisBy } from 'components/wiki-list'
+import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
 
 export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
@@ -20,6 +21,7 @@ export function SidebarSharedDrives() {
                         '->>',
                         initialFiles,
                         filterWikis,
+                        filterIsNotArchived,
                         [sortWikisBy, 'name'],
                         [
                             map,

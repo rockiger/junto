@@ -77,7 +77,7 @@ function Home(props) {
                                 <div>
                                     <h2>Wikis</h2>
                                     <WikiList
-                                        files={files}
+                                        files={filterIsNotArchived(files)}
                                         isDashboard
                                         orderBy="date"
                                     />
@@ -87,13 +87,7 @@ function Home(props) {
                                             <Tab>Pages</Tab>
                                             <Tab>Starred</Tab>
                                         </TabList>
-                                        <TabPanel
-                                            style={{
-                                                maxHeight:
-                                                    'calc(100vh - 168px)',
-                                                overflow: 'auto',
-                                            }}
-                                        >
+                                        <TabPanel>
                                             <FileList
                                                 emptyIcon={FileDocumentIcon}
                                                 emptyMessage="Your archive is empty."

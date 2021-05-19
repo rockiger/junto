@@ -33,9 +33,7 @@ function WikiOverview(props) {
                     value={filterString}
                 />
             </div>
-            <WikiList
-                files={filterIsNotArchived(filterSearch(filterString, files))}
-            />
+            <WikiList files={filterSearch(filterString, files)} />
         </div>
     )
 
