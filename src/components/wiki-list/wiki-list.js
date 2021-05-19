@@ -40,7 +40,6 @@ export { WikiList }
  * @param {WikiListProps} props
  */
 function WikiList({ files, isDashboard, orderBy = 'name' }) {
-    const [initialFiles] = useGlobal('initialFiles')
     const [isFileListLoading] = useGlobal('isFileListLoading')
     const [rootFolderId] = useGlobal('rootFolderId')
     const wikis = sortWikisBy(orderBy, filterWikis(files))
@@ -72,7 +71,6 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         properties: { pageName },
                         modifiedTime,
                         teamDriveId,
-                        parents,
                         starred,
                         viewedByMeTime,
                     } = f
@@ -83,7 +81,6 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         new Date(viewedByMeTime || modifiedTime),
                         'MMMM dd, yyyy'
                     )
-                    const folder = getWikiRootFolder(parents[0], initialFiles)
                     return (
                         <WikiCard
                             id={id}
@@ -149,6 +146,7 @@ export function sortWikisBy(attr = 'name', files) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function getWikiRootFolder(folderId, files) {
     const folder = files.find(f => f.id === folderId)
     return folder

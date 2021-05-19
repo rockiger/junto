@@ -3,10 +3,8 @@ import React, { useGlobal } from 'reactn'
 import { Redirect } from 'react-router'
 import StarIcon from 'mdi-react/StarIcon'
 
-import { H1, Spinner } from 'components/gsuite-components/'
+import { Spinner } from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
-
-import { isArchived } from 'lib/helper'
 
 export default StarredPage
 export { StarredPage as ArchivePage }

@@ -1,11 +1,10 @@
-import React, { useGlobal, useState } from 'reactn'
+import { useGlobal, useState } from 'reactn'
 import PropTypes from 'prop-types'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import FileSearchIcon from 'mdi-react/FileSearchIcon'
 import StarIcon from 'mdi-react/StarIcon'
 
 import {
-    H1,
     Spinner,
     Tab,
     Tabs,

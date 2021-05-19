@@ -11,7 +11,6 @@ export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
     const classes = useStyles()
     window['initialFiles'] = initialFiles
-    console.log(initialFiles)
 
     return (
         <ul className={classes.mydrive}>
@@ -44,6 +43,8 @@ export function SidebarSharedDrives() {
     )
 }
 // sortWikisBy(orderBy, filterWikis(files))
+
+// eslint-disable-next-line no-unused-vars
 function filterSharedDrives(files) {
     return files.filter(
         file =>

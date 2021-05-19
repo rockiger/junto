@@ -1,20 +1,13 @@
 // @ts-check
 
-import React, { useDispatch } from 'reactn'
+import { useDispatch } from 'reactn'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { Chip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import {
-    IconButton,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-} from '@material-ui/core'
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalVariantIcon'
 import StarIcon from 'mdi-react/StarIcon'

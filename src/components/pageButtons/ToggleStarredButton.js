@@ -4,7 +4,6 @@ import StarIcon from 'mdi-react/StarIcon'
 import StarOutlineIcon from 'mdi-react/StarOutlineIcon'
 
 import { Button } from './Button'
-import { toKeyName } from 'is-hotkey'
 
 import styles from './toggle-read-only-button.module.scss'
 

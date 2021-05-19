@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from 'react'
 import HistoryIcon from 'mdi-react/HistoryIcon'
 
-import { IconButton, Modal, Spinner } from 'components/gsuite-components'
+import { Modal, Spinner } from 'components/gsuite-components'
 
 const HistoryDialog = React.lazy(() => import('./history-dialog'))
 

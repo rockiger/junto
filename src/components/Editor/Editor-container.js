@@ -5,13 +5,9 @@ import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
 import { debounce } from 'lodash'
 
-import {
-    PageButtons,
-    ToggleReadOnlyButton,
-    ShareButton,
-} from 'components/pageButtons'
+import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
 import { Event } from 'components/Tracking'
-import { API_KEY, OVERVIEW_NAME } from 'lib/constants'
+import { API_KEY } from 'lib/constants'
 import { filesUpdater, getMetaById } from 'lib/helper'
 import { updateMetadata } from 'lib/gdrive'
 

@@ -1,6 +1,4 @@
-/* global gapi */
-
-import React, { useEffect } from 'react'
+import React from 'react'
 import DotsVerticalIcon from 'mdi-react/DotsVerticalIcon'
 
 import { ArchiveMenuEntry } from 'components/archive/archive-menu-entry' //! rename

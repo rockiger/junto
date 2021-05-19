@@ -5,7 +5,6 @@ import ArchiveIconDown from 'mdi-react/ArchiveArrowDownOutlineIcon'
 import ArchiveIconUp from 'mdi-react/ArchiveArrowUpIcon'
 import { useSnackbar } from 'notistack'
 
-import { IconButton } from 'components/gsuite-components'
 import {
     Alert,
     emptyAlert as initialAlert,
@@ -18,7 +17,6 @@ import {
     isWikiRootFile,
 } from 'lib/helper'
 
-import s from './archive-menu-entry.module.scss'
 import { updateMetadata, moveFile } from 'lib/gdrive'
 
 export default ArchiveMenuEntry
