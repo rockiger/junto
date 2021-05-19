@@ -65,8 +65,8 @@ export function ButtonMenuComponent({
                         <MenuItem
                             key={el.key}
                             onClick={() => {
-                                onSelect(el.handler)
                                 onClose()
+                                onSelect(el.handler)
                             }}
                         >
                             {selectable && el.active && (

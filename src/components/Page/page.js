@@ -138,7 +138,7 @@ export default class Page extends React.Component {
                 })
             }
             this.setState({
-                canEdit: fileDescription.capabilities.canEdit,
+                canEdit: fileDescription.capabilities?.canEdit,
                 initialContent: fileContent ? fileContent : '',
                 fileLoaded: true,
                 fileLoading: false,
