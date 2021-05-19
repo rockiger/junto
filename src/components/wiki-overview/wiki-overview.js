@@ -1,8 +1,6 @@
 //@ts-check
 import React, { useGlobal, useState } from 'reactn'
 
-import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
-
 import s from './wiki-overview.module.scss'
 import WikiList from 'components/wiki-list'
 
@@ -33,9 +31,7 @@ function WikiOverview(props) {
                     value={filterString}
                 />
             </div>
-            <WikiList
-                files={filterIsNotArchived(filterSearch(filterString, files))}
-            />
+            <WikiList files={filterSearch(filterString, files)} />
         </div>
     )
 

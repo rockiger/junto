@@ -1,19 +1,25 @@
 // @ts-check
 
-import React, { useDispatch } from 'reactn'
+import { useDispatch } from 'reactn'
+import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
+import { Chip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalVariantIcon'
+import StarIcon from 'mdi-react/StarIcon'
 
 import { Spacer, Spinner } from 'components/gsuite-components'
 import { EXT } from 'lib/constants'
 import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { ButtonMenu } from 'components/ButtonMenu'
+import { isArchived } from 'lib/helper'
 
 import s from './file-list.module.scss'
+import { EmptyPlaceholder } from './EmptyPlaceHolder'
 
 /** @typedef {import('reactn/default').IFile} File */
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
@@ -57,6 +63,7 @@ const FileListPartial = props => {
                 })
                 .map(file => {
                     const filename = getTitleFromFile(file)
+                    //! next
                     return (
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
@@ -71,7 +78,22 @@ const FileListPartial = props => {
                                 >
                                     <FileDocumentIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={filename} />
+                                <ListItemText
+                                    primary={
+                                        <>
+                                            {filename}{' '}
+                                            {isArchived(file) && (
+                                                <Chip
+                                                    label="archived"
+                                                    size="small"
+                                                />
+                                            )}
+                                        </>
+                                    }
+                                />
+                                {file.starred && (
+                                    <StarIcon style={{ color: '#fbbc05' }} />
+                                )}
                             </Link>
                         </ListItem>
                     )
@@ -168,7 +190,9 @@ const Periods = ({ files, sortBy }) => {
 
 /**
  * @typedef {object} FileListComponentProps
+ * @property {MdiReactIconComponentType} [emptyIcon]
  * @prop {string} [emptyMessage]
+ * @prop {string} [emptySubline]
  * @prop {File[]} files
  * @prop {boolean} [isLoading]
  * @prop {boolean} [isScrollable]
@@ -184,7 +208,9 @@ const Periods = ({ files, sortBy }) => {
  */
 const FileListComponent = props => {
     const {
+        emptyIcon,
         emptyMessage,
+        emptySubline,
         files,
         header,
         searchTerm,
@@ -206,7 +232,7 @@ const FileListComponent = props => {
                     <Header className={s.FileList_header_title}>{title}</Header>
                 )}
                 <Spacer />
-                {setSortBy && (
+                {!_.isEmpty(files) && setSortBy && (
                     <div className={s.FileList_header_buttons}>
                         <strong
                             className={s.sortCriteria}
@@ -248,7 +274,13 @@ const FileListComponent = props => {
                 // @ts-ignore */}
                 {props.isLoading && <Spinner />}
                 {!props.isLoading && <Periods files={files} sortBy={sortBy} />}
-                {files.length === 0 && <h2>{emptyMessage}</h2>}
+                {files.length === 0 && !props.isLoading && (
+                    <EmptyPlaceholder
+                        icon={emptyIcon}
+                        subline={emptySubline}
+                        title={emptyMessage}
+                    />
+                )}
             </div>
             <style>{`
                     .filelist h1 {

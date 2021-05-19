@@ -8,7 +8,7 @@ import { ButtonMenuComponent } from './ButtonMenu-component'
  * @prop {'IconButton' | 'LinkButton'} [buttonType]
  * @prop {any} children
  * @prop {array} items
- * @prop {'center' | 'left' | 'right'} [position] 
+ * @prop {'center' | 'left' | 'right'} [position]
  * @prop {boolean} [selectable]
  * @prop {string} [tooltip]
  *
@@ -17,7 +17,14 @@ import { ButtonMenuComponent } from './ButtonMenu-component'
 /**
  * @param {Props} param0
  */
-export function ButtonMenu({ buttonType, children, items, position='center',selectable, tooltip }) {
+export function ButtonMenu({
+    buttonType,
+    children,
+    items,
+    position = 'center',
+    selectable,
+    tooltip,
+}) {
     const [anchorEl, setAnchorEl] = useState(null)
 
     const onClick = event => {
@@ -31,8 +38,8 @@ export function ButtonMenu({ buttonType, children, items, position='center',sele
      * @param {function} fn
      */
     const onSelect = (fn = () => {}) => {
-        fn()
         onClose()
+        fn()
     }
 
     return (

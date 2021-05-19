@@ -5,13 +5,11 @@ import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
 import { debounce } from 'lodash'
 
-import {
-    PageButtons,
-    ToggleReadOnlyButton,
-    ShareButton,
-} from 'components/pageButtons'
+import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
 import { Event } from 'components/Tracking'
-import { API_KEY, OVERVIEW_NAME } from 'lib/constants'
+import { API_KEY } from 'lib/constants'
+import { filesUpdater, getMetaById } from 'lib/helper'
+import { updateMetadata } from 'lib/gdrive'
 
 import MaterialEditor from './material-editor'
 import {
@@ -20,8 +18,8 @@ import {
     save,
     updateModifiedTimeInGlobalState,
 } from './Editor-helper'
-import ArchiveButton from 'components/archive/archive-button'
-import { History as HistoryButton } from 'components/history/history'
+import { PageMenu } from 'components/pageButtons/PageMenu'
+import { ToggleStarredButton } from 'components/pageButtons/ToggleStarredButton'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -71,9 +69,7 @@ const EditorLogic = React.forwardRef(
             if (readOnly) {
                 setHeight(`calc(100vh - 65px - 40px`)
             } else {
-                setHeight(
-                    `calc(100vh - 65px - 40px - 43px)`
-                )
+                setHeight(`calc(100vh - 65px - 40px - 43px)`)
                 setTimeout(() => {
                     if (editorRef.current) editorRef.current.focus()
                 }, 100)
@@ -157,18 +153,56 @@ const EditorLogic = React.forwardRef(
             return next()
         }
 
+        const star = async fileId => {
+            console.log('star page')
+            const updatedFiles = filesUpdater(
+                { starred: true },
+                { files, initialFiles },
+                fileId
+            )
+            setFiles(updatedFiles.files)
+            setInitialFiles(updatedFiles.initialFiles)
+            //!
+            await updateMetadata(fileId, { starred: true })
+        }
+
+        const unstar = async fileId => {
+            console.log('unstar page')
+            const updatedFiles = filesUpdater(
+                { starred: false },
+                { files, initialFiles },
+                fileId
+            )
+            setFiles(updatedFiles.files)
+            setInitialFiles(updatedFiles.initialFiles)
+            //!
+            await updateMetadata(fileId, { starred: false })
+        }
+
         // TODO: Move to editor-component
         return (
             <div onKeyDown={onKeyDown}>
                 {canEdit && (
                     <PageButtons>
-                        <ShareButton fileId={fileId} />
-                        <HistoryButton fileId={fileId} />
-                        <ArchiveButton fileId={fileId} />
                         <ToggleReadOnlyButton
                             readOnly={readOnly}
                             onClick={onClickToggleButton}
                         />
+                        <ToggleStarredButton
+                            isStarred={
+                                getMetaById(fileId, initialFiles)['starred']
+                            }
+                            onClick={() => {
+                                if (
+                                    getMetaById(fileId, initialFiles)['starred']
+                                ) {
+                                    unstar(fileId)
+                                } else {
+                                    star(fileId)
+                                }
+                            }}
+                        />
+                        <PageMenu fileId={fileId} />
                     </PageButtons>
                 )}
                 <MaterialEditor

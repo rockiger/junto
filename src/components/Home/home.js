@@ -1,12 +1,22 @@
-import React, { useGlobal, useState } from 'reactn'
+import { useGlobal, useState } from 'reactn'
 import PropTypes from 'prop-types'
+import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
+import FileSearchIcon from 'mdi-react/FileSearchIcon'
+import StarIcon from 'mdi-react/StarIcon'
 
-import { Spinner } from 'components/gsuite-components'
+import {
+    Spinner,
+    Tab,
+    Tabs,
+    TabList,
+    TabPanel,
+} from 'components/gsuite-components/'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 
 import FrontPage from './front-page'
 import FileList from './FileList'
 import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
+import { filterStarred } from 'components/Starred'
 import WikiList from 'components/wiki-list'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
@@ -70,16 +80,65 @@ function Home(props) {
                                         isDashboard
                                         orderBy="date"
                                     />
+                                    <h2>Recently used</h2>
+                                    <Tabs>
+                                        <TabList>
+                                            <Tab>Pages</Tab>
+                                            <Tab>Starred</Tab>
+                                        </TabList>
+                                        <TabPanel>
+                                            <FileList
+                                                emptyIcon={FileDocumentIcon}
+                                                emptyMessage="Your archive is empty."
+                                                emptySubline="The archive will show pages you archived"
+                                                files={files}
+                                                sortBy={sortBy}
+                                                setSortBy={
+                                                    setSortByAndLocalStorage
+                                                }
+                                            />
+                                        </TabPanel>
+                                        <TabPanel
+                                            style={{
+                                                maxHeight:
+                                                    'calc(100vh - 168px)',
+                                                overflow: 'auto',
+                                            }}
+                                        >
+                                            <FileList
+                                                emptyIcon={StarIcon}
+                                                emptyMessage="No starred pages."
+                                                emptySubline="Add stars to pages you want to easily refer to later."
+                                                files={filterStarred(files)}
+                                                sortBy={sortBy}
+                                                setSortBy={
+                                                    setSortByAndLocalStorage
+                                                }
+                                            />
+                                        </TabPanel>
+                                    </Tabs>
                                 </div>
                             )}
-                            <FileList
-                                emptyMessage="There are no files in this view."
-                                files={filterIsNotArchived(files)}
-                                header="h2"
-                                sortBy={sortBy}
-                                setSortBy={setSortByAndLocalStorage}
-                                title={searchTerm ? '' : 'Pages'}
-                            />
+                            {searchTerm && (
+                                <FileList
+                                    emptyIcon={FileSearchIcon}
+                                    emptyMessage={
+                                        searchTerm
+                                            ? 'None of your pages matched this search.'
+                                            : 'There are no pages in this view.'
+                                    }
+                                    emptySubline={
+                                        searchTerm
+                                            ? 'Try another search with a broader keyword.'
+                                            : ''
+                                    }
+                                    files={files}
+                                    header="h2"
+                                    sortBy={sortBy}
+                                    setSortBy={setSortByAndLocalStorage}
+                                    title={searchTerm ? '' : 'Pages'}
+                                />
+                            )}
                         </div>
                     </>
                 )}

@@ -11,6 +11,7 @@ import { SharedWithMe } from 'components/SharedWithMe'
 import { PrivacyPolicy, TermsOfService, FAQ } from 'components/staticPages'
 import styles from './main.module.scss'
 import { WikiOverview } from 'components/wiki-overview'
+import StarredPage from 'components/Starred/StarredPage'
 
 export default function Main(props: any): ReactElement {
     const [isCreatingNewFile] = useGlobal('isCreatingNewFile')
@@ -83,6 +84,12 @@ export default function Main(props: any): ReactElement {
                 path="/privacy-policy"
                 render={(props: any) => <PrivacyPolicy />}
             />
+            <Route exact path="/starred">
+                <StarredPage
+                    isSignedIn={isSignedIn}
+                    isSigningIn={isSigningIn}
+                />
+            </Route>
             <Route
                 exact
                 path="/terms-of-service"

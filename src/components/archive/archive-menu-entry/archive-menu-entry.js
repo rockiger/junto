@@ -5,7 +5,6 @@ import ArchiveIconDown from 'mdi-react/ArchiveArrowDownOutlineIcon'
 import ArchiveIconUp from 'mdi-react/ArchiveArrowUpIcon'
 import { useSnackbar } from 'notistack'
 
-import { IconButton } from 'components/gsuite-components'
 import {
     Alert,
     emptyAlert as initialAlert,
@@ -18,11 +17,10 @@ import {
     isWikiRootFile,
 } from 'lib/helper'
 
-import s from './archive-button.module.scss'
 import { updateMetadata, moveFile } from 'lib/gdrive'
 
-export default ArchiveButton
-export { ArchiveButton }
+export default ArchiveMenuEntry
+export { ArchiveMenuEntry }
 
 /**
  * @typedef ArchiveButtonProps
@@ -33,7 +31,7 @@ export { ArchiveButton }
  * A archive-button component.
  * @param {ArchiveButtonProps} props
  */
-function ArchiveButton({ fileId }) {
+function ArchiveMenuEntry({ fileId }) {
     const [global] = useGlobal()
     const [, setFiles] = useGlobal('files')
     const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
@@ -41,40 +39,30 @@ function ArchiveButton({ fileId }) {
     const [alert, setAlert] = useState(initialAlert)
     const file = getMetaById(fileId, initialFiles)
 
-    return (
-        <div className={s.ArchiveButton}>
-            <IconButton
-                id="HelpButton"
-                onClick={
-                    file && isArchived(file)
-                        ? onClickUnArchiveButton
-                        : onClickArchiveButton
-                }
-                selected={alert.isOpen}
-                tooltip={
-                    file && isArchived(file) ? 'Restore page' : 'Archive page'
-                }
-            >
-                {file && isArchived(file) ? (
-                    <ArchiveIconUp />
-                ) : (
-                    <ArchiveIconDown />
-                )}
-            </IconButton>
-            {alert && (
-                <Alert
-                    isOpen={alert.isOpen}
-                    okLabel={alert.buttonText}
-                    onClose={onClose}
-                    onOk={alert.onOk}
-                    maxWidth="sm"
-                    title={alert.title}
-                >
-                    {alert.content}
-                </Alert>
-            )}
-        </div>
-    )
+    const ArchiveAlert = alert
+        ? props => (
+              <Alert
+                  isOpen={alert.isOpen}
+                  okLabel={alert.buttonText}
+                  onClose={onClose}
+                  onOk={alert.onOk}
+                  maxWidth="sm"
+                  title={alert.title}
+              >
+                  {alert.content}
+              </Alert>
+          )
+        : null
+
+    return {
+        title: file && isArchived(file) ? 'Restore' : 'Archive',
+        handler:
+            file && isArchived(file)
+                ? onClickUnArchiveButton
+                : onClickArchiveButton,
+        icon: file && isArchived(file) ? ArchiveIconUp : ArchiveIconDown,
+        ArchiveAlert,
+    }
 
     function onClickArchiveButton() {
         const file = getMetaById(fileId, initialFiles)

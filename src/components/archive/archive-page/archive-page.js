@@ -1,7 +1,7 @@
 //@ts-check
 import React, { useGlobal } from 'reactn'
 import { Redirect } from 'react-router'
-
+import ArchiveIcon from 'mdi-react/ArchiveIcon'
 import {
     H1,
     Spinner,
@@ -41,14 +41,26 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                         <Tab>Pages</Tab>
                         <Tab>Wikis</Tab>
                     </TabList>
-                    <TabPanel style={{ maxHeight: 'calc(100vh - 168px)' }}>
+                    <TabPanel
+                        style={{
+                            maxHeight: 'calc(100vh - 168px)',
+                            overflow: 'auto',
+                        }}
+                    >
                         <FileList
+                            emptyIcon={ArchiveIcon}
                             emptyMessage="Your archive is empty."
+                            emptySubline="The archive will show pages you archived"
                             files={filterPages(archivedFiles)}
                             sortBy="modifiedByMeTime"
                         />
                     </TabPanel>
-                    <TabPanel style={{ maxHeight: 'calc(100vh - 168px)' }}>
+                    <TabPanel
+                        style={{
+                            maxHeight: 'calc(100vh - 168px)',
+                            overflow: 'auto',
+                        }}
+                    >
                         <WikiList files={archivedFiles} />
                     </TabPanel>
                 </Tabs>

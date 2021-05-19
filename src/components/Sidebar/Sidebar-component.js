@@ -2,6 +2,7 @@ import React from 'react'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 import ArchiveOutlineIcon from 'mdi-react/ArchiveOutlineIcon'
 import CheckboxMultipleBlankIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
+import StarIcon from 'mdi-react/StarOutlineIcon'
 
 import { isMobileDevice } from 'lib/helper'
 import { SidebarSharedDrives } from './SidebarSharedDrives'
@@ -49,6 +50,12 @@ const SidebarRenderer = props => {
                 >
                     <SidebarTree />
                     <SidebarSharedDrives />
+                    <SidebarItem
+                        icon={StarIcon}
+                        name="Starred"
+                        path="/starred"
+                        tooltip="Your starred pages"
+                    />
                     <SidebarItem
                         icon={CheckboxMultipleBlankIcon}
                         name="Wikis"

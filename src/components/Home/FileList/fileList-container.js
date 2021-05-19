@@ -11,7 +11,9 @@ export default FileList
 
 /**
  * @typedef FileListProps
+ * @property {MdiReactIconComponentType} [emptyIcon]
  * @property {string} [emptyMessage]
+ * @property {string} [emptySubline]
  * @property {'h1'|'h2'|'h3'|'h4'|'h5'|'h6'} [header]
  * @property {boolean} [isLoading]
  * @property {boolean} [isScrollable]
@@ -24,7 +26,16 @@ export default FileList
 /**
  * @param {FileListProps} props
  */
-function FileList({ emptyMessage, files, header, sortBy, setSortBy, title }) {
+function FileList({
+    emptyIcon,
+    emptyMessage,
+    emptySubline,
+    files,
+    header,
+    sortBy,
+    setSortBy,
+    title,
+}) {
     const [isFileListLoading] = useGlobal('isFileListLoading')
     const [searchTerm] = useGlobal('searchTerm')
 
@@ -32,11 +43,13 @@ function FileList({ emptyMessage, files, header, sortBy, setSortBy, title }) {
 
     return (
         <FileListComponent
+            emptyIcon={emptyIcon}
             emptyMessage={
                 searchTerm
                     ? 'None of your files matched this search.'
                     : emptyMessage
             }
+            emptySubline={emptySubline}
             files={files}
             header={header}
             isLoading={isFileListLoading}
@@ -47,4 +60,3 @@ function FileList({ emptyMessage, files, header, sortBy, setSortBy, title }) {
         />
     )
 }
- 

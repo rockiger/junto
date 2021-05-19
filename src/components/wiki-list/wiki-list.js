@@ -8,14 +8,21 @@ import { sortBy } from 'lodash'
 import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
 import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
 
+import { EmptyPlaceholder } from 'components/Home/FileList/EmptyPlaceHolder'
 import {
     Card,
     CardBody,
     CardHeader,
     CardFooter,
+    Spacer,
     Spinner,
 } from 'components/gsuite-components'
+import ArchiveIcon from 'mdi-react/ArchiveIcon'
+import CheckboxMultipleBlankOutlineIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
+import StarIcon from 'mdi-react/StarIcon'
 
+import { OVERVIEW_NAME } from 'lib/constants'
+import { isArchived } from 'lib/helper'
 import s from './wiki-list.module.scss'
 
 export default WikiList
@@ -33,14 +40,23 @@ export { WikiList }
  * @param {WikiListProps} props
  */
 function WikiList({ files, isDashboard, orderBy = 'name' }) {
-    const [initialFiles] = useGlobal('initialFiles')
     const [isFileListLoading] = useGlobal('isFileListLoading')
+    const [rootFolderId] = useGlobal('rootFolderId')
     const wikis = sortWikisBy(orderBy, filterWikis(files))
+    const myFulcrum = getOverviewFile(files, rootFolderId)
     return (
         <div className={s.WikiList}>
-            {!isFileListLoading && wikis.length === 0 && (
-                <h2 className={s.emptyMessage}>Your wiki archive is empty.</h2>
-            )}
+            {!isFileListLoading &&
+                !myFulcrum &&
+                wikis.length === 0 &&
+                (isDashboard ? (
+                    <h2>You don't have any wikis in your Google Drive.</h2>
+                ) : (
+                    <EmptyPlaceholder
+                        icon={CheckboxMultipleBlankOutlineIcon}
+                        title="You don't have any archived wikis."
+                    />
+                ))}
             {isFileListLoading && <Spinner />}
             <div
                 className={clsx(
@@ -55,47 +71,48 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         properties: { pageName },
                         modifiedTime,
                         teamDriveId,
-                        parents,
+                        starred,
                         viewedByMeTime,
                     } = f
+                    const archived = isArchived(f)
                     //@ts-ignore
                     const date = format(
                         //@ts-ignore
                         new Date(viewedByMeTime || modifiedTime),
                         'MMMM dd, yyyy'
                     )
-                    const folder = getWikiRootFolder(parents[0], initialFiles)
-                    const { description } = folder
                     return (
-                        <Link key={id} to={`/page/${id}`}>
-                            <Card>
-                                <CardHeader
-                                    avatar={pageName[0]}
-                                    subtitle={date}
-                                    title={pageName}
-                                />
-                                <CardBody>{description}</CardBody>
-                                <CardFooter>
-                                    {teamDriveId ? (
-                                        <>
-                                            <FolderAccountIcon
-                                                className={s.FooterIcon}
-                                            />{' '}
-                                            Shared Drive
-                                        </>
-                                    ) : (
-                                        <>
-                                            <FolderGoogleDriveIcon
-                                                className={s.FooterIcon}
-                                            />{' '}
-                                            My Drive
-                                        </>
-                                    )}{' '}
-                                </CardFooter>
-                            </Card>
-                        </Link>
+                        <WikiCard
+                            id={id}
+                            date={date}
+                            description=""
+                            isArchived={archived}
+                            isStarred={starred}
+                            key={id}
+                            pageName={pageName}
+                            teamDriveId={teamDriveId}
+                        />
                     )
                 })}
+                {myFulcrum && (
+                    <WikiCard
+                        id={myFulcrum.id}
+                        date={format(
+                            //@ts-ignore
+                            new Date(
+                                myFulcrum.viewedByMeTime ||
+                                    myFulcrum.modifiedTime
+                            ),
+                            'MMMM dd, yyyy'
+                        )}
+                        description=""
+                        isArchived={isArchived(myFulcrum)}
+                        isStarred={myFulcrum.starred}
+                        key={myFulcrum.id}
+                        pageName="My Fulcrum"
+                        teamDriveId=""
+                    />
+                )}
             </div>
         </div>
     )
@@ -129,7 +146,62 @@ export function sortWikisBy(attr = 'name', files) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function getWikiRootFolder(folderId, files) {
     const folder = files.find(f => f.id === folderId)
     return folder
+}
+
+function WikiCard({
+    id,
+    date,
+    description,
+    isArchived,
+    isStarred,
+    pageName,
+    teamDriveId,
+}) {
+    return (
+        <Link key={id} to={`/page/${id}`}>
+            <Card>
+                <CardHeader
+                    avatar={pageName[0]}
+                    subtitle={date}
+                    title={pageName}
+                />
+                <CardBody>{description}</CardBody>
+                <CardFooter>
+                    {teamDriveId ? (
+                        <>
+                            <FolderAccountIcon className={s.FooterIcon} />{' '}
+                            Shared Drive
+                        </>
+                    ) : (
+                        <>
+                            <FolderGoogleDriveIcon className={s.FooterIcon} />{' '}
+                            My Drive
+                        </>
+                    )}
+                    <Spacer />
+                    {isArchived && <ArchiveIcon />}
+                    {isStarred && <StarIcon style={{ color: '#fbbc05' }} />}
+                </CardFooter>
+            </Card>
+        </Link>
+    )
+}
+
+/**
+ *
+ * @param {any[]} files
+ * @param {string} rootFolderId
+ * @returns {object|null}
+ */
+export function getOverviewFile(files, rootFolderId) {
+    const overview = files.find(
+        file =>
+            file.name === OVERVIEW_NAME && file.parents.includes(rootFolderId)
+    )
+    if (overview) return overview
+    return null
 }

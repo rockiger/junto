@@ -5,12 +5,12 @@ import { SidebarTreeItem } from '../SidebarTree/SidebarTreeItem'
 import { useStyles } from '../SidebarTree/SidebarTree-styles'
 import { getTitleFromFile, isArchived } from 'lib/helper'
 import { filterWikis, sortWikisBy } from 'components/wiki-list'
+import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
 
 export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
     const classes = useStyles()
     window['initialFiles'] = initialFiles
-    console.log(initialFiles)
 
     return (
         <ul className={classes.mydrive}>
@@ -20,6 +20,7 @@ export function SidebarSharedDrives() {
                         '->>',
                         initialFiles,
                         filterWikis,
+                        filterIsNotArchived,
                         [sortWikisBy, 'name'],
                         [
                             map,
@@ -42,6 +43,8 @@ export function SidebarSharedDrives() {
     )
 }
 // sortWikisBy(orderBy, filterWikis(files))
+
+// eslint-disable-next-line no-unused-vars
 function filterSharedDrives(files) {
     return files.filter(
         file =>
