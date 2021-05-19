@@ -24,21 +24,17 @@ export { StarredPage as ArchivePage }
 function StarredPage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
 
+    console.log({ files, starred: filterStarred(files) })
     if (isSignedIn && !isSigningIn) {
         return (
             <>
-                <H1>Starred</H1>
                 <FileList
                     emptyIcon={StarIcon}
                     emptyMessage="No starred pages."
                     emptySubline="Add stars to pages you want to easily refer to later."
-                    files={_.thread(
-                        files,
-                        filterStarred,
-                        filterPages,
-                        filterIsArchived
-                    )}
+                    files={_.thread(files, filterStarred)}
                     sortBy="modifiedByMeTime"
+                    title="Starred"
                 />
             </>
         )
@@ -53,23 +49,9 @@ function StarredPage({ isSignedIn, isSigningIn }) {
     }
 }
 
-function filterIsArchived(files) {
+export function filterStarred(files) {
     const filtered = files.filter(file => {
-        return isArchived(file)
-    })
-    return filtered
-}
-
-function filterPages(files) {
-    const filtered = files.filter(file => {
-        return !file.properties || !file.properties.pageName
-    })
-    return filtered
-}
-
-function filterStarred(files) {
-    const filtered = files.filter(file => {
-        return files.starred
+        return file.starred
     })
     return filtered
 }

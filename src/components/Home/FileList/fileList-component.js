@@ -4,9 +4,17 @@ import React, { useDispatch } from 'reactn'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import {
+    IconButton,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+} from '@material-ui/core'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalVariantIcon'
+import StarIcon from 'mdi-react/StarIcon'
 
 import { Spacer, Spinner } from 'components/gsuite-components'
 import { EXT } from 'lib/constants'
@@ -58,6 +66,7 @@ const FileListPartial = props => {
                 })
                 .map(file => {
                     const filename = getTitleFromFile(file)
+                    //! next
                     return (
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
@@ -73,6 +82,9 @@ const FileListPartial = props => {
                                     <FileDocumentIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={filename} />
+                                {file.starred && (
+                                    <StarIcon style={{ color: '#fbbc05' }} />
+                                )}
                             </Link>
                         </ListItem>
                     )
