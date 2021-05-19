@@ -1,6 +1,7 @@
 // @ts-check
 
 import React, { useDispatch } from 'reactn'
+import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -216,6 +217,7 @@ const FileListComponent = props => {
             searchTerm ? 'Search Result' : title
         } – Fulcrum.wiki`
     }
+    console.log(files)
     return (
         <div className="filelist">
             <div className={s.FileList_header}>
@@ -223,7 +225,7 @@ const FileListComponent = props => {
                     <Header className={s.FileList_header_title}>{title}</Header>
                 )}
                 <Spacer />
-                {setSortBy && (
+                {!_.isEmpty(files) && setSortBy && (
                     <div className={s.FileList_header_buttons}>
                         <strong
                             className={s.sortCriteria}

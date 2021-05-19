@@ -99,7 +99,10 @@ function Home(props) {
                                                 emptyMessage="Your archive is empty."
                                                 emptySubline="The archive will show pages you archived"
                                                 files={files}
-                                                sortBy="modifiedByMeTime"
+                                                sortBy={sortBy}
+                                                setSortBy={
+                                                    setSortByAndLocalStorage
+                                                }
                                             />
                                         </TabPanel>
                                         <TabPanel
@@ -114,7 +117,10 @@ function Home(props) {
                                                 emptyMessage="No starred pages."
                                                 emptySubline="Add stars to pages you want to easily refer to later."
                                                 files={filterStarred(files)}
-                                                sortBy="modifiedByMeTime"
+                                                sortBy={sortBy}
+                                                setSortBy={
+                                                    setSortByAndLocalStorage
+                                                }
                                             />
                                         </TabPanel>
                                     </Tabs>
