@@ -7,7 +7,7 @@ export const useStyles = makeStyles(theme => {
             flexShrink: 0,
             marginLeft: 3,
             padding: 0,
-            [theme.breakpoints.down('md')]: {
+            [theme.breakpoints.down('sm')]: {
                 display: 'none',
             },
         },
