@@ -62,6 +62,9 @@
     },
     "eslintConfig": {
         "extends": "react-app",
+        "globals": {
+            "_": "writable"
+        },
         "overrides": [
             {
                 "files": [
