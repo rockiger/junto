@@ -500,6 +500,15 @@ export function refreshSession() {
         return token && Date.now() < token.expires_at
     }
     console.log(isTokenValid())
+    return reloadAuthResponse()
+}
+
+/**
+ * Reloads the auth instance
+ *
+ * @returns {Promise|Object}
+ */
+export function reloadAuthResponse() {
     return gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse()
 }
 
