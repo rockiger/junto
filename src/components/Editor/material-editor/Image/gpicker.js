@@ -43,17 +43,26 @@ export function getImage(apiKey) {
                 .setIncludeFolders(true)
                 .setOwnedByMe(true)
                 .setLabel('My Images')
+
+            const sharedDrivesView = new google.picker.DocsView(
+                google.picker.ViewId.DOCS_IMAGES
+            )
+                .setIncludeFolders(true)
+                .setEnableDrives(true)
+
             const sharedWithMe = new google.picker.DocsView(
                 google.picker.ViewId.DOCS_IMAGES
             )
                 .setIncludeFolders(true)
                 .setOwnedByMe(false)
+
             var uploadView = new google.picker.DocsUploadView()
             uploadView.setMimeTypes(
                 'image/png,image/jpeg,image/jpg, image/svg+xml, image/gif, image/webp, image/bmp, image/tiff'
             )
             var picker = new google.picker.PickerBuilder()
                 .addView(myImages)
+                .addView(sharedDrivesView)
                 .addView(sharedWithMe)
                 .addView(uploadView)
                 .setOAuthToken(accessToken)
