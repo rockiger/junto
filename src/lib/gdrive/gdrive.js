@@ -213,9 +213,27 @@ export async function createNewWiki({
             resource: fileMetadata,
             supportsAllDrives,
         })
-        console.log(result)
 
-        return JSON.parse(result.body).id
+        const folder = JSON.parse(result.body)
+        console.log(folder)
+        if (folder.teamDriveId && supportsAllDrives) {
+            // create permission
+            const domain = getDomainOfCurrentUser()
+            // eslint-disable-next-line
+            const permissionResult = await gapi.client.drive.permissions.create(
+                {
+                    fields: '*',
+                    fileId: folder.id,
+                    resource: {
+                        role: 'fileOrganizer',
+                        type: 'domain',
+                        domain: domain,
+                    },
+                    supportsAllDrives,
+                }
+            )
+        }
+        return folder.id
     } catch (err) {
         alert(`We couldn't create your base on your Google Drive.`)
         console.error(err.body)
@@ -311,6 +329,7 @@ export function getFileDescription(driveId) {
  * a file'sid: {driveId, driveVersion, name, ifid}
  */
 export async function getFolderId(name = 'Fulcrum Documents') {
+    //! TODO try to debug here to clean personal problems
     try {
         const result = await gapi.client.drive.files.list({
             q: `name="${name}"`,
@@ -523,4 +542,22 @@ function formatResult(response) {
         stories.push(file)
     }
     return stories
+}
+
+/**
+ * Produces the domain of the current user based on his email. If this is not present it doesn't work.
+ * @returns email string
+ */
+function getDomainOfCurrentUser() {
+    const email = gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getBasicProfile()
+        .getEmail()
+    const domain = email.split('@')[1]
+    if (domain) {
+        return domain
+    } else {
+        throw new Error('No domain found')
+    }
 }
