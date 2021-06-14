@@ -170,6 +170,26 @@ export async function createFile(
         })
         console.log(response)
 
+        const file = JSON.parse(response.body)
+        if (file.teamDriveId && supportsAllDrives) {
+            // create permission
+            const domain = getDomainOfCurrentUser()
+            // eslint-disable-next-line
+            const permissionResult = await gapi.client.drive.permissions.create(
+                {
+                    fields: '*',
+                    fileId: file.id,
+                    resource: {
+                        allowFileDiscovery: true,
+                        domain,
+                        role: 'fileOrganizer',
+                        type: 'domain',
+                    },
+                    supportsAllDrives,
+                }
+            )
+        }
+
         return response.result.id
     } catch (err) {
         alert(`Couldn't create new file. Please reload the page and try again.`)
@@ -225,9 +245,10 @@ export async function createNewWiki({
                     fields: '*',
                     fileId: folder.id,
                     resource: {
+                        allowFileDiscovery: true,
+                        domain,
                         role: 'fileOrganizer',
                         type: 'domain',
-                        domain: domain,
                     },
                     supportsAllDrives,
                 }
@@ -329,15 +350,22 @@ export function getFileDescription(driveId) {
  * a file'sid: {driveId, driveVersion, name, ifid}
  */
 export async function getFolderId(name = 'Fulcrum Documents') {
-    //! TODO try to debug here to clean personal problems
     try {
         const result = await gapi.client.drive.files.list({
             q: `name="${name}"`,
-            pageSize: 10,
-            fields: 'nextPageToken, files(id, name)',
+            pageSize: 100,
+            fields: 'nextPageToken, files(id, name, createdTime)',
         })
         const resultBody = JSON.parse(result.body)
-        if (resultBody.files.length > 0) return resultBody.files[0].id
+
+        if (resultBody.files.length > 0)
+            return _.thread(
+                resultBody,
+                [_.get, 'files'],
+                [_.orderBy, 'createdTime'],
+                _.head,
+                [_.get, 'id']
+            )
     } catch (err) {
         console.log(err)
     }
