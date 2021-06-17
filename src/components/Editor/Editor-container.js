@@ -5,6 +5,7 @@ import { isHotkey } from 'is-hotkey'
 import { useLocation } from 'react-router-dom'
 import { debounce } from 'lodash'
 
+import { Hint } from 'components/gsuite-components/hint'
 import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
 import { Event } from 'components/Tracking'
 import { API_KEY } from 'lib/constants'
@@ -184,10 +185,12 @@ const EditorLogic = React.forwardRef(
             <div onKeyDown={onKeyDown}>
                 {canEdit && (
                     <PageButtons>
-                        <ToggleReadOnlyButton
-                            readOnly={readOnly}
-                            onClick={onClickToggleButton}
-                        />
+                        <Hint>
+                            <ToggleReadOnlyButton
+                                readOnly={readOnly}
+                                onClick={onClickToggleButton}
+                            />
+                        </Hint>
                         <ToggleStarredButton
                             isStarred={_.thread(
                                 fileId,
