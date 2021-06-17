@@ -170,6 +170,26 @@ export async function createFile(
         })
         console.log(response)
 
+        const file = JSON.parse(response.body)
+        if (file.teamDriveId && supportsAllDrives) {
+            // create permission
+            const domain = getDomainOfCurrentUser()
+            // eslint-disable-next-line
+            const permissionResult = await gapi.client.drive.permissions.create(
+                {
+                    fields: '*',
+                    fileId: file.id,
+                    resource: {
+                        allowFileDiscovery: true,
+                        domain,
+                        role: 'fileOrganizer',
+                        type: 'domain',
+                    },
+                    supportsAllDrives,
+                }
+            )
+        }
+
         return response.result.id
     } catch (err) {
         alert(`Couldn't create new file. Please reload the page and try again.`)
@@ -213,9 +233,28 @@ export async function createNewWiki({
             resource: fileMetadata,
             supportsAllDrives,
         })
-        console.log(result)
 
-        return JSON.parse(result.body).id
+        const folder = JSON.parse(result.body)
+        console.log(folder)
+        if (folder.teamDriveId && supportsAllDrives) {
+            // create permission
+            const domain = getDomainOfCurrentUser()
+            // eslint-disable-next-line
+            const permissionResult = await gapi.client.drive.permissions.create(
+                {
+                    fields: '*',
+                    fileId: folder.id,
+                    resource: {
+                        allowFileDiscovery: true,
+                        domain,
+                        role: 'fileOrganizer',
+                        type: 'domain',
+                    },
+                    supportsAllDrives,
+                }
+            )
+        }
+        return folder.id
     } catch (err) {
         alert(`We couldn't create your base on your Google Drive.`)
         console.error(err.body)
@@ -314,11 +353,19 @@ export async function getFolderId(name = 'Fulcrum Documents') {
     try {
         const result = await gapi.client.drive.files.list({
             q: `name="${name}"`,
-            pageSize: 10,
-            fields: 'nextPageToken, files(id, name)',
+            pageSize: 100,
+            fields: 'nextPageToken, files(id, name, createdTime)',
         })
         const resultBody = JSON.parse(result.body)
-        if (resultBody.files.length > 0) return resultBody.files[0].id
+
+        if (resultBody.files.length > 0)
+            return _.thread(
+                resultBody,
+                [_.get, 'files'],
+                [_.orderBy, 'createdTime'],
+                _.head,
+                [_.get, 'id']
+            )
     } catch (err) {
         console.log(err)
     }
@@ -500,6 +547,15 @@ export function refreshSession() {
         return token && Date.now() < token.expires_at
     }
     console.log(isTokenValid())
+    return reloadAuthResponse()
+}
+
+/**
+ * Reloads the auth instance
+ *
+ * @returns {Promise|Object}
+ */
+export function reloadAuthResponse() {
     return gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse()
 }
 
@@ -514,4 +570,22 @@ function formatResult(response) {
         stories.push(file)
     }
     return stories
+}
+
+/**
+ * Produces the domain of the current user based on his email. If this is not present it doesn't work.
+ * @returns email string
+ */
+function getDomainOfCurrentUser() {
+    const email = gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getBasicProfile()
+        .getEmail()
+    const domain = email.split('@')[1]
+    if (domain) {
+        return domain
+    } else {
+        throw new Error('No domain found')
+    }
 }

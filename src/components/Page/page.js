@@ -1,7 +1,7 @@
 /* global gapi */
 import React from 'reactn'
 import PropTypes from 'prop-types'
-import { BrowserRouter as Router, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, withRouter } from 'react-router-dom'
 
 import { Chip } from '@material-ui/core'
 import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
@@ -27,7 +27,7 @@ import { BreadcrumbsBar } from './Breadcrumbs'
 import { filesUpdater } from 'lib/helper'
 import { getPageById, putPage } from 'lib/localDB'
 
-export default class Page extends React.Component {
+class Page extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -103,8 +103,9 @@ export default class Page extends React.Component {
                     console.log({ err })
                 }
             } else {
-                alert(`Couldn't load file`)
+                alert(`Couldn't find file`)
                 console.log({ error })
+                this.props.history.push('/')
             }
             return undefined
         }
@@ -327,6 +328,8 @@ export default class Page extends React.Component {
         }
     }
 }
+
+export default withRouter(Page)
 
 Page.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,

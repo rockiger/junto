@@ -5,9 +5,7 @@ describe('Test the Editor', () => {
 
         cy.wait(1000)
 
-        cy.get('aside.App-sidebar ul > li > a')
-            .contains('My Fulcrum')
-            .click()
+        cy.get('aside.App-sidebar ul > li > a').contains('My Wiki').click()
 
         cy.wait(1000)
 

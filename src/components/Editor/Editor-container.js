@@ -189,9 +189,11 @@ const EditorLogic = React.forwardRef(
                             onClick={onClickToggleButton}
                         />
                         <ToggleStarredButton
-                            isStarred={
-                                getMetaById(fileId, initialFiles)['starred']
-                            }
+                            isStarred={_.thread(
+                                fileId,
+                                [getMetaById, initialFiles],
+                                [_.get, ['starred'], false]
+                            )}
                             onClick={() => {
                                 if (
                                     getMetaById(fileId, initialFiles)['starred']

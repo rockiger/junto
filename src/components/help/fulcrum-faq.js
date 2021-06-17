@@ -65,8 +65,8 @@ function FulcrumFaq() {
             <h2>How can I rename wikis or the root page of a wiki?</h2>
             <p>
                 Right now, this is not possible. You can't rename{' '}
-                <strong>My Fulcrum</strong> nor the name of a wiki. We are
-                working on this feature, which will make it possible.
+                <strong>My Wiki</strong> nor the name of a wiki. We are working
+                on this feature, which will make it possible.
             </p>
             <h2>How do I create a new (shared) wiki?</h2>
             <p>

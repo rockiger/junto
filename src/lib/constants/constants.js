@@ -13,7 +13,7 @@ export const DISCOVERY_DOCS = [
 // included, separated by spaces.
 // Could make sense at a later stage https://www.googleapis.com/auth/drive.appfolder
 export const SCOPES =
-    'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.install'
+    'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.install https://www.googleapis.com/auth/drive.appdata'
 /* export const SCOPES =
 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.install'
  */
@@ -21,7 +21,7 @@ export const EXT = '.gwiki'
 export const EXTLENGTH = EXT.length
 export const FOLDER_NAME = 'Fulcrum Documents'
 export const LOCALSTORAGE_NAME = 'junto-content-xlc'
-export const MYHOME = 'My Fulcrum'
+export const MYHOME = 'My Wiki'
 export const OVERVIEW_NAME = '_myDrive_overview_please_do_not_touch' + EXT
 export const UNTITLEDNAME = 'Untitled page'
 export const UNTITLEDFILE = UNTITLEDNAME + EXT

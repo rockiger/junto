@@ -17,7 +17,7 @@ export const SidebarTreeComponent = ({ rootFolderId, files }) => {
             {!isInitialFileListLoading && (
                 <ul className={classes.mydrive}>
                     <SidebarTreeItem
-                        expand={true}
+                        expand={false}
                         files={sortFilesByName(files)}
                         label={MYHOME}
                         level={0}

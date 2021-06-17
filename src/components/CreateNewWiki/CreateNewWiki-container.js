@@ -96,7 +96,7 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
  * @param {string} search
  * @returns { {folderId: string, action: string, userId: string } | null}
  */
-export const getState = (search) => {
+export const getState = search => {
     const urlParams = new URLSearchParams(search)
 
     const stateString = urlParams.get('state')

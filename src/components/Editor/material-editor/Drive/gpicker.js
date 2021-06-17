@@ -50,8 +50,14 @@ export function getDocument(apiKey) {
                 .setIncludeFolders(true)
                 .setOwnedByMe(false)
             var uploadView = new google.picker.DocsUploadView()
+
+            const sharedDrivesView = new google.picker.DocsView()
+                .setIncludeFolders(true)
+                .setEnableDrives(true)
+
             var picker = new google.picker.PickerBuilder()
                 .addView(myDocuments)
+                .addView(sharedDrivesView)
                 .addView(sharedWithMe)
                 .addView(uploadView)
                 .setOAuthToken(accessToken)

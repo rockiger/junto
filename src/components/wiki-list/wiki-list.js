@@ -109,7 +109,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         isArchived={isArchived(myFulcrum)}
                         isStarred={myFulcrum.starred}
                         key={myFulcrum.id}
-                        pageName="My Fulcrum"
+                        pageName="My Wiki"
                         teamDriveId=""
                     />
                 )}
@@ -136,7 +136,7 @@ export function sortWikisBy(attr = 'name', files) {
         return sortBy(files, file =>
             file.properties && file.properties.pageName
                 ? file.properties.pageName
-                : 'My Fulcrum'
+                : 'My Wiki'
         )
     } else {
         return sortBy(
