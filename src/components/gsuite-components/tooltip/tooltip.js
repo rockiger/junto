@@ -17,9 +17,10 @@ export { Tooltip }
  * A Tooltip component.
  * @param {TooltipProps} props
  */
-function Tooltip({ children, content }) {
+function Tooltip({ children, content, ...restProps }) {
     return (
         <TooltipBase
+            {...restProps}
             arrow={false}
             content={content}
             direction="down"
