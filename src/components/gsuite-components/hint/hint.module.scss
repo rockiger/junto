@@ -15,18 +15,66 @@ $hint-color: $logo-green;
     width: 100%;
 }
 
+.hint__Tooltip {
+    & > span:first-child {
+        background-color: $tooltip-background;
+        border: 0;
+        border-radius: 2px;
+        color: white;
+        font-size: 1rem;
+        margin-left: 0;
+        max-width: 400px !important;
+        min-width: 200px;
+        opacity: 0.9;
+        padding: 0.25rem 0.5rem !important;
+        width: auto !important;
+    }
+
+    &__content {
+        padding: 0.5rem;
+        padding-left: 1rem;
+
+        &__headline {
+            font-weight: bold;
+            padding-bottom: 0.5rem;
+        }
+    }
+
+    &__logo {
+        padding-left: 0.75rem;
+        padding-right: 0.5rem;
+    }
+}
+
+.hint__Tooltip__iconbar {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 0;
+
+    &__IconButton {
+        color: white;
+        float: right;
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+    &__CloseIcon {
+        height: 1rem;
+        width: 1rem;
+    }
+}
+
 .hint {
-    width: 15px;
+    animation: pulse 2s infinite;
+    background: $hint-color;
+    border-radius: 100px;
+    box-shadow: 0 0 0 0 rgba($hint-color, 1);
+    cursor: pointer;
     height: 15px;
     position: absolute;
-    background: $hint-color;
     left: 15px;
-    top: 15px;
-    border-radius: 100px;
-
-    box-shadow: 0 0 0 0 rgba($hint-color, 1);
     transform: scale(1);
-    animation: pulse 2s infinite;
+    top: 15px;
+    width: 15px;
 }
 
 @keyframes pulse {
