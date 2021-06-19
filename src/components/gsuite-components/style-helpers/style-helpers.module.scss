@@ -3,3 +3,12 @@
 .Spacer {
     flex-grow: 1;
 }
+
+.HStack {
+    display: flex;
+}
+
+.VStack {
+    display: flex;
+    flex-direction: column;
+}
