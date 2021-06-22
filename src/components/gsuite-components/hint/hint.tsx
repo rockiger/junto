@@ -23,14 +23,14 @@ interface Props {
 export const Hint = ({ children, id, scope }: Props) => {
     const [hints, setHints] = useGlobal('hints')
     const [isOpen, setIsOpen] = React.useState(false)
-
+    const show = showHint(id, hints[scope])
     let hint
     try {
         hint = hints[scope][id]
     } catch (e) {
         hint = emptyHint()
     }
-    const { message, rank, title, unread } = hint
+    const { message, rank, title } = hint
 
     const onClickIconButton = () => {
         setIsOpen(false)
@@ -42,13 +42,12 @@ export const Hint = ({ children, id, scope }: Props) => {
                 [id]: { message, rank, title, unread: false },
             },
         })
-
         //! TODO write changes to config in gdrive
     }
     return (
         <div className={s.hint__wrapper_outer}>
             {children}
-            {unread && (
+            {show && (
                 <div className={s.hint__wrapper_inner}>
                     <TooltipBase
                         arrow={false}
@@ -106,3 +105,22 @@ const emptyHint = (): IHint => ({
     title: '',
     unread: false,
 })
+
+/**
+ * Consume an hints object and an id to decide if the current
+ * hint should be shown.
+ * @param currentId
+ * @param scopedHints the hints of the current scope
+ * @returns boolean
+ */
+const showHint = (currentId: string, scopedHints: { [key: string]: IHint }) =>
+    _.thread(
+        scopedHints,
+        _.keys,
+        [_.map, el => ({ ...scopedHints[el], id: el })],
+        [_.filter, ['unread', true]],
+        [_.sortBy, ['rank', 'title', 'message']],
+        [_.findIndex, ['id', currentId]],
+        _.trace,
+        [pos => pos === 0]
+    )

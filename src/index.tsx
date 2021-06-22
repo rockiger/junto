@@ -43,9 +43,23 @@ const initialState: State = {
             edit_page: {
                 unread: true,
                 message:
-                    'Click on the pencil button or press the e to edit a page.',
+                    'Click on the pencil button or press (e) to edit a page.',
                 rank: 10,
                 title: 'Edit page',
+            },
+            star_page: {
+                unread: true,
+                message:
+                    'Click on the star button or press (f) to star a page. You will find all starred pages in your sidebar under "Starred"',
+                rank: 20,
+                title: 'Star page',
+            },
+            page_menu: {
+                unread: true,
+                message:
+                    'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ',
+                rank: 30,
+                title: 'Page Menu',
             },
         },
     },
