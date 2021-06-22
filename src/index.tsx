@@ -34,22 +34,34 @@ addReducers({
 })
 
 const initialState: State = {
+    backgroundUpdate: false,
+    files: [],
+    goToNewFile: false,
+    //!
+    hints: {
+        wiki_page: {
+            edit_page: {
+                unread: true,
+                message:
+                    'Click on the pencil button or press the e to edit a page.',
+                rank: 10,
+                title: 'Edit page',
+            },
+        },
+    },
+    initialFiles: [],
     isCreatingNewFile: false,
-    rootFolderId: null,
     isFileListLoading: false,
+    isInitialFileListLoading: false,
     isSearchFieldActive: false,
     isSignedIn: false,
     isSigningIn: true,
-    goToNewFile: false,
     oldSearchTerm: '',
     redirect: false,
+    rootFolderId: null,
     searchTerm: '',
     searchValue: '', // The value in the searchfield
     showSidebarOnMobile: false,
-    files: [],
-    initialFiles: [],
-    isInitialFileListLoading: false,
-    backgroundUpdate: false,
 }
 setGlobal(initialState)
 

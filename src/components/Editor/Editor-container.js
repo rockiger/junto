@@ -185,7 +185,7 @@ const EditorLogic = React.forwardRef(
             <div onKeyDown={onKeyDown}>
                 {canEdit && (
                     <PageButtons>
-                        <Hint>
+                        <Hint id="edit_page" scope="wiki_page">
                             <ToggleReadOnlyButton
                                 readOnly={readOnly}
                                 onClick={onClickToggleButton}
