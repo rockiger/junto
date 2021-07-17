@@ -21,6 +21,7 @@ declare module 'reactn/default' {
     export interface State {
         hints: HintMap
         hintsFileId: string
+        hintCounter: number
         isCreatingNewFile: boolean
         rootFolderId: null | string
         isFileListLoading: boolean

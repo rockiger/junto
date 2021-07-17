@@ -56,8 +56,9 @@ interface Props {
 
 export const Hint = ({ children, id, scope }: Props) => {
     const [hints, setHints] = useGlobal('hints')
+    const [hintCounter, setHintCounter] = useGlobal('hintCounter')
     const [isOpen, setIsOpen] = React.useState(false)
-    const show = showHint(id, hints[scope])
+    const show = showHint(id, hints[scope], hintCounter)
     let hint
     try {
         hint = hints[scope][id]
@@ -65,12 +66,13 @@ export const Hint = ({ children, id, scope }: Props) => {
     } catch (e) {
         hint = emptyHint()
     }
-    const { message, rank, title } = hint
+    const { message, title } = hint
 
     const onClickIconButton = () => {
         setIsOpen(false)
         // a bit complicated. It needs to change the nested hint in scope
         setHints(makeHintRead(hints, id, scope))
+        setHintCounter(hintCounter + 1)
         console.log('//! TODO write changes to config in gdrive')
         //! TODO write changes to config in gdrive
     }
@@ -145,9 +147,13 @@ const emptyHint = (): HintData => ({
  */
 export const showHint = (
     currentId: string,
-    scopedHints: { [key: string]: HintData }
-) =>
-    _.thread(
+    scopedHints: { [key: string]: HintData },
+    showedHints: number
+) => {
+    if (showedHints >= 3) {
+        return false
+    }
+    return _.thread(
         scopedHints,
         _.keys,
         [_.map, el => ({ ...scopedHints[el], id: el })],
@@ -156,6 +162,7 @@ export const showHint = (
         [_.findIndex, ['id', currentId]],
         [pos => pos === 0]
     )
+}
 
 /**
  * Consume a HintMap and a HintMapAppConfig and updates the HintMap

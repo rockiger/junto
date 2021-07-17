@@ -39,6 +39,7 @@ const initialState: State = {
     goToNewFile: false,
     hints: {},
     hintsFileId: '',
+    hintCounter: 0,
     initialFiles: [],
     isCreatingNewFile: false,
     isFileListLoading: false,
