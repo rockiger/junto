@@ -155,7 +155,6 @@ export default class GoogleLogin extends React.Component {
         const hintsProps = _.find(appDataFolderList, ['name', 'hints.json'])
         const hintsModule = await import('lib/constants/hints')
         const { hints } = hintsModule
-        console.log(hints)
         if (_.isUndefined(hintsProps)) {
             const hintsFileId = await createFile(
                 'hints.json',
@@ -167,10 +166,6 @@ export default class GoogleLogin extends React.Component {
             this.setGlobal({ hints: hints, hintsFileId })
         } else {
             const hintsAppData = JSON.parse(await downloadFile(hintsProps.id))
-            console.log(
-                mergeHintData(hints, hintsAppData),
-                _.isEmpty(hintsAppData)
-            )
             this.setGlobal({
                 hints: mergeHintData(hints, hintsAppData),
                 hintsFileId: hintsProps.id,

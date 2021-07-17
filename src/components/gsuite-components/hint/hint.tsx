@@ -6,6 +6,7 @@ import IconButton from '../icon-button'
 import { HStack } from '..'
 import logo from 'static/logo_48.svg'
 import s from './hint.module.scss'
+import { updateFile } from 'lib/gdrive'
 
 export interface HintData {
     unread: boolean
@@ -57,6 +58,7 @@ interface Props {
 export const Hint = ({ children, id, scope }: Props) => {
     const [hints, setHints] = useGlobal('hints')
     const [hintCounter, setHintCounter] = useGlobal('hintCounter')
+    const [hintsFileId] = useGlobal('hintsFileId')
     const [isOpen, setIsOpen] = React.useState(false)
     const show = showHint(id, hints[scope], hintCounter)
     let hint
@@ -74,11 +76,8 @@ export const Hint = ({ children, id, scope }: Props) => {
         const newHints = makeHintRead(hints, id, scope)
         setHints(newHints)
         setHintCounter(hintCounter + 1)
-        console.log(
-            '//! TODO write changes to config in gdrive',
-            hintMap2HintMapAppConfig(newHints)
-        )
-        //! TODO write changes to config in gdrive
+        // write changes to config in gdrive
+        updateFile(hintsFileId, hintMap2HintMapAppConfig(newHints), false)
     }
     return (
         <div className={s.hint__wrapper_outer}>
