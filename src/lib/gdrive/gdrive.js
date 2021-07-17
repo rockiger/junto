@@ -139,7 +139,7 @@ export async function listFilesChunked(searchTerm = '', orderBy = '') {
             supportsAllDrives: true,
         })
         pageToken = response.result.nextPageToken
-        files = [...files, ...response.result.files]
+        files = files.concat(response.result.files)
         //pageToken = undefined
     }
     return files
