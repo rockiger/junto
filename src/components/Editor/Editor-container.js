@@ -191,23 +191,29 @@ const EditorLogic = React.forwardRef(
                                 onClick={onClickToggleButton}
                             />
                         </Hint>
-                        <ToggleStarredButton
-                            isStarred={_.thread(
-                                fileId,
-                                [getMetaById, initialFiles],
-                                [_.get, ['starred'], false]
-                            )}
-                            onClick={() => {
-                                if (
-                                    getMetaById(fileId, initialFiles)['starred']
-                                ) {
-                                    unstar(fileId)
-                                } else {
-                                    star(fileId)
-                                }
-                            }}
-                        />
-                        <PageMenu fileId={fileId} />
+                        <Hint id="star_page" scope="wiki_page">
+                            <ToggleStarredButton
+                                isStarred={_.thread(
+                                    fileId,
+                                    [getMetaById, initialFiles],
+                                    [_.get, ['starred'], false]
+                                )}
+                                onClick={() => {
+                                    if (
+                                        getMetaById(fileId, initialFiles)[
+                                            'starred'
+                                        ]
+                                    ) {
+                                        unstar(fileId)
+                                    } else {
+                                        star(fileId)
+                                    }
+                                }}
+                            />
+                        </Hint>
+                        <Hint id="page_menu" scope="wiki_page">
+                            <PageMenu fileId={fileId} />
+                        </Hint>
                     </PageButtons>
                 )}
                 <MaterialEditor
