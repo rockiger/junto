@@ -1,11 +1,45 @@
 import React, { useGlobal } from 'reactn'
 import TooltipBase from 'react-tooltip-lite'
+import _ from 'lib/helper/globals'
 import CloseIcon from 'mdi-react/CloseIcon'
 import IconButton from '../icon-button'
 import { HStack } from '..'
 import logo from 'static/logo_48.svg'
 import s from './hint.module.scss'
-import { Hint as IHint } from 'reactn/default'
+
+export interface HintData {
+    unread: boolean
+    message: string
+    rank: number
+    title: string
+}
+
+/**
+ * An "2-dimensional" hash map of hinst. Where the first dimension represents the scope, e.g. a page/route where you want to show the hints, and the second dimension represents the actial hint to display.
+ * E.g., here the wiki_page is the scope and the edit_page is the ID of
+ * a hint:
+ * wiki_page: {
+ *        edit_page: {
+ *            unread: true,
+ *            message: 'Click on the pencil button',
+ *            rank: 10,
+ *            title: 'Edit page',
+ *        },
+ *        star_page: {
+ *            unread: true,
+ *            message: 'Click on the star button',
+ *            rank: 20,
+ *            title: 'Star page',
+ *        },
+ *      }
+ */
+export interface HintMap {
+    [key: string]: { [key: string]: HintData }
+}
+
+export interface HintMapAppConfig {
+    [key: string]: { [key: string]: { unread: boolean } }
+}
 
 interface Props {
     children: React.ReactNode
@@ -35,13 +69,8 @@ export const Hint = ({ children, id, scope }: Props) => {
     const onClickIconButton = () => {
         setIsOpen(false)
         // a bit complicated. It needs to change the nested hint in scope
-        setHints({
-            ...hints,
-            [scope]: {
-                ...hints[scope],
-                [id]: { message, rank, title, unread: false },
-            },
-        })
+        setHints(makeHintRead(hints, id, scope))
+        console.log('//! TODO write changes to config in gdrive')
         //! TODO write changes to config in gdrive
     }
     return (
@@ -99,7 +128,7 @@ export const Hint = ({ children, id, scope }: Props) => {
     )
 }
 
-const emptyHint = (): IHint => ({
+const emptyHint = (): HintData => ({
     message: '',
     rank: -1,
     title: '',
@@ -113,7 +142,10 @@ const emptyHint = (): IHint => ({
  * @param scopedHints the hints of the current scope
  * @returns boolean
  */
-const showHint = (currentId: string, scopedHints: { [key: string]: IHint }) =>
+export const showHint = (
+    currentId: string,
+    scopedHints: { [key: string]: HintData }
+) =>
     _.thread(
         scopedHints,
         _.keys,
@@ -121,6 +153,64 @@ const showHint = (currentId: string, scopedHints: { [key: string]: IHint }) =>
         [_.filter, ['unread', true]],
         [_.sortBy, ['rank', 'title', 'message']],
         [_.findIndex, ['id', currentId]],
-        _.trace,
         [pos => pos === 0]
     )
+
+/**
+ * Consume a HintMap and a HintMapAppConfig and updates the HintMap
+ * based on the given HintMapAppConfig.
+ * @param hints
+ * @param hintsAppData
+ * @returns the newly created HintMap
+ */
+export const mergeHintData = (
+    hints: HintMap,
+    hintsAppData: HintMapAppConfig
+) => {
+    if (_.isEmpty(hints) || _.isEmpty(hintsAppData)) {
+        return hints
+    }
+    return _.merge(hints, hintsAppData)
+}
+
+/**
+ * Consumes a HintMap the scope and the id. If the right path is found,
+ * it produces a new HintMap with a new read item otherwise the given
+ * HintMap is returned.
+ * @param hints
+ * @param id
+ * @param scope
+ * @returns
+ */
+export const makeHintRead = (
+    hints: HintMap,
+    id: string,
+    scope: string
+): HintMap => {
+    if (_.has(hints, `${scope}.${id}.unread`)) {
+        return _.set(hints, `${scope}.${id}.unread`, false)
+    }
+    return hints
+}
+
+/**
+ * Consumes a HintMapAppConfig, a HintMap, the scope and the id. If the
+ * right path is found, it produces a new HintMapAppConfig with a new
+ *  read item otherwise the given HintMapAppConfig is returned.
+ * @param hintAppConfig
+ * @param hints
+ * @param id
+ * @param scope
+ * @returns
+ */
+export const makeHintConfigRead = (
+    hintAppConfig: HintMapAppConfig,
+    hints: HintMap,
+    id: string,
+    scope: string
+): HintMapAppConfig => {
+    if (_.has(hints, `${scope}.${id}.unread`)) {
+        return _.set(hintAppConfig, `${scope}.${id}.unread`, false)
+    }
+    return hintAppConfig
+}
