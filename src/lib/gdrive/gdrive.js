@@ -64,6 +64,26 @@ export function init() {
 /**
  * Get all stories available on the Google Drive. Never rejects
  *
+ * @method listAppDataFiles
+ * @return {Promise|Array} A promise of the result that
+ * returns an array of file descriptions:
+ * [{driveId, driveVersion, name, ifid}]
+ */
+export function listAppDataFiles() {
+    return new Promise((resolve, reject) => {
+        gapi.client.drive.files
+            .list({
+                spaces: 'appDataFolder',
+                fields: 'nextPageToken, files(id, name)',
+                pageSize: 100,
+            })
+            .execute(response => resolve(formatResult(response)))
+    })
+}
+
+/**
+ * Get all stories available on the Google Drive. Never rejects
+ *
  * @method listFiles
  * @return {Promise|Array} A promise of the result that
  * returns an array of file descriptions:

@@ -4,10 +4,11 @@
 
 import React from 'reactn'
 import PropTypes from 'prop-types'
+import LogoutIcon from 'mdi-react/LogoutIcon'
+
 import IconButton from 'components/gsuite-components/icon-button'
 import Button from 'components/gsuite-components/button'
-
-import LogoutIcon from 'mdi-react/LogoutIcon'
+import { mergeHintData } from 'components/gsuite-components/hint'
 
 import {
     listFilesChunked as listFiles,
@@ -16,6 +17,8 @@ import {
     getFolderId,
     createNewWiki,
     refreshSession,
+    listAppDataFiles,
+    downloadFile,
 } from '../lib/gdrive'
 
 import { OVERVIEW_VALUE, OVERVIEW_NAME } from '../lib/constants'
@@ -91,6 +94,7 @@ export default class GoogleLogin extends React.Component {
         this.updateSigninStatus(
             window.gapi.auth2.getAuthInstance().isSignedIn.get()
         )
+        this.initHints()
     }
 
     /**
@@ -138,6 +142,39 @@ export default class GoogleLogin extends React.Component {
             // this.setState({folderId: newFolderId})
             console.log('newFolderId:', newRootFolderId)
             this.initFiles()
+        }
+    }
+
+    /**
+     * Initially load hints
+     */
+    initHints = async () => {
+        console.log('initHints')
+        const appDataFolderList = await listAppDataFiles()
+        console.log(appDataFolderList)
+        const hintsProps = _.find(appDataFolderList, ['name', 'hints.json'])
+        const hintsModule = await import('lib/constants/hints')
+        const { hints } = hintsModule
+        console.log(hints)
+        if (_.isUndefined(hintsProps)) {
+            const hintsFileId = await createFile(
+                'hints.json',
+                'appDataFolder',
+                false
+            )
+            await updateFile(hintsFileId, {}, false)
+            console.log({ hints })
+            this.setGlobal({ hints: hints, hintsFileId })
+        } else {
+            const hintsAppData = JSON.parse(await downloadFile(hintsProps.id))
+            console.log(
+                mergeHintData(hints, hintsAppData),
+                _.isEmpty(hintsAppData)
+            )
+            this.setGlobal({
+                hints: mergeHintData(hints, hintsAppData),
+                hintsFileId: hintsProps.id,
+            })
         }
     }
 

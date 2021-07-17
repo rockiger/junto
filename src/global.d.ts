@@ -1,4 +1,5 @@
 import 'reactn'
+import { HintMap } from 'components/gsuite-components/hint'
 
 declare module 'reactn/default' {
     export interface Reducers {
@@ -18,7 +19,8 @@ declare module 'reactn/default' {
     }
 
     export interface State {
-        hints: { [key: string]: { [key: string]: Hint } }
+        hints: HintMap
+        hintsFileId: string
         isCreatingNewFile: boolean
         rootFolderId: null | string
         isFileListLoading: boolean
@@ -35,13 +37,6 @@ declare module 'reactn/default' {
         initialFiles: IFile[]
         isInitialFileListLoading: boolean
         backgroundUpdate: boolean
-    }
-
-    export interface Hint {
-        unread: boolean
-        message: string
-        rank: number
-        title: string
     }
 
     export interface IFile {
