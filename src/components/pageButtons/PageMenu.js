@@ -12,7 +12,6 @@ export function PageMenu({ fileId }) {
     const historyItem = HistoryItem({ fileId })
     const { HistoryModal } = historyItem
     const shareButton = ShareMenuItem({ fileId })
-    console.log(HistoryModal)
     return (
         <ButtonMenu
             items={[

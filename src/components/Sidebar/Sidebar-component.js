@@ -10,6 +10,7 @@ import { SidebarTree } from './SidebarTree'
 import { SidebarItem } from './SidebarItem'
 
 import styles from './sidebar.module.scss'
+import { Hint } from 'components/gsuite-components/hint'
 window.isMobileDevice = isMobileDevice
 
 const SidebarRenderer = props => {
@@ -27,21 +28,23 @@ const SidebarRenderer = props => {
             )} */}
             <div className={styles.sidebar}>
                 {!isMobileDevice() && (
-                    <div
-                        className={styles.Sidebar_newButton}
-                        onClick={props.onClickNewButton}
-                    >
-                        <svg
-                            className={styles.svg}
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
+                    <Hint id="new_page" scope="dashboard">
+                        <div
+                            className={styles.Sidebar_newButton}
+                            onClick={props.onClickNewButton}
                         >
-                            <path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" />
-                        </svg>
-                        New Page
-                    </div>
+                            <svg
+                                className={styles.svg}
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" />
+                            </svg>
+                            New Page
+                        </div>
+                    </Hint>
                 )}
 
                 <div

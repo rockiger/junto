@@ -104,7 +104,6 @@ export default function HistoryDialogContent({ fileId }) {
     useEffect(() => {
         async function getRevisions() {
             const revData = await listRevisions(fileId)
-            console.log({ revData })
             setRevisions(_.reverse(revData.result.revisions))
             setLoaded(true)
         }

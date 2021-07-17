@@ -218,7 +218,6 @@ const FileListComponent = props => {
         sortBy,
         title,
     } = props
-    console.log(header)
     const Header = header ? header : 'h1'
     if (searchTerm || title) {
         document.title = `${

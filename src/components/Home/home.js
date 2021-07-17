@@ -18,6 +18,7 @@ import FileList from './FileList'
 import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
 import { filterStarred } from 'components/Starred'
 import WikiList from 'components/wiki-list'
+import { Hint } from 'components/gsuite-components/hint'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 
@@ -55,17 +56,19 @@ function Home(props) {
                     <Spinner />
                 ) : (
                     <>
-                        <h1
-                            style={{
-                                borderBottom: '1px solid #dadce0',
-                                fontSize: '1.5rem',
-                                fontWeight: 400,
-                                margin: 0,
-                                padding: '.5rem',
-                            }}
-                        >
-                            {searchTerm ? 'Search results' : 'Dashboard'}
-                        </h1>
+                        <Hint id="dashboard" scope="dashboard">
+                            <h1
+                                style={{
+                                    borderBottom: '1px solid #dadce0',
+                                    fontSize: '1.5rem',
+                                    fontWeight: 400,
+                                    margin: 0,
+                                    padding: '.5rem',
+                                }}
+                            >
+                                {searchTerm ? 'Search results' : 'Dashboard'}
+                            </h1>
+                        </Hint>
                         <div
                             style={{
                                 height: 'calc((100vh - 65px) - 56px)',
