@@ -61,6 +61,7 @@ export const Hint = ({ children, id, scope }: Props) => {
     let hint
     try {
         hint = hints[scope][id]
+        if (!hint) throw new Error('Hint is undefined')
     } catch (e) {
         hint = emptyHint()
     }
