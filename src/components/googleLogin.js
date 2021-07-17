@@ -94,7 +94,6 @@ export default class GoogleLogin extends React.Component {
         this.updateSigninStatus(
             window.gapi.auth2.getAuthInstance().isSignedIn.get()
         )
-        this.initHints()
     }
 
     /**
@@ -257,7 +256,10 @@ export default class GoogleLogin extends React.Component {
     updateSigninStatus = isSignedIn => {
         console.log({ isSignedIn })
         this.setGlobal({ isSignedIn, isSigningIn: false })
-        if (isSignedIn && !this.global.isFileListLoading) this.initFiles()
+        if (isSignedIn && !this.global.isFileListLoading) {
+            this.initFiles()
+            this.initHints()
+        }
     }
 
     /**
