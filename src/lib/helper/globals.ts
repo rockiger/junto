@@ -32,6 +32,7 @@ const threadBase = (threadType, initialValue, ...forms) => {
 
 export const thread = (initialValue, ...forms) =>
     threadBase('->', initialValue, ...forms)
+
 /**
  * Log a value to the console and return it again. Useful for logging a provisional result from the thread function.
  * @param {any} x the value to log
@@ -47,3 +48,6 @@ lodash.mixin({ thread, trace })
 declare global {
     var _: typeof lodash
 }
+
+const _ = { ...lodash, thread, trace }
+export default _
