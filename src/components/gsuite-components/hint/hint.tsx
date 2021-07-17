@@ -71,9 +71,13 @@ export const Hint = ({ children, id, scope }: Props) => {
     const onClickIconButton = () => {
         setIsOpen(false)
         // a bit complicated. It needs to change the nested hint in scope
-        setHints(makeHintRead(hints, id, scope))
+        const newHints = makeHintRead(hints, id, scope)
+        setHints(newHints)
         setHintCounter(hintCounter + 1)
-        console.log('//! TODO write changes to config in gdrive')
+        console.log(
+            '//! TODO write changes to config in gdrive',
+            hintMap2HintMapAppConfig(newHints)
+        )
         //! TODO write changes to config in gdrive
     }
     return (
@@ -221,4 +225,35 @@ export const makeHintConfigRead = (
         return _.set(hintAppConfig, `${scope}.${id}.unread`, false)
     }
     return hintAppConfig
+}
+
+export const hintMap2HintMapAppConfig = (hints: HintMap): HintMapAppConfig => {
+    const hintMap2HintMapAppConfigHelper = (scopeHints: {
+        [key: string]: HintData
+    }) =>
+        _.reduce(
+            scopeHints,
+            (acc, val, key) => {
+                const isRead = !val.unread
+                if (isRead) {
+                    return { ...acc, [key]: { unread: false } }
+                } else {
+                    return acc
+                }
+            },
+            {}
+        )
+
+    return _.reduce(
+        hints,
+        (acc, val, key) => {
+            const scopeConfig = hintMap2HintMapAppConfigHelper(val)
+            if (_.isEmpty(scopeConfig)) {
+                return acc
+            } else {
+                return { ...acc, [key]: scopeConfig }
+            }
+        },
+        {}
+    )
 }
