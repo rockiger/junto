@@ -41,6 +41,7 @@ declare module 'reactn/default' {
     }
 
     export interface IFile {
+        capabilities: { [key: string]: boolean }
         description?: string
         id: string
         name: string

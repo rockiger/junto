@@ -6,8 +6,9 @@ const gapi = window.gapi
 // 'name' name of the file on google drive
 // 'appProperties' keep the custom `ifid` field
 
-//const fileFields = 'id,version,name,modifiedByMeTime,viewedByMeTime'
-const fileFields = '*'
+const fileFields =
+    'capabilities,description,id,name,mimeType,modifiedByMeTime,modifiedTime,shared,ownedByMe,parents,properties,trashed,viewedByMeTime'
+// const fileFields = '*'
 
 function formatFileDescription(response) {
     response = response || null
