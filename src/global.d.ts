@@ -63,4 +63,6 @@ declare module 'reactn/default' {
     }
 
     export type IFileOrNull = IFile | null
+
+    export type SimpleMap = { [key: string]: any }
 }

@@ -8,19 +8,12 @@ const gapi = window.gapi
 
 const fileFields =
     'capabilities,description,id,name,mimeType,modifiedByMeTime,modifiedTime,shared,ownedByMe,parents,properties,trashed,viewedByMeTime'
-// const fileFields = '*'
+/* const fileFields = '*' */
 
 function formatFileDescription(response) {
     response = response || null
     if (response && !response.error) {
         return response
-        /* return {
-            driveId: response.id,
-            driveVersion: response.version,
-            name: response.name,
-            ifid: '',
-            properties: response.properties,
-        } */
     } else {
         return {
             driveId: '',
