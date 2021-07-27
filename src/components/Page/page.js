@@ -240,6 +240,11 @@ class Page extends React.Component {
             this.props.match.params.id &&
             !this.props.isCreatingNewFile
         ) {
+            console.log({
+                'this.state.fileLoaded': this.state.fileLoaded,
+                'this.state.fileName': this.state.fileName,
+                'this.state.canEdit': this.state.canEdit,
+            })
             return (
                 <div className="page">
                     <div className="editorContainer">
@@ -321,9 +326,9 @@ class Page extends React.Component {
         } else if (
             (!this.props.isSignedIn && this.props.isSigningIn) ||
             this.props.isCreatingNewFile
-        )
+        ) {
             return <Spinner />
-        else if (!this.props.isSignedIn && !this.props.isSigningIn) {
+        } else if (!this.props.isSignedIn && !this.props.isSigningIn) {
             return <Redirect to="/" />
         }
     }
