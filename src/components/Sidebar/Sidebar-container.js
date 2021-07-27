@@ -8,12 +8,13 @@ import {
     getParentFolderIdOfNewFile,
     isPage,
 } from './Sidebar-helper'
-import { createFile, updateFile, createNewWiki } from '../../lib/gdrive'
+import { createFile } from 'db'
+import { createNewWiki } from 'lib/gdrive'
 import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
 import SidebarRenderer from './Sidebar-component'
 
 class Sidebar extends React.Component {
-    onClickNewButton = async (ev) => {
+    onClickNewButton = async ev => {
         this.setGlobal({ isCreatingNewFile: true })
         let parentFolderIdOfNewFile
         console.log(isPage(this.props.location))
@@ -44,24 +45,15 @@ class Sidebar extends React.Component {
         }
 
         try {
-            console.log(parentFolderIdOfNewFile)
-            const newFileId = await createFile(
-                UNTITLEDFILE,
-                parentFolderIdOfNewFile
-            )
-            const result = await updateFile(
-                newFileId,
-                JSON.stringify(EMPTYVALUE)
-            )
-
-            console.log(result)
-
             this.setGlobal({
-                backgroundUpdate: true,
                 goToNewFile: true,
                 searchTerm: '',
-                isCreatingNewFile: false,
             })
+            const newFileId = await createFile(
+                UNTITLEDFILE,
+                parentFolderIdOfNewFile,
+                JSON.stringify(EMPTYVALUE)
+            )
             this.props.history.push(`/page/${newFileId}?edit`)
         } catch (err) {
             this.setGlobal({ isCreatingNewFile: false })
