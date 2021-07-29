@@ -1,21 +1,18 @@
-import React, { useDispatch, useGlobal, useState } from 'reactn'
+import { useDispatch, useGlobal, useState } from 'reactn'
 import { useHistory, useLocation } from 'react-router-dom'
 
+import { createFile } from 'db'
+import { createNewWiki } from 'lib/gdrive'
+import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
+import { getPageId, getParentFolderId, isPage } from '../../Sidebar-helper'
 import { SidebarTreeLinkComponent } from './SidebarTreeLink-component'
 import { useStyles } from './SidebarTreeLink-styles'
-
-import { getPageId, getParentFolderId, isPage } from '../../Sidebar-helper'
-import { createFile, updateFile, createNewWiki } from '../../../../lib/gdrive'
-import { EMPTYVALUE, UNTITLEDFILE } from '../../../../lib/constants'
-
 export function SidebarTreeLink(props) {
     const { isExpanded, label, level, pageId, parentId, setExpanded } = props
 
     const clearSearch = useDispatch('clearSearch')
     const [initialFiles] = useGlobal('initialFiles')
-    const [, setGoToNewFile] = useGlobal('goToNewFile')
     const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
-    const [, setBackgroundUpdate] = useGlobal('backgroundUpdate')
 
     const [showAddButton, setShowAddButton] = useState(false)
 
@@ -30,37 +27,24 @@ export function SidebarTreeLink(props) {
 
         setIsCreatingNewFile(true)
         let parentFolderIdOfNewFile = parentId
-        if (!parentFolderIdOfNewFile) {
-            const parentFolderId = getParentFolderId(pageId, initialFiles)
-            try {
+        try {
+            // check if the current page has already a folder for child
+            // pages, if not create a new one.
+            if (!parentFolderIdOfNewFile) {
+                const parentFolderId = getParentFolderId(pageId, initialFiles)
                 parentFolderIdOfNewFile = await createNewWiki({
                     name: pageId,
                     parentId: parentFolderId,
                     isWikiRoot: false,
                 })
-            } catch (err) {
-                setIsCreatingNewFile(false)
-                console.log(err)
             }
-        }
 
-        try {
-            console.log(parentFolderIdOfNewFile)
+            // create new child page
             const newFileId = await createFile(
                 UNTITLEDFILE,
-                parentFolderIdOfNewFile
-            )
-            console.log({ newFileId })
-            const result = await updateFile(
-                newFileId,
+                parentFolderIdOfNewFile,
                 JSON.stringify(EMPTYVALUE)
             )
-
-            console.log(result)
-
-            setGoToNewFile(true)
-            setIsCreatingNewFile(false)
-            setBackgroundUpdate(true)
             history.push(`/page/${newFileId}?edit`)
         } catch (err) {
             setIsCreatingNewFile(false)
