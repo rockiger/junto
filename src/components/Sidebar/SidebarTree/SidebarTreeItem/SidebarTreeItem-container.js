@@ -1,11 +1,17 @@
-import React, { useGlobal, useState } from 'reactn'
+import React, { useState } from 'reactn'
 
 import { SidebarTreeItemComponent } from './SidebarTreeItem-component'
 import { useStyles } from './SidebarTreeItem-styles'
 
 export function SidebarTreeItem(props) {
-    const { expand = false, files, label, level, pageId, parentId } = props
-    const [initialFiles] = useGlobal('initialFiles')
+    const {
+        expand = false,
+        initialFiles,
+        label,
+        level,
+        pageId,
+        parentId,
+    } = props
 
     const [isExpanded, setExpanded] = useState(expand)
 
@@ -14,7 +20,6 @@ export function SidebarTreeItem(props) {
     return (
         <SidebarTreeItemComponent
             classes={classes}
-            files={files}
             initialFiles={initialFiles}
             label={label}
             isExpanded={isExpanded}

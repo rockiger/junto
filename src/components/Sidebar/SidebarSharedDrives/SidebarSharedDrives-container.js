@@ -28,7 +28,7 @@ export function SidebarSharedDrives() {
                                 <SidebarTreeItem
                                     expand={false}
                                     key={index}
-                                    files={initialFiles}
+                                    initialFiles={initialFiles}
                                     label={getTitleFromFile(file)}
                                     level={0}
                                     pageId={file.id}

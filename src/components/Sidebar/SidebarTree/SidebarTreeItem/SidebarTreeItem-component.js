@@ -12,7 +12,6 @@ import { getTitleFromFile } from '../../../../lib/helper'
 export function SidebarTreeItemComponent(props) {
     const {
         classes,
-        files,
         initialFiles,
         label,
         isExpanded,
@@ -31,10 +30,10 @@ export function SidebarTreeItemComponent(props) {
                 parentId={parentId}
                 setExpanded={setExpanded}
             />
-            {isExpanded && files && (
+            {isExpanded && initialFiles && (
                 <ul className={classes.ul}>
-                    {files.map(file => {
-                        const folderId = getFolderId(file.id, files)
+                    {initialFiles.map(file => {
+                        const folderId = getFolderId(file.id, initialFiles)
                         if (shouldFileDisplay(file, parentId)) {
                             return (
                                 <SidebarTreeItem
