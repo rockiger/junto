@@ -1,5 +1,6 @@
 import React, { addReducers, setGlobal } from 'reactn'
 import { hydrate, render } from 'react-dom'
+import initReactnPersist from 'reactn-persist'
 import './lib/helper/globals'
 import { State } from 'reactn/default'
 import './index.scss'
@@ -56,6 +57,16 @@ const initialState: State = {
     userId: '',
 }
 setGlobal(initialState)
+
+initReactnPersist({
+    // REQUIRED.
+    storage: localStorage, // localStorage, sessionStorage or any instance with Storage API interface support.
+    // Optional.
+    whitelist: ['files', 'hints', 'initialFiles', 'rootFolderId'], // List of top-level keys in global, like ['users', 'token']. Default [].
+    debug: true,
+    key: '@reactn', // Key in storage. Default '@reactn'.
+    initialValue: initialState,
+})
 
 const rootElement = document.getElementById('root')
 if (rootElement!.hasChildNodes()) {

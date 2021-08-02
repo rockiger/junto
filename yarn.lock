@@ -13718,6 +13718,11 @@ reactn-devtools@^1.1.0:
   dependencies:
     redux-devtools-extension "^2.13.8"
 
+reactn-persist@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/reactn-persist/-/reactn-persist-1.3.2.tgz#4528aff891f5863357f21ae53c7d6b6ccbb82ff9"
+  integrity sha512-Ntlg083GMpRHeagtcIeXH+9w2K3mdcLS9HqJuh3Wmhi7lCa/X+9Tapzfl7Z4bhOXrsZma+dsdzbNJ9983whfLg==
+
 reactn@^2.2.7:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/reactn/-/reactn-2.2.7.tgz#4d9a94ab0d8a540062666408e4bf1fae6892cecc"
