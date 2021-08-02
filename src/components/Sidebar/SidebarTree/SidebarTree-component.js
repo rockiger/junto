@@ -9,16 +9,17 @@ import { MYHOME } from '../../../lib/constants'
 export const SidebarTreeComponent = ({ rootFolderId, files }) => {
     const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
     const classes = useStyles()
+
     return (
         <>
-            {isInitialFileListLoading && (
+            {_.isEmpty(files) && isInitialFileListLoading && (
                 <Spinner style={{ marginTop: '2rem' }} />
             )}
-            {!isInitialFileListLoading && (
+            {(_.isNotEmpty(files) || !isInitialFileListLoading) && (
                 <ul className={classes.mydrive}>
                     <SidebarTreeItem
                         expand={false}
-                        files={sortFilesByName(files)}
+                        initialFiles={sortFilesByName(files)}
                         label={MYHOME}
                         level={0}
                         pageId={getOverviewFileId(files, rootFolderId)}
