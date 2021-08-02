@@ -78,14 +78,14 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
 }
 
 function filterIsArchived(files) {
-    const filtered = files.filter(file => {
+    const filtered = _.filter(files, file => {
         return isArchived(file)
     })
     return filtered
 }
 
 function filterPages(files) {
-    const filtered = files.filter(file => {
+    const filtered = _.filter(files, file => {
         return !file.properties || !file.properties.pageName
     })
     return filtered

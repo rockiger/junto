@@ -43,7 +43,14 @@ export const trace = x => {
     return x
 }
 
-lodash.mixin({ thread, trace })
+/**
+ * Check if a collection is not empty. E.g. !_.isEmpty(col)
+ * @param {any} col
+ * @returns {boolean}
+ */
+export const isNotEmpty = col => !_.isEmpty(col)
+
+lodash.mixin({ isNotEmpty, thread, trace })
 
 declare global {
     var _: typeof lodash

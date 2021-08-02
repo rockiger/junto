@@ -46,7 +46,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
     const myFulcrum = getOverviewFile(files, rootFolderId)
     return (
         <div className={s.WikiList}>
-            {!isFileListLoading &&
+            {(_.isNotEmpty(files) || !isFileListLoading) &&
                 !myFulcrum &&
                 wikis.length === 0 &&
                 (isDashboard ? (
@@ -57,7 +57,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         title="You don't have any archived wikis."
                     />
                 ))}
-            {isFileListLoading && <Spinner />}
+            {_.isEmpty(files) && isFileListLoading && <Spinner />}
             <div
                 className={clsx(
                     s.WikiList_container,
@@ -119,7 +119,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
 }
 
 export function filterWikis(files) {
-    const filtered = files.filter(file => {
+    const filtered = _.filter(files, file => {
         return file.properties && file.properties.pageName
     })
     return filtered
@@ -198,7 +198,8 @@ function WikiCard({
  * @returns {object|null}
  */
 export function getOverviewFile(files, rootFolderId) {
-    const overview = files.find(
+    const overview = _.find(
+        files,
         file =>
             file.name === OVERVIEW_NAME && file.parents.includes(rootFolderId)
     )

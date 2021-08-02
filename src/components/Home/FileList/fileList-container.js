@@ -52,7 +52,7 @@ function FileList({
             emptySubline={emptySubline}
             files={files}
             header={header}
-            isLoading={isFileListLoading}
+            isLoading={_.isEmpty(files) && isFileListLoading}
             searchTerm={searchTerm}
             setSortBy={setSortBy}
             sortBy={sortBy}
