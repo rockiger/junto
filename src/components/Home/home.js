@@ -1,6 +1,5 @@
 import { useGlobal, useState } from 'reactn'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import FileSearchIcon from 'mdi-react/FileSearchIcon'
 import StarIcon from 'mdi-react/StarIcon'
