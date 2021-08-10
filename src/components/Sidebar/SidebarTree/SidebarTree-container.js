@@ -8,7 +8,7 @@ export const SidebarTree = props => {
 
     return (
         <SidebarTreeComponent
-            files={initialFiles}
+            initialFiles={initialFiles}
             rootFolderId={rootFolderId}
         />
     )

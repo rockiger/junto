@@ -2,11 +2,7 @@ import React from 'reactn'
 
 import { SidebarTreeItem } from './SidebarTreeItem-container'
 import { SidebarTreeLink } from '../SidebarTreeLink'
-import {
-    filterChildFiles,
-    getFolderId,
-    shouldFileDisplay,
-} from '../SidebarTree-helper'
+import { getFolderId, shouldFileDisplay } from '../SidebarTree-helper'
 import { getTitleFromFile } from '../../../../lib/helper'
 
 export function SidebarTreeItemComponent(props) {
@@ -37,10 +33,7 @@ export function SidebarTreeItemComponent(props) {
                         if (shouldFileDisplay(file, parentId)) {
                             return (
                                 <SidebarTreeItem
-                                    files={filterChildFiles(
-                                        folderId,
-                                        initialFiles
-                                    )}
+                                    initialFiles={initialFiles}
                                     key={file.id}
                                     label={getTitleFromFile(file)}
                                     level={level + 1}

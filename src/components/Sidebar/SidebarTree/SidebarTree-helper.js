@@ -1,6 +1,6 @@
 //@ts-check
 import { EXT, OVERVIEW_NAME } from 'lib/constants'
-import { isArchived } from 'lib/helper'
+import { isArchived, isPage } from 'lib/helper'
 
 /**
  * Produces the child folder for a given file if it exists and it has relevant content.
@@ -11,27 +11,18 @@ import { isArchived } from 'lib/helper'
  */
 export function getFolderId(fileId, files) {
     const folder = files.find(file => file.name === fileId)
+
     if (folder) {
-        return folder.id
-        //! This commented code works for the tests, but then the sidebar shows only
-        //  one level of childeren, maybe the problem lies somewhere else. After the
-        //  algorithm book, there could be a new opportunity to create a new tree.
-        /* // folder has Children
         const children = files.filter(file => {
             return file.parents && file.parents.includes(folder.id)
         })
 
         for (const child of children) {
-            //! this seems still buggy
-            const page = isPage(child)
-            const archived = isArchived(child)
             const hasChildThatCounts = isPage(child) && !isArchived(child)
-            console.log({ page, archived, hasChildThatCounts })
             if (hasChildThatCounts) {
-                console.log('return', folder.id)
                 return folder.id
             }
-        } */
+        }
     }
     return null
 }
@@ -78,12 +69,12 @@ export function filterChildFiles(folderId, files) {
  */
 export function shouldFileDisplay(file, parentId) {
     const { mimeType, name, parents, trashed } = file
-    return (
+
+    return !!(
         mimeType === 'application/json' &&
         name !== OVERVIEW_NAME &&
         name.endsWith(EXT) &&
-        parents &&
-        parents.includes(parentId) &&
+        parents?.includes(parentId) &&
         trashed === false &&
         !isArchived(file)
     )
