@@ -1,8 +1,7 @@
 import { useDispatch, useGlobal, useState } from 'reactn'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { createFile } from 'db'
-import { createNewWiki } from 'lib/gdrive'
+import { createFile, createNewWiki } from 'db'
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import { getPageId, getParentFolderId, isPage } from '../../Sidebar-helper'
 import { SidebarTreeLinkComponent } from './SidebarTreeLink-component'

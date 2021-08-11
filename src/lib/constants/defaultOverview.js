@@ -23,6 +23,7 @@ export const OVERVIEW_VALUE = {
                         text: 'your',
                         marks: [{ object: 'mark', type: 'bold', data: {} }],
                     },
+                    { object: 'text', text: ' ', marks: [] },
                     {
                         object: 'inline',
                         type: 'link',

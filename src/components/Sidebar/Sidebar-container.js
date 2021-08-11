@@ -8,8 +8,7 @@ import {
     getParentFolderIdOfNewFile,
     isPage,
 } from './Sidebar-helper'
-import { createFile } from 'db'
-import { createNewWiki } from 'lib/gdrive'
+import { createFile, createNewWiki } from 'db'
 import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
 import SidebarRenderer from './Sidebar-component'
 

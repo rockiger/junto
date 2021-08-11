@@ -163,12 +163,12 @@ export function listRevisions(fileId) {
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export async function createFile(
+export async function createFile({
     name,
     parentId,
     supportsAllDrives = true,
-    pageName = ''
-) {
+    pageName = '',
+}) {
     const fileMetadata = {
         name: name,
         mimeType: 'text/json',
@@ -179,6 +179,7 @@ export async function createFile(
 
     try {
         const response = await window.gapi.client.drive.files.create({
+            fields: fileFields,
             resource: fileMetadata,
             supportsAllDrives,
         })
@@ -224,7 +225,7 @@ export async function createFile(
  *
  * @method createNewWiki
  * @param {CreateNewWikiParams} [opts]
- * @return {string} An id of the created file
+ * @return {object} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export async function createNewWiki({
@@ -244,6 +245,7 @@ export async function createNewWiki({
 
     try {
         const result = await gapi.client.drive.files.create({
+            fields: fileFields,
             resource: fileMetadata,
             supportsAllDrives,
         })
@@ -268,7 +270,7 @@ export async function createNewWiki({
                 }
             )
         }
-        return folder.id
+        return folder
     } catch (err) {
         alert(`We couldn't create your base on your Google Drive.`)
         console.error(err.body)

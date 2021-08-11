@@ -2,8 +2,8 @@
 import React, { useEffect, useGlobal, useRef } from 'reactn'
 import { useHistory, useLocation } from 'react-router'
 
+import { createFile, createNewWiki } from 'db'
 import Spinner from 'components/gsuite-components/spinner'
-import { createFile, createNewWiki, updateFile } from 'lib/gdrive'
 import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
 
 import { CreateNewWikiModal } from './CreateNewWikiModal'
@@ -48,12 +48,9 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                         const newFileId = await createFile(
                             OVERVIEW_NAME,
                             newRootFolderId,
-                            true,
+                            OVERVIEW_VALUE,
                             name
                         )
-                        await updateFile(newFileId, OVERVIEW_VALUE, true)
-                        setBackgroundUpdate(true)
-                        setIsCreatingNewFile(false)
                         history.push(`/page/${newFileId}`)
                     } catch (err) {
                         console.log({ err })

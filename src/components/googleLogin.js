@@ -5,6 +5,7 @@
 import React from 'reactn'
 import PropTypes from 'prop-types'
 import LogoutIcon from 'mdi-react/LogoutIcon'
+import { createFile, createNewWiki } from 'db'
 
 import IconButton from 'components/gsuite-components/icon-button'
 import Button from 'components/gsuite-components/button'
@@ -12,10 +13,8 @@ import { mergeHintData } from 'components/gsuite-components/hint'
 
 import {
     listFilesChunked as listFiles,
-    createFile,
     updateFile,
     getFolderId,
-    createNewWiki,
     refreshSession,
     listAppDataFiles,
     downloadFile,
@@ -130,8 +129,7 @@ export default class GoogleLogin extends React.Component {
             }
         } else {
             const newRootFolderId = await createNewWiki()
-            const newFileId = await createFile(OVERVIEW_NAME, newRootFolderId)
-            await updateFile(newFileId, OVERVIEW_VALUE)
+            await createFile(OVERVIEW_NAME, newRootFolderId, OVERVIEW_VALUE)
             // this.setState({folderId: newFolderId})
             console.log('newFolderId:', newRootFolderId)
             this.initFiles()
@@ -163,6 +161,21 @@ export default class GoogleLogin extends React.Component {
                 hints: mergeHintData(hints, hintsAppData),
                 hintsFileId: hintsProps.id,
             })
+        }
+    }
+
+    initUser = () => {
+        try {
+            const userId = window.gapi.auth2
+                .getAuthInstance()
+                .currentUser.get()
+                .getId()
+            this.setGlobal({
+                userId,
+            })
+            console.log({ userId })
+        } catch (e) {
+            console.error("Couldn't get userId", e)
         }
     }
 
@@ -216,6 +229,7 @@ export default class GoogleLogin extends React.Component {
         console.log({ isSignedIn })
         this.setGlobal({ isSignedIn, isSigningIn: false })
         if (isSignedIn && !this.global.isFileListLoading) {
+            this.initUser()
             this.initFiles()
             this.initHints()
         }

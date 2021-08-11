@@ -4,6 +4,7 @@ import { SimpleMap } from 'reactn/default'
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import {
     createFile as createFileBase,
+    createNewWiki as createNewWikiBase,
     listFilesChunked,
     refreshSession,
     updateFile as updateFileBase,
@@ -57,10 +58,15 @@ export const backgroundUpdateFiles = async () => {
 export const createFile = async (
     fileName: string = UNTITLEDFILE,
     fileParentId: string = '',
-    fileContent: any = EMPTYVALUE
+    fileContent: any = EMPTYVALUE,
+    pageNameProperty: string = ''
 ) => {
     try {
-        const newFileId = await createFileBase(fileName, fileParentId)
+        const newFileId = await createFileBase({
+            name: fileName,
+            parentId: fileParentId,
+            pageName: pageNameProperty,
+        })
         const result = await updateFileBase(newFileId, fileContent)
         console.log({ result })
         const { files, initialFiles } = getGlobal()
@@ -71,6 +77,41 @@ export const createFile = async (
             isCreatingNewFile: false,
         })
         return newFileId
+    } catch (err) {
+        setGlobal({ isCreatingNewFile: false })
+        console.log(err)
+    }
+}
+
+/**
+ * @typedef CreateNewWikiParams
+ * @property {string} [name]
+ * @property {string|null} [parentId]
+ * @property {boolean} [supportsAllDrives]
+ * @property {string} [description]
+ * @property {boolean} [isWikiRoot]
+ */
+/**
+ * Creates a new (wiki) folder in the base directory
+ * Updates the global state.
+ *
+ * @method createNewWiki
+ * @param {CreateNewWikiParams} [opts]
+ * @return {string} An id of the created file
+ * a file description: {driveId, driveVersion, name, ifid}
+ */
+export const createNewWiki = async opts => {
+    try {
+        const result = await createNewWikiBase(opts)
+        console.log({ newWikiResult: result })
+        const { files, initialFiles } = getGlobal()
+        // Unlike create new file we don't need to reset the isCreatingNewFile
+        // propery, because there should always be a new file created.
+        setGlobal({
+            files: [...files, result],
+            initialFiles: [...initialFiles, result],
+        })
+        return result.id
     } catch (err) {
         setGlobal({ isCreatingNewFile: false })
         console.log(err)
