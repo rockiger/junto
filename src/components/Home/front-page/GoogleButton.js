@@ -4,12 +4,13 @@ import GoogleIcon from 'components/googleIcon'
 
 import styles from './google-button.module.scss'
 
-export const GoogleButton = () => (
+export const GoogleButton = ({ onClick = () => {} }) => (
     <div
         className={styles.GoogleButton}
         onClick={() => {
             const button = document.getElementById('authorize_button') || null
             if (button) button.click()
+            onClick()
         }}
     >
         <div className={styles.GoogleButton_icon}>

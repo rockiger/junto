@@ -56,13 +56,13 @@ const EditorLogic = React.forwardRef(
                     ev.preventDefault()
                     setReadOnly(false)
                     editorRef.current.focus()
-                    Event('Editor', 'Activate Editor')
+                    Event('Editor', 'Activate Editor', 'Keyboard Shortcut')
                 } else if (isSaveHotkey(ev) && readOnly === false) {
                     ev.stopPropagation()
                     ev.preventDefault()
                     setReadOnly(true)
                     await saveToDriveAndLocalDB(fileId, initialValue)
-                    Event('Editor', 'Deactivate Editor')
+                    Event('Editor', 'Deactivate Editor', 'Keyboard Shortcut')
                 }
             }
             window.addEventListener('keydown', onKeyDown)
@@ -116,10 +116,10 @@ const EditorLogic = React.forwardRef(
             if (readOnly === true) {
                 setReadOnly(false)
                 setTimeout(() => editorRef.current.focus(), 100)
-                Event('Editor', 'Activate Editor')
+                Event('Editor', 'Activate Editor', 'Button')
             } else if (readOnly === false) {
                 setReadOnly(true)
-                Event('Editor', 'Deactivate Editor')
+                Event('Editor', 'Deactivate Editor', 'Button')
                 await saveToDriveAndLocalDB(fileId, initialValue)
             }
         }

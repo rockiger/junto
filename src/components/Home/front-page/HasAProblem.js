@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Event } from 'components/Tracking'
 import { GoogleButton } from './GoogleButton'
 
 import assistant from 'static/img/assistant.jpg'
@@ -33,7 +34,11 @@ export const HasAProblem = () => {
                             Never came back to that great idea you wrote down?
                         </li>
                     </ul>
-                    <GoogleButton />
+                    <GoogleButton
+                        onClick={() =>
+                            Event('Frontpage', 'GoogleButton', 'HasAProblem')
+                        }
+                    />
                 </div>
                 <div
                     className="md"

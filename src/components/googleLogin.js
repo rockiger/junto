@@ -21,6 +21,7 @@ import {
 } from '../lib/gdrive'
 
 import { OVERVIEW_VALUE, OVERVIEW_NAME } from '../lib/constants'
+import { Event } from './Tracking'
 
 export default class GoogleLogin extends React.Component {
     componentDidMount() {
@@ -252,6 +253,7 @@ export default class GoogleLogin extends React.Component {
                     this.setGlobal({ isSigningIn: false })
                 }
             )
+        Event('Header', 'Sign In Button')
     }
 
     render() {
@@ -290,6 +292,7 @@ export default class GoogleLogin extends React.Component {
 function handleSignoutClick(event) {
     window.gapi.auth2.getAuthInstance().signOut()
     event.preventDefault()
+    Event('Header', 'Sign Out Button')
 }
 
 GoogleLogin.propTypes = {

@@ -14,6 +14,7 @@ import page02 from 'static/img/page02.png'
 import GoogleDriveLogo from 'static/googleDriveLogo.svg'
 
 import './front-page.scss'
+import { Event } from 'components/Tracking'
 
 export default function FrontPage() {
     document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
@@ -62,7 +63,11 @@ export default function FrontPage() {
                                 display: 'flex',
                             }}
                         >
-                            <GoogleButton />
+                            <GoogleButton
+                                onClick={() =>
+                                    Event('Frontpage', 'GoogleButton', 'First')
+                                }
+                            />
                             <strong style={{ marginLeft: 6 }}>
                                 - it's free!
                             </strong>
@@ -81,7 +86,11 @@ export default function FrontPage() {
                 </div>
             </div>
             <div className="call-to-action">
-                <GoogleButton />
+                <GoogleButton
+                    onClick={() =>
+                        Event('Frontpage', 'GoogleButton', 'Floating')
+                    }
+                />
             </div>
             <HasAProblem />
             <AndEndsInSuccess />
@@ -201,7 +210,11 @@ export default function FrontPage() {
                         marginBottom: '5rem',
                     }}
                 >
-                    <GoogleButton />
+                    <GoogleButton
+                        onClick={() =>
+                            Event('Frontpage', 'GoogleButton', 'HasAPlan')
+                        }
+                    />
                 </div>
             </div>
             <style>{` 
