@@ -53,6 +53,7 @@ const initialState: State = {
     searchTerm: '',
     searchValue: '', // The value in the searchfield
     showSidebarOnMobile: false,
+    userId: '',
 }
 setGlobal(initialState)
 

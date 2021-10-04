@@ -38,6 +38,7 @@ declare module 'reactn/default' {
         initialFiles: IFile[]
         isInitialFileListLoading: boolean
         backgroundUpdate: boolean
+        userId: string
     }
 
     export interface IFile {
