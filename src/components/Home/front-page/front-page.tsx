@@ -1,5 +1,6 @@
 //@ts-check
-import React from 'react'
+import React, { useEffect } from 'react'
+import { PageView } from 'components/Tracking'
 
 import { AndEndsInSuccess } from './AndEndsInSuccess'
 import { GoogleButton } from './GoogleButton'
@@ -18,6 +19,8 @@ import { Event } from 'components/Tracking'
 
 export default function FrontPage() {
     document.title = 'Fulcrum.wiki - The knowledge base made for Google Drive'
+    useEffect(() => PageView({ pathname: '/frontpage' }), [])
+
     return (
         <>
             <div className="hero" style={{ backgroundColor: '#f7f7f7' }}>

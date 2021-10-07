@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { PageView } from 'components/Tracking'
 
 export function PrivacyPolicy() {
     document.title = 'Privacy Policy - Fulcrum.wiki'
+    useEffect(() => PageView(), [])
     return (
         <>
             <div className="container container__max1280">

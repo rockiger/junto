@@ -6,8 +6,11 @@ export const initGA = trackingID => {
     } catch (err) {}
 }
 
-export const PageView = () => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
+export const PageView = ({ pathname = '', search = '' } = {}) => {
+    ReactGA.pageview(
+        `${pathname || window.location.pathname}` +
+            `${search || window.location.search}`
+    )
 }
 
 /**
