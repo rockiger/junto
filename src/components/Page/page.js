@@ -44,7 +44,7 @@ class Page extends React.Component {
     }
     componentDidMount() {
         this.setGlobal({ goToNewFile: false })
-        PageView()
+        PageView({ pathname: '/page' })
     }
 
     componentDidUpdate(prevProps, prevState) {

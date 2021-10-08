@@ -1,6 +1,5 @@
 // @ts-check
-import React, { useEffect, useGlobal } from 'reactn'
-import { PageView } from 'components/Tracking'
+import React, { useGlobal } from 'reactn'
 
 import FileListComponent from './fileList-component'
 
@@ -38,8 +37,6 @@ function FileList({
 }) {
     const [isFileListLoading] = useGlobal('isFileListLoading')
     const [searchTerm] = useGlobal('searchTerm')
-
-    useEffect(() => PageView(), [])
 
     return (
         <FileListComponent

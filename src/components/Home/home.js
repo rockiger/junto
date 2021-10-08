@@ -19,6 +19,8 @@ import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
 import { filterStarred } from 'components/Starred'
 import WikiList from 'components/wiki-list'
 import { Hint } from 'components/gsuite-components/hint'
+import { useEffect } from 'react'
+import { PageView } from 'components/Tracking'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 
@@ -37,12 +39,19 @@ function Home(props) {
             : 'modifiedByMeTime'
     )
 
+    useEffect(() => {
+        if (searchTerm) {
+            PageView({ pathname: '/search' })
+        } else {
+            PageView({ pathname: '/' })
+        }
+    }, [searchTerm])
+
     /**
      * @param {SortBy} sortBy
      * @returns {void}
      */
     const setSortByAndLocalStorage = sortBy => {
-        console.log({ sortBy })
         setSortBy(sortBy)
         //@ts-ignore
         localStorage.setItem(localStorageKey, sortBy)
