@@ -1,5 +1,5 @@
 //@ts-check
-import React, { useGlobal } from 'reactn'
+import React, { useEffect, useGlobal } from 'reactn'
 import { Redirect } from 'react-router'
 import ArchiveIcon from 'mdi-react/ArchiveIcon'
 import {
@@ -11,6 +11,8 @@ import {
     TabPanel,
 } from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
+import { PageView } from 'components/Tracking'
+
 import { WikiList } from 'components/wiki-list'
 
 import { isArchived } from 'lib/helper'
@@ -31,6 +33,8 @@ export { ArchivePage }
 function ArchivePage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
     const archivedFiles = filterIsArchived(files)
+
+    useEffect(() => PageView({ pathname: '/archive' }), [])
 
     if (isSignedIn && !isSigningIn) {
         return (

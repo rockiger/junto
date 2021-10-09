@@ -1,16 +1,20 @@
-import React, { useGlobal } from 'reactn'
+import React, { useEffect, useGlobal } from 'reactn'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 
 import Spinner from 'components/gsuite-components/spinner'
-
 import FileList from 'components/Home/FileList'
+import { PageView } from 'components/Tracking'
+
 import { isArchived } from 'lib/helper'
 
 function SharedWithMe(props) {
     const { isSignedIn, isSigningIn } = props
     const [files] = useGlobal('files')
+
+    useEffect(() => PageView({ pathname: '/wikis' }), [])
+
     if (isSignedIn && !isSigningIn) {
         return (
             <FileList

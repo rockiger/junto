@@ -1,7 +1,8 @@
 //@ts-check
-import React, { useGlobal, useState } from 'reactn'
+import React, { useEffect, useGlobal, useState } from 'reactn'
 
 import s from './wiki-overview.module.scss'
+import { PageView } from 'components/Tracking'
 import WikiList from 'components/wiki-list'
 
 export default WikiOverview
@@ -18,6 +19,8 @@ export { WikiOverview }
 function WikiOverview(props) {
     const [files] = useGlobal('initialFiles')
     const [filterString, setFilterString] = useState('')
+
+    useEffect(() => PageView({ pathname: '/wikis' }), [])
 
     return (
         <div className={s.WikiOverview}>

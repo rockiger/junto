@@ -1,10 +1,11 @@
 //@ts-check
-import React, { useGlobal } from 'reactn'
+import React, { useEffect, useGlobal } from 'reactn'
 import { Redirect } from 'react-router'
 import StarIcon from 'mdi-react/StarIcon'
 
 import { Spinner } from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
+import { PageView } from 'components/Tracking'
 
 export default StarredPage
 export { StarredPage as ArchivePage }
@@ -21,6 +22,10 @@ export { StarredPage as ArchivePage }
  */
 function StarredPage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
+
+    useEffect(() => {
+        PageView({ pathname: '/starred' })
+    }, [])
 
     console.log({ files, starred: filterStarred(files) })
     if (isSignedIn && !isSigningIn) {
