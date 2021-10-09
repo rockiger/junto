@@ -8,6 +8,7 @@ import SearchIcon from 'mdi-react/SearchIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 
 import IconButton from 'components/gsuite-components/icon-button'
+import { Event } from 'components/Tracking'
 
 import SearchAutocomplete from './SearchAutocomplete'
 import styles from './search.module.scss'
@@ -17,8 +18,6 @@ export const Search = ({ clearSearch, submit }) => {
     const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         'isSearchFieldActive'
     )
-    // For testing
-    // const [isSearchFieldActive, setIsSearchFieldActive] = [true, () => {}]
     const [searchValue, setSearchValue] = useGlobal('searchValue')
 
     const [selectedRow, setSelectedRow] = useState(null)
@@ -37,7 +36,7 @@ export const Search = ({ clearSearch, submit }) => {
             if (ev.key === '/' && !isSearchFieldActive) {
                 ev.stopPropagation()
                 ev.preventDefault()
-                setIsSearchFieldActive(true)
+                activateSearch('keydown /')
                 inputRef.current.focus()
             }
         }
@@ -64,7 +63,7 @@ export const Search = ({ clearSearch, submit }) => {
                 <IconButton
                     aria-label="Search"
                     className={styles.Search_Icon}
-                    onClick={submit}
+                    onClick={() => submitSearch('click')}
                     size="small"
                 >
                     <SearchIcon />
@@ -85,21 +84,21 @@ export const Search = ({ clearSearch, submit }) => {
                     arial-label="Search Fulcrum"
                     placeholder="Search Fulcrum"
                     className={styles.Search_input}
-                    onClick={() => setIsSearchFieldActive(true)}
-                    onFocus={() => setIsSearchFieldActive(true)}
+                    onClick={() => activateSearch('click')}
+                    onFocus={() => activateSearch('focus')}
                     onBlur={() =>
                         setTimeout(() => setIsSearchFieldActive(false), 100)
                     }
-                    onChange={(ev) => {
+                    onChange={ev => {
                         setSearchValue(ev.target.value)
                         setSelectedRow(null)
                     }}
-                    onKeyDown={(ev) => {
+                    onKeyDown={ev => {
                         const border = Math.min(6, filteredFiles.length - 1)
                         if (ev.key === 'Enter') {
                             ev.preventDefault()
                             if (selectedRow === null) {
-                                submit()
+                                submitSearch('keydown Enter')
                             } else {
                                 setSubmitSelected(true)
                             }
@@ -168,6 +167,19 @@ export const Search = ({ clearSearch, submit }) => {
             )}
         </div>
     )
+
+    /**
+     * @param {string} kind of activation
+     */
+    function activateSearch(kind) {
+        setIsSearchFieldActive(true)
+        Event('Search', 'Activate search', kind)
+    }
+
+    function submitSearch(kind) {
+        submit()
+        Event('Search', 'Submit search', kind)
+    }
 }
 
 export default Search

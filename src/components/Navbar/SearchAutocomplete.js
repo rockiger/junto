@@ -4,6 +4,7 @@ import clsx from 'clsx'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
+import { Event } from 'components/Tracking'
 import { getTitleFromFile, getExtFromFileName, sortByDate } from 'lib/helper'
 import { EXT } from 'lib/constants'
 
@@ -25,10 +26,10 @@ export const SearchAutocomplete = ({
     useEffect(() => {
         setFilteredFiles(
             files
-                .filter((file) =>
+                .filter(file =>
                     file.name.toLowerCase().includes(searchValue.toLowerCase())
                 )
-                .filter((file) => {
+                .filter(file => {
                     const ext = getExtFromFileName(file.name)
                     return ext === EXT
                 })
@@ -57,6 +58,7 @@ export const SearchAutocomplete = ({
         ) {
             history.push(`/page/${filteredFiles[selectedRow].id}`)
             clearSearch()
+            Event('Search', 'Submit Selected', 'keydown Enter')
         }
         setSubmitSelected(false)
     }, [
@@ -98,7 +100,10 @@ export const SearchAutocomplete = ({
                                 className={
                                     styles.SearcAutocomplete_MenuItem_Link
                                 }
-                                onClick={() => setTimeout(clearSearch, 100)}
+                                onClick={() => {
+                                    setTimeout(clearSearch, 100)
+                                    Event('Search', 'Submit Selected', 'click')
+                                }}
                                 to={`/page/${file.id}`}
                             >
                                 <div
