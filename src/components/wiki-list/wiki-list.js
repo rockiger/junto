@@ -24,6 +24,7 @@ import StarIcon from 'mdi-react/StarIcon'
 import { OVERVIEW_NAME } from 'lib/constants'
 import { isArchived } from 'lib/helper'
 import s from './wiki-list.module.scss'
+import { Event } from 'components/Tracking'
 
 export default WikiList
 export { WikiList }
@@ -87,6 +88,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                             date={date}
                             description=""
                             isArchived={archived}
+                            isDashboard={isDashboard}
                             isStarred={starred}
                             key={id}
                             pageName={pageName}
@@ -157,12 +159,25 @@ function WikiCard({
     date,
     description,
     isArchived,
+    isDashboard,
     isStarred,
     pageName,
     teamDriveId,
 }) {
     return (
-        <Link key={id} to={`/page/${id}`}>
+        <Link
+            key={id}
+            to={`/page/${id}`}
+            onClick={() => {
+                Event(
+                    'WikiCard',
+                    'Click',
+                    `${isDashboard ? 'Dashboard,' : ''}${
+                        isStarred ? 'Starred,' : ''
+                    }${isArchived ? 'Archived' : ''}`
+                )
+            }}
+        >
             <Card>
                 <CardHeader
                     avatar={pageName[0]}

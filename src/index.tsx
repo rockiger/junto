@@ -63,7 +63,7 @@ initReactnPersist({
     storage: localStorage, // localStorage, sessionStorage or any instance with Storage API interface support.
     // Optional.
     whitelist: ['files', 'hints', 'initialFiles', 'rootFolderId'], // List of top-level keys in global, like ['users', 'token']. Default [].
-    debug: true,
+    //debug: true,
     key: '@reactn', // Key in storage. Default '@reactn'.
     initialValue: initialState,
 })
