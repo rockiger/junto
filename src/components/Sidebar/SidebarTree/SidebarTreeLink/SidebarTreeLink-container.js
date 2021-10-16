@@ -9,7 +9,7 @@ import { useStyles } from './SidebarTreeLink-styles'
 export function SidebarTreeLink(props) {
     const { isExpanded, label, level, pageId, parentId, setExpanded } = props
 
-    const clearSearch = useDispatch('clearSearch')
+    const clearSearch = useDispatch('clearSearchComplete')
     const [initialFiles] = useGlobal('initialFiles')
     const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
 

@@ -14,7 +14,7 @@ import { useStyles } from './SidebarItem-styles'
  */
 
 export const SidebarItem = ({ icon: Icon, name, path, tooltip }) => {
-    const clearSearch = useDispatch('clearSearch')
+    const clearSearch = useDispatch('clearSearchComplete')
     const location = useLocation()
     const classes = useStyles()
 

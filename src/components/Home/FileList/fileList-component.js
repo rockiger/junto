@@ -1,6 +1,6 @@
 // @ts-check
 
-import { useDispatch } from 'reactn'
+import { useDispatch, useGlobal } from 'reactn'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
@@ -37,8 +37,22 @@ import { EmptyPlaceholder } from './EmptyPlaceHolder'
  */
 const FileListPartial = props => {
     const { files, sortBy } = props
-    const clearSearch = useDispatch('clearSearch')
     const classes = useStyles()
+
+    // unfortunately, reactn's useDispatch leads to an max call depth error,
+    // hence the commented line below doesn't work. So we use setGlobal.
+    // const clearSearch = useDispatch('clearSearchComplete')
+    const [, setGlobal] = useGlobal()
+    function clearSearch() {
+        setGlobal(g => ({
+            files: [...g.initialFiles],
+            isSearchFieldActive: false,
+            oldSearchTerm: '',
+            searchTerm: '',
+            searchValue: '',
+        }))
+    }
+
     return (
         <List className="filelist-list">
             {files
@@ -68,7 +82,7 @@ const FileListPartial = props => {
                         <ListItem className={classes.listitem} key={file.id}>
                             <Link
                                 className={classes.link}
-                                onClick={() => clearSearch()}
+                                onClick={clearSearch}
                                 style={{ color: '#3c4043' }}
                                 to={`/page/${file.id}`}
                             >

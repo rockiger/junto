@@ -12,7 +12,7 @@ import Search from './Search'
 
 import styles from './navbar.module.scss'
 
-const Navbar = (props) => {
+const Navbar = props => {
     const [isSignedIn] = useGlobal('isSignedIn')
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
     const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
@@ -21,7 +21,7 @@ const Navbar = (props) => {
         'showSidebarOnMobile'
     )
 
-    const clearSearch = useDispatch('clearSearch')
+    const clearSearch = useDispatch('clearSearchComplete')
 
     useEffect(() => {
         if (searchValue !== searchTerm) setSearchValue(searchTerm)

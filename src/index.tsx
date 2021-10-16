@@ -19,10 +19,13 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 addReducers({
-    clearSearch: async (global, dispatch) => {
-        await dispatch.clearSearchMeta()
-        await dispatch.clearSearchFiles()
-    },
+    clearSearchComplete: (global, dispatch) => ({
+        files: [...global.initialFiles],
+        isSearchFieldActive: false,
+        oldSearchTerm: '',
+        searchTerm: '',
+        searchValue: '',
+    }),
     clearSearchFiles: (global, dispatch) => ({
         files: [...global.initialFiles],
     }),
