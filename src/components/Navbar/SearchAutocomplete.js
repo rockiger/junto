@@ -87,35 +87,30 @@ export const SearchAutocomplete = ({
                 {filteredFiles.slice(0, 7).map((file, index) => {
                     const filename = getTitleFromFile(file)
                     return (
-                        <div
+                        <Link
                             className={clsx(
                                 styles.SearchAutocomplete_MenuItem,
+                                styles.SearcAutocomplete_MenuItem_Link,
                                 index === selectedRow &&
                                     styles.SearchAutocomplete_MenuItem__selected
                             )}
                             key={file.id}
                             selected={index === selectedRow}
+                            onClick={() => {
+                                setTimeout(clearSearch, 100)
+                                Event('Search', 'Submit Selected', 'click')
+                            }}
+                            to={`/page/${file.id}`}
                         >
-                            <Link
+                            <div
                                 className={
-                                    styles.SearcAutocomplete_MenuItem_Link
+                                    styles.SearcAutocomplete_MenuItem_icon
                                 }
-                                onClick={() => {
-                                    setTimeout(clearSearch, 100)
-                                    Event('Search', 'Submit Selected', 'click')
-                                }}
-                                to={`/page/${file.id}`}
                             >
-                                <div
-                                    className={
-                                        styles.SearcAutocomplete_MenuItem_icon
-                                    }
-                                >
-                                    <FileDocumentIcon />
-                                </div>
-                                <div>{filename}</div>
-                            </Link>
-                        </div>
+                                <FileDocumentIcon />
+                            </div>
+                            <div>{filename}</div>
+                        </Link>
                     )
                 })}
             </div>
