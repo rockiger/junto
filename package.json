@@ -61,7 +61,8 @@
         "cypress": "node_modules/.bin/cypress open",
         "postbuild": "react-snap",
         "storybook": "start-storybook -p 6006 -s public",
-        "build-storybook": "build-storybook -s public"
+        "build-storybook": "build-storybook -s public",
+        "start-pro": "PORT=5763 react-scripts start"
     },
     "eslintConfig": {
         "extends": "react-app",

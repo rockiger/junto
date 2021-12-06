@@ -217,9 +217,9 @@ export default class GoogleLogin extends React.Component {
     }
 
     onFailure = error => {
-        alert(`We couldn't sign you in. Please reload your app and try again.`)
-        console.log(JSON.stringify(error, null, 2))
         this.setState({ isSigningIn: false })
+        this.updateSigninStatus(false)
+        console.log(JSON.stringify(error, null, 2))
     }
 
     /**
