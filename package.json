@@ -23,7 +23,7 @@
         "jss-preset-default": "^10.6.0",
         "lodash": "^4.17.21",
         "mdi-react": "^7.5.0",
-        "node-sass": "^5.0.0",
+        "node-sass": "^7.0.0",
         "notistack": "^1.0.6",
         "prismjs": "^1.24.0",
         "prop-types": "^15.7.2",
