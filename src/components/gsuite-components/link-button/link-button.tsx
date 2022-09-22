@@ -36,9 +36,11 @@ export default function LinkButton({
                     selected && s.LinkButton__selected
                 )}
                 onClick={onClick}
-                style={{paddingRight: Icon ? 0 : null}}
+                style={{ paddingRight: Icon ? 0 : undefined }}
             >
-                {children}{Icon ? <Icon /> : null}
+                {children}
+                {/*//@ts-ignore*/}
+                {Icon ? <Icon /> : null}
             </button>
         </Tooltip>
     )

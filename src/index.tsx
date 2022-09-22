@@ -18,6 +18,7 @@ if (process.env.NODE_ENV !== 'development') {
     console.error = noop
 }
 
+//@ts-ignore
 addReducers({
     clearSearch: async (global, dispatch) => {
         await dispatch.clearSearchMeta()
@@ -47,7 +48,7 @@ const initialState: State = {
     isInitialFileListLoading: false,
     isSearchFieldActive: false,
     isSignedIn: false,
-    isSigningIn: true,
+    isSigningIn: false,
     oldSearchTerm: '',
     redirect: false,
     rootFolderId: null,

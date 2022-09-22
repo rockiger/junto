@@ -42,6 +42,7 @@ export function ListItem({
                 </div>
                 {Menu && (
                     <div>
+                        {/*//@ts-ignore*/}
                         <Menu />
                     </div>
                 )}

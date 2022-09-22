@@ -120,13 +120,13 @@ describe('mergeHintData', () => {
 
 describe('showHint', () => {
     test('"" hintData => false', () => {
-        expect(showHint('', hintData['wiki_page'])).toBeFalsy()
+        expect(showHint('', hintData['wiki_page'], 0)).toBeFalsy()
     })
     test('"edit_page" hint_data => false', () => {
-        expect(showHint('edit_page', hintData['wiki_page'])).toBeFalsy()
+        expect(showHint('edit_page', hintData['wiki_page'], 0)).toBeFalsy()
     })
     test('"page_menu" hint_data => true', () => {
-        expect(showHint('page_menu', hintData['wiki_page'])).toBeTruthy()
+        expect(showHint('page_menu', hintData['wiki_page'], 0)).toBeTruthy()
     })
 })
 

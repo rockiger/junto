@@ -5,7 +5,7 @@ const id1 = 'TESTID1'
 const date1 = new Date().toISOString()
 const query1: IPage = {
     id: id1,
-    content: {},
+    content: '',
     editedTime: date1,
     modifiedTime: date1,
 }

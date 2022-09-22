@@ -18,6 +18,7 @@ const EmptyPlaceholder = ({ icon, subline, title }: Props) => {
     return (
         <Container>
             {icon && (
+                //@ts-ignore
                 <Icon
                     style={{
                         color: 'rgb(232, 240, 254)',

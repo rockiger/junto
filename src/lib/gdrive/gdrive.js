@@ -157,8 +157,8 @@ export function listRevisions(fileId) {
  * Creates file with name and a parentId.
  *
  * @method createFile
- * @param {String} name Name of the new file on Google Drive
- * @param {String} parentId Id of the parent where the file should be
+ * name Name of the new file on Google Drive
+ * parentId Id of the parent where the file should be
  * 							created, needs to be a folder
  * @return {String} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}

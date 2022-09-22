@@ -11,7 +11,6 @@ import gsuiteIntegrations from 'static/img/gsuite-integrations.png'
 import instantSearch from 'static/img/instant-search.png'
 import page01 from 'static/img/page01.png'
 import page02 from 'static/img/page02.png'
-import GoogleDriveLogo from 'static/googleDriveLogo.svg'
 
 import './front-page.scss'
 
@@ -29,7 +28,7 @@ export default function FrontPage() {
                             <br />
                             <img
                                 alt=""
-                                src={GoogleDriveLogo}
+                                src={''}
                                 style={{
                                     bottom: -12,
                                     height: 46,

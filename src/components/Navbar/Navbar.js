@@ -6,13 +6,13 @@ import clsx from 'clsx'
 import IconButton from 'components/gsuite-components/icon-button'
 import MenuIcon from 'mdi-react/MenuIcon'
 
-import logo from '../../static/logo_48.svg'
+//import logo from '../../static/logo_48.svg'
 
 import Search from './Search'
 
 import styles from './navbar.module.scss'
 
-const Navbar = (props) => {
+const Navbar = props => {
     const [isSignedIn] = useGlobal('isSignedIn')
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
     const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
@@ -54,7 +54,11 @@ const Navbar = (props) => {
                 )}
                 to="/"
             >
-                <img className={styles.Navbar_logo} src={logo} alt="App logo" />
+                <img
+                    className={styles.Navbar_logo}
+                    src={'logo'}
+                    alt="App logo"
+                />
                 <div className={styles.Navbar_title}>Fulcrum Wiki</div>
             </Link>
             <div className={styles.Navbar_spacer}>

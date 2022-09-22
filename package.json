@@ -23,7 +23,7 @@
         "jss-preset-default": "^10.6.0",
         "lodash": "^4.17.21",
         "mdi-react": "^7.5.0",
-        "node-sass": "^5.0.0",
+        "node-sass": "^6.0.1",
         "notistack": "^1.0.6",
         "prismjs": "^1.24.0",
         "prop-types": "^15.7.2",
@@ -39,7 +39,7 @@
         "react-jss": "^10.6.0",
         "react-modal": "^3.13.1",
         "react-router-dom": "^5.2.0",
-        "react-scripts": "4.0.3",
+        "react-scripts": "^5.0.1",
         "react-tabs": "^3.2.2",
         "react-tooltip-lite": "^1.12.0",
         "react-use-dimensions": "^1.2.1",
@@ -54,7 +54,7 @@
     },
     "scripts": {
         "start": "PORT=4763 react-scripts start",
-        "build": "react-scripts build",
+        "build": "PUBLIC_URL=/wp-content/reactpress/apps/fulcrum/build react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "cypress": "node_modules/.bin/cypress open",
@@ -110,7 +110,8 @@
         "react-snap": "^1.23.0",
         "react-test-renderer": "^17.0.2",
         "reactn-devtools": "^1.1.0",
-        "redux": "^4.1.0"
+        "redux": "^4.1.0",
+        "sass-loader": "^13.0.2"
     },
     "jest": {},
     "reactSnap": {

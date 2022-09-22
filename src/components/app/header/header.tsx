@@ -20,6 +20,7 @@ export default function Header(props: any) {
             <Navbar isSignedIn={isSignedIn}>
                 {isSignedIn &&
                     isInitialFileListLoading &&
+                    //@ts-ignore
                     _.isNotEmpty(initialFiles) && (
                         <div
                             style={{
@@ -40,15 +41,6 @@ export default function Header(props: any) {
                         FAQ
                     </FooterLink>
                 )}
-                {/*
-                //@ts-ignore */}
-                <GoogleLogin
-                    clientId={CLIENT_ID}
-                    apiKey={API_KEY}
-                    discoveryDocs={DISCOVERY_DOCS}
-                    scope={SCOPES}
-                    buttonText="Sign in"
-                />
             </Navbar>
         </div>
     )

@@ -90,7 +90,7 @@ export const files: Array<IFile> = [
     wikiOverviewFile,
 ]
 
-const props: IProps = { fileId: 'ifile4', files }
+const props: IProps = { fileId: 'ifile4', children: files }
 
 describe('Breadcrumbs', () => {
     it('renders without crashing', () => {

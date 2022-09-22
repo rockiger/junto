@@ -29,13 +29,15 @@ export const backgroundUpdateFiles = async () => {
             oldSearchTerm: searchTerm,
         })
     } catch (err) {
-        const body = JSON.parse(err.body)
+        //@ts-ignore
+        const body = JSON.parse(err.body as string)
         const { error } = body
         if (error.message === 'Invalid Credentials') {
             try {
                 await refreshSession()
                 backgroundUpdateFiles()
             } catch (err) {
+                //@ts-ignore
                 alert(`Couldn't refresh session: ${err.message}`)
                 console.log({ err })
             }
@@ -62,6 +64,7 @@ export const createFile = async (
     pageNameProperty: string = ''
 ) => {
     try {
+        //@ts-ignore
         const newFileId = await createFileBase({
             name: fileName,
             parentId: fileParentId,

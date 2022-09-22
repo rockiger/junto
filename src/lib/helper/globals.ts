@@ -52,9 +52,9 @@ export const isNotEmpty = col => !_.isEmpty(col)
 
 lodash.mixin({ isNotEmpty, thread, trace })
 
+const lodashImproved = { ...lodash, isNotEmpty, thread, trace }
 declare global {
     var _: typeof lodash
 }
 
-const _ = { ...lodash, thread, trace }
-export default _
+export default lodashImproved

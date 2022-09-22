@@ -100,7 +100,7 @@ export const Hint = ({ children, id, scope }: Props) => {
                                     <HStack>
                                         <img
                                             className={s.hint__Tooltip__logo}
-                                            src={logo}
+                                            src={'logo'}
                                             alt="App logo"
                                         />
 

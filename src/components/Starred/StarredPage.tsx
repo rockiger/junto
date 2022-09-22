@@ -30,6 +30,7 @@ function StarredPage({ isSignedIn, isSigningIn }) {
                     emptyIcon={StarIcon}
                     emptyMessage="No starred pages."
                     emptySubline="Add stars to pages you want to easily refer to later."
+                    /*//@ts-ignore */
                     files={_.thread(files, filterStarred)}
                     sortBy="modifiedByMeTime"
                     title="Starred"

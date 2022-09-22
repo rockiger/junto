@@ -42,7 +42,7 @@ declare module 'reactn/default' {
     }
 
     export interface IFile {
-        capabilities: { [key: string]: boolean }
+        capabilities?: { [key: string]: boolean }
         description?: string
         id: string
         name: string
@@ -58,7 +58,7 @@ declare module 'reactn/default' {
             wikiRoot?: 'false' | 'true'
             [key: string]: any
         }
-        trashed: boolean
+        trashed?: boolean
         viewedByMeTime?: string
         [key: string]: any
     }
