@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { setGlobal } from 'reactn'
 import ReactDOM from 'react-dom'
 import { IFile, IFileOrNull } from 'reactn/default'

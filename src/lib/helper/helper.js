@@ -41,11 +41,11 @@ export function isMobileDevice() {
 }
 
 export function isFolder(file) {
-    return file.name.mimeType === 'application/vnd.google-apps.folder'
+    return file.title.mimeType === 'application/vnd.google-apps.folder'
 }
 
 export function isPage(file) {
-    return EXT === getExtFromFileName(file.name)
+    return EXT === getExtFromFileName(file.title)
 }
 
 /**

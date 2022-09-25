@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@apollo/client": "^3.6.9",
         "@material-ui/core": "^4.11.4",
         "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.58",
@@ -16,6 +17,7 @@
         "clsx": "^1.1.1",
         "date-fns": "^2.21.3",
         "dexie": "^3.0.3",
+        "graphql": "^16.6.0",
         "image-extensions": "^1.1.0",
         "immutable": "^4.0.0-rc.12",
         "is-hotkey": "^0.2.0",
@@ -53,7 +55,7 @@
         "typescript": "^4.2.4"
     },
     "scripts": {
-        "start": "PORT=4763 react-scripts start",
+        "start": "PUBLIC_URL=/fulcrum react-scripts start",
         "build": "PUBLIC_URL=/wp-content/reactpress/apps/fulcrum/build react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
@@ -113,8 +115,5 @@
         "redux": "^4.1.0",
         "sass-loader": "^13.0.2"
     },
-    "jest": {},
-    "reactSnap": {
-        "port": 4763
-    }
+    "jest": {}
 }

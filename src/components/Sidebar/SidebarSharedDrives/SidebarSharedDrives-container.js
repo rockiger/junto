@@ -1,14 +1,16 @@
 import React, { useGlobal } from 'reactn'
 import { OVERVIEW_NAME } from 'lib/constants'
 
-import { SidebarTreeItem } from '../SidebarTree/SidebarTreeItem'
+import FolderIcon from 'mdi-react/FolderOutlineIcon'
 import { useStyles } from '../SidebarTree/SidebarTree-styles'
 import { getTitleFromFile, isArchived } from 'lib/helper'
 import { filterWikis, sortWikisBy } from 'components/wiki-list'
 import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
+import { SidebarItem } from '../SidebarItem'
 
 export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
+    const [wikis] = useGlobal('wikis')
     const classes = useStyles()
     window['initialFiles'] = initialFiles
 
@@ -18,21 +20,18 @@ export function SidebarSharedDrives() {
                 <ul className={classes.mydrive}>
                     {thread(
                         '->>',
-                        initialFiles,
-                        filterWikis,
-                        filterIsNotArchived,
-                        [sortWikisBy, 'name'],
+                        wikis,
+                        //! filterIsNotArchived,
+                        //! [sortWikisBy, 'name'],
                         [
                             map,
-                            (file, index) => (
-                                <SidebarTreeItem
-                                    expand={false}
-                                    key={index}
-                                    initialFiles={initialFiles}
-                                    label={getTitleFromFile(file)}
-                                    level={0}
-                                    pageId={file.id}
-                                    parentId={file.parents[0]}
+                            wiki => (
+                                <SidebarItem
+                                    key={wiki.id}
+                                    icon={FolderIcon}
+                                    name={wiki.name}
+                                    path={`/page/${wiki.id}`}
+                                    tooltip="Your starred pages"
                                 />
                             ),
                         ]
@@ -48,7 +47,7 @@ export function SidebarSharedDrives() {
 function filterSharedDrives(files) {
     return files.filter(
         file =>
-            file.name === OVERVIEW_NAME &&
+            file.title === OVERVIEW_NAME &&
             file.properties &&
             file.properties.pageName &&
             file.parents[0] &&

@@ -12,7 +12,7 @@ import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalVariantIcon'
 import StarIcon from 'mdi-react/StarIcon'
 
-import { Spacer, Spinner } from 'components/gsuite-components'
+import { Wikir, Spinner } from 'components/gsuite-components'
 import { EXT } from 'lib/constants'
 import { getTitleFromFile, sortByDate } from 'lib/helper'
 import { ButtonMenu } from 'components/ButtonMenu'
@@ -230,7 +230,7 @@ const FileListComponent = props => {
                 {title && (
                     <Header className={s.FileList_header_title}>{title}</Header>
                 )}
-                <Spacer />
+                <Wikir />
                 {!_.isEmpty(files) && setSortBy && (
                     <div className={s.FileList_header_buttons}>
                         <strong
@@ -272,7 +272,8 @@ const FileListComponent = props => {
                 {/* 
                 // @ts-ignore */}
                 {props.isLoading && <Spinner />}
-                {!props.isLoading && <Periods files={files} sortBy={sortBy} />}
+                {!props.isLoading &&
+                    _.map(files, f => <div key={f.id}>{f.title}</div>)}
                 {files.length === 0 && !props.isLoading && (
                     <EmptyPlaceholder
                         icon={emptyIcon}

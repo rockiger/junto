@@ -96,23 +96,11 @@ function getMetaById(fileId: String, files: Array<IFile>): IFile | null {
  * @param files - the files to check
  */
 function hasChildren(fileId: string, files: IFile[]) {
-    const folder = files.find(file => file.name === fileId)
-    if (folder) {
-        return Boolean(
-            files.filter(
-                file => file.parents && file.parents.includes(folder.id)
-            ).length
-        )
-    }
     return false
 }
 
 function hasProperty(file: IFile, property: string, question: any = 'true') {
-    return Boolean(
-        file.properties &&
-            file.properties[property] &&
-            file.properties[property] === question
-    )
+    return false
 }
 
 function isArchived(file: IFile) {
@@ -121,7 +109,7 @@ function isArchived(file: IFile) {
 }
 
 function isWikiRootFile(file: IFile) {
-    return file.name === OVERVIEW_NAME
+    return file.title === OVERVIEW_NAME
 }
 function isWikiRootFolder(folder: IFile) {
     return hasProperty(folder, 'wikiRoot')

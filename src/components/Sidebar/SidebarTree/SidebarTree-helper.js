@@ -10,7 +10,7 @@ import { isArchived, isPage } from 'lib/helper'
  * @returns {string | null}
  */
 export function getFolderId(fileId, files) {
-    const folder = files.find(file => file.name === fileId)
+    const folder = files.find(file => file.title === fileId)
 
     if (folder) {
         const children = files.filter(file => {
@@ -36,7 +36,7 @@ export function getFolderId(fileId, files) {
 export function getOverviewFileId(files, rootFolderId) {
     const overview = files.find(
         file =>
-            file.name === OVERVIEW_NAME && file.parents.includes(rootFolderId)
+            file.title === OVERVIEW_NAME && file.parents.includes(rootFolderId)
     )
     if (overview) return overview.id
     return ''

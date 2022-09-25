@@ -19,6 +19,7 @@ declare module 'reactn/default' {
     }
 
     export interface State {
+        areWikisLoading: boolean
         hints: HintMap
         hintsFileId: string
         hintCounter: number
@@ -38,29 +39,32 @@ declare module 'reactn/default' {
         initialFiles: IFile[]
         isInitialFileListLoading: boolean
         backgroundUpdate: boolean
+        wikis: Wiki[]
         userId: string
     }
 
     export interface IFile {
-        capabilities?: { [key: string]: boolean }
-        description?: string
+        author: {
+            avatar: string // URL
+            name: string
+        }
+        body: string // HTML
+        excerpt: string
+        created: string // DATE
+        id: string
+        isOverview: boolean
+        isStarred: boolean
+        modified: string // DATE
+        status: 'draft' | 'pending' | 'publish'
+        title: string
+    }
+
+    export interface Wiki {
+        count: number
+        description: string
         id: string
         name: string
-        parents: Array<string> // the id of the parrent of a file
-        mimeType: 'application/vnd.google-apps.folder' | 'application/json'
-        modifiedByMeTime?: string
-        modifiedTime?: string
-        shared?: boolean
-        ownedByMe?: boolean
-        properties?: {
-            archived?: 'false' | 'true'
-            pageName?: string
-            wikiRoot?: 'false' | 'true'
-            [key: string]: any
-        }
-        trashed?: boolean
-        viewedByMeTime?: string
-        [key: string]: any
+        overviewPage: string // ID
     }
 
     export type IFileOrNull = IFile | null

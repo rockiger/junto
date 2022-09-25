@@ -1,28 +1,15 @@
 //@ts-check
-import React, { useGlobal } from 'reactn'
+import { useGlobal } from 'reactn'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { format } from 'date-fns'
 import { sortBy } from 'lodash'
 
-import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
-import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
-
 import { EmptyPlaceholder } from 'components/Home/FileList/EmptyPlaceHolder'
-import {
-    Card,
-    CardBody,
-    CardHeader,
-    CardFooter,
-    Spacer,
-    Spinner,
-} from 'components/gsuite-components'
-import ArchiveIcon from 'mdi-react/ArchiveIcon'
+import { Card, CardHeader, Spinner } from 'components/gsuite-components'
 import CheckboxMultipleBlankOutlineIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
-import StarIcon from 'mdi-react/StarIcon'
 
 import { OVERVIEW_NAME } from 'lib/constants'
-import { isArchived } from 'lib/helper'
 import s from './wiki-list.module.scss'
 
 export default WikiList
@@ -39,16 +26,13 @@ export { WikiList }
  * A wiki-list component.
  * @param {WikiListProps} props
  */
-function WikiList({ files, isDashboard, orderBy = 'name' }) {
-    const [isFileListLoading] = useGlobal('isFileListLoading')
-    const [rootFolderId] = useGlobal('rootFolderId')
-    const wikis = sortWikisBy(orderBy, filterWikis(files))
-    const myFulcrum = getOverviewFile(files, rootFolderId)
+function WikiList({ isDashboard }) {
+    const [areWikisLoading] = useGlobal('areWikisLoading')
+    const [wikis] = useGlobal('wikis')
     return (
         <div className={s.WikiList}>
-            {(_.isNotEmpty(files) || !isFileListLoading) &&
-                !myFulcrum &&
-                wikis.length === 0 &&
+            {_.isEmpty(wikis) &&
+                !areWikisLoading &&
                 (isDashboard ? (
                     <h2>You don't have any wikis in your Google Drive.</h2>
                 ) : (
@@ -57,62 +41,29 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         title="You don't have any archived wikis."
                     />
                 ))}
-            {_.isEmpty(files) && isFileListLoading && <Spinner />}
+            {_.isEmpty(wikis) && areWikisLoading && <Spinner />}
             <div
                 className={clsx(
                     s.WikiList_container,
                     isDashboard && s.WikiList_container__isDashboard
                 )}
             >
-                {wikis.map(f => {
-                    const {
-                        id,
-                        //@ts-ignore
-                        properties: { pageName },
-                        modifiedTime,
-                        teamDriveId,
-                        starred,
-                        viewedByMeTime,
-                    } = f
-                    const archived = isArchived(f)
-                    //@ts-ignore
+                {wikis.map(s => {
+                    const { id, name } = s
                     const date = format(
-                        //@ts-ignore
-                        new Date(viewedByMeTime || modifiedTime),
+                        //!new Date(viewedByMeTime || modifiedTime),
+                        new Date(),
                         'MMMM dd, yyyy'
                     )
                     return (
                         <WikiCard
                             id={id}
                             date={date}
-                            description=""
-                            isArchived={archived}
-                            isStarred={starred}
                             key={id}
-                            pageName={pageName}
-                            teamDriveId={teamDriveId}
+                            pageName={name}
                         />
                     )
                 })}
-                {myFulcrum && (
-                    <WikiCard
-                        id={myFulcrum.id}
-                        date={format(
-                            //@ts-ignore
-                            new Date(
-                                myFulcrum.viewedByMeTime ||
-                                    myFulcrum.modifiedTime
-                            ),
-                            'MMMM dd, yyyy'
-                        )}
-                        description=""
-                        isArchived={isArchived(myFulcrum)}
-                        isStarred={myFulcrum.starred}
-                        key={myFulcrum.id}
-                        pageName="My Wiki"
-                        teamDriveId=""
-                    />
-                )}
             </div>
         </div>
     )
@@ -147,45 +98,16 @@ export function sortWikisBy(attr = 'name', files) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function getWikiRootFolder(folderId, files) {
-    const folder = files.find(f => f.id === folderId)
-    return folder
-}
 
-function WikiCard({
-    id,
-    date,
-    description,
-    isArchived,
-    isStarred,
-    pageName,
-    teamDriveId,
-}) {
+function WikiCard({ id, date, pageName }) {
     return (
         <Link key={id} to={`/page/${id}`}>
             <Card>
                 <CardHeader
-                    avatar={pageName[0]}
+                    avatar={_.first(pageName)}
                     subtitle={date}
                     title={pageName}
                 />
-                <CardBody>{description}</CardBody>
-                <CardFooter>
-                    {teamDriveId ? (
-                        <>
-                            <FolderAccountIcon className={s.FooterIcon} />{' '}
-                            Shared Drive
-                        </>
-                    ) : (
-                        <>
-                            <FolderGoogleDriveIcon className={s.FooterIcon} />{' '}
-                            My Drive
-                        </>
-                    )}
-                    <Spacer />
-                    {isArchived && <ArchiveIcon />}
-                    {isStarred && <StarIcon style={{ color: '#fbbc05' }} />}
-                </CardFooter>
             </Card>
         </Link>
     )
@@ -201,7 +123,7 @@ export function getOverviewFile(files, rootFolderId) {
     const overview = _.find(
         files,
         file =>
-            file.name === OVERVIEW_NAME && file.parents.includes(rootFolderId)
+            file.title === OVERVIEW_NAME && file.parents.includes(rootFolderId)
     )
     if (overview) return overview
     return null

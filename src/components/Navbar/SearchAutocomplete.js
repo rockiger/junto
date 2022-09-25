@@ -25,11 +25,11 @@ export const SearchAutocomplete = ({
     useEffect(() => {
         setFilteredFiles(
             files
-                .filter((file) =>
-                    file.name.toLowerCase().includes(searchValue.toLowerCase())
+                .filter(file =>
+                    file.title.toLowerCase().includes(searchValue.toLowerCase())
                 )
-                .filter((file) => {
-                    const ext = getExtFromFileName(file.name)
+                .filter(file => {
+                    const ext = getExtFromFileName(file.title)
                     return ext === EXT
                 })
                 .sort((file1, file2) => {

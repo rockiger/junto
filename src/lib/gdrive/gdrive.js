@@ -67,7 +67,7 @@ export function listAppDataFiles() {
     return new Promise((resolve, reject) => {
         gapi.client.drive.files
             .list({
-                spaces: 'appDataFolder',
+                wikis: 'appDataFolder',
                 fields: 'nextPageToken, files(id, name)',
                 pageSize: 100,
             })

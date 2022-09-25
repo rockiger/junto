@@ -51,7 +51,7 @@ const SidebarRenderer = props => {
                     className={styles.Sidebar_navigation}
                     id="Sidebar-Navigation"
                 >
-                    <SidebarTree />
+                    {/*//!<SidebarTreei /> */}
                     <SidebarSharedDrives />
                     <SidebarItem
                         icon={StarIcon}

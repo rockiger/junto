@@ -1,3 +1,4 @@
+/* global reactPress */
 import { getGlobal, setGlobal } from 'reactn'
 import { SimpleMap } from 'reactn/default'
 
@@ -11,6 +12,9 @@ import {
     updateMetadata as updateMetadataBase,
 } from 'lib/gdrive'
 import { filesUpdater } from 'lib/helper'
+import { fetchPages, fetchSpaces } from 'lib/wordpress'
+import { useEffect } from 'react'
+import { gql } from '@apollo/client'
 
 /**
  * Silently update the the files metadata for the current state.
@@ -143,4 +147,18 @@ export const updateMetadata = async (
     })
     await updateMetadataBase(fileId, metadata)
     if (doBackgroundUpdate) await backgroundUpdateFiles()
+}
+
+export const getWikis = async () => {
+    setGlobal({ areWikisLoading: true })
+    const wikis = await fetchSpaces()
+    console.log(wikis)
+    setGlobal({ areWikisLoading: true, wikis })
+}
+
+export const getFiles = async () => {
+    setGlobal({ isFileListLoading: true })
+    const files = await fetchPages()
+    console.log(files)
+    setGlobal({ files, isFileListLoading: false })
 }

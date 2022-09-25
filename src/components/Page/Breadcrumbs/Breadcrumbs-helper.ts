@@ -1,6 +1,11 @@
+//@ts-nocheck
 import { IFile, IFileOrNull } from 'reactn/default'
 import { EXT, FOLDER_NAME, OVERVIEW_NAME } from 'lib/constants'
-import { getMetaById, isArchived, isWikiRootFolder as isWikiRoot } from 'lib/helper'
+import {
+    getMetaById,
+    isArchived,
+    isWikiRootFolder as isWikiRoot,
+} from 'lib/helper'
 
 export { getMetaById, getParents, getBreadcrumbName }
 /**
@@ -13,7 +18,7 @@ export { getMetaById, getParents, getBreadcrumbName }
  */
 function getParents(file: IFileOrNull, files: Array<IFile>): Array<IFile> {
     // The overview of a wiki shouldn't have a parent
-    if (!file || file.name === OVERVIEW_NAME || !file.parents) return []
+    if (!file || file.title === OVERVIEW_NAME || !file.parents) return []
     const parentFolder = getMetaById(file.parents[0], files)
     const parentFile = getBreadcrumbName(parentFolder, files)
     if (!parentFolder || !parentFile) return []
@@ -43,12 +48,12 @@ function getBreadcrumbName(folder: IFileOrNull, files: Array<IFile>) {
 }
 
 function findWikiFile(files: IFile[], folder: IFile) {
-    return files.find((el) => el.id === folder.name)
+    return files.find(el => el.id === folder.name)
 }
 
 function findWikiRootFile(files: IFile[], folder: IFile) {
     const result = files.find(
-        (el) =>
+        el =>
             el.name === OVERVIEW_NAME &&
             el.parents.includes(folder.id) &&
             el.properties &&
@@ -59,7 +64,7 @@ function findWikiRootFile(files: IFile[], folder: IFile) {
 
 function findPersonalWikiRootFile(files: IFile[], folder: IFile) {
     const result = files.find(
-        (el) => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
+        el => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
     )
     return result
 }
@@ -70,7 +75,9 @@ function isPersonalRoot(folder: IFile) {
 
 export function getChildren(parent: IFile, files: IFile[]) {
     const folderId = getParentFolderId(parent, files)
-    return filterChildFiles(folderId,files).filter(el => shouldFileDisplay(el, folderId))
+    return filterChildFiles(folderId, files).filter(el =>
+        shouldFileDisplay(el, folderId)
+    )
 }
 
 /**
@@ -81,17 +88,16 @@ export function getChildren(parent: IFile, files: IFile[]) {
  * @returns {string | null}
  */
 export function getParentFolderId(file, files) {
-    if (file.name === "_myDrive_overview_please_do_not_touch.gwiki") {
+    if (file.title === '_myDrive_overview_please_do_not_touch.gwiki') {
         return file.parents[0] ?? ''
     } else {
         const folder = files.find(el => el.name === file.id)
-    if (folder) {
-        return folder.id
+        if (folder) {
+            return folder.id
+        }
     }
-}
     return ''
 }
-
 
 /**
  *

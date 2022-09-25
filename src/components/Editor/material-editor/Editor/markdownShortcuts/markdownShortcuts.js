@@ -34,7 +34,7 @@ const getType = chars => {
     }
 }
 
-const onSpace = (event, editor, next) => {
+const onWiki = (event, editor, next) => {
     const { value } = editor
     const { selection } = value
     if (selection.isExpanded) return next()
@@ -133,7 +133,7 @@ export const markdownShortcuts = {
     onKeyDown(event, editor, next) {
         switch (event.key) {
             case ' ':
-                return onSpace(event, editor, next)
+                return onWiki(event, editor, next)
             case 'Backspace':
                 return onBackspace(event, editor, next)
             case 'Enter':

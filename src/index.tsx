@@ -36,6 +36,7 @@ addReducers({
 })
 
 const initialState: State = {
+    areWikisLoading: true,
     backgroundUpdate: false,
     files: [],
     goToNewFile: false,
@@ -47,7 +48,7 @@ const initialState: State = {
     isFileListLoading: false,
     isInitialFileListLoading: false,
     isSearchFieldActive: false,
-    isSignedIn: false,
+    isSignedIn: true,
     isSigningIn: false,
     oldSearchTerm: '',
     redirect: false,
@@ -55,6 +56,7 @@ const initialState: State = {
     searchTerm: '',
     searchValue: '', // The value in the searchfield
     showSidebarOnMobile: false,
+    wikis: [],
     userId: '',
 }
 setGlobal(initialState)

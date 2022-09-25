@@ -16,7 +16,7 @@ export function convertFilesToAutocompletItems(files) {
     if (files && files.map) {
         const items = files
             .filter(file => {
-                const ext = getExtFromFileName(file.name)
+                const ext = getExtFromFileName(file.title)
                 return ext === EXT
             })
             .map(file => {

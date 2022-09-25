@@ -82,8 +82,8 @@ function ArchiveMenuEntry({ fileId }) {
                             easier to find relevant content.
                         </p>
                         <p>
-                            If you need the content from this space at later
-                            time, you can restore the space anytime.
+                            If you need the content from this wiki at later
+                            time, you can restore the wiki anytime.
                         </p>
                     </>
                 ),
