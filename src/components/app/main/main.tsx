@@ -43,15 +43,7 @@ export default function Main(props: any): ReactElement {
             <Route
                 exact
                 path="/page/:id"
-                render={(props: any) => (
-                    <Page
-                        {...props}
-                        isCreatingNewFile={isCreatingNewFile}
-                        isSignedIn={isSignedIn}
-                        isSigningIn={isSigningIn}
-                        setGoToNewFile={setGoToNewFile}
-                    />
-                )}
+                render={(props: any) => <Page {...props} />}
             />
             <Route
                 exact

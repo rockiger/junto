@@ -11,7 +11,7 @@ import Main from './main'
 import Sidebar from './sidebar'
 
 import styles from './app.module.scss'
-import { getFiles, getWikis } from 'db'
+import { createPage, getFiles, getWikis } from 'db'
 
 export default function App() {
     const [isSignedIn] = useGlobal('isSignedIn')
@@ -26,6 +26,12 @@ export default function App() {
     useEffect(() => {
         getWikis()
         getFiles()
+        //@ts-ignore
+        /*  createPage({
+            spaceId: 'dGVybToxMjI=',
+            title: 'Test',
+            parentId: 'cG9zdDoxNzE0',
+        }) */
     }, [])
 
     return (

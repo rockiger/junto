@@ -12,7 +12,13 @@ import {
     updateMetadata as updateMetadataBase,
 } from 'lib/gdrive'
 import { filesUpdater } from 'lib/helper'
-import { fetchPages, fetchSpaces } from 'lib/wordpress'
+import {
+    fetchPage,
+    fetchPages,
+    fetchSpaces,
+    postPage,
+    updatePage,
+} from 'lib/wordpress'
 import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 
@@ -149,16 +155,33 @@ export const updateMetadata = async (
     if (doBackgroundUpdate) await backgroundUpdateFiles()
 }
 
+//@ts-ignore
+export const createPage = async vars => {
+    //! loading state
+    //@ts-ignore
+    const file = await postPage(vars)
+    return file
+    //! loadingState
+}
+
 export const getWikis = async () => {
     setGlobal({ areWikisLoading: true })
     const wikis = await fetchSpaces()
-    console.log(wikis)
     setGlobal({ areWikisLoading: true, wikis })
 }
 
 export const getFiles = async () => {
     setGlobal({ isFileListLoading: true })
     const files = await fetchPages()
-    console.log(files)
-    setGlobal({ files, isFileListLoading: false })
+    setGlobal({ files, initialFiles: files, isFileListLoading: false })
+}
+
+export const getFile = async id => {
+    const file = await fetchPage(id)
+    return file
+}
+
+export const updateFile = async (id, options) => {
+    const file = await updatePage(id, options)
+    return file
 }
