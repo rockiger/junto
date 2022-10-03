@@ -20,8 +20,6 @@ export const BreadcrumbsBar = (props: IProps) => {
     const history = useHistory()
     const classes = useStyles()
 
-    console.log({ parentPages, childPages })
-
     if (!parentPages.length && !childPages.length) {
         return (
             <Children childPages={childPages} history={history}>

@@ -12,6 +12,8 @@ import Sidebar from './sidebar'
 
 import styles from './app.module.scss'
 import { createPage, getFiles, getWikis } from 'db'
+import { ApolloProvider } from '@apollo/client'
+import { client } from 'lib/wordpress'
 
 export default function App() {
     const [isSignedIn] = useGlobal('isSignedIn')
@@ -40,14 +42,16 @@ export default function App() {
                 [styles.App__isSignedIn]: isSignedIn,
             })}
         >
-            <SnackbarProvider maxSnack={3}>
-                <Router basename={'/fulcrum'}>
-                    <Header />
-                    {isSignedIn && <Sidebar />}
-                    <Main />
-                    {!isSignedIn && <Footer />}
-                </Router>
-            </SnackbarProvider>
+            <ApolloProvider client={client}>
+                <SnackbarProvider maxSnack={3}>
+                    <Router basename={'/fulcrum'}>
+                        <Header />
+                        {isSignedIn && <Sidebar />}
+                        <Main />
+                        {!isSignedIn && <Footer />}
+                    </Router>
+                </SnackbarProvider>
+            </ApolloProvider>
         </div>
     )
 }

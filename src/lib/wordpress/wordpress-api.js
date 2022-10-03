@@ -158,47 +158,46 @@ export const GET_FULCRUM_PAGE = gql`
     }
 `
 
-export async function fetchPage(id) {
-    const normalizeResponseData = data => {
-        const {
-            acfFulcrumPage,
-            author,
-            content,
-            excerpt,
-            dateGmt,
-            id,
-            modifiedGmt,
-            parentId,
-            status,
-            title,
-        } = data.fulcrumPage
-        const { firstName, name, nicename, nickname } = author.node
-        const isOverview = !!acfFulcrumPage.isoverview
-        const isStarred = !!acfFulcrumPage.isstarred
+export const normalizeFetchPageData = data => {
+    const {
+        acfFulcrumPage,
+        author,
+        content,
+        excerpt,
+        dateGmt,
+        id,
+        modifiedGmt,
+        parentId,
+        status,
+        title,
+    } = data.fulcrumPage
+    const { firstName, name, nicename, nickname } = author.node
+    const isOverview = !!acfFulcrumPage.isoverview
+    const isStarred = !!acfFulcrumPage.isstarred
 
-        return {
-            author: {
-                avatar: data.fulcrumPage.author.node.avatar.url,
-                name: firstName || nickname || nicename || name,
-            },
-            body: content || '',
-            created: dateGmt,
-            excerpt,
-            id,
-            isOverview,
-            isStarred,
-            modified: modifiedGmt,
-            parentId,
-            status,
-            title,
-        }
+    return {
+        author: {
+            avatar: data.fulcrumPage.author.node.avatar.url,
+            name: firstName || nickname || nicename || name,
+        },
+        body: content || '',
+        created: dateGmt,
+        excerpt,
+        id,
+        isOverview,
+        isStarred,
+        modified: modifiedGmt,
+        parentId,
+        status,
+        title,
     }
-
+}
+export async function fetchPage(id) {
     const response = await client.query({
         query: GET_FULCRUM_PAGE,
         variables: { id },
     })
-    return normalizeResponseData(response.data)
+    return normalizeFetchPageData(response.data)
 }
 
 export const GET_FULCRUM_PAGES = gql`
@@ -335,7 +334,7 @@ export async function fetchPages() {
     )
 }
 
-const UPDATE_FULCRUM_PAGE = gql`
+export const UPDATE_FULCRUM_PAGE = gql`
     mutation UpdateFulcrumPage(
         $content: String
         $id: ID!

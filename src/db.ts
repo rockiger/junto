@@ -16,11 +16,20 @@ import {
     fetchPage,
     fetchPages,
     fetchSpaces,
+    GET_FULCRUM_PAGE,
+    normalizeFetchPageData,
     postPage,
     updatePage,
+    UPDATE_FULCRUM_PAGE,
 } from 'lib/wordpress'
-import { useEffect } from 'react'
-import { gql } from '@apollo/client'
+import { useEffect, useMemo } from 'react'
+import {
+    gql,
+    MutationHookOptions,
+    QueryHookOptions,
+    useMutation,
+    useQuery,
+} from '@apollo/client'
 
 /**
  * Silently update the the files metadata for the current state.
@@ -176,12 +185,27 @@ export const getFiles = async () => {
     setGlobal({ files, initialFiles: files, isFileListLoading: false })
 }
 
-export const getFile = async id => {
-    const file = await fetchPage(id)
-    return file
+export const useGetPage = (options: QueryHookOptions = {}) => {
+    const __options = options?.onCompleted
+        ? {
+              ...options,
+              onCompleted: data =>
+                  //@ts-ignore
+                  options.onCompleted(normalizeFetchPageData(data)),
+          }
+        : options
+    const { data, error, loading: isLoading } = useQuery(
+        GET_FULCRUM_PAGE,
+        __options
+    )
+    const page = useMemo(
+        () => (data ? normalizeFetchPageData(data) : undefined),
+        [data]
+    )
+
+    return { error, isLoading, page } as const
 }
 
-export const updateFile = async (id, options) => {
-    const file = await updatePage(id, options)
-    return file
+export const useUpdatePage = (options: MutationHookOptions = {}) => {
+    return useMutation(UPDATE_FULCRUM_PAGE, options)
 }

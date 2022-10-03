@@ -13,19 +13,20 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
     } = props
     return (
         <>
-            <div style={{padding: '0.25rem 0'}}><input
-                className="flexInput"
-                id={id}
-                onBlur={onBlur}
-                onKeyDown={onKeyDown}
-                onChange={onChange}
-                placeholder={placeholder}
-                ref={ref}
-                style={{
-                    width,
-                }}
-                value={value}
-            />
+            <div style={{ padding: '0.25rem 0' }}>
+                <input
+                    className="flexInput"
+                    id={id}
+                    onBlur={onBlur}
+                    onKeyDown={onKeyDown}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    ref={ref}
+                    style={{
+                        width,
+                    }}
+                    value={value}
+                />
             </div>
             <div
                 ref={h1Ref}
@@ -47,6 +48,7 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
                     font: unset;
                     font-size: 1.2rem;
                     font-weight: 400;
+                    letter-spacing: normal;
                     padding: 0 .5rem;
                     margin: 0 -.5rem;
                 }
