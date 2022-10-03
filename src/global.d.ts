@@ -51,10 +51,11 @@ declare module 'reactn/default' {
         body: string // HTML
         excerpt: string
         created: string // DATE
-        id: string
+        id: string // ID
         isOverview: boolean
         isStarred: boolean
         modified: string // DATE
+        parentId: string // ID
         status: 'draft' | 'pending' | 'publish'
         title: string
     }
