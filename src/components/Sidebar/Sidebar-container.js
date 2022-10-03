@@ -68,6 +68,6 @@ class Sidebar extends React.Component {
 export default withRouter(Sidebar)
 
 Sidebar.propTypes = {
-    goToNewFile: PropTypes.bool.isRequired,
-    setGoToNewFile: PropTypes.func.isRequired,
+    goToNewFile: PropTypes.bool,
+    setGoToNewFile: PropTypes.func,
 }

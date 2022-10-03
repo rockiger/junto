@@ -17,7 +17,7 @@ export { Tooltip }
  * A Tooltip component.
  * @param {TooltipProps} props
  */
-function Tooltip({ children, content, ...restProps }) {
+function Tooltip({ children, content = '', ...restProps }) {
     return (
         <TooltipBase
             {...restProps}
