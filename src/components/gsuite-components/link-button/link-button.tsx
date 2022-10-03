@@ -36,7 +36,10 @@ export default function LinkButton({
                     selected && s.LinkButton__selected
                 )}
                 onClick={onClick}
-                style={{ paddingRight: Icon ? 0 : undefined }}
+                style={{
+                    paddingRight: Icon ? 0 : undefined,
+                    lineHeight: 'normal',
+                }}
             >
                 {children}
                 {/*//@ts-ignore*/}

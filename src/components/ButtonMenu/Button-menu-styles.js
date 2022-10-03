@@ -6,5 +6,6 @@ export const useStyles = makeStyles(theme => {
             color: theme.palette.primary.main,
             backgroundColor: '#e8f0fe',
         },
+        lineHeight: 'normal',
     }
 })

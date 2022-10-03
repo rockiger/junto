@@ -20,7 +20,15 @@ export const BreadcrumbsBar = (props: IProps) => {
     const history = useHistory()
     const classes = useStyles()
 
-    if (parentPages.length === 0) return null
+    console.log({ parentPages, childPages })
+
+    if (!parentPages.length && !childPages.length) {
+        return (
+            <Children childPages={childPages} history={history}>
+                {children}
+            </Children>
+        )
+    }
     return (
         <span id="breadcrumbsBar" className={classes.breadcrumbsBar}>
             <Breadcrumbs
@@ -64,22 +72,28 @@ export const BreadcrumbsBar = (props: IProps) => {
                         return null
                     }
                 })}
-                <div style={{ display: 'flex' }}>
+                <Children childPages={childPages} history={history}>
                     {children}
-                    {!_.isEmpty(childPages) ? (
-                        <ButtonMenu
-                            items={childPages.map(child => ({
-                                key: child.id,
-                                name: getTitleFromFile(child),
-                                handler: () =>
-                                    history.push(`/page/${child.id}`),
-                            }))}
-                        >
-                            <FileTreeIcon />
-                        </ButtonMenu>
-                    ) : null}
-                </div>
+                </Children>
             </Breadcrumbs>
         </span>
+    )
+}
+function Children({ children, childPages, history }) {
+    return (
+        <div style={{ display: 'flex' }}>
+            {children}
+            {!_.isEmpty(childPages) ? (
+                <ButtonMenu
+                    items={childPages.map(child => ({
+                        key: child.id,
+                        name: getTitleFromFile(child),
+                        handler: () => history.push(`/page/${child.id}`),
+                    }))}
+                >
+                    <FileTreeIcon />
+                </ButtonMenu>
+            ) : null}
+        </div>
     )
 }

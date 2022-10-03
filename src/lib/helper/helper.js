@@ -9,20 +9,7 @@ import { EXT, EXTLENGTH, MYHOME, OVERVIEW_NAME } from '../constants'
  * @returns {string}
  */
 export function getTitleFromFile(file) {
-    const { name = '', properties = {} } = file
-    if (!name) return ''
-    if (name === OVERVIEW_NAME) {
-        const { pageName } = properties
-        if (pageName) {
-            return pageName
-        }
-        return MYHOME
-    }
-
-    // The title of a folder that acts as a root to a wiki
-    if (properties.wikiRoot) return name
-
-    return name.substr(0, name.length - EXTLENGTH)
+    return file?.title || ''
 }
 
 export function getExtFromFileName(filename) {

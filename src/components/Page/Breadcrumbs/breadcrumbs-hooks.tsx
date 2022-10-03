@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { useEffect, useGlobal, useState } from 'reactn'
 import { IFile, IFileOrNull } from 'reactn/default'
 
-import { getChildren, getMetaById, getParents } from './Breadcrumbs-helper'
+import { getChildren, getMetaById } from './Breadcrumbs-helper'
 
 export const useBreadcrumbs = fileId => {
     const [files] = useGlobal('initialFiles')
@@ -19,20 +19,16 @@ export const useBreadcrumbs = fileId => {
     }, [fileId, files])
 
     useEffect(() => {
-        if (file && files.length > 0) {
-            //@ts-ignore
-            _.thread(
-                file,
-                [getParents, files],
-                [
-                    _.map,
-                    el => ({
-                        file: el,
-                        children: getChildren(el, files),
-                    }),
-                ],
-                setParents
-            )
+        const parentFile = getMetaById(_.get(file, 'parentId', ''), files)
+        if (parentFile && files.length > 0) {
+            setParents([
+                {
+                    file: parentFile,
+                    children: getChildren(parentFile, files).filter(
+                        child => child.id !== file?.id
+                    ),
+                },
+            ])
         }
     }, [file, files])
 

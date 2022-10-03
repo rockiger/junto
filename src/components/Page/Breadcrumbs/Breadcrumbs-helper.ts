@@ -1,11 +1,6 @@
 //@ts-nocheck
 import { IFile, IFileOrNull } from 'reactn/default'
-import { EXT, FOLDER_NAME, OVERVIEW_NAME } from 'lib/constants'
-import {
-    getMetaById,
-    isArchived,
-    isWikiRootFolder as isWikiRoot,
-} from 'lib/helper'
+import { getMetaById } from 'lib/helper'
 
 export { getMetaById, getParents, getBreadcrumbName }
 /**
@@ -16,13 +11,12 @@ export { getMetaById, getParents, getBreadcrumbName }
  * @param files the list of files where the parents are retrieved from
  * @returns the list of parents ordered with the farthest parent first
  */
-function getParents(file: IFileOrNull, files: Array<IFile>): Array<IFile> {
+function getParents(file: IFileOrNull, files: Array<IFile>): IFile {
     // The overview of a wiki shouldn't have a parent
-    if (!file || file.title === OVERVIEW_NAME || !file.parents) return []
-    const parentFolder = getMetaById(file.parents[0], files)
-    const parentFile = getBreadcrumbName(parentFolder, files)
-    if (!parentFolder || !parentFile) return []
-    return [...getParents(parentFolder, files), parentFile]
+    if (!file?.parentId) return []
+    const parentFile = getMetaById(file.parentId, files)
+    if (!parentFile) return []
+    return [parentFile]
 }
 
 /**
@@ -35,49 +29,11 @@ function getParents(file: IFileOrNull, files: Array<IFile>): Array<IFile> {
  */
 function getBreadcrumbName(folder: IFileOrNull, files: Array<IFile>) {
     if (!folder) return null
-    if (isPersonalRoot(folder)) {
-        return findPersonalWikiRootFile(files, folder)
-    }
-    if (isWikiRoot(folder)) {
-        return findWikiRootFile(files, folder)
-    }
-    const result = findWikiFile(files, folder)
-    // if the folder doesn't have a corresponding file, it must be
-    // a root folder
-    return result ? result : folder
-}
-
-function findWikiFile(files: IFile[], folder: IFile) {
-    return files.find(el => el.id === folder.name)
-}
-
-function findWikiRootFile(files: IFile[], folder: IFile) {
-    const result = files.find(
-        el =>
-            el.name === OVERVIEW_NAME &&
-            el.parents.includes(folder.id) &&
-            el.properties &&
-            el.properties.pageName === folder.name
-    )
-    return result
-}
-
-function findPersonalWikiRootFile(files: IFile[], folder: IFile) {
-    const result = files.find(
-        el => el.name === OVERVIEW_NAME && el.parents.includes(folder.id)
-    )
-    return result
-}
-
-function isPersonalRoot(folder: IFile) {
-    return folder.name === FOLDER_NAME
+    return folder
 }
 
 export function getChildren(parent: IFile, files: IFile[]) {
-    const folderId = getParentFolderId(parent, files)
-    return filterChildFiles(folderId, files).filter(el =>
-        shouldFileDisplay(el, folderId)
-    )
+    return files.filter(el => el.parentId === parent.id)
 }
 
 /**
@@ -101,15 +57,15 @@ export function getParentFolderId(file, files) {
 
 /**
  *
- * @param {string} folderId
+ * @param {string} parentId
  * @param {any[]} files
  * @returns {any[]}
  */
-export function filterChildFiles(folderId, files) {
-    if (folderId)
+export function filterChildFiles(parentId, files) {
+    if (parentId)
         return files.filter(file => {
             try {
-                return file.parents && file.parents.includes(folderId)
+                return file.parentId === parentId
             } catch (err) {
                 console.error(err)
                 console.log(file)
@@ -125,16 +81,7 @@ export function filterChildFiles(folderId, files) {
  * @param {string} parentId
  */
 export function shouldFileDisplay(file, parentId) {
-    const { mimeType, name, parents, trashed } = file
-    return (
-        mimeType === 'application/json' &&
-        name !== OVERVIEW_NAME &&
-        name.endsWith(EXT) &&
-        parents &&
-        parents.includes(parentId) &&
-        trashed === false &&
-        !isArchived(file)
-    )
+    return file.parentId === parentId
 }
 
 export function sortFilesByName(files) {
