@@ -1,3 +1,5 @@
+import Image from '@tiptap/extension-image'
+import Link from '@tiptap/extension-link'
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { isHotkey } from 'is-hotkey'
@@ -31,11 +33,20 @@ export default function Page() {
     const editor = useEditor({
         content: page?.body,
         editable: false,
-        extensions: [StarterKit],
+        extensions: [StarterKit, Image, Link],
     })
 
     window.editor = editor
     /* Callbacks */
+
+    const addImage = () => {
+        const url = window.prompt('URL')
+
+        if (url) {
+            editor.chain().focus().setImage({ src: url }).run()
+        }
+    }
+
     const onBlurInput = useCallback(() => {
         if (!pageHead) {
             setPageHead(UNTITLEDNAME)
@@ -81,6 +92,31 @@ export default function Page() {
         ev.stopPropagation()
     }, [])
 
+    const setLink = useCallback(() => {
+        const previousUrl = editor.getAttributes('link').href
+        const url = window.prompt('URL', previousUrl)
+
+        // cancelled
+        if (url === null) {
+            return
+        }
+
+        // empty
+        if (url === '') {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run()
+
+            return
+        }
+
+        // update link
+        editor
+            .chain()
+            .focus()
+            .extendMarkRange('link')
+            .setLink({ href: url })
+            .run()
+    }, [editor])
+
     /**
      * Set shortcuts
      */
@@ -99,6 +135,14 @@ export default function Page() {
                             variables: { id, body: editor.getHTML() },
                         })
                     }
+                } else if (editor?.isEditable && isHotkey('mod+b')(ev)) {
+                    ev.stopPropagation()
+                    ev.preventDefault()
+                    setLink()
+                } else if (editor?.isEditable && isHotkey('mod+i')(ev)) {
+                    ev.stopPropagation()
+                    ev.preventDefault()
+                    addImage()
                 } else if (!editor?.isEditable && ev.key === 'e') {
                     ev.stopPropagation()
                     ev.preventDefault()
@@ -116,7 +160,7 @@ export default function Page() {
                 window.removeEventListener('keydown', onKeyDown)
             }
         }
-    }, [editor, id, page?.body, updateFile])
+    }, [editor, id, page?.body, setLink, updateFile])
 
     /**
      * Set the contentent of the editor

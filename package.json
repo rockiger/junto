@@ -7,6 +7,8 @@
         "@material-ui/core": "^4.11.4",
         "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.58",
+        "@tiptap/extension-image": "^2.0.0-beta.199",
+        "@tiptap/extension-link": "^2.0.0-beta.199",
         "@tiptap/react": "^2.0.0-beta.199",
         "@tiptap/starter-kit": "^2.0.0-beta.199",
         "@types/jest": "^26.0.23",
