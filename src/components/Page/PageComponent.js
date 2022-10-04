@@ -1,9 +1,13 @@
+import { EditorContent } from '@tiptap/react'
 import { FlexInput } from 'components/FlexInput'
 import { Spinner } from 'components/gsuite-components'
+import { Hint } from 'components/gsuite-components/hint'
+import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
 import { UNTITLEDNAME } from 'lib/constants'
 import React from 'react'
 import { BreadcrumbsBar } from './Breadcrumbs'
 import s from './Page.module.scss'
+import './Editor.scss'
 
 /**
  * @param {{editorRef, titleInputRef}} ref A ref-object {editorRef, titleInputRef} with two references!
@@ -11,6 +15,7 @@ import s from './Page.module.scss'
 const PageContainer = React.forwardRef(
     (
         {
+            editor,
             error,
             isLoading,
             onBlurInput,
@@ -53,7 +58,22 @@ const PageContainer = React.forwardRef(
                                 />
                             </BreadcrumbsBar>
                         </h1>
-                        <div>{page.body}</div>
+                        <div>
+                            <PageButtons>
+                                <Hint id="edit_page" scope="wiki_page">
+                                    <ToggleReadOnlyButton
+                                        readOnly={!editor?.isEditable}
+                                        onClick={() => {
+                                            editor.setEditable(
+                                                !editor.isEditable
+                                            )
+                                            editor.commands.focus()
+                                        }}
+                                    ></ToggleReadOnlyButton>
+                                </Hint>
+                            </PageButtons>
+                            <EditorContent editor={editor} />
+                        </div>
                     </div>
                 </div>
             </>
