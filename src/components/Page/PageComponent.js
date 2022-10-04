@@ -19,6 +19,7 @@ const PageContainer = React.forwardRef(
             error,
             isLoading,
             onBlurInput,
+            onClickToggleButton,
             onChangeInput,
             onKeyDownInput,
             page,
@@ -63,12 +64,7 @@ const PageContainer = React.forwardRef(
                                 <Hint id="edit_page" scope="wiki_page">
                                     <ToggleReadOnlyButton
                                         readOnly={!editor?.isEditable}
-                                        onClick={() => {
-                                            editor.setEditable(
-                                                !editor.isEditable
-                                            )
-                                            editor.commands.focus()
-                                        }}
+                                        onClick={onClickToggleButton}
                                     ></ToggleReadOnlyButton>
                                 </Hint>
                             </PageButtons>

@@ -47,14 +47,14 @@ export const CREATE_FULCRUM_PAGE = gql`
     mutation createFulcrumPage(
         $spaceId: ID!
         $title: String
-        $content: String
+        $body: String
         $parentId: ID
     ) {
         createFulcrumPage(
             input: {
                 fulcrumSpaces: { nodes: { id: $spaceId } }
                 title: $title
-                content: $content
+                content: $body
                 parentId: $parentId
             }
         ) {
@@ -336,7 +336,7 @@ export async function fetchPages() {
 
 export const UPDATE_FULCRUM_PAGE = gql`
     mutation UpdateFulcrumPage(
-        $content: String
+        $body: String
         $id: ID!
         $parentId: ID
         $spaceId: ID
@@ -344,7 +344,7 @@ export const UPDATE_FULCRUM_PAGE = gql`
     ) {
         updateFulcrumPage(
             input: {
-                content: $content
+                content: $body
                 fulcrumSpaces: { nodes: { id: $spaceId } }
                 id: $id
                 parentId: $parentId
