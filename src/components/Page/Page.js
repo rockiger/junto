@@ -1,5 +1,7 @@
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { isHotkey } from 'is-hotkey'
@@ -33,7 +35,15 @@ export default function Page() {
     const editor = useEditor({
         content: page?.body,
         editable: false,
-        extensions: [StarterKit, Image, Link],
+        extensions: [
+            StarterKit,
+            Image,
+            Link,
+            TaskList,
+            TaskItem.configure({
+                nested: true,
+            }),
+        ],
     })
 
     window.editor = editor
