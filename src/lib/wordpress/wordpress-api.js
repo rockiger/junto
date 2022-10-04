@@ -147,10 +147,10 @@ export const GET_FULCRUM_PAGE = gql`
                 }
             }
             content
-            dateGmt
+            date
             excerpt
             id
-            modifiedGmt
+            modified
             parentId
             status
             title
@@ -164,9 +164,9 @@ export const normalizeFetchPageData = data => {
         author,
         content,
         excerpt,
-        dateGmt,
+        date,
         id,
-        modifiedGmt,
+        modified,
         parentId,
         status,
         title,
@@ -181,12 +181,12 @@ export const normalizeFetchPageData = data => {
             name: firstName || nickname || nicename || name,
         },
         body: content || '',
-        created: dateGmt,
+        created: date,
         excerpt,
         id,
         isOverview,
         isStarred,
-        modified: modifiedGmt,
+        modified: modified,
         parentId,
         status,
         title,
@@ -220,10 +220,10 @@ export const GET_FULCRUM_PAGES = gql`
                     }
                 }
                 content
-                dateGmt
+                date
                 excerpt
                 id
-                modifiedGmt
+                modified
                 parentId
                 status
                 title
@@ -247,10 +247,10 @@ export const GET_FULCRUM_PAGES = gql`
                     }
                 }
                 content
-                dateGmt
+                date
                 excerpt
                 id
-                modifiedGmt
+                modified
                 parentId
                 status
                 title
@@ -274,10 +274,10 @@ export const GET_FULCRUM_PAGES = gql`
                     }
                 }
                 content
-                dateGmt
+                date
                 excerpt
                 id
-                modifiedGmt
+                modified
                 parentId
                 status
                 title
@@ -290,13 +290,13 @@ export async function fetchPages() {
     function rewriteNodes(nodes) {
         return nodes.map(node => {
             const {
-                acfFulcrumPage,
+                acfFulcrumPage = {},
                 author,
                 content,
                 excerpt,
-                dateGmt,
+                date,
                 id,
-                modifiedGmt,
+                modified,
                 parentId,
                 status,
                 title,
@@ -311,12 +311,12 @@ export async function fetchPages() {
                     name: firstName || nickname || nicename || name,
                 },
                 body: content || '',
-                created: dateGmt,
+                created: date,
                 excerpt,
                 id,
                 isOverview,
                 isStarred,
-                modified: modifiedGmt,
+                modified: modified,
                 parentId,
                 status,
                 title,
@@ -352,7 +352,7 @@ export const UPDATE_FULCRUM_PAGE = gql`
             }
         ) {
             fulcrumPage {
-                modifiedGmt
+                modified
             }
         }
     }
