@@ -3,10 +3,10 @@ import React from 'react'
 
 import s from './style-helpers.module.scss'
 
-export { HStack, Wikir, VStack }
+export { HStack, Spacer, VStack }
 
-function Wikir() {
-    return <div className={s.Wikir}></div>
+function Spacer() {
+    return <div className={s.Spacer}></div>
 }
 
 function HStack({ children }) {
