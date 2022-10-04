@@ -1,65 +1,6 @@
 @import 'static/styles/_palette.scss';
 @import 'static/styles/_breakpoints.scss';
 
-html,
-body {
-    border: none;
-    margin: 0;
-    padding: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-input,
-p,
-blockquote,
-address,
-big,
-cite,
-code,
-em,
-font,
-img,
-small,
-strike,
-sub,
-sup,
-li,
-ol,
-ol li,
-ul,
-ul li,
-fieldset,
-form,
-label,
-legend,
-button,
-table,
-caption,
-tr,
-th,
-td {
-    border: none;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    letter-spacing: inherit;
-    line-height: inherit;
-    margin: 0;
-    padding: 0;
-    text-align: inherit;
-    text-transform: inherit;
-}
-
-blockquote::before,
-blockquote::after {
-    content: '';
-}
-
 html {
     box-sizing: border-box;
 }
@@ -77,6 +18,7 @@ body {
         Avenir Next, Avenir, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
     font-weight: 400;
     line-height: 1.43;
     letter-spacing: 0.2px;
