@@ -1,5 +1,7 @@
+/* global reactPress */
 import { IFile, State } from 'reactn/default'
 import { OVERVIEW_NAME } from 'lib/constants'
+import { addHours } from 'date-fns'
 
 export {
     filesUpdater,
@@ -22,7 +24,7 @@ type IGlobalState = State
  * Interp. as the change to a files meta data.
  * Change should consist of properties from IFile.
  */
-type IChange = {
+export type IChange = {
     id?: string
     mimeType?: 'application/vnd.google-apps.folder' | 'application/json'
     name?: string
@@ -58,12 +60,18 @@ const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
 const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
     return files.map(item => {
         if (item.id === id) {
-            const now = new Date().toISOString()
+            const now = addHours(
+                new Date(),
+                //@ts-ignore offset the server time because wordpress doesn't has modifiedGmt on drafts
+                window.reactPress.gmt_offset
+            )
+                .toISOString()
+                // To have the same format as WordPress and make dates comparable
+                .slice(0, -5)
             return {
                 ...item,
                 ...change,
-                modifiedByMeTime: now,
-                modifiedTime: now,
+                modified: now,
             }
         } else {
             return item
