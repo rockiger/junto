@@ -1,7 +1,5 @@
 // @ts-check
 
-import { useDispatch } from 'reactn'
-import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { Chip } from '@material-ui/core'
@@ -12,9 +10,8 @@ import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalVariantIcon'
 import StarIcon from 'mdi-react/StarIcon'
 
-import { Wikir, Spinner } from 'components/gsuite-components'
-import { EXT } from 'lib/constants'
-import { getTitleFromFile, sortByDate } from 'lib/helper'
+import { Spacer, Spinner } from 'components/gsuite-components'
+import { getTitleFromFile } from 'lib/helper'
 import { ButtonMenu } from 'components/ButtonMenu'
 import { isArchived } from 'lib/helper'
 
@@ -22,12 +19,12 @@ import s from './file-list.module.scss'
 import { EmptyPlaceholder } from './EmptyPlaceHolder'
 
 /** @typedef {import('reactn/default').IFile} File */
-/** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
+/** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime' | 'modified' } SortBy */
 
 /**
  * @typedef {object} Props
+ * @prop {any} classes
  * @prop {File[]} files
- * @prop {SortBy} sortBy
  *
  */
 
@@ -36,78 +33,57 @@ import { EmptyPlaceholder } from './EmptyPlaceHolder'
  * @param {Props} props
  */
 const FileListPartial = props => {
-    const { files, sortBy } = props
-    const clearSearch = useDispatch('clearSearch')
-    const classes = useStyles()
+    const { files, classes } = props
+    const clearSearch = () => {} //! useDispatch('clearSearch')
     return (
         <List className="filelist-list">
-            {files
-                .filter(file => {
-                    return shouldFileDisplay(file)
-                })
-                .sort((file1, file2) => {
-                    let result
-
-                    if (sortBy === 'viewedByMeTime') {
-                        result = sortByDate(
-                            file1.viewedByMeTime,
-                            file2.viewedByMeTime
-                        )
-                    } else {
-                        result = sortByDate(
-                            file1.modifiedByMeTime,
-                            file2.modifiedByMeTime
-                        )
-                    }
-                    return result
-                })
-                .map(file => {
-                    const filename = getTitleFromFile(file)
-                    //! next
-                    return (
-                        <ListItem className={classes.listitem} key={file.id}>
-                            <Link
-                                className={classes.link}
-                                onClick={() => clearSearch()}
-                                style={{ color: '#3c4043' }}
-                                to={`/page/${file.id}`}
+            {files.map(file => {
+                const filename = getTitleFromFile(file)
+                //! next
+                return (
+                    <ListItem className={classes.listitem} key={file.id}>
+                        <Link
+                            className={classes.link}
+                            onClick={() => clearSearch()}
+                            style={{ color: '#3c4043' }}
+                            to={`/page/${file.id}`}
+                        >
+                            <ListItemIcon
+                                style={{ color: '#4285f4' }}
+                                className={classes.icon}
                             >
-                                <ListItemIcon
-                                    style={{ color: '#4285f4' }}
-                                    className={classes.icon}
-                                >
-                                    <FileDocumentIcon />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={
-                                        <>
-                                            {filename}{' '}
-                                            {isArchived(file) && (
-                                                <Chip
-                                                    label="archived"
-                                                    size="small"
-                                                />
-                                            )}
-                                        </>
-                                    }
-                                />
-                                {file.starred && (
-                                    <StarIcon style={{ color: '#fbbc05' }} />
-                                )}
-                            </Link>
-                        </ListItem>
-                    )
-                })}
+                                <FileDocumentIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={
+                                    <>
+                                        {filename}{' '}
+                                        {isArchived(file) && (
+                                            <Chip
+                                                label="archived"
+                                                size="small"
+                                            />
+                                        )}
+                                    </>
+                                }
+                            />
+                            {file.isStarred && (
+                                <StarIcon style={{ color: '#fbbc05' }} />
+                            )}
+                        </Link>
+                    </ListItem>
+                )
+            })}
         </List>
     )
 }
 
-const PeriodList = ({ files, headline, sortBy }) => {
+const PeriodList = ({ classes, files, headline }) => {
     if (files.length > 0) {
         return (
             <>
                 <div className={s.FileList_tagline}>{headline}</div>
-                <FileListPartial files={files} sortBy={sortBy} />
+                <FileListPartial classes={classes} files={files} />
             </>
         )
     } else {
@@ -115,74 +91,41 @@ const PeriodList = ({ files, headline, sortBy }) => {
     }
 }
 
-/**
- *
- * @param {{files: File[], sortBy: SortBy}} param0
- */
-
-const Periods = ({ files, sortBy }) => {
-    const createFilter = (older, younger = new Date()) => {
-        return file => {
-            // @ts-ignore
-            const date = parseInt(Date.parse(file[sortBy]))
-
-            return (
-                date > parseInt(older.getTime()) &&
-                // @ts-ignore
-                date < parseInt(younger.getTime())
-            )
-        }
-    }
-
-    const newTimeBorder = (daysBack = 0) => {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        today.setDate(today.getDate() - daysBack)
-        return new Date(today.getTime())
-    }
-
-    const today = newTimeBorder()
-    const todayFilter = createFilter(today)
-    const todayFiles = files.filter(todayFilter)
-
-    const yesterday = newTimeBorder(1)
-    const yesterdayFilter = createFilter(yesterday, today)
-    const yesterdayFiles = files.filter(yesterdayFilter)
-
-    const lastWeek = newTimeBorder(7)
-    const lastWeekFilter = createFilter(lastWeek, yesterday)
-    const lastWeekFiles = files.filter(lastWeekFilter)
-
-    const lastMonth = newTimeBorder(30)
-    const lastMonthFilter = createFilter(lastMonth, lastWeek)
-    const lastMonthFiles = files.filter(lastMonthFilter)
-
-    const earlier = new Date(0) // 1970
-    const earlierFilter = createFilter(earlier, lastMonth)
-    const earlierFiles = files.filter(earlierFilter)
+const Periods = ({
+    classes,
+    filePeriods: {
+        todayFiles,
+        yesterdayFiles,
+        lastWeekFiles,
+        lastMonthFiles,
+        earlierFiles,
+    },
+    sortBy,
+}) => {
+    console.log('Periods')
 
     return (
         <>
-            <PeriodList files={todayFiles} headline="Today" sortBy={sortBy} />
+            <PeriodList classes={classes} files={todayFiles} headline="Today" />
             <PeriodList
+                classes={classes}
                 files={yesterdayFiles}
                 headline="Yesterday"
-                sortBy={sortBy}
             />
             <PeriodList
+                classes={classes}
                 files={lastWeekFiles}
                 headline="Previous 7 Days"
-                sortBy={sortBy}
             />
             <PeriodList
+                classes={classes}
                 files={lastMonthFiles}
                 headline="Previous 30 Days"
-                sortBy={sortBy}
             />
             <PeriodList
+                classes={classes}
                 files={earlierFiles}
                 headline="Earlier"
-                sortBy={sortBy}
             />
         </>
     )
@@ -190,15 +133,15 @@ const Periods = ({ files, sortBy }) => {
 
 /**
  * @typedef {object} FileListComponentProps
- * @property {MdiReactIconComponentType} [emptyIcon]
+ * @property {any} [emptyIcon]
  * @prop {string} [emptyMessage]
  * @prop {string} [emptySubline]
- * @prop {File[]} files
+ * @prop {{todayFiles: File[], yesterdayFiles: File[], lastWeekFiles: File[], lastMonthFiles: File[], earlierFiles: File[]}} filePeriods
  * @prop {boolean} [isLoading]
  * @prop {boolean} [isScrollable]
  * @prop {SortBy} sortBy
  * @prop {string} searchTerm
- * @prop {function} setSortBy
+ * @prop {function | undefined} setSortBy
  * @prop {string} [title]
  * @prop {'h1'|'h2'|'h3'|'h4'|'h5'|'h6'} [header]
  */
@@ -211,7 +154,7 @@ const FileListComponent = props => {
         emptyIcon,
         emptyMessage,
         emptySubline,
-        files,
+        filePeriods,
         header,
         searchTerm,
         setSortBy,
@@ -224,14 +167,16 @@ const FileListComponent = props => {
             searchTerm ? 'Search Result' : title
         } – Fulcrum.wiki`
     }
+    const classes = useStyles()
+
     return (
         <div className="filelist">
             <div className={s.FileList_header}>
                 {title && (
                     <Header className={s.FileList_header_title}>{title}</Header>
                 )}
-                <Wikir />
-                {!_.isEmpty(files) && setSortBy && (
+                <Spacer />
+                {isEmptyFilePeriods(filePeriods) && setSortBy && (
                     <div className={s.FileList_header_buttons}>
                         <strong
                             className={s.sortCriteria}
@@ -272,13 +217,18 @@ const FileListComponent = props => {
                 {/* 
                 // @ts-ignore */}
                 {props.isLoading && <Spinner />}
-                {!props.isLoading &&
-                    _.map(files, f => <div key={f.id}>{f.title}</div>)}
-                {files.length === 0 && !props.isLoading && (
+                {isEmptyFilePeriods(filePeriods) && !props.isLoading && (
                     <EmptyPlaceholder
                         icon={emptyIcon}
                         subline={emptySubline}
                         title={emptyMessage}
+                    />
+                )}
+                {!props.isLoading && !isEmptyFilePeriods(filePeriods) && (
+                    <Periods
+                        classes={classes}
+                        filePeriods={filePeriods}
+                        sortBy={sortBy}
                     />
                 )}
             </div>
@@ -310,6 +260,10 @@ const FileListComponent = props => {
 }
 export default FileListComponent
 
+function isEmptyFilePeriods(filePeriods) {
+    return _.every(_.values(filePeriods), _.isEmpty)
+}
+
 function useStyles() {
     const useStyles = makeStyles(theme => {
         return {
@@ -330,16 +284,4 @@ function useStyles() {
         }
     })
     return useStyles()
-}
-
-/**
- * @param {File} file
- */
-function shouldFileDisplay(file) {
-    const { mimeType, name, trashed } = file
-    return (
-        mimeType === 'application/json' &&
-        name.endsWith(EXT) &&
-        trashed === false
-    )
 }

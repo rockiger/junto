@@ -11,7 +11,7 @@ import {
     updateFile as updateFileBase,
     updateMetadata as updateMetadataBase,
 } from 'lib/gdrive'
-import { filesUpdater } from 'lib/helper'
+import { filesUpdater, IChange } from 'lib/helper'
 import {
     fetchPage,
     fetchPages,
@@ -22,7 +22,7 @@ import {
     updatePage,
     UPDATE_FULCRUM_PAGE,
 } from 'lib/wordpress'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import {
     gql,
     MutationHookOptions,
@@ -207,5 +207,23 @@ export const useGetPage = (options: QueryHookOptions = {}) => {
 }
 
 export const useUpdatePage = (options: MutationHookOptions = {}) => {
-    return useMutation(UPDATE_FULCRUM_PAGE, options)
+    const [mutate, ...rest] = useMutation(UPDATE_FULCRUM_PAGE, options)
+
+    const updateFile = useCallback(
+        options => {
+            const updatedFiles = filesUpdater(
+                options.variables,
+                getGlobal(),
+                //@ts-ignore
+                options?.variables?.id
+            )
+            setGlobal({
+                files: updatedFiles.files,
+                initialFiles: updatedFiles.initialFiles,
+            })
+            return mutate(options)
+        },
+        [mutate]
+    )
+    return [updateFile, ...rest] as const
 }

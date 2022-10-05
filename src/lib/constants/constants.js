@@ -23,7 +23,7 @@ export const FOLDER_NAME = 'Fulcrum Documents'
 export const LOCALSTORAGE_NAME = 'junto-content-xlc'
 export const MYHOME = 'My Wiki'
 export const OVERVIEW_NAME = '_myDrive_overview_please_do_not_touch' + EXT
-export const UNTITLEDNAME = 'Untitled page'
+export const UNTITLEDNAME = '(no title)'
 export const UNTITLEDFILE = UNTITLEDNAME + EXT
 
 export const DEFAULTVALUE = {}
