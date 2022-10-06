@@ -7,7 +7,7 @@ import { getPageId, getParentFolderId, isPage } from '../../Sidebar-helper'
 import { SidebarTreeLinkComponent } from './SidebarTreeLink-component'
 import { useStyles } from './SidebarTreeLink-styles'
 export function SidebarTreeLink(props) {
-    const { isExpanded, label, level, pageId, parentId, setExpanded } = props
+    const { isExpanded, label, level, pageId, hasChildren, setExpanded } = props
 
     const clearSearch = useDispatch('clearSearch')
     const [initialFiles] = useGlobal('initialFiles')
@@ -25,7 +25,7 @@ export function SidebarTreeLink(props) {
         ev.preventDefault(ev)
 
         setIsCreatingNewFile(true)
-        let parentFolderIdOfNewFile = parentId
+        let parentFolderIdOfNewFile = pageId
         try {
             // check if the current page has already a folder for child
             // pages, if not create a new one.
@@ -33,7 +33,7 @@ export function SidebarTreeLink(props) {
                 const parentFolderId = getParentFolderId(pageId, initialFiles)
                 parentFolderIdOfNewFile = await createNewWiki({
                     name: pageId,
-                    parentId: parentFolderId,
+                    parentId: pageId,
                     isWikiRoot: false,
                 })
             }
@@ -87,7 +87,7 @@ export function SidebarTreeLink(props) {
                 padding: 0,
             }}
             pageId={pageId}
-            parentId={parentId}
+            hasChildren={hasChildren}
             showAddButton={showAddButton}
         />
     )

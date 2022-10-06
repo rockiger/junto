@@ -1,12 +1,8 @@
 import React, { useGlobal } from 'reactn'
-import { OVERVIEW_NAME } from 'lib/constants'
 
-import FolderIcon from 'mdi-react/FolderOutlineIcon'
 import { useStyles } from '../SidebarTree/SidebarTree-styles'
-import { getTitleFromFile, isArchived } from 'lib/helper'
-import { filterWikis, sortWikisBy } from 'components/wiki-list'
-import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
-import { SidebarItem } from '../SidebarItem'
+import { sortWikisBy } from 'components/wiki-list'
+import { SidebarTreeItem } from '../SidebarTree/SidebarTreeItem'
 
 export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
@@ -22,16 +18,17 @@ export function SidebarSharedDrives() {
                         '->>',
                         wikis,
                         //! filterIsNotArchived,
-                        //! [sortWikisBy, 'name'],
+                        [sortWikisBy, 'name'],
                         [
                             map,
                             wiki => (
-                                <SidebarItem
+                                <SidebarTreeItem
+                                    expand={true}
                                     key={wiki.id}
-                                    icon={FolderIcon}
-                                    name={wiki.name}
-                                    path={`/page/${wiki.id}`}
-                                    tooltip="Your starred pages"
+                                    initialFiles={initialFiles}
+                                    label={wiki.name}
+                                    level={0}
+                                    pageId={wiki.overviewPage}
                                 />
                             ),
                         ]
@@ -40,28 +37,6 @@ export function SidebarSharedDrives() {
             </li>
         </ul>
     )
-}
-// sortWikisBy(orderBy, filterWikis(files))
-
-// eslint-disable-next-line no-unused-vars
-function filterSharedDrives(files) {
-    return files.filter(
-        file =>
-            file.title === OVERVIEW_NAME &&
-            file.properties &&
-            file.properties.pageName &&
-            file.parents[0] &&
-            isParentFolderNotDeleted(file, files) &&
-            !isArchived(file)
-        // file.teamDriveId
-        // TODO && parent[0] is
-    )
-}
-
-function isParentFolderNotDeleted(childFile, files) {
-    const parentId = childFile.parents[0]
-    const parents = files.filter(file => file.id === parentId)
-    return parents[0] && parents[0].trashed === false
 }
 
 /**

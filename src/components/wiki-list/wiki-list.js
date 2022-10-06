@@ -3,7 +3,6 @@ import { useGlobal } from 'reactn'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { format } from 'date-fns'
-import { sortBy } from 'lodash'
 
 import { EmptyPlaceholder } from 'components/Home/FileList/EmptyPlaceHolder'
 import { Card, CardHeader, Spinner } from 'components/gsuite-components'
@@ -78,23 +77,12 @@ export function filterWikis(files) {
 
 /**
  *
- * @param {'date'|'name'} attr
+ * @param {'date'|'name'} sortBy
  * @param {import('reactn/default').IFile[]} files
  * @returns {import('reactn/default').IFile[]}
  */
-export function sortWikisBy(attr = 'name', files) {
-    if (attr === 'name') {
-        return sortBy(files, file =>
-            file.properties && file.properties.pageName
-                ? file.properties.pageName
-                : 'My Wiki'
-        )
-    } else {
-        return sortBy(
-            files,
-            file => file.viewedByMeTime || file.modifiedTime
-        ).reverse()
-    }
+export function sortWikisBy(sortBy = 'name', files) {
+    return _.sortBy(files, file => file[sortBy])
 }
 
 // eslint-disable-next-line no-unused-vars

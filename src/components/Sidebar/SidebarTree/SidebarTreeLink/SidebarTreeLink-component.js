@@ -22,7 +22,7 @@ export function SidebarTreeLinkComponent(props) {
         onMouseLeave,
         openButtonStyle,
         pageId,
-        parentId,
+        hasChildren,
         showAddButton,
     } = props
 
@@ -35,7 +35,7 @@ export function SidebarTreeLinkComponent(props) {
             to={`/page/${pageId}`}
             style={linkStyle}
         >
-            {parentId ? (
+            {hasChildren ? (
                 <IconButton
                     aria-label="open"
                     onClick={onClickTreeButton}

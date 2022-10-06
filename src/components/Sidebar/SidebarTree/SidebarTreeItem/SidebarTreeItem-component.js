@@ -8,12 +8,13 @@ import { getTitleFromFile } from '../../../../lib/helper'
 export function SidebarTreeItemComponent(props) {
     const {
         classes,
+        childFiles,
         initialFiles,
         label,
         isExpanded,
         level,
         pageId,
-        parentId,
+        hasChildren,
         setExpanded,
     } = props
     return (
@@ -23,27 +24,21 @@ export function SidebarTreeItemComponent(props) {
                 label={label}
                 level={level}
                 pageId={pageId}
-                parentId={parentId}
+                hasChildren={hasChildren}
                 setExpanded={setExpanded}
             />
-            {isExpanded && initialFiles && (
+            {isExpanded && childFiles && (
                 <ul className={classes.ul}>
-                    {initialFiles.map(file => {
-                        const folderId = getFolderId(file.id, initialFiles)
-                        if (shouldFileDisplay(file, parentId)) {
-                            return (
-                                <SidebarTreeItem
-                                    initialFiles={initialFiles}
-                                    key={file.id}
-                                    label={getTitleFromFile(file)}
-                                    level={level + 1}
-                                    pageId={file.id}
-                                    parentId={folderId}
-                                />
-                            )
-                        }
-                        return null
-                    })}
+                    {childFiles.map(file => (
+                        <SidebarTreeItem
+                            initialFiles={initialFiles}
+                            key={file.id}
+                            label={getTitleFromFile(file)}
+                            level={level + 1}
+                            pageId={file.id}
+                            parentId={file.parentId}
+                        />
+                    ))}
                 </ul>
             )}
         </li>
