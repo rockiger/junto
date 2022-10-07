@@ -42,55 +42,46 @@ function FileList({
 
     useEffect(() => PageView(), [])
 
-    const sorter = useMemo(() => createSorter(sortBy), [sortBy])
-    const sortedFiles = useMemo(() => files.sort(sorter), [files, sorter])
+    const filePeriods = useMemo(() => {
+        console.log('filePeriods', files, sortBy)
+        if (_.isEmpty(files)) {
+            return {
+                todayFiles: [],
+                yesterdayFiles: [],
+                lastWeekFiles: [],
+                lastMonthFiles: [],
+                earlierFiles: [],
+            }
+        }
+        const sorter = createSorter(sortBy)
+        const sortedFiles = files.sort(sorter)
+        const today = newTimeBorder()
+        const todayFilter = createFilter(today)
+        const todayFiles = sortedFiles.filter(todayFilter)
 
-    const today = useMemo(() => newTimeBorder(), [])
-    const todayFilter = useMemo(() => createFilter(today), [today])
-    const todayFiles = useMemo(() => sortedFiles.filter(todayFilter), [
-        sortedFiles,
-        todayFilter,
-    ])
+        const yesterday = newTimeBorder(1)
+        const yesterdayFilter = createFilter(yesterday, today)
+        const yesterdayFiles = sortedFiles.filter(yesterdayFilter)
 
-    const yesterday = useMemo(() => newTimeBorder(1), [])
-    const yesterdayFilter = useMemo(() => createFilter(yesterday, today), [
-        yesterday,
-        today,
-    ])
-    const yesterdayFiles = useMemo(() => sortedFiles.filter(yesterdayFilter), [
-        sortedFiles,
-        yesterdayFilter,
-    ])
+        const lastWeek = newTimeBorder(7)
+        const lastWeekFilter = createFilter(lastWeek, yesterday)
+        const lastWeekFiles = sortedFiles.filter(lastWeekFilter)
 
-    const lastWeek = useMemo(() => newTimeBorder(7), [])
-    const lastWeekFilter = useMemo(() => createFilter(lastWeek, yesterday), [
-        lastWeek,
-        yesterday,
-    ])
-    const lastWeekFiles = useMemo(() => sortedFiles.filter(lastWeekFilter), [
-        sortedFiles,
-        lastWeekFilter,
-    ])
+        const lastMonth = newTimeBorder(30)
+        const lastMonthFilter = createFilter(lastMonth, lastWeek)
+        const lastMonthFiles = sortedFiles.filter(lastMonthFilter)
 
-    const lastMonth = useMemo(() => newTimeBorder(30), [])
-    const lastMonthFilter = useMemo(() => createFilter(lastMonth, lastWeek), [
-        lastMonth,
-        lastWeek,
-    ])
-    const lastMonthFiles = useMemo(() => sortedFiles.filter(lastMonthFilter), [
-        sortedFiles,
-        lastMonthFilter,
-    ])
-
-    const earlier = useMemo(() => new Date(0), []) // 1970
-    const earlierFilter = useMemo(() => createFilter(earlier, lastMonth), [
-        earlier,
-        lastMonth,
-    ])
-    const earlierFiles = useMemo(() => sortedFiles.filter(earlierFilter), [
-        sortedFiles,
-        earlierFilter,
-    ])
+        const earlier = new Date(0) // 1970
+        const earlierFilter = createFilter(earlier, lastMonth)
+        const earlierFiles = sortedFiles.filter(earlierFilter)
+        return {
+            todayFiles,
+            yesterdayFiles,
+            lastWeekFiles,
+            lastMonthFiles,
+            earlierFiles,
+        }
+    }, [files, sortBy])
 
     return (
         <FileListComponent
@@ -101,13 +92,7 @@ function FileList({
                     : emptyMessage
             }
             emptySubline={emptySubline}
-            filePeriods={{
-                todayFiles,
-                yesterdayFiles,
-                lastWeekFiles,
-                lastMonthFiles,
-                earlierFiles,
-            }}
+            filePeriods={filePeriods}
             header={header}
             isLoading={_.isEmpty(files) && isFileListLoading}
             searchTerm={searchTerm}

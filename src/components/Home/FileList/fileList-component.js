@@ -102,8 +102,6 @@ const Periods = ({
     },
     sortBy,
 }) => {
-    console.log('Periods')
-
     return (
         <>
             <PeriodList classes={classes} files={todayFiles} headline="Today" />
