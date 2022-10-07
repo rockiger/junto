@@ -48,7 +48,6 @@ declare module 'reactn/default' {
             avatar: string // URL
             name: string
         }
-        body: string // HTML
         excerpt: string
         created: string // DATE
         id: string // ID

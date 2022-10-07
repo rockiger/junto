@@ -164,8 +164,6 @@ export default function Page() {
 
             window.addEventListener('keydown', onKeyDown)
 
-            console.log('Set shortcuts')
-
             return function cleanup() {
                 window.removeEventListener('keydown', onKeyDown)
             }
@@ -179,7 +177,6 @@ export default function Page() {
         if (page && editor) editor.commands.setContent(page?.body)
     }, [editor, page])
 
-    console.log({ editor, page })
     return (
         <PageComponent
             {...{

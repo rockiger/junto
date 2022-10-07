@@ -14,8 +14,6 @@ export function SidebarTreeItem(props) {
         [initialFiles, pageId]
     )
 
-    console.log(childFiles, label, pageId)
-
     const classes = useStyles()
 
     if (!pageId) return null

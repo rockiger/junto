@@ -60,10 +60,29 @@ export const CREATE_FULCRUM_PAGE = gql`
         ) {
             clientMutationId
             fulcrumPage {
-                id
-                title
+                acfFulcrumPage {
+                    isoverview
+                    isstarred
+                }
+                author {
+                    node {
+                        avatar {
+                            url
+                        }
+                        firstName
+                        name
+                        nicename
+                        nickname
+                    }
+                }
                 content
+                date
+                excerpt
+                id
+                modified
                 parentId
+                status
+                title
             }
         }
     }
@@ -172,8 +191,8 @@ export const normalizeFetchPageData = data => {
         title,
     } = data.fulcrumPage
     const { firstName, name, nicename, nickname } = author.node
-    const isOverview = !!acfFulcrumPage.isoverview
-    const isStarred = !!acfFulcrumPage.isstarred
+    const isOverview = !!acfFulcrumPage?.isoverview
+    const isStarred = !!acfFulcrumPage?.isstarred
 
     return {
         author: {
@@ -219,7 +238,6 @@ export const GET_FULCRUM_PAGES = gql`
                         nickname
                     }
                 }
-                content
                 date
                 excerpt
                 id
@@ -246,7 +264,6 @@ export const GET_FULCRUM_PAGES = gql`
                         nickname
                     }
                 }
-                content
                 date
                 excerpt
                 id
@@ -273,7 +290,6 @@ export const GET_FULCRUM_PAGES = gql`
                         nickname
                     }
                 }
-                content
                 date
                 excerpt
                 id
@@ -292,7 +308,6 @@ export async function fetchPages() {
             const {
                 acfFulcrumPage = {},
                 author,
-                content,
                 excerpt,
                 date,
                 id,
@@ -310,7 +325,6 @@ export async function fetchPages() {
                     avatar: node.author.node.avatar.url,
                     name: firstName || nickname || nicename || name,
                 },
-                body: content || '',
                 created: date,
                 excerpt,
                 id,

@@ -1,71 +1,46 @@
-import React from 'reactn'
+import { createPage } from 'db'
+import React, { useGlobal } from 'reactn'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { matchPath, useHistory } from 'react-router'
 
-import {
-    getPageId,
-    getParentFolderId,
-    getParentFolderIdOfNewFile,
-    isPage,
-} from './Sidebar-helper'
-import { createFile, createNewWiki } from 'db'
-import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
 import SidebarRenderer from './Sidebar-component'
 
-class Sidebar extends React.Component {
-    onClickNewButton = async ev => {
-        this.setGlobal({ isCreatingNewFile: true })
-        let parentFolderIdOfNewFile
-        console.log(isPage(this.props.location))
-        if (isPage(this.props.location)) {
-            const pageId = getPageId(this.props.location)
-            parentFolderIdOfNewFile = getParentFolderIdOfNewFile(
-                pageId,
-                this.global.initialFiles
-            )
-            if (!parentFolderIdOfNewFile) {
-                const parentFolderId = getParentFolderId(
-                    pageId,
-                    this.global.initialFiles
-                )
-                try {
-                    parentFolderIdOfNewFile = await createNewWiki({
-                        name: pageId,
-                        parentId: parentFolderId,
-                        isWikiRoot: false,
-                    })
-                } catch (err) {
-                    this.setGlobal({ isCreatingNewFile: false })
-                    console.log(err)
-                }
-            }
-        } else {
-            parentFolderIdOfNewFile = this.global.rootFolderId
-        }
+export default Sidebar
+export function Sidebar() {
+    const [wikis] = useGlobal('wikis')
+    const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
+    const history = useHistory()
+    const onClickNewButton = async ev => {
+        ev.preventDefault(ev)
 
-        try {
-            this.setGlobal({
-                goToNewFile: true,
-                searchTerm: '',
+        const title = window.prompt('New filename')
+        if (title) {
+            // We can't use hook useParams, because Sidebar compent it outside
+            // of any route.
+            const pathname = history.location.pathname
+            const match = matchPath(pathname, {
+                path: '/page/:id',
+                exact: true,
+                strict: false,
             })
-            const newFileId = await createFile(
-                UNTITLEDFILE,
-                parentFolderIdOfNewFile,
-                JSON.stringify(EMPTYVALUE)
-            )
-            this.props.history.push(`/page/${newFileId}?edit`)
-        } catch (err) {
-            this.setGlobal({ isCreatingNewFile: false })
-            console.log(err)
+            const id = match?.params?.id
+            try {
+                // create new child page
+                const page = await createPage({
+                    title: title,
+                    parentId: id || _.get(_.first(wikis), 'overviewPage'),
+                })
+                history.push(`/page/${page.id}?edit`)
+            } catch (err) {
+                setIsCreatingNewFile(false)
+                window.err = err
+                console.error(err)
+            }
         }
     }
 
-    render() {
-        return <SidebarRenderer onClickNewButton={this.onClickNewButton} />
-    }
+    return <SidebarRenderer onClickNewButton={onClickNewButton} />
 }
-
-export default withRouter(Sidebar)
 
 Sidebar.propTypes = {
     goToNewFile: PropTypes.bool,

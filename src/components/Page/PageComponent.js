@@ -27,7 +27,7 @@ const PageContainer = React.forwardRef(
         },
         ref
     ) => {
-        const { editorRef, titleInputRef } = ref
+        const { titleInputRef } = ref
 
         if (isLoading) {
             return <Spinner />

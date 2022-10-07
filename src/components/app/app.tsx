@@ -11,7 +11,7 @@ import Main from './main'
 import Sidebar from './sidebar'
 
 import styles from './app.module.scss'
-import { createPage, getFiles, getWikis } from 'db'
+import { getFiles, getWikis } from 'db'
 import { ApolloProvider } from '@apollo/client'
 import { client } from 'lib/wordpress'
 
@@ -28,12 +28,6 @@ export default function App() {
     useEffect(() => {
         getWikis()
         getFiles()
-        //@ts-ignore
-        /*  createPage({
-            spaceId: 'dGVybToxMjI=',
-            title: 'Test',
-            parentId: 'cG9zdDoxNzE0',
-        }) */
     }, [])
 
     return (

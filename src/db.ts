@@ -1,4 +1,3 @@
-/* global reactPress */
 import { getGlobal, setGlobal } from 'reactn'
 import { SimpleMap } from 'reactn/default'
 
@@ -11,20 +10,17 @@ import {
     updateFile as updateFileBase,
     updateMetadata as updateMetadataBase,
 } from 'lib/gdrive'
-import { filesUpdater, IChange } from 'lib/helper'
+import { filesUpdater } from 'lib/helper'
 import {
-    fetchPage,
     fetchPages,
     fetchSpaces,
     GET_FULCRUM_PAGE,
     normalizeFetchPageData,
     postPage,
-    updatePage,
     UPDATE_FULCRUM_PAGE,
 } from 'lib/wordpress'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
-    gql,
     MutationHookOptions,
     QueryHookOptions,
     useMutation,
@@ -166,11 +162,22 @@ export const updateMetadata = async (
 
 //@ts-ignore
 export const createPage = async vars => {
-    //! loading state
+    setGlobal({ isCreatingNewFile: true })
+    const { files, initialFiles, wikis } = getGlobal()
+    const spaceId = _.get(_.first(wikis), 'id')
+
     //@ts-ignore
-    const file = await postPage(vars)
-    return file
-    //! loadingState
+    const result = await postPage({ ...vars, spaceId })
+    console.log(result)
+    const page = normalizeFetchPageData({ fulcrumPage: result })
+
+    setGlobal({
+        backgroundUpdate: true,
+        files: _.sortBy([...files, page], ['title']),
+        initialFiles: _.sortBy([...initialFiles, page], ['title']),
+        isCreatingNewFile: false,
+    })
+    return page
 }
 
 export const getWikis = async () => {

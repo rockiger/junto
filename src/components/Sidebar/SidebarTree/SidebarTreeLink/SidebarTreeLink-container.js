@@ -1,16 +1,14 @@
 import { useDispatch, useGlobal, useState } from 'reactn'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { createFile, createNewWiki } from 'db'
-import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
-import { getPageId, getParentFolderId, isPage } from '../../Sidebar-helper'
+import { createPage } from 'db'
+import { getPageId, isPage } from '../../Sidebar-helper'
 import { SidebarTreeLinkComponent } from './SidebarTreeLink-component'
 import { useStyles } from './SidebarTreeLink-styles'
 export function SidebarTreeLink(props) {
     const { isExpanded, label, level, pageId, hasChildren, setExpanded } = props
 
     const clearSearch = useDispatch('clearSearch')
-    const [initialFiles] = useGlobal('initialFiles')
     const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
 
     const [showAddButton, setShowAddButton] = useState(false)
@@ -21,33 +19,23 @@ export function SidebarTreeLink(props) {
 
     const currentPageId = isPage(location) ? getPageId(location) : null
 
-    async function onCLickAddButton(ev) {
+    async function onClickAddButton(ev) {
         ev.preventDefault(ev)
 
-        setIsCreatingNewFile(true)
-        let parentFolderIdOfNewFile = pageId
-        try {
-            // check if the current page has already a folder for child
-            // pages, if not create a new one.
-            if (!parentFolderIdOfNewFile) {
-                const parentFolderId = getParentFolderId(pageId, initialFiles)
-                parentFolderIdOfNewFile = await createNewWiki({
-                    name: pageId,
+        const title = window.prompt('New filename')
+        if (title) {
+            try {
+                // create new child page
+                const page = await createPage({
+                    title: title,
                     parentId: pageId,
-                    isWikiRoot: false,
                 })
+                history.push(`/page/${page.id}?edit`)
+            } catch (err) {
+                setIsCreatingNewFile(false)
+                window.err = err
+                console.log(err)
             }
-
-            // create new child page
-            const newFileId = await createFile(
-                UNTITLEDFILE,
-                parentFolderIdOfNewFile,
-                JSON.stringify(EMPTYVALUE)
-            )
-            history.push(`/page/${newFileId}?edit`)
-        } catch (err) {
-            setIsCreatingNewFile(false)
-            console.log(err)
         }
     }
 
@@ -76,7 +64,7 @@ export function SidebarTreeLink(props) {
                 paddingLeft: level * 16,
             }}
             onClick={clearSearch}
-            onCLickAddButton={onCLickAddButton}
+            onCLickAddButton={onClickAddButton}
             onClickTreeButton={onClickTreeButton}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
