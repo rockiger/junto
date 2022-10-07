@@ -4,8 +4,7 @@ import clsx from 'clsx'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 
-import { getTitleFromFile, getExtFromFileName, sortByDate } from 'lib/helper'
-import { EXT } from 'lib/constants'
+import { getTitleFromFile, sortByDate } from 'lib/helper'
 
 import styles from './search-autocomplete.module.scss'
 
@@ -28,10 +27,6 @@ export const SearchAutocomplete = ({
                 .filter(file =>
                     file.title.toLowerCase().includes(searchValue.toLowerCase())
                 )
-                .filter(file => {
-                    const ext = getExtFromFileName(file.title)
-                    return ext === EXT
-                })
                 .sort((file1, file2) => {
                     let result = sortByDate(
                         file1.viewedByMeTime,
