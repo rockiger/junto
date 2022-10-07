@@ -11,6 +11,7 @@ import MenuIcon from 'mdi-react/MenuIcon'
 import Search from './Search'
 
 import styles from './navbar.module.scss'
+import { getFiles } from 'db'
 
 const Navbar = props => {
     const [isSignedIn] = useGlobal('isSignedIn')
@@ -31,6 +32,7 @@ const Navbar = props => {
     const submit = () => {
         setSearchTerm(searchValue)
         setIsSearchFieldActive(false)
+        getFiles(searchValue)
         props.history.push('/')
     }
     return (

@@ -220,8 +220,8 @@ export async function fetchPage(id) {
 }
 
 export const GET_FULCRUM_PAGES = gql`
-    query getFulcrumPages {
-        drafts: fulcrumPages(where: { status: DRAFT }) {
+    query getFulcrumPages($search: String) {
+        drafts: fulcrumPages(where: { status: DRAFT, search: $search }) {
             nodes {
                 acfFulcrumPage {
                     isoverview
@@ -247,7 +247,7 @@ export const GET_FULCRUM_PAGES = gql`
                 title
             }
         }
-        pendings: fulcrumPages(where: { status: PENDING }) {
+        pendings: fulcrumPages(where: { status: PENDING, search: $search }) {
             nodes {
                 acfFulcrumPage {
                     isoverview
@@ -273,7 +273,7 @@ export const GET_FULCRUM_PAGES = gql`
                 title
             }
         }
-        publishes: fulcrumPages(where: { status: PUBLISH }) {
+        publishes: fulcrumPages(where: { status: PUBLISH, search: $search }) {
             nodes {
                 acfFulcrumPage {
                     isoverview
@@ -302,7 +302,7 @@ export const GET_FULCRUM_PAGES = gql`
     }
 `
 
-export async function fetchPages() {
+export async function fetchPages(search = '') {
     function rewriteNodes(nodes) {
         return nodes.map(node => {
             const {
@@ -339,6 +339,7 @@ export async function fetchPages() {
     }
     const response = await client.query({
         query: GET_FULCRUM_PAGES,
+        variables: { search },
     })
     const { drafts, pendings, publishes } = response.data
     return _.concat(

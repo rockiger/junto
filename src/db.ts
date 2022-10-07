@@ -186,10 +186,14 @@ export const getWikis = async () => {
     setGlobal({ areWikisLoading: true, wikis })
 }
 
-export const getFiles = async () => {
+export const getFiles = async (search = '') => {
     setGlobal({ isFileListLoading: true })
-    const files = await fetchPages()
-    setGlobal({ files, initialFiles: files, isFileListLoading: false })
+    const files = await fetchPages(search)
+    if (search) {
+        setGlobal({ files, isFileListLoading: false })
+    } else {
+        setGlobal({ files, initialFiles: files, isFileListLoading: false })
+    }
 }
 
 export const useGetPage = (options: QueryHookOptions = {}) => {

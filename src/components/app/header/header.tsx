@@ -2,7 +2,6 @@ import React, { useGlobal } from 'reactn'
 import SyncIcon from 'mdi-react/SyncIcon'
 
 import Navbar from 'components/Navbar'
-import GoogleLogin from 'components/googleLogin'
 import { Help } from 'components/help'
 import { FooterLink } from 'components/staticPages/Footer'
 
