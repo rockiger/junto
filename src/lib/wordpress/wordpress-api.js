@@ -8,11 +8,15 @@ import {
 import { setContext } from '@apollo/client/link/context'
 
 const httpLink = createHttpLink({
-    uri: 'http://rockiger.local/graphql',
+    uri:
+        process.env.NODE_ENV === 'production'
+            ? `${reactPress?.user?.data?.user_url}/graphql`
+            : 'http://rockiger.local/graphql', // live site needs rockiger.com
 })
 
 const authLink = setContext((_, { headers }) => {
     const credentials = btoa('admin:pass')
+    console.log(reactPress)
 
     // return the headers to the context so httpLink can read them
 
@@ -20,7 +24,8 @@ const authLink = setContext((_, { headers }) => {
         headers: {
             ...headers,
 
-            Authorization: `Basic ${credentials}`,
+            Authorization: `Basic ${credentials}`, // Use for tests
+            // 'X-WP-Nonce': reactPress.api.nonce, // Use for staging/live site
         },
     }
 })
@@ -273,6 +278,32 @@ export const GET_FULCRUM_PAGES = gql`
                 title
             }
         }
+        privates: fulcrumPages(where: { status: PRIVATE, search: $search }) {
+            nodes {
+                acfFulcrumPage {
+                    isoverview
+                    isstarred
+                }
+                author {
+                    node {
+                        avatar {
+                            url
+                        }
+                        firstName
+                        name
+                        nicename
+                        nickname
+                    }
+                }
+                date
+                excerpt
+                id
+                modified
+                parentId
+                status
+                title
+            }
+        }
         publishes: fulcrumPages(where: { status: PUBLISH, search: $search }) {
             nodes {
                 acfFulcrumPage {
@@ -341,10 +372,11 @@ export async function fetchPages(search = '') {
         query: GET_FULCRUM_PAGES,
         variables: { search },
     })
-    const { drafts, pendings, publishes } = response.data
+    const { drafts, pendings, privates, publishes } = response.data
     return _.concat(
         rewriteNodes(drafts.nodes),
         rewriteNodes(pendings.nodes),
+        rewriteNodes(privates.nodes),
         rewriteNodes(publishes.nodes)
     )
 }
@@ -355,6 +387,7 @@ export const UPDATE_FULCRUM_PAGE = gql`
         $id: ID!
         $parentId: ID
         $spaceId: ID
+        $status: PostStatusEnum = PRIVATE
         $title: String
     ) {
         updateFulcrumPage(
@@ -363,6 +396,7 @@ export const UPDATE_FULCRUM_PAGE = gql`
                 fulcrumSpaces: { nodes: { id: $spaceId } }
                 id: $id
                 parentId: $parentId
+                status: $status
                 title: $title
             }
         ) {

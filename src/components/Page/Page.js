@@ -22,11 +22,12 @@ export default function Page() {
 
     /* GraphQL operations */
     const [updateFile] = useUpdatePage({
+        onCompleted: data => refetch(),
         onError: error =>
             enqueueSnackbar(`Error while saving: ${error.message}`),
     })
 
-    const { isLoading, error, page } = useGetPage({
+    const { isLoading, error, page, refetch } = useGetPage({
         onCompleted: page => setPageHead(page.title),
         variables: { id },
     })

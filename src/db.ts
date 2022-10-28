@@ -205,7 +205,7 @@ export const useGetPage = (options: QueryHookOptions = {}) => {
                   options.onCompleted(normalizeFetchPageData(data)),
           }
         : options
-    const { data, error, loading: isLoading } = useQuery(
+    const { data, error, loading: isLoading, refetch } = useQuery(
         GET_FULCRUM_PAGE,
         __options
     )
@@ -214,7 +214,7 @@ export const useGetPage = (options: QueryHookOptions = {}) => {
         [data]
     )
 
-    return { error, isLoading, page } as const
+    return { error, isLoading, page, refetch } as const
 }
 
 export const useUpdatePage = (options: MutationHookOptions = {}) => {
