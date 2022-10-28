@@ -60,10 +60,13 @@ const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
 const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
     return files.map(item => {
         if (item.id === id) {
+            const date = new Date()
+            const offset = (date.getTimezoneOffset() * -1) / 60
             const now = addHours(
                 new Date(),
-                //@ts-ignore offset the server time because wordpress doesn't has modifiedGmt on drafts
-                window.reactPress.gmt_offset
+                // offset the time to local because wordpress doesn't has
+                // modifiedGmt on drafts
+                offset
             )
                 .toISOString()
                 // To have the same format as WordPress and make dates comparable
