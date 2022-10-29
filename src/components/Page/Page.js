@@ -177,7 +177,10 @@ export default function Page() {
      * Set the contentent of the editor
      */
     useEffect(() => {
-        if (page && editor) editor.commands.setContent(page?.body)
+        if (page && editor) {
+            editor.commands.setContent(page?.body)
+            editor.setEditable(false)
+        }
     }, [editor, page])
 
     return (

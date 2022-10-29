@@ -68,7 +68,7 @@ const PageContainer = React.forwardRef(
                                     ></ToggleReadOnlyButton>
                                 </Hint>
                             </PageButtons>
-                            <EditorContent editor={editor} />
+                            <EditorContent spellCheck={false} editor={editor} />
                         </div>
                     </div>
                 </div>
