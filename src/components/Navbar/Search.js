@@ -34,7 +34,11 @@ export const Search = ({ clearSearch, submit }) => {
 
     useEffect(() => {
         function onKeyDown(ev) {
-            if (ev.key === '/' && !isSearchFieldActive) {
+            if (
+                ev.key === '/' &&
+                !isSearchFieldActive &&
+                !window?.editor.isEditable
+            ) {
                 ev.stopPropagation()
                 ev.preventDefault()
                 setIsSearchFieldActive(true)
@@ -90,11 +94,11 @@ export const Search = ({ clearSearch, submit }) => {
                     onBlur={() =>
                         setTimeout(() => setIsSearchFieldActive(false), 100)
                     }
-                    onChange={(ev) => {
+                    onChange={ev => {
                         setSearchValue(ev.target.value)
                         setSelectedRow(null)
                     }}
-                    onKeyDown={(ev) => {
+                    onKeyDown={ev => {
                         const border = Math.min(6, filteredFiles.length - 1)
                         if (ev.key === 'Enter') {
                             ev.preventDefault()

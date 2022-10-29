@@ -48,6 +48,7 @@ export default function Page() {
     })
 
     window.editor = editor
+
     /* Callbacks */
 
     const addImage = () => {
@@ -133,7 +134,7 @@ export default function Page() {
      */
     useEffect(() => {
         // only set event listener if all neccessary dependencies are given
-        if (editor && id && page?.body && updateFile) {
+        if (editor && id && updateFile) {
             function onKeyDown(ev) {
                 if (editor?.isEditable && isHotkey('mod+Enter')(ev)) {
                     ev.stopPropagation()
@@ -169,6 +170,7 @@ export default function Page() {
                 window.removeEventListener('keydown', onKeyDown)
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, id, page?.body, setLink, updateFile])
 
     /**
