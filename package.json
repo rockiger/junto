@@ -61,7 +61,7 @@
         "typescript": "^4.2.4"
     },
     "scripts": {
-        "start": "PUBLIC_URL=/fulcrum react-scripts start",
+        "start": "PUBLIC_URL=/de/fulcrum react-scripts start",
         "build": "PUBLIC_URL=/wp-content/reactpress/apps/fulcrum/build react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",

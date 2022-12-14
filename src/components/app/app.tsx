@@ -1,5 +1,5 @@
 import React, { useEffect, useGlobal } from 'reactn'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { HashRouter as Router } from 'react-router-dom'
 
 import clsx from 'clsx'
 import { SnackbarProvider } from 'notistack'
@@ -38,7 +38,7 @@ export default function App() {
         >
             <ApolloProvider client={client}>
                 <SnackbarProvider maxSnack={3}>
-                    <Router basename={'/fulcrum'}>
+                    <Router>
                         <Header />
                         {isSignedIn && <Sidebar />}
                         <Main />
