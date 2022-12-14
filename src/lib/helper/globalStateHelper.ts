@@ -1,18 +1,6 @@
-/* global reactPress */
 import { IFile, State } from 'reactn/default'
 import { OVERVIEW_NAME } from 'lib/constants'
 import { addHours } from 'date-fns'
-
-export {
-    filesUpdater,
-    filesUpdaterHelper,
-    filterIsNotArchived,
-    getMetaById,
-    hasChildren,
-    isArchived,
-    isWikiRootFile,
-    isWikiRootFolder,
-}
 
 /**
  * Interp. as a Global State with response of Google Drive as
@@ -124,4 +112,15 @@ function isWikiRootFile(file: IFile) {
 }
 function isWikiRootFolder(folder: IFile) {
     return hasProperty(folder, 'wikiRoot')
+}
+
+export {
+    filesUpdater,
+    filesUpdaterHelper,
+    filterIsNotArchived,
+    getMetaById,
+    hasChildren,
+    isArchived,
+    isWikiRootFile,
+    isWikiRootFolder,
 }

@@ -19,7 +19,6 @@ export const SearchAutocomplete = ({
     setFilteredFiles,
     setSubmitSelected,
     submitSelected,
-    width,
 }) => {
     useEffect(() => {
         setFilteredFiles(

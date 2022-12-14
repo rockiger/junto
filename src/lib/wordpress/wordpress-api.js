@@ -194,7 +194,7 @@ export const normalizeFetchPageData = data => {
         parentId,
         status,
         title,
-    } = data.fulcrumPage
+    } = data?.fulcrumPage
     const { firstName, name, nicename, nickname } = author.node
     const isOverview = !!acfFulcrumPage?.isoverview
     const isStarred = !!acfFulcrumPage?.isstarred
