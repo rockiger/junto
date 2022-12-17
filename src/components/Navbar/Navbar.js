@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import IconButton from 'components/gsuite-components/icon-button'
 import MenuIcon from 'mdi-react/MenuIcon'
 
-//import logo from '../../static/logo_48.svg'
+import logo from './logo_48.png'
 
 import Search from './Search'
 
@@ -56,11 +56,7 @@ const Navbar = props => {
                 )}
                 to="/"
             >
-                <img
-                    className={styles.Navbar_logo}
-                    src={'logo'}
-                    alt="App logo"
-                />
+                <img className={styles.Navbar_logo} src={logo} alt="App logo" />
                 <div className={styles.Navbar_title}>Fulcrum Wiki</div>
             </Link>
             <div className={styles.Navbar_spacer}>
