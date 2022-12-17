@@ -183,6 +183,7 @@ export const GET_FULCRUM_PAGE = gql`
 `
 
 export const normalizeFetchPageData = data => {
+    if (!data?.fulcrumPage) return {}
     const {
         acfFulcrumPage,
         author,
