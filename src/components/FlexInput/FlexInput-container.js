@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FlexInputComponent } from './FlexInput-component'
 
 export const FlexInput = React.forwardRef((props, ref) => {
-    const { id = '', onBlur, onChange, onKeyDown, placeholder, value } = props
+    const { id = '', onBlur, onChange, placeholder, value } = props
     const [width, setWidth] = useState()
     const h1Ref = useRef(null)
 
@@ -18,7 +18,6 @@ export const FlexInput = React.forwardRef((props, ref) => {
             id={id}
             onBlur={onBlur}
             onChange={onChange}
-            onKeyDown={onKeyDown}
             placeholder={placeholder}
             ref={ref}
             value={value}

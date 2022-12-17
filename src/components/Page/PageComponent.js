@@ -21,7 +21,6 @@ const PageContainer = React.forwardRef(
             onBlurInput,
             onClickToggleButton,
             onChangeInput,
-            onKeyDownInput,
             page,
             pageHead,
         },
@@ -55,7 +54,6 @@ const PageContainer = React.forwardRef(
                                     placeholder={UNTITLEDNAME}
                                     ref={titleInputRef}
                                     onChange={onChangeInput}
-                                    onKeyDown={onKeyDownInput}
                                 />
                             </BreadcrumbsBar>
                         </h1>

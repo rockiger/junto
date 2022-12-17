@@ -90,20 +90,6 @@ export default function Page() {
         }
     }
 
-    const onKeyDownInput = useCallback(ev => {
-        switch (ev.key) {
-            case `ArrowDown`:
-            case `Tab`:
-                ev.preventDefault()
-                editorRef?.current?.focus()
-                break
-
-            default:
-                break
-        }
-        ev.stopPropagation()
-    }, [])
-
     const setLink = useCallback(() => {
         const previousUrl = editor.getAttributes('link').href
         const url = window.prompt('URL', previousUrl)
@@ -192,7 +178,6 @@ export default function Page() {
                 onBlurInput,
                 onChangeInput,
                 onClickToggleButton,
-                onKeyDownInput,
                 page,
                 pageHead,
                 ref: {
