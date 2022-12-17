@@ -35,7 +35,7 @@ export function ButtonMenuComponent({
             <ButtonComponent
                 aria-controls="button-menu"
                 aria-haspopup="true"
-                className={Boolean(anchorEl) ? classes.active : null}
+                className={!!anchorEl ? classes.active : null}
                 Icon={MenuDownIcon}
                 onClick={onClick}
                 tooltip={tooltip}
@@ -51,7 +51,7 @@ export function ButtonMenuComponent({
                 getContentAnchorEl={null}
                 id="button-menu"
                 keepMounted
-                open={Boolean(anchorEl)}
+                open={!!anchorEl}
                 onClose={onClose}
                 style={{ zIndex: 1000 }}
                 transformOrigin={{
