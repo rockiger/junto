@@ -28,7 +28,7 @@ export default function Page() {
     })
 
     const { isLoading, error, page, refetch } = useGetPage({
-        onCompleted: page => setPageHead(page.title),
+        onCompleted: page => setPageTitle(page.title),
         variables: { id },
     })
 
@@ -46,7 +46,6 @@ export default function Page() {
             }),
         ],
     })
-
     window.editor = editor
 
     /* Callbacks */
@@ -61,7 +60,7 @@ export default function Page() {
 
     const onBlurInput = useCallback(() => {
         if (!pageHead) {
-            setPageHead(UNTITLEDNAME)
+            setPageTitle(UNTITLEDNAME)
         }
         if (page?.title !== pageHead) {
             console.log('update file')
@@ -70,7 +69,7 @@ export default function Page() {
     }, [id, page?.title, pageHead, updateFile])
 
     const onChangeInput = useCallback(ev => {
-        setPageHead(ev.target.value)
+        setPageTitle(ev.target.value)
     }, [])
 
     const onClickToggleButton = ev => {
@@ -114,6 +113,13 @@ export default function Page() {
             .setLink({ href: url })
             .run()
     }, [editor])
+
+    /** @param {string} pageTitle */
+    function setPageTitle(pageTitle) {
+        console.log('setPageTitle Test')
+        document.title = `${pageTitle} – Fulcrum.wiki`
+        setPageHead(pageTitle)
+    }
 
     /**
      * Set shortcuts

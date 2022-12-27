@@ -92,6 +92,7 @@ function Home(props) {
                                         files={files}
                                         sortBy={'modified'}
                                         setSortBy={setSortByAndLocalStorage}
+                                        title="Dashboard"
                                     />
                                 </TabPanel>
                                 <TabPanel
@@ -107,6 +108,7 @@ function Home(props) {
                                         files={filterStarred(files)}
                                         sortBy={'modified'}
                                         setSortBy={setSortByAndLocalStorage}
+                                        title="Dashboard"
                                     />
                                 </TabPanel>
                             </Tabs>

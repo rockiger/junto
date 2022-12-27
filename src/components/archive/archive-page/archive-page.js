@@ -53,6 +53,7 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                             emptySubline="The archive will show pages you archived"
                             files={filterPages(archivedFiles)}
                             sortBy="modifiedByMeTime"
+                            title="Archive"
                         />
                     </TabPanel>
                     <TabPanel
