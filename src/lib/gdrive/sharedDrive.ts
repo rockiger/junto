@@ -13,7 +13,7 @@ export async function checkForFulcrumFolder(parent) {
         const body = JSON.parse(response.body)
         if (body.files.length > 0) return true
     } catch (err) {
-        console.log(err.body)
+        console.log(err)
     }
     return false
 }

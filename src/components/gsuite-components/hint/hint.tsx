@@ -84,6 +84,7 @@ export const Hint = ({ children, id, scope }: Props) => {
             {children}
             {show && (
                 <div className={s.hint__wrapper_inner}>
+                    {/*@ts-ignore */}
                     <TooltipBase
                         arrow={false}
                         content={

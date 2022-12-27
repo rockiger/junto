@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme } from '@material-ui/core/styles'
 
 // Client ID and API key from the Developer Console
 export const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
@@ -37,7 +37,7 @@ export const THEMEVARS = {
     text: '#3c4043',
 }
 
-export const THEME = createMuiTheme({
+export const THEME = createTheme({
     palette: {
         background: {
             default: THEMEVARS.background,

@@ -1,5 +1,4 @@
 import React, { useGlobal, useEffect, useRef, useState } from 'reactn'
-import useDimensions from 'react-use-dimensions'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 
@@ -25,7 +24,6 @@ export const Search = ({ clearSearch, submit }) => {
     const [submitSelected, setSubmitSelected] = useState(false)
     const [filteredFiles, setFilteredFiles] = useState(files)
 
-    const [searchRef, { height, width }] = useDimensions()
     const inputRef = useRef(null)
 
     useEffect(() => {
@@ -62,7 +60,6 @@ export const Search = ({ clearSearch, submit }) => {
                     isEmpty(filteredFiles) &&
                     styles.Search__active__empty
             )}
-            ref={searchRef}
         >
             <div className={styles.Search_start}>
                 <IconButton
@@ -159,7 +156,6 @@ export const Search = ({ clearSearch, submit }) => {
             {isSearchFieldActive && (
                 <SearchAutocomplete
                     clearSearch={clearSearch}
-                    height={height}
                     files={files}
                     filteredFiles={filteredFiles}
                     searchValue={searchValue}
@@ -167,7 +163,6 @@ export const Search = ({ clearSearch, submit }) => {
                     setFilteredFiles={setFilteredFiles}
                     setSubmitSelected={setSubmitSelected}
                     submitSelected={submitSelected}
-                    width={width}
                 />
             )}
         </div>

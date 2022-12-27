@@ -1,11 +1,11 @@
 import React from 'react'
-import classnames from 'classnames'
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import blue from '@material-ui/core/colors/blue'
 
 import { IconButton } from 'components/gsuite-components'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     active: {
         background: blue[50],
         color: theme.palette.primary.main,
@@ -35,8 +35,8 @@ export const Button = ({
             id={id}
             style={style}
             type={type}
-            onClick={(e) => onClick(e)}
-            className={classnames(
+            onClick={e => onClick(e)}
+            className={clsx(
                 className,
                 active ? classes.active : classes.unactive
             )}
