@@ -122,7 +122,7 @@ function FulcrumFaq() {
                 <Button
                     onClick={() =>
                         window.open(
-                            'https://docs.google.com/forms/d/e/1FAIpQLSfqL6-8Ls00xgL2cWiNkR5cmC5bUpyRl71KTVnzIIKfdef-1Q/viewform?usp=sf_link',
+                            'https://docs.google.com/forms/d/e/1FAIpQLSegjllDihzlzhT88DgPjWemFQOWcoKb0acroD8NN1li31GuOA/viewform?usp=sf_link',
                             '_blank'
                         )
                     }

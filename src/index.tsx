@@ -4,7 +4,7 @@ import initReactnPersist from 'reactn-persist'
 import './lib/helper/globals'
 import { State } from 'reactn/default'
 import './index.scss'
-import App from 'components/app'
+import App from './components/app'
 import * as serviceWorker from './serviceWorker'
 import addReactNDevTools from 'reactn-devtools'
 
