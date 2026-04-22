@@ -1,8 +1,7 @@
-import React, { useEffect, useGlobal } from 'reactn'
+import React, { useGlobal } from 'reactn'
 import { BrowserRouter as Router } from 'react-router-dom'
 import clsx from 'clsx'
 import { SnackbarProvider } from 'notistack'
-import { initGA, setGA } from 'components/Tracking'
 
 import Footer from './footer'
 import Header from './header'
@@ -13,11 +12,6 @@ import styles from './app.module.scss'
 
 export default function App() {
     const [isSignedIn] = useGlobal('isSignedIn')
-
-    useEffect(() => {
-        initGA('UA-151325933-1')
-        setGA({ anonymizeIp: true })
-    }, [])
 
     return (
         <div

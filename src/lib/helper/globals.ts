@@ -48,7 +48,7 @@ export const trace = x => {
  * @param {any} col
  * @returns {boolean}
  */
-export const isNotEmpty = col => !_.isEmpty(col)
+export const isNotEmpty = col => !lodash.isEmpty(col)
 
 lodash.mixin({ isNotEmpty, thread, trace })
 
@@ -56,5 +56,7 @@ declare global {
     var _: typeof lodash
 }
 
-const _ = { ...lodash, thread, trace }
-export default _
+const lodashExtended = { ...lodash, thread, trace }
+;(globalThis as typeof globalThis & { _: typeof lodashExtended })._ =
+    lodashExtended
+export default lodashExtended

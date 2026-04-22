@@ -1,6 +1,6 @@
 import React, { useEffect, useGlobal } from 'reactn'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router'
+import { Navigate } from 'react-router-dom'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 
 import Spinner from 'components/gsuite-components/spinner'
@@ -33,7 +33,7 @@ function SharedWithMe(props) {
             </div>
         )
     } else {
-        return <Redirect to={'/'} />
+        return <Navigate to="/" replace />
     }
 }
 SharedWithMe.propTypes = {

@@ -1,5 +1,5 @@
 import React, { useDispatch, useEffect, useGlobal } from 'reactn'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
@@ -13,6 +13,7 @@ import Search from './Search'
 import styles from './navbar.module.scss'
 
 const Navbar = props => {
+    const navigate = useNavigate()
     const [isSignedIn] = useGlobal('isSignedIn')
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
     const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
@@ -31,7 +32,7 @@ const Navbar = props => {
     const submit = () => {
         setSearchTerm(searchValue)
         setIsSearchFieldActive(false)
-        props.history.push('/')
+        navigate('/')
     }
     return (
         <div className={styles.Navbar}>
@@ -67,7 +68,7 @@ const Navbar = props => {
     )
 }
 
-export default withRouter(Navbar)
+export default Navbar
 Navbar.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
 }

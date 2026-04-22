@@ -1,6 +1,6 @@
 //@ts-check
 import React, { useEffect, useGlobal, useRef } from 'reactn'
-import { useHistory, useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { createFile, createNewWiki } from 'db'
 import Spinner from 'components/gsuite-components/spinner'
@@ -15,7 +15,7 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
         'isCreatingNewFile'
     )
 
-    const history = useHistory()
+    const navigate = useNavigate()
     const location = useLocation()
     const modalRef = useRef(null)
 
@@ -51,11 +51,11 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                             OVERVIEW_VALUE,
                             name
                         )
-                        history.push(`/page/${newFileId}`)
+                        navigate(`/page/${newFileId}`)
                     } catch (err) {
                         console.log({ err })
                         setIsCreatingNewFile(false)
-                        if (!err) history.push('/')
+                        if (!err) navigate('/')
                     }
                 }
             } catch (err) {
@@ -65,7 +65,7 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
         anyNameFunction(state)
     }, [
         folderId,
-        history,
+        navigate,
         isSignedIn,
         setBackgroundUpdate,
         setIsCreatingNewFile,

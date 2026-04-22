@@ -1,6 +1,6 @@
 //@ts-check
 import React, { useEffect, useGlobal } from 'reactn'
-import { Redirect } from 'react-router'
+import { Navigate } from 'react-router-dom'
 import ArchiveIcon from 'mdi-react/ArchiveIcon'
 import {
     H1,
@@ -77,7 +77,7 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
             </div>
         )
     } else {
-        return <Redirect to={'/'} />
+        return <Navigate to="/" replace />
     }
 }
 

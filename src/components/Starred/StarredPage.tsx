@@ -1,6 +1,6 @@
 //@ts-check
 import React, { useEffect, useGlobal } from 'reactn'
-import { Redirect } from 'react-router'
+import { Navigate } from 'react-router-dom'
 import StarIcon from 'mdi-react/StarIcon'
 
 import { Spinner } from 'components/gsuite-components/'
@@ -48,7 +48,7 @@ function StarredPage({ isSignedIn, isSigningIn }) {
             </div>
         )
     } else {
-        return <Redirect to={'/'} />
+        return <Navigate to="/" replace />
     }
 }
 

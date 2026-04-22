@@ -1,11 +1,9 @@
-//@ts-check
-import React from 'react'
-import TooltipBase from 'react-tooltip-lite'
+import { Tooltip as TooltipBase } from "react-tooltip";
 
-import s from './tooltip.module.scss'
+import s from "./tooltip.module.scss";
 
-export default Tooltip
-export { Tooltip }
+export default Tooltip;
+export { Tooltip };
 
 /**
  * @typedef TooltipProps
@@ -18,18 +16,18 @@ export { Tooltip }
  * @param {TooltipProps} props
  */
 function Tooltip({ children, content, ...restProps }) {
-    return (
-        <TooltipBase
-            {...restProps}
-            arrow={false}
-            content={content}
-            direction="down"
-            hoverDelay={500}
-            isOpen={!content ? false : undefined}
-            mouseOutDelay={200}
-            tipContentClassName={s.Tooltip}
-        >
-            {children}
-        </TooltipBase>
-    )
+	return (
+		<TooltipBase
+			{...restProps}
+			arrow={false}
+			content={content}
+			direction="down"
+			hoverDelay={500}
+			isOpen={!content ? false : undefined}
+			mouseOutDelay={200}
+			tipContentClassName={s.Tooltip}
+		>
+			{children}
+		</TooltipBase>
+	);
 }

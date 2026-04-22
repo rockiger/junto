@@ -45,6 +45,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
     const [rootFolderId] = useGlobal('rootFolderId')
     const wikis = sortWikisBy(orderBy, filterWikis(files))
     const myFulcrum = getOverviewFile(files, rootFolderId)
+    console.log('files', files)
     return (
         <div className={s.WikiList}>
             {(_.isNotEmpty(files) || !isFileListLoading) &&

@@ -1,6 +1,6 @@
-import React, { useGlobal } from 'reactn'
-import { ReactElement } from 'react'
-import { Route } from 'react-router-dom'
+import { useGlobal } from 'reactn'
+import type { ReactElement } from 'react'
+import { Route, Routes } from 'react-router-dom'
 
 import { ArchivePage } from 'components/archive'
 import { CreateNewWiki } from 'components/CreateNewWiki'
@@ -13,7 +13,7 @@ import styles from './main.module.scss'
 import { WikiOverview } from 'components/wiki-overview'
 import StarredPage from 'components/Starred/StarredPage'
 
-export default function Main(props: any): ReactElement {
+export default function Main(): ReactElement {
     const [isCreatingNewFile] = useGlobal('isCreatingNewFile')
     const [isSignedIn] = useGlobal('isSignedIn')
     const [isSigningIn] = useGlobal('isSigningIn')
@@ -21,83 +21,90 @@ export default function Main(props: any): ReactElement {
 
     return (
         <div className={styles.Main}>
-            <Route
-                exact
-                path="/"
-                render={(props: any) => (
-                    <Home
-                        {...props}
-                        isCreatingNewFile={isCreatingNewFile}
-                        isSignedIn={isSignedIn}
-                        isSigningIn={isSigningIn}
-                        setGoToNewFile={setGoToNewFile}
-                    />
-                )}
-            />
-            <Route exact path="/archive">
-                <ArchivePage
-                    isSignedIn={isSignedIn}
-                    isSigningIn={isSigningIn}
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <Home
+                            isCreatingNewFile={isCreatingNewFile}
+                            isSignedIn={isSignedIn}
+                            isSigningIn={isSigningIn}
+                            setGoToNewFile={setGoToNewFile}
+                        />
+                    }
                 />
-            </Route>
-            <Route
-                exact
-                path="/page/:id"
-                render={(props: any) => (
-                    <Page
-                        {...props}
-                        isCreatingNewFile={isCreatingNewFile}
-                        isSignedIn={isSignedIn}
-                        isSigningIn={isSigningIn}
-                        setGoToNewFile={setGoToNewFile}
-                    />
-                )}
-            />
-            <Route
-                exact
-                path="/shared-with-me"
-                render={(props: any) => (
-                    <SharedWithMe
-                        {...props}
-                        isCreatingNewFile={isCreatingNewFile}
-                        isSignedIn={isSignedIn}
-                        isSigningIn={isSigningIn}
-                        setGoToNewFile={setGoToNewFile}
-                    />
-                )}
-            />
-            <Route exact path="/drive/" render={props => <Drive />} />
-            <Route
-                exact
-                path="/new/"
-                render={(props: any) => (
-                    <CreateNewWiki
-                        isSignedIn={isSignedIn}
-                        isSigningIn={isSigningIn}
-                    />
-                )}
-            />
-            <Route exact path="/faq" render={(props: any) => <FAQ />} />
+                <Route
+                    path="/archive"
+                    element={
+                        <ArchivePage
+                            isSignedIn={isSignedIn}
+                            isSigningIn={isSigningIn}
+                        />
+                    }
+                />
+                <Route
+                    path="/page/:id"
+                    element={
+                        <Page
+                            isCreatingNewFile={isCreatingNewFile}
+                            isSignedIn={isSignedIn}
+                            isSigningIn={isSigningIn}
+                            setGoToNewFile={setGoToNewFile}
+                        />
+                    }
+                />
+                <Route
+                    path="/shared-with-me"
+                    element={
+                        <SharedWithMe
+                            isCreatingNewFile={isCreatingNewFile}
+                            isSignedIn={isSignedIn}
+                            isSigningIn={isSigningIn}
+                            setGoToNewFile={setGoToNewFile}
+                        />
+                    }
+                />
+                <Route path="/drive" element={<Drive />} />
+                <Route path="/drive/" element={<Drive />} />
+                <Route
+                    path="/new"
+                    element={
+                        <CreateNewWiki
+                            isSignedIn={isSignedIn}
+                            isSigningIn={isSigningIn}
+                        />
+                    }
+                />
+                <Route
+                    path="/new/"
+                    element={
+                        <CreateNewWiki
+                            isSignedIn={isSignedIn}
+                            isSigningIn={isSigningIn}
+                        />
+                    }
+                />
+                <Route path="/faq" element={<FAQ />} />
 
-            <Route
-                exact
-                path="/privacy-policy"
-                render={(props: any) => <PrivacyPolicy />}
-            />
-            <Route exact path="/starred">
-                <StarredPage
-                    isSignedIn={isSignedIn}
-                    isSigningIn={isSigningIn}
+                <Route
+                    path="/privacy-policy"
+                    element={<PrivacyPolicy />}
                 />
-            </Route>
-            <Route
-                exact
-                path="/terms-of-service"
-                render={(props: any) => <TermsOfService />}
-            />
-            <Route exact path="/wikis">
-                <WikiOverview />
-            </Route>
+                <Route
+                    path="/starred"
+                    element={
+                        <StarredPage
+                            isSignedIn={isSignedIn}
+                            isSigningIn={isSigningIn}
+                        />
+                    }
+                />
+                <Route
+                    path="/terms-of-service"
+                    element={<TermsOfService />}
+                />
+                <Route path="/wikis" element={<WikiOverview />} />
+            </Routes>
         </div>
     )
 }

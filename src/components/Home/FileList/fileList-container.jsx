@@ -1,10 +1,10 @@
 // @ts-check
-import React, { useGlobal } from 'reactn'
+import { useGlobal } from "reactn";
 
-import FileListComponent from './fileList-component'
+import FileListComponent from "./fileList-component";
 
-export { FileList }
-export default FileList
+export { FileList };
+export default FileList;
 
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
 
@@ -26,34 +26,32 @@ export default FileList
  * @param {FileListProps} props
  */
 function FileList({
-    emptyIcon,
-    emptyMessage,
-    emptySubline,
-    files,
-    header,
-    sortBy,
-    setSortBy,
-    title,
+	emptyIcon,
+	emptyMessage,
+	emptySubline,
+	files,
+	header,
+	sortBy,
+	setSortBy,
+	title,
 }) {
-    const [isFileListLoading] = useGlobal('isFileListLoading')
-    const [searchTerm] = useGlobal('searchTerm')
+	const [isFileListLoading] = useGlobal("isFileListLoading");
+	const [searchTerm] = useGlobal("searchTerm");
 
-    return (
-        <FileListComponent
-            emptyIcon={emptyIcon}
-            emptyMessage={
-                searchTerm
-                    ? 'None of your files matched this search.'
-                    : emptyMessage
-            }
-            emptySubline={emptySubline}
-            files={files}
-            header={header}
-            isLoading={_.isEmpty(files) && isFileListLoading}
-            searchTerm={searchTerm}
-            setSortBy={setSortBy}
-            sortBy={sortBy}
-            title={title}
-        />
-    )
+	return (
+		<FileListComponent
+			emptyIcon={emptyIcon}
+			emptyMessage={
+				searchTerm ? "None of your files matched this search." : emptyMessage
+			}
+			emptySubline={emptySubline}
+			files={files}
+			header={header}
+			isLoading={_.isEmpty(files) && isFileListLoading}
+			searchTerm={searchTerm}
+			setSortBy={setSortBy}
+			sortBy={sortBy}
+			title={title}
+		/>
+	);
 }

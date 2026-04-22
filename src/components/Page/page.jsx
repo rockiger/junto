@@ -1,7 +1,11 @@
 /* global gapi */
 import React from 'reactn'
 import PropTypes from 'prop-types'
-import { BrowserRouter as Router, Redirect, withRouter } from 'react-router-dom'
+import {
+    Navigate,
+    useNavigate,
+    useParams,
+} from 'react-router-dom'
 
 import { Chip } from '@material-ui/core'
 import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
@@ -33,7 +37,7 @@ class Page extends React.Component {
         this.state = {
             canEdit: false,
             editorDelta: {},
-            fileId: this.props.match.params.id,
+            fileId: this.props.params.id,
             fileName: UNTITLEDFILE,
             pageHead: UNTITLEDNAME,
             fileLoaded: false,
@@ -67,13 +71,13 @@ class Page extends React.Component {
 
         // when going from one page to the next, we check if the parmeter in the url changed
         if (
-            prevProps.match.params.id !== this.props.match.params.id &&
+            prevProps.params.id !== this.props.params.id &&
             this.global.files.length > 0
         ) {
             this.setGlobal({ goToNewFile: false })
             this.setState(
                 {
-                    fileId: this.props.match.params.id,
+                    fileId: this.props.params.id,
                     fileLoaded: false,
                 },
                 this.loadEditorContent
@@ -105,7 +109,7 @@ class Page extends React.Component {
             } else {
                 alert(`Couldn't find file`)
                 console.log({ error })
-                this.props.history.push('/')
+                this.props.navigate('/')
             }
             return undefined
         }
@@ -147,7 +151,7 @@ class Page extends React.Component {
                 pageHead,
             })
         } else {
-            Router.push('/')
+            this.props.navigate('/')
         }
     }
 
@@ -237,7 +241,7 @@ class Page extends React.Component {
         )
         if (
             this.props.isSignedIn &&
-            this.props.match.params.id &&
+            this.props.params.id &&
             !this.props.isCreatingNewFile
         ) {
             console.log({
@@ -329,20 +333,25 @@ class Page extends React.Component {
         ) {
             return <Spinner />
         } else if (!this.props.isSignedIn && !this.props.isSigningIn) {
-            return <Redirect to="/" />
+            return <Navigate to="/" replace />
         }
     }
 }
 
-export default withRouter(Page)
+function PageWithRouter(props) {
+    const navigate = useNavigate()
+    const params = useParams()
+    return <Page {...props} navigate={navigate} params={params} />
+}
+
+export default PageWithRouter
 
 Page.propTypes = {
     isSignedIn: PropTypes.bool.isRequired,
     isSigningIn: PropTypes.bool.isRequired,
-    match: PropTypes.shape({
-        params: PropTypes.shape({
-            id: PropTypes.string.isRequired,
-        }),
+    navigate: PropTypes.func.isRequired,
+    params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
     }),
     setGoToNewFile: PropTypes.func.isRequired,
 }

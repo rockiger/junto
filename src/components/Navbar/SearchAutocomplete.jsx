@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
@@ -15,7 +15,6 @@ export const SearchAutocomplete = ({
     files,
     filteredFiles,
     height,
-    history,
     searchValue,
     selectedRow,
     setFilteredFiles,
@@ -23,6 +22,8 @@ export const SearchAutocomplete = ({
     submitSelected,
     width,
 }) => {
+    const navigate = useNavigate()
+
     useEffect(() => {
         setFilteredFiles(
             files
@@ -56,7 +57,7 @@ export const SearchAutocomplete = ({
             selectedRow !== null &&
             filteredFiles.length >= selectedRow
         ) {
-            history.push(`/page/${filteredFiles[selectedRow].id}`)
+            navigate(`/page/${filteredFiles[selectedRow].id}`)
             clearSearch()
             Event('Search', 'Submit Selected', 'keydown Enter')
         }
@@ -64,7 +65,7 @@ export const SearchAutocomplete = ({
     }, [
         clearSearch,
         filteredFiles,
-        history,
+        navigate,
         selectedRow,
         setSubmitSelected,
         submitSelected,
@@ -118,4 +119,4 @@ export const SearchAutocomplete = ({
     )
 }
 
-export default withRouter(SearchAutocomplete)
+export default SearchAutocomplete

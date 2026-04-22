@@ -1,1 +1,1 @@
-export * from './SidebarTreeItem-container.js'
+export * from './SidebarTreeItem-container.jsx'

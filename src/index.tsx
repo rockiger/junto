@@ -1,35 +1,38 @@
-import React, { addReducers, setGlobal } from 'reactn'
-import { hydrate, render } from 'react-dom'
+import { addReducers, setGlobal } from 'reactn'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import initReactnPersist from 'reactn-persist'
 import './lib/helper/globals'
-import { State } from 'reactn/default'
+import type { State } from 'reactn/default'
 import './index.scss'
 import App from './components/app'
+import { initGA, setGA } from './components/Tracking'
 import * as serviceWorker from './serviceWorker'
-import addReactNDevTools from 'reactn-devtools'
 
-addReactNDevTools()
+initGA('UA-151325933-1')
+setGA({ anonymizeIp: true })
+
+// addReactNDevTools()
 
 // Remove console from production builds
 if (process.env.NODE_ENV !== 'development') {
-    function noop() {}
+    function noop() { }
     console.log = noop
     console.warn = noop
     console.error = noop
 }
 
 addReducers({
-    clearSearchComplete: (global, dispatch) => ({
+    clearSearchComplete: (global, _dispatch) => ({
         files: [...global.initialFiles],
         isSearchFieldActive: false,
         oldSearchTerm: '',
         searchTerm: '',
         searchValue: '',
     }),
-    clearSearchFiles: (global, dispatch) => ({
+    clearSearchFiles: (global, _dispatch) => ({
         files: [...global.initialFiles],
     }),
-    clearSearchMeta: (global, dispatch) => ({
+    clearSearchMeta: (_global, _dispatch) => ({
         isSearchFieldActive: false,
         oldSearchTerm: '',
         searchTerm: '',
@@ -72,10 +75,13 @@ initReactnPersist({
 })
 
 const rootElement = document.getElementById('root')
-if (rootElement!.hasChildNodes()) {
-    hydrate(<App />, rootElement)
+if (!rootElement) {
+    throw new Error('Root element "#root" not found')
+}
+if (rootElement.hasChildNodes()) {
+    hydrateRoot(rootElement, <App />)
 } else {
-    render(<App />, rootElement)
+    createRoot(rootElement).render(<App />)
 }
 
 // If you want your app to work offline and load faster, you can change

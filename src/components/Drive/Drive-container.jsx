@@ -1,6 +1,6 @@
 //@ts-check
 import React from 'react'
-import { Redirect, useLocation } from 'react-router'
+import { Navigate, useLocation } from 'react-router-dom'
 
 export const Drive = () => {
     const location = useLocation()
@@ -8,7 +8,7 @@ export const Drive = () => {
     console.log(search)
     const path = createPath(search)
 
-    return <Redirect to={path} />
+    return <Navigate to={path} replace />
 }
 
 /**

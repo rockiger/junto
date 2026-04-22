@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { Breadcrumbs } from '@material-ui/core'
 import NavigateNextIcon from 'mdi-react/NavigateNextIcon'
 import FileTreeIcon from 'mdi-react/FileTreeIcon'
@@ -17,7 +17,7 @@ import { useBreadcrumbs } from './breadcrumbs-hooks'
 export const BreadcrumbsBar = (props: IProps) => {
     const { children, fileId } = props
     const { childPages, parentPages } = useBreadcrumbs(fileId)
-    const history = useHistory()
+    const navigate = useNavigate()
     const classes = useStyles()
 
     if (parentPages.length === 0) return null
@@ -43,7 +43,7 @@ export const BreadcrumbsBar = (props: IProps) => {
                                             key: el.file.id,
                                             name: getTitleFromFile(el.file),
                                             handler: () =>
-                                                history.push(
+                                                navigate(
                                                     `/page/${el.file.id}`
                                                 ),
                                         },
@@ -52,7 +52,7 @@ export const BreadcrumbsBar = (props: IProps) => {
                                         key: child.id,
                                         name: getTitleFromFile(child),
                                         handler: () =>
-                                            history.push(`/page/${child.id}`),
+                                            navigate(`/page/${child.id}`),
                                     }))
                                 )}
                                 tooltip={title}
@@ -72,7 +72,7 @@ export const BreadcrumbsBar = (props: IProps) => {
                                 key: child.id,
                                 name: getTitleFromFile(child),
                                 handler: () =>
-                                    history.push(`/page/${child.id}`),
+                                    navigate(`/page/${child.id}`),
                             }))}
                         >
                             <FileTreeIcon />

@@ -1,6 +1,6 @@
 import React from 'reactn'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
     getPageId,
@@ -53,7 +53,7 @@ class Sidebar extends React.Component {
                 parentFolderIdOfNewFile,
                 JSON.stringify(EMPTYVALUE)
             )
-            this.props.history.push(`/page/${newFileId}?edit`)
+            this.props.navigate(`/page/${newFileId}?edit`)
         } catch (err) {
             this.setGlobal({ isCreatingNewFile: false })
             console.log(err)
@@ -65,7 +65,13 @@ class Sidebar extends React.Component {
     }
 }
 
-export default withRouter(Sidebar)
+function SidebarWithRouter(props) {
+    const navigate = useNavigate()
+    const location = useLocation()
+    return <Sidebar {...props} navigate={navigate} location={location} />
+}
+
+export default SidebarWithRouter
 
 Sidebar.propTypes = {
     goToNewFile: PropTypes.bool.isRequired,

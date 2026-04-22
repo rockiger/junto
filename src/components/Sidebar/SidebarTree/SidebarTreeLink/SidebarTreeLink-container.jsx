@@ -1,5 +1,5 @@
 import { useDispatch, useGlobal, useState } from 'reactn'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { createFile, createNewWiki } from 'db'
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
@@ -16,7 +16,7 @@ export function SidebarTreeLink(props) {
     const [showAddButton, setShowAddButton] = useState(false)
 
     const classes = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const location = useLocation()
 
     const currentPageId = isPage(location) ? getPageId(location) : null
@@ -44,7 +44,7 @@ export function SidebarTreeLink(props) {
                 parentFolderIdOfNewFile,
                 JSON.stringify(EMPTYVALUE)
             )
-            history.push(`/page/${newFileId}?edit`)
+            navigate(`/page/${newFileId}?edit`)
         } catch (err) {
             setIsCreatingNewFile(false)
             console.log(err)
