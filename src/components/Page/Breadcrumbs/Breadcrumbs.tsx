@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 import { Breadcrumbs } from '@material-ui/core'
 import NavigateNextIcon from 'mdi-react/NavigateNextIcon'
 import FileTreeIcon from 'mdi-react/FileTreeIcon'
@@ -43,16 +43,22 @@ export const BreadcrumbsBar = (props: IProps) => {
                                             key: el.file.id,
                                             name: getTitleFromFile(el.file),
                                             handler: () =>
-                                                navigate(
-                                                    `/page/${el.file.id}`
-                                                ),
+                                                void navigate({
+                                                    to: '/page/$id',
+                                                    params: {
+                                                        id: el.file.id,
+                                                    },
+                                                }),
                                         },
                                     ],
                                     el.children.map(child => ({
                                         key: child.id,
                                         name: getTitleFromFile(child),
                                         handler: () =>
-                                            navigate(`/page/${child.id}`),
+                                            void navigate({
+                                                to: '/page/$id',
+                                                params: { id: child.id },
+                                            }),
                                     }))
                                 )}
                                 tooltip={title}
@@ -72,7 +78,10 @@ export const BreadcrumbsBar = (props: IProps) => {
                                 key: child.id,
                                 name: getTitleFromFile(child),
                                 handler: () =>
-                                    navigate(`/page/${child.id}`),
+                                    void navigate({
+                                        to: '/page/$id',
+                                        params: { id: child.id },
+                                    }),
                             }))}
                         >
                             <FileTreeIcon />

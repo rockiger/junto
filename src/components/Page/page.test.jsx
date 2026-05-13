@@ -1,29 +1,33 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import renderer from 'react-test-renderer'
+import { setGlobal } from 'reactn'
 
-import { MemoryRouter } from 'react-router-dom'
+import { TestRouter } from '../../test-router'
+import { getUserRole } from './page'
 
-import Page, { getUserRole } from './page'
+setGlobal({
+    isCreatingNewFile: false,
+    rootFolderId: null,
+    isFileListLoading: false,
+    isSearchFieldActive: false,
+    isSignedIn: false,
+    isSigningIn: false,
+    goToNewFile: false,
+    oldSearchTerm: '',
+    redirect: false,
+    searchTerm: '',
+    searchValue: '',
+    files: [],
+    initialFiles: [],
+    isInitialFileListLoading: false,
+    backgroundUpdate: false,
+    showSidebarOnMobile: false,
+})
 
 describe('Page', () => {
-    const props = {
-        isSignedIn: false,
-        isSigningIn: false,
-        match: {
-            params: { id: '' },
-        },
-        setGoToNewFile: () => {},
-    }
-
     it('renders without crashing', () => {
         const div = document.createElement('div')
-        ReactDOM.render(
-            <MemoryRouter>
-                <Page {...props} />
-            </MemoryRouter>,
-            div
-        )
+        ReactDOM.render(<TestRouter initialPath="/page/test-page-id" />, div)
         ReactDOM.unmountComponentAtNode(div)
     })
 

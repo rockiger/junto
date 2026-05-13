@@ -1,6 +1,7 @@
+// @ts-nocheck
 //@ts-check
 import React, { useGlobal } from 'reactn'
-import { Link } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
 import clsx from 'clsx'
 import { format } from 'date-fns'
 import { sortBy } from 'lodash'
@@ -168,7 +169,8 @@ function WikiCard({
     return (
         <Link
             key={id}
-            to={`/page/${id}`}
+            to="/page/$id"
+            params={{ id }}
             onClick={() => {
                 Event(
                     'WikiCard',

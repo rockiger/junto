@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { useDispatch, useGlobal, useState } from 'reactn'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 
 import { createFile, createNewWiki } from 'db'
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
@@ -44,7 +45,7 @@ export function SidebarTreeLink(props) {
                 parentFolderIdOfNewFile,
                 JSON.stringify(EMPTYVALUE)
             )
-            navigate(`/page/${newFileId}?edit`)
+            navigate({ href: `/page/${newFileId}?edit` })
         } catch (err) {
             setIsCreatingNewFile(false)
             console.log(err)

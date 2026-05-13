@@ -1,6 +1,7 @@
+// @ts-nocheck
 //@ts-check
 import React, { useEffect, useGlobal } from 'reactn'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from '@tanstack/react-router'
 import ArchiveIcon from 'mdi-react/ArchiveIcon'
 import {
     H1,

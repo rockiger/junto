@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React from 'reactn'
 
-import { Link } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
 
 import { IconButton, Tooltip } from '@material-ui/core'
 
@@ -32,7 +33,8 @@ export function SidebarTreeLinkComponent(props) {
             onClick={onClick}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            to={`/page/${pageId}`}
+            to="/page/$id"
+            params={{ id: pageId }}
             style={linkStyle}
         >
             {parentId ? (

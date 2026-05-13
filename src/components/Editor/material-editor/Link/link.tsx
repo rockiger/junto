@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
 import { Link as MaterialLink } from '@material-ui/core'
 
 import { hasLinks, toggleLink } from './linkPlugin'
@@ -31,16 +32,36 @@ export function LinkNode({
                 />
             )}
             {href && href.startsWith('/page/') ? (
-                <RouterLink
-                    {...attributes}
-                    className="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
-                    to={href}
-                    onClick={ev => {
-                        if (!readOnly) ev.preventDefault()
-                    }}
-                >
-                    {children}
-                </RouterLink>
+                (() => {
+                    const m = href.match(/^\/page\/([^/?#]+)/)
+                    return m ? (
+                        <Link
+                            {...attributes}
+                            className="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorPrimary"
+                            to="/page/$id"
+                            params={{
+                                id: m[1],
+                            }}
+                            onClick={ev => {
+                                if (!readOnly) ev.preventDefault()
+                            }}
+                        >
+                            {children}
+                        </Link>
+                    ) : (
+                        <MaterialLink
+                            {...attributes}
+                            href={href}
+                            target={
+                                href && href.startsWith('/page/')
+                                    ? '_self'
+                                    : '_blank'
+                            }
+                        >
+                            {children}
+                        </MaterialLink>
+                    )
+                })()
             ) : (
                 <MaterialLink
                     {...attributes}

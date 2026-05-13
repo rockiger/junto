@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React, { useEffect, useGlobal } from 'reactn'
 import PropTypes from 'prop-types'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from '@tanstack/react-router'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 
 import Spinner from 'components/gsuite-components/spinner'

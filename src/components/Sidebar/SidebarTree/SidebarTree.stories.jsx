@@ -1,13 +1,31 @@
-import React, { setGlobal } from 'reactn'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import {
+    Outlet,
+    RouterProvider,
+    createMemoryHistory,
+    createRootRoute,
+    createRoute,
+    createRouter,
+} from '@tanstack/react-router'
 import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
 
 import { SidebarTreeItem } from './SidebarTreeItem'
 import { useStyles } from './SidebarTree-styles'
 import testState from './testState.js'
 
 import { MYHOME } from '../../../lib/constants'
+
+const rootRoute = createRootRoute({
+    component: StoryShell,
+})
+
+const pageRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/page/$id',
+    component: () => null,
+})
+
+const storyRouteTree = rootRoute.addChildren([pageRoute])
 
 storiesOf('SidebarTree', module)
     .addDecorator(story => (
@@ -22,13 +40,13 @@ storiesOf('SidebarTree', module)
     ))
     .add('default', SidebarDefault)
 
-function SidebarDefault() {
+function StoryShell() {
     const { files } = (window.testState = testState)
     const classes = useStyles()
 
     console.log(testState)
     return (
-        <Router>
+        <>
             <ul className={classes.mydrive}>
                 <SidebarTreeItem
                     expand={true}
@@ -39,6 +57,20 @@ function SidebarDefault() {
                     parentId={'10t_Nrv_DUoOSbp9MoYGmfm1Cdj--Zc0D'}
                 />
             </ul>
-        </Router>
+            <Outlet />
+        </>
     )
+}
+
+function SidebarDefault() {
+    const router = useMemo(
+        () =>
+            createRouter({
+                routeTree: storyRouteTree,
+                history: createMemoryHistory({ initialEntries: ['/'] }),
+                trailingSlash: 'preserve',
+            }),
+        []
+    )
+    return <RouterProvider router={router} />
 }

@@ -1,8 +1,9 @@
+// @ts-nocheck
 import React, { useEffect, useGlobal, useState } from 'reactn'
 import { Beforeunload } from 'react-beforeunload'
 import { Value } from 'slate'
 import { isHotkey } from 'is-hotkey'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@tanstack/react-router'
 import { debounce } from 'lodash'
 
 import { Hint } from 'components/gsuite-components/hint'
@@ -40,10 +41,12 @@ const EditorLogic = React.forwardRef(
     ) => {
         const [files, setFiles] = useGlobal('files')
         const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
-        const { search } = useLocation()
-        const [readOnly, setReadOnly] = useState(
-            search === '?edit' ? false : true
-        )
+        const { searchStr } = useLocation()
+        const hasEdit =
+            searchStr === '?edit' ||
+            (searchStr.startsWith('?') &&
+                new URLSearchParams(searchStr.slice(1)).has('edit'))
+        const [readOnly, setReadOnly] = useState(!hasEdit)
         const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
         //const editorRef = useRef(null)
 

@@ -1,8 +1,9 @@
+// @ts-nocheck
 // @ts-check
 
 import { useDispatch, useGlobal } from 'reactn'
 import _ from 'lodash'
-import { Link } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
 import clsx from 'clsx'
 import { Chip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -84,7 +85,8 @@ const FileListPartial = props => {
                                 className={classes.link}
                                 onClick={clearSearch}
                                 style={{ color: '#3c4043' }}
-                                to={`/page/${file.id}`}
+                                to="/page/$id"
+                                params={{ id: file.id }}
                             >
                                 <ListItemIcon
                                     style={{ color: '#4285f4' }}

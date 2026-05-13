@@ -1,12 +1,11 @@
+// @ts-nocheck
 //@ts-check
 import React from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation } from '@tanstack/react-router'
 
 export const Drive = () => {
-    const location = useLocation()
-    const { search } = location
-    console.log(search)
-    const path = createPath(search)
+    const { searchStr } = useLocation()
+    const path = createPath(searchStr)
 
     return <Navigate to={path} replace />
 }

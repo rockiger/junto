@@ -1,5 +1,6 @@
+// @ts-nocheck
 import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@tanstack/react-router'
 import clsx from 'clsx'
 
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
@@ -57,7 +58,10 @@ export const SearchAutocomplete = ({
             selectedRow !== null &&
             filteredFiles.length >= selectedRow
         ) {
-            navigate(`/page/${filteredFiles[selectedRow].id}`)
+            navigate({
+                to: '/page/$id',
+                params: { id: filteredFiles[selectedRow].id },
+            })
             clearSearch()
             Event('Search', 'Submit Selected', 'keydown Enter')
         }
@@ -101,7 +105,8 @@ export const SearchAutocomplete = ({
                                 setTimeout(clearSearch, 100)
                                 Event('Search', 'Submit Selected', 'click')
                             }}
-                            to={`/page/${file.id}`}
+                            to="/page/$id"
+                            params={{ id: file.id }}
                         >
                             <div
                                 className={

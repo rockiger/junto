@@ -1,41 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import React, { useMemo, useState } from 'react'
+import {
+    Outlet,
+    RouterProvider,
+    createMemoryHistory,
+    createRootRoute,
+    createRoute,
+    createRouter,
+} from '@tanstack/react-router'
 import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
 
 import { SearchAutocomplete } from './SearchAutocomplete'
 import testState from './testState.js'
 
-const items = [
-    {
-        id: '1',
-        icon: () => (
-            <img
-                style={{
-                    verticalAlign: 'sub',
-                }}
-                src="https://drive-thirdparty.googleusercontent.com/16/type/application/json"
-                alt="Wiki File"
-            />
-        ),
-        href: 'https://spielgel.de',
-        name: 'Test 1',
-    },
-    {
-        id: '2',
-        icon: () => (
-            <img
-                style={{
-                    verticalAlign: 'sub',
-                }}
-                src="https://drive-thirdparty.googleusercontent.com/16/type/application/json"
-                alt="Wiki File"
-            />
-        ),
-        href: 'https://faz.net',
-        name: 'Test 2',
-    },
-]
+const rootRoute = createRootRoute({
+    component: SearchStoryShell,
+})
+
+const pageRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/page/$id',
+    component: () => null,
+})
+
+const storyRouteTree = rootRoute.addChildren([pageRoute])
 
 storiesOf('SearchAutocomplete', module)
     .addDecorator(story => (
@@ -43,23 +30,36 @@ storiesOf('SearchAutocomplete', module)
             {story()}
         </div>
     ))
-    .add('default', () => <SearchAutocompleteDefault />)
+    .add('default', () => <SearchAutocompleteStory />)
 
-const SearchAutocompleteDefault = () => {
+function SearchStoryShell() {
     const { files } = testState
-    console.log({ files })
-
     const [filteredFiles, setFilteredFiles] = useState(files)
 
     return (
-        <Router>
+        <>
             <SearchAutocomplete
+                clearSearch={() => {}}
                 files={files}
                 filteredFiles={filteredFiles}
                 searchValue={''}
                 setFilteredFiles={setFilteredFiles}
                 setSubmitSelected={() => {}}
             />
-        </Router>
+            <Outlet />
+        </>
     )
+}
+
+function SearchAutocompleteStory() {
+    const router = useMemo(
+        () =>
+            createRouter({
+                routeTree: storyRouteTree,
+                history: createMemoryHistory({ initialEntries: ['/'] }),
+                trailingSlash: 'preserve',
+            }),
+        []
+    )
+    return <RouterProvider router={router} />
 }

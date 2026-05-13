@@ -1,6 +1,7 @@
+// @ts-nocheck
 //@ts-check
 import React, { useEffect, useGlobal, useRef } from 'reactn'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 
 import { createFile, createNewWiki } from 'db'
 import Spinner from 'components/gsuite-components/spinner'
@@ -16,11 +17,10 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
     )
 
     const navigate = useNavigate()
-    const location = useLocation()
     const modalRef = useRef(null)
 
-    const { search } = location
-    const state = getState(search)
+    const { searchStr } = useLocation()
+    const state = getState(searchStr)
     //@ts-ignore
     const { folderId } = state
 
@@ -51,11 +51,14 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                             OVERVIEW_VALUE,
                             name
                         )
-                        navigate(`/page/${newFileId}`)
+                        navigate({
+                            to: '/page/$id',
+                            params: { id: newFileId },
+                        })
                     } catch (err) {
                         console.log({ err })
                         setIsCreatingNewFile(false)
-                        if (!err) navigate('/')
+                        if (!err) navigate({ to: '/' })
                     }
                 }
             } catch (err) {

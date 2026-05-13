@@ -1,12 +1,10 @@
 import React, { useGlobal } from 'reactn'
-import { BrowserRouter as Router } from 'react-router-dom'
 import clsx from 'clsx'
+import { RouterProvider } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { SnackbarProvider } from 'notistack'
 
-import Footer from './footer'
-import Header from './header'
-import Main from './main'
-import Sidebar from './sidebar'
+import { router } from 'router'
 
 import styles from './app.module.scss'
 
@@ -20,12 +18,10 @@ export default function App() {
             })}
         >
             <SnackbarProvider maxSnack={3}>
-                <Router>
-                    <Header />
-                    {isSignedIn && <Sidebar />}
-                    <Main />
-                    {!isSignedIn && <Footer />}
-                </Router>
+                <RouterProvider router={router} />
+                {import.meta.env.DEV ? (
+                    <TanStackRouterDevtools router={router} />
+                ) : null}
             </SnackbarProvider>
         </div>
     )

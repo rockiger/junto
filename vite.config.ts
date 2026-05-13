@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -20,17 +21,24 @@ export default defineConfig(() => {
 				scss: {
 					loadPaths: [path.resolve(__dirname, "src")],
 					// Avoid flooding the dev server; @import still works until Dart Sass 3.
-					silenceDeprecations: ["import"],
+					silenceDeprecations: ["import" as const],
 				},
 				sass: {
 					loadPaths: [path.resolve(__dirname, "src")],
-					silenceDeprecations: ["import"],
+					silenceDeprecations: ["import" as const],
 				},
 			},
 		},
 		server: {
 			port: 4763,
 		},
-		plugins: [tsconfigPaths(), react()],
+		plugins: [
+			tsconfigPaths(),
+			tanstackRouter({
+				target: "react",
+				autoCodeSplitting: false,
+			}),
+			react(),
+		],
 	};
 });

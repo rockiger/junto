@@ -1,9 +1,7 @@
 import React, { setGlobal } from 'reactn'
 import ReactDOM from 'react-dom'
-import renderer from 'react-test-renderer'
-import { MemoryRouter } from 'react-router-dom'
 
-import Sidebar from './'
+import { TestRouter } from '../../test-router'
 
 setGlobal({
     isCreatingNewFile: false,
@@ -16,24 +14,19 @@ setGlobal({
     oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
-    searchValue: '', // The value in the searchfield
+    searchValue: '',
     files: [],
     initialFiles: [],
     isInitialFileListLoading: false,
     backgroundUpdate: false,
+    showSidebarOnMobile: false,
 })
 
 describe('Sidebar', () => {
     it('renders without crashing', () => {
         const div = document.createElement('div')
         ReactDOM.render(
-            <MemoryRouter>
-                <Sidebar
-                    files={[]}
-                    goToNewFile={false}
-                    setGoToNewFile={() => {}}
-                />
-            </MemoryRouter>,
+            <TestRouter initialPath="/" />,
             div
         )
         ReactDOM.unmountComponentAtNode(div)

@@ -38,3 +38,7 @@ alwaysApply: true
 ## Unklarheit
 
 - Wenn die Anfrage mehrdeutig ist: kurz nachfragen oder die wahrscheinlichste Interpretation nennen und danach handeln.
+
+## Package Manager
+
+- Always use bun instead of npm or yarn.

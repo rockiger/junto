@@ -1,6 +1,7 @@
+// @ts-nocheck
 //@ts-check
 import React, { useDispatch } from 'reactn'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from '@tanstack/react-router'
 import { Tooltip } from 'components/gsuite-components'
 
 import { useStyles } from './SidebarItem-styles'

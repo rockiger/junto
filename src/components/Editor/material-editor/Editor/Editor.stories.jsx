@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { Value } from 'slate'
 
-import Editor from './Editor-container.js'
+import Editor from './Editor-container'
 
 import codeValueAsJson from './codevalue.json'
 import checkListValueAsJson from './checkListValue.json'

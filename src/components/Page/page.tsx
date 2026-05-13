@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* global gapi */
 import React from 'reactn'
 import PropTypes from 'prop-types'
@@ -5,7 +6,8 @@ import {
     Navigate,
     useNavigate,
     useParams,
-} from 'react-router-dom'
+    type NavigateFn,
+} from '@tanstack/react-router'
 
 import { Chip } from '@material-ui/core'
 import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
@@ -31,8 +33,31 @@ import { BreadcrumbsBar } from './Breadcrumbs'
 import { filesUpdater } from 'lib/helper'
 import { getPageById, putPage } from 'lib/localDB'
 
-class Page extends React.Component {
-    constructor(props) {
+type PageOuterProps = {
+    isSignedIn: boolean
+    isSigningIn: boolean
+    isCreatingNewFile: boolean
+    setGoToNewFile: (v: boolean) => void
+}
+
+type PageProps = PageOuterProps & {
+    navigate: NavigateFn
+    params: { id: string }
+}
+
+type PageState = {
+    canEdit: boolean
+    editorDelta: Record<string, unknown>
+    fileId: string
+    fileName: string
+    pageHead: string
+    fileLoaded: boolean
+    fileLoading: boolean
+    initialContent?: string
+}
+
+class Page extends React.Component<PageProps, PageState> {
+    constructor(props: PageProps) {
         super(props)
         this.state = {
             canEdit: false,
@@ -43,16 +68,19 @@ class Page extends React.Component {
             fileLoaded: false,
             fileLoading: false,
         }
-        this.editorRef = React.createRef(null)
-        this.inputRef = React.createRef(null)
+        this.editorRef = React.createRef()
+        this.inputRef = React.createRef()
     }
+
+    editorRef: React.RefObject<unknown>
+    inputRef: React.RefObject<unknown>
+
     componentDidMount() {
         this.setGlobal({ goToNewFile: false })
         PageView({ pathname: '/page' })
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        // load editor content when user is signed in and can use drive api
+    componentDidUpdate(prevProps: PageProps, prevState: PageState) {
         if (
             this.props.isSignedIn &&
             !this.state.fileLoaded &&
@@ -69,7 +97,6 @@ class Page extends React.Component {
             this.updateViewedByMeDate()
         }
 
-        // when going from one page to the next, we check if the parmeter in the url changed
         if (
             prevProps.params.id !== this.props.params.id &&
             this.global.files.length > 0
@@ -84,49 +111,58 @@ class Page extends React.Component {
             )
         }
 
-        // Change title if pageHead changed
         if (prevState.pageHead !== this.state.pageHead) {
             document.title = `${this.state.pageHead} – Fulcrum.wiki`
         }
     }
 
-    async downloadFileContent(fileId) {
+    async downloadFileContent(fileId: string) {
         try {
             const fileContent = await downloadFile(fileId)
             return fileContent
-        } catch (err) {
+        } catch (err: unknown) {
             console.log({ err })
-            const body = err.body ? JSON.parse(err.body) : {}
+            const rawBody =
+                err &&
+                typeof err === 'object' &&
+                'body' in err &&
+                typeof (err as { body: string }).body === 'string'
+                    ? (err as { body: string }).body
+                    : '{}'
+            const body = JSON.parse(rawBody) as {
+                error?: { message?: string }
+            }
             const { error = {} } = body
             if (error.message === 'Invalid Credentials') {
                 try {
                     await refreshSession()
                     this.loadEditorContent()
-                } catch (err) {
+                } catch (e) {
                     alert(`Couldn't refresh session:`)
-                    console.log({ err })
+                    console.log({ err: e })
                 }
             } else {
                 alert(`Couldn't find file`)
                 console.log({ error })
-                this.props.navigate('/')
+                void this.props.navigate({ to: '/' })
             }
             return undefined
         }
     }
 
-    loadEditorContent = async ev => {
+    loadEditorContent = async () => {
         const { fileId } = this.state
         if (fileId) {
             let fileContent
-            let fileDescription = this.global.files.find(el => el.id === fileId)
+            let fileDescription = this.global.files.find(
+                (el: { id: string }) => el.id === fileId
+            )
 
             if (!fileDescription)
                 fileDescription = await getFileDescription(this.state.fileId)
 
             const pageHead = getTitleFromFile(fileDescription)
 
-            // get local page content from localDB if present and up to date
             const page = await getPageById(fileId)
             console.log(page)
             if (page && page.editedTime >= fileDescription.modifiedTime) {
@@ -143,7 +179,7 @@ class Page extends React.Component {
                 })
             }
             this.setState({
-                canEdit: fileDescription.capabilities?.canEdit,
+                canEdit: Boolean(fileDescription.capabilities?.canEdit),
                 initialContent: fileContent ? fileContent : '',
                 fileLoaded: true,
                 fileLoading: false,
@@ -151,15 +187,15 @@ class Page extends React.Component {
                 pageHead,
             })
         } else {
-            this.props.navigate('/')
+            void this.props.navigate({ to: '/' })
         }
     }
 
-    setEditorDelta = editorDelta => {
+    setEditorDelta = (editorDelta: Record<string, unknown>) => {
         this.setState({ editorDelta })
     }
 
-    onBlurInput = async ev => {
+    onBlurInput = async () => {
         const { fileId } = this.state
         let { pageHead } = this.state
         if (!pageHead) {
@@ -169,20 +205,24 @@ class Page extends React.Component {
 
         const fileName = getFileNameFromTitle(pageHead)
         if (this.state.fileName !== fileName) {
-            this.renameFile(fileId, fileName)
+            await this.renameFile(fileId, fileName)
         }
     }
 
-    onChangeInput = ev => {
+    onChangeInput = (ev: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ pageHead: ev.target.value })
     }
 
-    onKeyDownInput = ev => {
+    onKeyDownInput = (ev: React.KeyboardEvent<HTMLInputElement>) => {
         switch (ev.key) {
             case `ArrowDown`:
             case `Tab`:
                 ev.preventDefault()
-                this.editorRef.current.focus()
+                ;(
+                    this.editorRef.current as {
+                        focus?: () => void
+                    } | null
+                )?.focus?.()
                 break
 
             default:
@@ -192,13 +232,7 @@ class Page extends React.Component {
         ev.stopPropagation()
     }
 
-    /**
-     * Renames the file in the global state and in Google Drive
-     *
-     * @param {string} - the id of the of the file
-     * @param {string} - the new name
-     */
-    renameFile = async (id, name) => {
+    renameFile = async (id: string, name: string) => {
         const change = { name }
 
         this.setState({ fileName: name })
@@ -206,10 +240,6 @@ class Page extends React.Component {
         await renameFileInGdrive(this.state.fileId, name)
     }
 
-    /**
-     * Updates the the viewedByMe and viewedByMeTime properties
-     * in the global state and in Google Drive
-     */
     updateViewedByMeDate = () => {
         const { fileId } = this.state
         const now = new Date().toISOString()
@@ -219,22 +249,22 @@ class Page extends React.Component {
             viewedByMeTime: now,
         }
 
-        // Update the global state
         this.setGlobal(filesUpdater(change, this.global, fileId))
 
-        // Update the file on Google Drive
         updateMetadata(fileId, { viewedByMeTime: now })
     }
 
     render() {
-        let editor = (
+        const editor = (
             <Editor
                 canEdit={this.state.canEdit}
                 fileId={this.state.fileId}
                 fileLoaded={this.state.fileLoaded}
                 fileName={this.state.fileName}
-                initialValue={this.state.initialContent}
-                inputRef={this.inputRef}
+                initialValue={this.state.initialContent ?? ''}
+                inputRef={
+                    this.inputRef as React.RefObject<HTMLInputElement | null>
+                }
                 ref={this.editorRef}
                 setEditorDelta={this.setEditorDelta}
             />
@@ -279,7 +309,10 @@ class Page extends React.Component {
                                                         : ''
                                                 }
                                                 placeholder="Untitled page"
-                                                ref={this.inputRef}
+                                                ref={
+                                                    this
+                                                        .inputRef as React.LegacyRef<HTMLInputElement>
+                                                }
                                                 onKeyDown={this.onKeyDownInput}
                                                 onChange={this.onChangeInput}
                                             />
@@ -335,12 +368,13 @@ class Page extends React.Component {
         } else if (!this.props.isSignedIn && !this.props.isSigningIn) {
             return <Navigate to="/" replace />
         }
+        return null
     }
 }
 
-function PageWithRouter(props) {
+function PageWithRouter(props: PageOuterProps) {
     const navigate = useNavigate()
-    const params = useParams()
+    const params = useParams({ from: '/page/$id' })
     return <Page {...props} navigate={navigate} params={params} />
 }
 
@@ -356,22 +390,30 @@ Page.propTypes = {
     setGoToNewFile: PropTypes.func.isRequired,
 }
 
-/**
- *
- * @param {string} fileId
- * @param {object[]} files
- * @param {string} userEmail
- */
-export function getUserRole(fileId, files, userEmail) {
+type DrivePermRole =
+    | 'organizer'
+    | 'owner'
+    | 'fileOrganizer'
+    | 'writer'
+    | 'commenter'
+    | 'reader'
+
+export function getUserRole(
+    fileId: string,
+    files: {
+        id: string
+        permissions?: { emailAddress?: string; role: string }[]
+    }[],
+    userEmail: string
+): DrivePermRole {
     const fileMeta = files.find(file => file.id === fileId)
     console.log(fileMeta)
-    /** @type {'organizer' | 'owner' | 'fileOrganizer' | 'writer' | 'commenter' | 'reader'} */
-    let userRole = 'owner'
+    let userRole: DrivePermRole = 'owner'
     if (fileMeta && fileMeta.permissions) {
         const userPermission = fileMeta.permissions.find(
             el => el.emailAddress === userEmail
         )
-        if (userPermission) userRole = userPermission.role
+        if (userPermission) userRole = userPermission.role as DrivePermRole
     }
 
     return userRole

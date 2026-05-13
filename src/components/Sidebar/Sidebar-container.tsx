@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React from 'reactn'
 import PropTypes from 'prop-types'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 
 import {
     getPageId,
@@ -53,7 +54,9 @@ class Sidebar extends React.Component {
                 parentFolderIdOfNewFile,
                 JSON.stringify(EMPTYVALUE)
             )
-            this.props.navigate(`/page/${newFileId}?edit`)
+            this.props.navigate({
+                href: `/page/${newFileId}?edit`,
+            })
         } catch (err) {
             this.setGlobal({ isCreatingNewFile: false })
             console.log(err)

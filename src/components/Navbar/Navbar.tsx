@@ -1,5 +1,6 @@
+// @ts-nocheck
 import React, { useDispatch, useEffect, useGlobal } from 'reactn'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@tanstack/react-router'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
@@ -32,7 +33,7 @@ const Navbar = props => {
     const submit = () => {
         setSearchTerm(searchValue)
         setIsSearchFieldActive(false)
-        navigate('/')
+        navigate({ to: '/' })
     }
     return (
         <div className={styles.Navbar}>

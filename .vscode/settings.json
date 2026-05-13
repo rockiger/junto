@@ -20,9 +20,5 @@
 		"statusBarItem.remoteForeground": "#e7e7e7",
 		"commandCenter.border": "#e7e7e799"
 	},
-	"peacock.remoteColor": "#007fff",
-	"search.exclude": {
-		"**/node_modules": false
-	},
-	"search.useIgnoreFiles": false
+	"peacock.remoteColor": "#007fff"
 }
