@@ -30,6 +30,8 @@ type IChange = {
     parents?: Array<string> // the id of the parrent of a file
     properties?: { [key: string]: any }
     shared?: boolean
+    viewedByMe?: boolean
+    viewedByMeTime?: string
 }
 
 /**

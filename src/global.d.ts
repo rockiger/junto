@@ -1,6 +1,11 @@
 import 'reactn'
 import { HintMap } from 'components/gsuite-components/hint'
 
+/** Google API client (loaded at runtime). */
+declare const gapi: {
+    load: ( module: string, callback?: () => void ) => void
+}
+
 declare module 'reactn/default' {
     export interface Reducers {
         clearSearch: (
