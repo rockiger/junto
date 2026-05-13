@@ -6,8 +6,8 @@ const isPro =
 
 // Client ID and API key from the Developer Console
 export const CLIENT_ID = isPro
-	? import.meta.env.VITE_CLIENT_ID_PRO
-	: import.meta.env.VITE_CLIENT_ID;
+	? import.meta.env.VITE_GOOGLE_CLIENT_ID
+	: import.meta.env.VITE_GOOGLE_CLIENT_ID;
 export const API_KEY = isPro
 	? import.meta.env.VITE_API_KEY_PRO
 	: import.meta.env.VITE_API_KEY;
