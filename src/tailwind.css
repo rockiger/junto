@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens: values from src/static/styles/_palette.scss + Drive-like UI.
+ * Naming avoids Tailwind duplicates (e.g. --color-fg-default -> text-fg-default, not text-text-primary).
+ */
+@theme {
+	/* Typography (matches index.scss body stack) */
+	--font-sans: Roboto, "Open Sans", ui-sans-serif, system-ui, sans-serif;
+
+	/* Accent / brand (primary-* from palette) */
+	--color-accent: #4285f4;
+	--color-accent-light: rgb(103 157 246);
+	--color-accent-dark: rgb(46 93 170);
+	--color-on-accent: #fff;
+
+	/* Foreground / text (text-* from palette) */
+	--color-fg-default: #3c4043;
+	--color-fg-muted: rgb(0 0 0 / 0.54);
+	--color-fg-disabled: rgb(0 0 0 / 0.38);
+	--color-fg-hint: rgb(0 0 0 / 0.38);
+	--color-heading: #202124;
+
+	/* Surfaces (background / paper) */
+	--color-surface: #fff;
+	--color-surface-alt: #f1f3f4;
+	--color-surface-paper: #fff;
+
+	/* Interactive overlays (action-* from palette) */
+	--color-surface-hover: rgb(0 0 0 / 0.08);
+	--color-surface-selected: rgb(0 0 0 / 0.14);
+	--color-surface-active: rgb(0 0 0 / 0.54);
+
+	/* Borders & dividers */
+	--color-edge: rgb(0 0 0 / 0.12);
+	--color-edge-strong: #d5d5d5;
+	--color-divider: rgb(0 0 0 / 0.12);
+
+	/* Semantic */
+	--color-danger: #f44336;
+	--color-danger-light: #e57373;
+	--color-danger-dark: #d32f2f;
+	--color-on-danger: #fff;
+
+	/* Grey scale (subset for chips / chrome) */
+	--color-grey-50: #fafafa;
+	--color-grey-100: #f5f5f5;
+	--color-grey-200: #eeeeee;
+	--color-grey-300: #e0e0e0;
+	--color-grey-600: #757575;
+	--color-grey-700: #616161;
+	--color-grey-800: #424242;
+
+	/* Layout: sidebar 256px, header 64px, list row ~40px */
+	--spacing-sidebar: 16rem;
+	--spacing-header: 4rem;
+	--spacing-row: 2.5rem;
+
+	--radius-control: 0.25rem;
+	--radius-panel: 0.5rem;
+
+	--shadow-focus: 0 0 0 2px rgb(66 133 244 / 0.35);
+}

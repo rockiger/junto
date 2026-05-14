@@ -1,0 +1,19 @@
+- [] List Markdown-it Wiki files from Google Drive
+- [] Create Sub-pages for Wiki files in Google Drive
+- [] Show file in React-Lexical
+- [] Use UI from DaisyUI
+- [] Build Sidebar to reflect Wiki structure
+- [] Build Editor to edit Wiki files
+- [] Build Toolbar to edit Wiki files
+- [] Build Preview to preview Wiki files
+- [] Build Footer to show Wiki files
+- [] Build Header to show Wiki files
+- [] Build Main to show Wiki files
+- [] Build Sidebar to show Wiki files
+- [] Build Sidebar to show Wiki files
+- [] Make webfonts for Metropolis
+- [] Convert .gwiki files to .md to use legacy files
+- [] Deploy to Hostinger
+- [] Font to Metropolis
+- [] Remove tanstack design
+- [] Details summary merken
