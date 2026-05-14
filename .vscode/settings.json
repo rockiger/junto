@@ -1,4 +1,7 @@
 {
+	"files.associations": {
+		"**/tailwind.css": "tailwindcss"
+	},
 	"peacock.color": "#007fff",
 	"workbench.colorCustomizations": {
 		"activityBar.activeBackground": "#3399ff",

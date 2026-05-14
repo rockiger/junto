@@ -6,7 +6,8 @@
  */
 @theme {
 	/* Typography (matches index.scss body stack) */
-	--font-sans: Roboto, "Open Sans", ui-sans-serif, system-ui, sans-serif;
+	--font-sans:
+		Metropolis, Roboto, "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
 	/* Accent / brand (primary-* from palette) */
 	--color-accent: #4285f4;
