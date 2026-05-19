@@ -9,6 +9,18 @@
 	--font-sans:
 		Metropolis, Roboto, "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
+	/* Sidebar and header background colors */
+	--color-sidebar: hsl(249.99998, 33%, 96%);
+	--color-search-bg: hsl(247.5, 20%, 92%);
+	--color-search-placeholder: hsl(223.84615, 13%, 39%);
+	--color-tab-selected: hsl(222.97298, 34%, 42%);
+	--color-icon-blue: hsl(214.2029, 82%, 51%);
+	--color-icon-blue-light: hsl(214.2029, 82%, 90%);
+	--color-icon-blue-lighter: hsl(214.2029, 82%, 95%);
+	--color-icon-surface: hsl(251.99998, 16%, 94%);
+	--color-text-default: hsl(230.00002, 10%, 11%);
+	--color-text-muted: hsl(240, 7%, 29%);
+
 	/* Accent / brand (primary-* from palette) */
 	--color-accent: #4285f4;
 	--color-accent-light: rgb(103 157 246);
@@ -23,7 +35,7 @@
 	--color-heading: #202124;
 
 	/* Surfaces (background / paper) */
-	--color-surface: #fff;
+	--color-surface: hsl(249.99998, 33%, 96%);
 	--color-surface-alt: #f1f3f4;
 	--color-surface-paper: #fff;
 
@@ -61,4 +73,11 @@
 	--radius-panel: 0.5rem;
 
 	--shadow-focus: 0 0 0 2px rgb(66 133 244 / 0.35);
+
+	/* Stacking (fixed chrome above content) */
+	--z-1000: 1000;
+}
+
+html {
+	@apply text-text-default;
 }

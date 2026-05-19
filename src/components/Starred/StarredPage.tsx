@@ -1,11 +1,14 @@
 //@ts-check
-import React, { useEffect, useGlobal } from 'reactn'
-import { Navigate } from '@tanstack/react-router'
-import StarIcon from 'mdi-react/StarIcon'
 
+import { Navigate } from '@tanstack/react-router'
 import { Spinner } from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
+import type { SortBy } from 'components/Home/FileList/fileList-component'
 import { PageView } from 'components/Tracking'
+import { LOCALSTORAGE_NAME } from 'lib/constants'
+import StarIcon from 'mdi-react/StarIcon'
+import { useEffect, useGlobal, useState } from 'reactn'
+import type { IFile } from 'reactn/default'
 
 export default StarredPage
 export { StarredPage as ArchivePage }
@@ -16,12 +19,25 @@ export { StarredPage as ArchivePage }
  * @property {boolean} isSigningIn
  */
 
+const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
+const sortByLS = localStorage.getItem(localStorageKey)
+
 /**
  * A archive-page component.
  * @param {ArchivePageProps} props
  */
-function StarredPage({ isSignedIn, isSigningIn }) {
+function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigningIn: boolean }) {
     const [files] = useGlobal('files')
+    const [sortBy, setSortBy] = useState(
+        sortByLS &&
+            (sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")
+            ? sortByLS
+            : "modifiedByMeTime",
+    )
+    const setSortByAndLocalStorage = (sortBy: SortBy) => {
+        setSortBy(sortBy)
+        localStorage.setItem(localStorageKey, sortBy)
+    }
 
     useEffect(() => {
         PageView({ pathname: '/starred' })
@@ -30,16 +46,14 @@ function StarredPage({ isSignedIn, isSigningIn }) {
     console.log({ files, starred: filterStarred(files) })
     if (isSignedIn && !isSigningIn) {
         return (
-            <>
-                <FileList
-                    emptyIcon={StarIcon}
-                    emptyMessage="No starred pages."
-                    emptySubline="Add stars to pages you want to easily refer to later."
-                    files={_.thread(files, filterStarred)}
-                    sortBy="modifiedByMeTime"
-                    title="Starred"
-                />
-            </>
+            <FileList
+                emptyIcon={StarIcon}
+                emptyMessage="No starred pages."
+                emptySubline="Add stars to pages you want to easily refer to later."
+                files={_.thread(files, filterStarred)}
+                sortBy={sortBy as SortBy}
+                setSortBy={setSortByAndLocalStorage}
+            />
         )
     } else if (!isSignedIn && isSigningIn) {
         return (
@@ -52,7 +66,7 @@ function StarredPage({ isSignedIn, isSigningIn }) {
     }
 }
 
-export function filterStarred(files) {
+export function filterStarred(files: IFile[]) {
     const filtered = files.filter(file => {
         return file.starred
     })

@@ -1,3 +1,31 @@
+- [x] Move to tanstack start
+- [x] Update React to 19
+- [] Make mobile views working again
+-- [x] Home
+-- [x] Starred
+--- [x] Filter Starred files
+-- [x] Shared
+--- [x] Repair placeholder of SharedWithMe
+--- [x] Filter SharedWithMe files
+-- [x] Archive
+-- [] Search
+-- [] Page-View
+--- [] Convert Page to Markdown-it
+-- [] Page-Edit
+----------------------------------------------------------
+- [] Make desktop views working again
+-- [] Home
+-- [] Starred
+-- [] Shared
+-- [] Archive
+-- [] Search
+-- [] Page-View
+-- [] Page-Edit
+- [] Add react-compiler
+- [] Deploy to Hostinger
+----------------------------------------------------------
+- [] Migrate to markdown-it backend
+- [] Migrate to React-Lexical
 - [] List Markdown-it Wiki files from Google Drive
 - [] Create Sub-pages for Wiki files in Google Drive
 - [] Show file in React-Lexical
@@ -14,6 +42,7 @@
 - [] Make webfonts for Metropolis
 - [] Convert .gwiki files to .md to use legacy files
 - [] Deploy to Hostinger
-- [] Font to Metropolis
-- [] Remove tanstack design
 - [] Details summary merken
+- [] Deploy to Hostinger
+- [] Read Hints to guide users
+- [] Star a file in the file list

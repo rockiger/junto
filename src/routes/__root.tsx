@@ -1,9 +1,9 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { useGlobal } from 'reactn'
-import Header from 'components/app/header'
 import Footer from 'components/app/footer'
+import Header from 'components/app/header'
 import Sidebar from 'components/app/sidebar'
-import styles from 'components/app/main/main.module.scss'
+import { DashboardMobileDock } from 'components/Home/dashboard-mobile'
+import { useGlobal } from 'reactn'
 
 export const Route = createRootRoute({
     component: RootLayout,
@@ -16,10 +16,10 @@ function RootLayout() {
         <>
             <Header />
             {isSignedIn && <Sidebar />}
-            <div className={styles.Main}>
+            <div className="bg-sidebar pb-32 min-h-[calc(100dvh-64px)]">
                 <Outlet />
             </div>
-            {!isSignedIn && <Footer />}
+            {!isSignedIn ? <Footer /> : <DashboardMobileDock />}
         </>
     )
 }

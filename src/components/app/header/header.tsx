@@ -1,36 +1,34 @@
-import React, { useGlobal } from 'reactn'
-import SyncIcon from 'mdi-react/SyncIcon'
-
-import Navbar from 'components/Navbar'
-import GoogleLogin from 'components/googleLogin'
+import GoogleLoginUntyped from 'components/googleLogin'
 import { Help } from 'components/help'
 import { FooterLink } from 'components/staticPages/Footer'
-
-import styles from './header.module.scss'
-
 import { API_KEY, CLIENT_ID, DISCOVERY_DOCS, SCOPES } from 'lib/constants'
+import { isEmpty } from 'lodash'
+import SyncIcon from 'mdi-react/SyncIcon'
+import type { ComponentType } from 'react'
+import { useGlobal } from 'reactn'
+import Navbar from './navbar'
 
-export default function Header(props: any) {
+const GoogleLogin = GoogleLoginUntyped as unknown as ComponentType<{
+    apiKey: string
+    buttonText?: string
+    clientId: string
+    discoveryDocs: string[]
+    scope: string
+}>
+
+export default function Header() {
     const [isSignedIn] = useGlobal('isSignedIn')
     const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
     const [initialFiles] = useGlobal('initialFiles')
 
     return (
-        <div className={styles.Header}>
+        <div className="bg-sidebar" style={{ gridArea: 'header' }}>
             <Navbar isSignedIn={isSignedIn}>
                 {isSignedIn &&
                     isInitialFileListLoading &&
-                    _.isNotEmpty(initialFiles) && (
-                        <div
-                            style={{
-                                alignContent: 'center',
-                                color: 'rgba(0, 0, 0, 0.54)',
-                                display: 'flex',
-                                fontSize: '0.75rem',
-                                fontWeight: 500,
-                            }}
-                        >
-                            <SyncIcon style={{ height: '1rem' }} />
+                    !isEmpty(initialFiles) && (
+                        <div className="hidden md:flex items-center gap-1 text-xs font-medium text-fg-muted">
+                            <SyncIcon className="h-4 shrink-0" />
                             Syncing...
                         </div>
                     )}

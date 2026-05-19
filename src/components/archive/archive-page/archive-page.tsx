@@ -1,22 +1,23 @@
 // @ts-nocheck
 //@ts-check
-import React, { useEffect, useGlobal } from 'reactn'
+
 import { Navigate } from '@tanstack/react-router'
-import ArchiveIcon from 'mdi-react/ArchiveIcon'
 import {
-    H1,
     Spinner,
     Tab,
-    Tabs,
     TabList,
     TabPanel,
+    TabPanels,
+    Tabs,
 } from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
 import { PageView } from 'components/Tracking'
-
 import { WikiList } from 'components/wiki-list'
-
+import { LOCALSTORAGE_NAME } from 'lib/constants'
 import { isArchived } from 'lib/helper'
+import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
+import { SelectionIndicator } from 'react-aria-components'
+import { useEffect, useGlobal, useState } from 'reactn'
 
 export default ArchivePage
 export { ArchivePage }
@@ -27,6 +28,11 @@ export { ArchivePage }
  * @property {boolean} isSigningIn
  */
 
+
+
+const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
+const sortByLS = localStorage.getItem(localStorageKey)
+
 /**
  * A archive-page component.
  * @param {ArchivePageProps} props
@@ -34,41 +40,70 @@ export { ArchivePage }
 function ArchivePage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
     const archivedFiles = filterIsArchived(files)
+    const [sortBy, setSortBy] = useState(
+        sortByLS &&
+            (sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")
+            ? sortByLS
+            : "modifiedByMeTime",
+    )
+
+    const setSortByAndLocalStorage = (sortBy: SortBy) => {
+        setSortBy(sortBy)
+        localStorage.setItem(localStorageKey, sortBy)
+    }
 
     useEffect(() => PageView({ pathname: '/archive' }), [])
 
     if (isSignedIn && !isSigningIn) {
         return (
             <>
-                <H1>Archive</H1>
-                <Tabs>
-                    <TabList>
-                        <Tab>Pages</Tab>
-                        <Tab>Wikis</Tab>
+                {true && (<Tabs className="w-full">
+                    <TabList
+                        aria-label="Tabs"
+                        className="bg-sidebar flex w-full justify-around sticky top-0 z-10"
+                    >
+                        <Tab
+                            className="flex min-w-0 flex-1 cursor-pointer flex-col items-center py-0 text-fg-muted outline-none data-focus-visible:ring-2 data-focus-visible:ring-accent/35 data-focus-visible:ring-offset-2 data-focus-visible:ring-offset-sidebar data-selected:text-tab-selected"
+                            id="pages"
+                        >
+                            <div className="inline-flex max-w-full flex-col items-center gap-3 pt-3.5">
+                                <span className="text-sm font-medium px-0.5">Pages</span>
+                                <SelectionIndicator
+                                    className="bg-tab-selected h-[3px] w-full max-w-full shrink-0"
+                                />
+                            </div>
+                        </Tab>
+                        <Tab
+                            className="flex min-w-0 flex-1 cursor-pointer flex-col items-center py-0 text-fg-muted outline-none data-focus-visible:ring-2 data-focus-visible:ring-accent/35 data-focus-visible:ring-offset-2 data-focus-visible:ring-offset-sidebar data-selected:text-tab-selected"
+                            id="wikis"
+                        >
+                            <div className="inline-flex max-w-full flex-col items-center gap-3 pt-3.5">
+                                <span className="text-sm font-medium px-0.5">Wikis</span>
+                                <SelectionIndicator
+                                    className="bg-tab-selected h-[3px] w-full max-w-full shrink-0"
+                                />
+                            </div>
+                        </Tab>
                     </TabList>
-                    <TabPanel
-                        style={{
-                            maxHeight: 'calc(100vh - 168px)',
-                            overflow: 'auto',
-                        }}
-                    >
-                        <FileList
-                            emptyIcon={ArchiveIcon}
-                            emptyMessage="Your archive is empty."
-                            emptySubline="The archive will show pages you archived"
-                            files={filterPages(archivedFiles)}
-                            sortBy="modifiedByMeTime"
-                        />
-                    </TabPanel>
-                    <TabPanel
-                        style={{
-                            maxHeight: 'calc(100vh - 168px)',
-                            overflow: 'auto',
-                        }}
-                    >
-                        <WikiList files={archivedFiles} />
-                    </TabPanel>
+                    <TabPanels>
+                        <TabPanel id="pages" className="flex items-center justify-center">
+                            <div> <FileList
+                                emptyIcon={FileDocumentIcon}
+                                emptyMessage="Your archive is empty."
+                                emptySubline="The archive will show pages you archived"
+                                files={archivedFiles}
+                                sortBy={sortBy as SortBy}
+                                setSortBy={setSortByAndLocalStorage}
+                            /></div>
+                        </TabPanel>
+                        <TabPanel id="wikis" className="flex items-center justify-center">
+                            <WikiList
+                                files={archivedFiles}
+                                orderBy="date"
+                            />					</TabPanel>
+                    </TabPanels>
                 </Tabs>
+                )}
             </>
         )
     } else if (!isSignedIn && isSigningIn) {
@@ -89,9 +124,9 @@ function filterIsArchived(files) {
     return filtered
 }
 
-function filterPages(files) {
+function _filterPages(files) {
     const filtered = _.filter(files, file => {
-        return !file.properties || !file.properties.pageName
+        return !file.properties?.pageName
     })
     return filtered
 }

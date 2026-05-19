@@ -1,9 +1,8 @@
-import React from 'react'
+
 import { Box } from '@material-ui/core'
 import { styled } from '@material-ui/core/styles'
-import { MdiReactIconComponentType } from 'mdi-react'
-
 import { H2 } from 'components/gsuite-components/h2'
+import type { MdiReactIconComponentType } from 'mdi-react'
 
 export { EmptyPlaceholder }
 
@@ -18,16 +17,11 @@ const EmptyPlaceholder = ({ icon, subline, title }: Props) => {
     return (
         <Container>
             {icon && (
-                <Icon
-                    style={{
-                        color: 'rgb(232, 240, 254)',
-                        height: '10rem',
-                        width: '10rem',
-                    }}
+                <Icon className="text-icon-blue-light size-40"
                 />
             )}
             <H2>{title}</H2>
-            <div>{subline && subline}</div>
+            <div className="text-center">{subline && subline}</div>
         </Container>
     )
 }

@@ -7,5 +7,21 @@
 		"parser": {
 			"tailwindDirectives": true
 		}
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	},
+	"linter": {
+		"rules": {
+			"noUnusedVariables": "off",
+			"correctness": {
+				"noUnusedImports": "error",
+				"noUnusedVariables": "off"
+			}
+		}
 	}
 }

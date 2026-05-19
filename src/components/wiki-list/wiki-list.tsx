@@ -1,31 +1,25 @@
 // @ts-nocheck
 //@ts-check
-import React, { useGlobal } from 'reactn'
-import { Link } from '@tanstack/react-router'
-import clsx from 'clsx'
-import { format } from 'date-fns'
-import { sortBy } from 'lodash'
 
-import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
-import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
-
-import { EmptyPlaceholder } from 'components/Home/FileList/EmptyPlaceHolder'
+import { createLink, } from '@tanstack/react-router'
 import {
-    Card,
-    CardBody,
-    CardHeader,
-    CardFooter,
-    Spacer,
     Spinner,
 } from 'components/gsuite-components'
-import ArchiveIcon from 'mdi-react/ArchiveIcon'
-import CheckboxMultipleBlankOutlineIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
-import StarIcon from 'mdi-react/StarIcon'
-
+import { EmptyPlaceholder } from 'components/Home/FileList/EmptyPlaceHolder'
+import { Event } from 'components/Tracking'
+import { format } from 'date-fns'
 import { OVERVIEW_NAME } from 'lib/constants'
 import { isArchived } from 'lib/helper'
-import s from './wiki-list.module.scss'
-import { Event } from 'components/Tracking'
+import { sortBy } from 'lodash'
+import CheckboxMultipleBlankOutlineIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
+import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
+import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
+import { GridList, GridListItem } from 'react-aria-components'
+import { useGlobal } from 'reactn'
+import type { IFile } from 'reactn/default'
+
+/** RAC {@link GridListItem} als TanStack-Router-Link ([createLink](https://tanstack.com/router/latest/docs/guide/custom-link)). */
+const GridListItemLink = createLink(GridListItem)
 
 export default WikiList
 export { WikiList }
@@ -45,11 +39,11 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
     const [isFileListLoading] = useGlobal('isFileListLoading')
     const [rootFolderId] = useGlobal('rootFolderId')
     const wikis = sortWikisBy(orderBy, filterWikis(files))
+    console.log('wikis', wikis)
     const myFulcrum = getOverviewFile(files, rootFolderId)
-    console.log('files', files)
     return (
-        <div className={s.WikiList}>
-            {(_.isNotEmpty(files) || !isFileListLoading) &&
+        <div className="w-full">
+            {(!_.isEmpty(files) || !isFileListLoading) &&
                 !myFulcrum &&
                 wikis.length === 0 &&
                 (isDashboard ? (
@@ -61,16 +55,18 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                     />
                 ))}
             {_.isEmpty(files) && isFileListLoading && <Spinner />}
-            <div
-                className={clsx(
-                    s.WikiList_container,
-                    isDashboard && s.WikiList_container__isDashboard
-                )}
+            {(isDashboard && myFulcrum) || wikis.length ? <GridList
+
+                aria-label="Wiki pages"
+                className="flex flex-col gap-0.5 px-2"
             >
+                <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)">
+                    <h2 className="text-lg font-medium">Wikis</h2>
+                </GridListItem>
                 {wikis.map(f => {
                     const {
                         id,
-                        //@ts-ignore
+                        //@ts-expect-error
                         properties: { pageName },
                         modifiedTime,
                         teamDriveId,
@@ -78,10 +74,8 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         viewedByMeTime,
                     } = f
                     const archived = isArchived(f)
-                    //@ts-ignore
                     const date = format(
-                        //@ts-ignore
-                        new Date(viewedByMeTime || modifiedTime),
+                        new Date(viewedByMeTime || modifiedTime || ''),
                         'MMMM dd, yyyy'
                     )
                     return (
@@ -102,10 +96,9 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                     <WikiCard
                         id={myFulcrum.id}
                         date={format(
-                            //@ts-ignore
                             new Date(
                                 myFulcrum.viewedByMeTime ||
-                                    myFulcrum.modifiedTime
+                                myFulcrum.modifiedTime || ''
                             ),
                             'MMMM dd, yyyy'
                         )}
@@ -115,16 +108,17 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         key={myFulcrum.id}
                         pageName="My Wiki"
                         teamDriveId=""
+                        isDashboard={isDashboard}
                     />
                 )}
-            </div>
+            </GridList> : null}
         </div>
     )
 }
 
-export function filterWikis(files) {
+export function filterWikis(files: IFile[]) {
     const filtered = _.filter(files, file => {
-        return file.properties && file.properties.pageName
+        return file.properties?.pageName
     })
     return filtered
 }
@@ -135,10 +129,10 @@ export function filterWikis(files) {
  * @param {import('reactn/default').IFile[]} files
  * @returns {import('reactn/default').IFile[]}
  */
-export function sortWikisBy(attr = 'name', files) {
+export function sortWikisBy(attr = 'name', files: IFile[]) {
     if (attr === 'name') {
         return sortBy(files, file =>
-            file.properties && file.properties.pageName
+            file.properties?.pageName
                 ? file.properties.pageName
                 : 'My Wiki'
         )
@@ -151,7 +145,7 @@ export function sortWikisBy(attr = 'name', files) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function getWikiRootFolder(folderId, files) {
+function _getWikiRootFolder(folderId: string, files: IFile[]) {
     const folder = files.find(f => f.id === folderId)
     return folder
 }
@@ -165,9 +159,11 @@ function WikiCard({
     isStarred,
     pageName,
     teamDriveId,
-}) {
+}: Partial<IFile>) {
     return (
-        <Link
+        <GridListItemLink
+            className="bg-surface-paper flex cursor-pointer rounded-lg p-3 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)"
+            textValue={pageName}
             key={id}
             to="/page/$id"
             params={{ id }}
@@ -175,37 +171,33 @@ function WikiCard({
                 Event(
                     'WikiCard',
                     'Click',
-                    `${isDashboard ? 'Dashboard,' : ''}${
-                        isStarred ? 'Starred,' : ''
+                    `${isDashboard ? 'Dashboard,' : ''}${isStarred ? 'Starred,' : ''
                     }${isArchived ? 'Archived' : ''}`
                 )
             }}
         >
-            <Card>
-                <CardHeader
-                    avatar={pageName[0]}
-                    subtitle={date}
-                    title={pageName}
-                />
-                <CardBody>{description}</CardBody>
-                <CardFooter>
+            <div className="flex items-center justify-center pr-3">
+                {teamDriveId ? (
+                    <FolderAccountIcon size={30} />
+                ) : (
+                    <FolderGoogleDriveIcon size={30} />
+                )}
+            </div>
+            <div className="flex flex-col justify-between">
+                <p className="text-lg">{pageName}</p>
+                <p className="font-medium text-sm text-text-muted">
                     {teamDriveId ? (
                         <>
-                            <FolderAccountIcon className={s.FooterIcon} />{' '}
-                            Shared Drive
+                            in Shared with me
                         </>
                     ) : (
                         <>
-                            <FolderGoogleDriveIcon className={s.FooterIcon} />{' '}
-                            My Drive
+                            in My Drive
                         </>
                     )}
-                    <Spacer />
-                    {isArchived && <ArchiveIcon />}
-                    {isStarred && <StarIcon style={{ color: '#fbbc05' }} />}
-                </CardFooter>
-            </Card>
-        </Link>
+                </p>
+            </div>
+        </GridListItemLink>
     )
 }
 
@@ -215,7 +207,7 @@ function WikiCard({
  * @param {string} rootFolderId
  * @returns {object|null}
  */
-export function getOverviewFile(files, rootFolderId) {
+export function getOverviewFile(files: IFile[], rootFolderId: string) {
     const overview = _.find(
         files,
         file =>

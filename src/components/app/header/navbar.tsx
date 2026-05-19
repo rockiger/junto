@@ -1,29 +1,29 @@
-// @ts-nocheck
-import React, { useDispatch, useEffect, useGlobal } from 'reactn'
-import { Link, useNavigate } from '@tanstack/react-router'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
+import { Link, useNavigate } from "@tanstack/react-router"
+import clsx from "clsx"
+import IconButton from "components/gsuite-components/icon-button"
+import MenuIcon from "mdi-react/MenuIcon"
+import type { ReactNode } from "react"
+import { useDispatch, useEffect, useGlobal } from "reactn"
 
-import IconButton from 'components/gsuite-components/icon-button'
-import MenuIcon from 'mdi-react/MenuIcon'
+import logo from "../../../static/logo_48.svg"
+import Search from "./search"
 
-import logo from '../../static/logo_48.svg'
 
-import Search from './Search'
+export type NavbarProps = {
+    isSignedIn: boolean
+    children?: ReactNode
+}
 
-import styles from './navbar.module.scss'
-
-const Navbar = props => {
+function Navbar({ isSignedIn, children }: NavbarProps) {
     const navigate = useNavigate()
-    const [isSignedIn] = useGlobal('isSignedIn')
-    const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
-    const [searchTerm, setSearchTerm] = useGlobal('searchTerm')
-    const [searchValue, setSearchValue] = useGlobal('searchValue')
+    const [, setIsSearchFieldActive] = useGlobal("isSearchFieldActive")
+    const [searchTerm, setSearchTerm] = useGlobal("searchTerm")
+    const [searchValue, setSearchValue] = useGlobal("searchValue")
     const [showSidebarOnMobile, setShowSidebarOnMobile] = useGlobal(
-        'showSidebarOnMobile'
+        "showSidebarOnMobile",
     )
 
-    const clearSearch = useDispatch('clearSearchComplete')
+    const clearSearch = useDispatch("clearSearchComplete")
 
     useEffect(() => {
         if (searchValue !== searchTerm) setSearchValue(searchTerm)
@@ -33,14 +33,16 @@ const Navbar = props => {
     const submit = () => {
         setSearchTerm(searchValue)
         setIsSearchFieldActive(false)
-        navigate({ to: '/' })
+        navigate({ to: "/" })
     }
+
     return (
-        <div className={styles.Navbar}>
+        <div className="navbar flex h-header w-full">
             {isSignedIn && (
-                <div className={styles.Navbar_menu}>
+                <div
+                    className={clsx("flex items-center pr-2 md:hidden")}
+                >
                     <IconButton
-                        id=""
                         onClick={() => {
                             setShowSidebarOnMobile(!showSidebarOnMobile)
                         }}
@@ -51,25 +53,26 @@ const Navbar = props => {
             )}
             <Link
                 className={clsx(
-                    styles.Navbar_logoContainer,
-                    isSignedIn && styles.Navbar_logoContainer__isSignedIn
+                    "flex items-center pl-6 text-xl font-normal text-fg-default no-underline",
+                    isSignedIn && clsx("hidden w-sidebar md:flex"),
                 )}
                 to="/"
             >
-                <img className={styles.Navbar_logo} src={logo} alt="App logo" />
-                <div className={styles.Navbar_title}>Fulcrum Wiki</div>
+                <img
+                    className={clsx("mr-3 max-h-6 md:max-h-10")}
+                    src={logo}
+                    alt="App logo"
+                />
+                <div>Fulcrum Wiki</div>
             </Link>
-            <div className={styles.Navbar_spacer}>
-                {props.isSignedIn && (
-                    <Search clearSearch={clearSearch} submit={submit} />
-                )}
+            <div className="flex flex-1 items-center">
+                {isSignedIn && <Search clearSearch={clearSearch} submit={submit} />}
             </div>
-            <div className={styles.Navbar_actions}>{props.children}</div>
+            <div className={clsx("flex items-center pl-2 md:pr-2")}>
+                {children}
+            </div>
         </div>
     )
 }
 
 export default Navbar
-Navbar.propTypes = {
-    isSignedIn: PropTypes.bool.isRequired,
-}

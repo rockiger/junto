@@ -1,295 +1,139 @@
-// @ts-nocheck
-// @ts-check
-
-import { useDispatch, useGlobal } from 'reactn'
-import _ from 'lodash'
-import { Link } from '@tanstack/react-router'
-import clsx from 'clsx'
-import { Chip } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
-import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
-import SortAlphabeticalIcon from 'mdi-react/SortAlphabeticalVariantIcon'
+import { createLink } from "@tanstack/react-router"
+import { ButtonMenu } from "components/ButtonMenu"
+import { Spacer, Spinner } from "components/gsuite-components"
+import { EXT } from "lib/constants"
+import { getTitleFromFile, sortByDate } from "lib/helper"
+import type { MdiReactIconComponentType } from "mdi-react"
+import FileDocumentIcon from "mdi-react/FileDocumentIcon"
+import SortAlphabeticalIcon from "mdi-react/SortAlphabeticalVariantIcon"
 import StarIcon from 'mdi-react/StarIcon'
+import { createElement } from "react"
+import { GridList, GridListItem } from "react-aria-components"
+import type { IFile } from "reactn/default"
+import { EmptyPlaceholder } from "./EmptyPlaceHolder"
 
-import { Spacer, Spinner } from 'components/gsuite-components'
-import { EXT } from 'lib/constants'
-import { getTitleFromFile, sortByDate } from 'lib/helper'
-import { ButtonMenu } from 'components/ButtonMenu'
-import { isArchived } from 'lib/helper'
+/** RAC {@link GridListItem} als TanStack-Router-Link ([createLink](https://tanstack.com/router/latest/docs/guide/custom-link)). */
+const GridListItemLink = createLink(GridListItem)
 
-import s from './file-list.module.scss'
-import { EmptyPlaceholder } from './EmptyPlaceHolder'
+export type SortBy = "modifiedByMeTime" | "sharedWithMeTime" | "viewedByMeTime"
 
-/** @typedef {import('reactn/default').IFile} File */
-/** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
+export type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
 
-/**
- * @typedef {object} Props
- * @prop {File[]} files
- * @prop {SortBy} sortBy
- *
- */
-
-/**
- *
- * @param {Props} props
- */
-const FileListPartial = props => {
-    const { files, sortBy } = props
-    const classes = useStyles()
-
-    // unfortunately, reactn's useDispatch leads to an max call depth error,
-    // hence the commented line below doesn't work. So we use setGlobal.
-    // const clearSearch = useDispatch('clearSearchComplete')
-    const [, setGlobal] = useGlobal()
-    function clearSearch() {
-        setGlobal(g => ({
-            files: [...g.initialFiles],
-            isSearchFieldActive: false,
-            oldSearchTerm: '',
-            searchTerm: '',
-            searchValue: '',
-        }))
-    }
-
-    return (
-        <List className="filelist-list">
-            {files
-                .filter(file => {
-                    return shouldFileDisplay(file)
-                })
-                .sort((file1, file2) => {
-                    let result
-
-                    if (sortBy === 'viewedByMeTime') {
-                        result = sortByDate(
-                            file1.viewedByMeTime,
-                            file2.viewedByMeTime
-                        )
-                    } else {
-                        result = sortByDate(
-                            file1.modifiedByMeTime,
-                            file2.modifiedByMeTime
-                        )
-                    }
-                    return result
-                })
-                .map(file => {
-                    const filename = getTitleFromFile(file)
-                    //! next
-                    return (
-                        <ListItem className={classes.listitem} key={file.id}>
-                            <Link
-                                className={classes.link}
-                                onClick={clearSearch}
-                                style={{ color: '#3c4043' }}
-                                to="/page/$id"
-                                params={{ id: file.id }}
-                            >
-                                <ListItemIcon
-                                    style={{ color: '#4285f4' }}
-                                    className={classes.icon}
-                                >
-                                    <FileDocumentIcon />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={
-                                        <>
-                                            {filename}{' '}
-                                            {isArchived(file) && (
-                                                <Chip
-                                                    label="archived"
-                                                    size="small"
-                                                />
-                                            )}
-                                        </>
-                                    }
-                                />
-                                {file.starred && (
-                                    <StarIcon style={{ color: '#fbbc05' }} />
-                                )}
-                            </Link>
-                        </ListItem>
-                    )
-                })}
-        </List>
-    )
+export type FileListComponentProps = {
+    emptyIcon?: MdiReactIconComponentType
+    emptyMessage?: string
+    emptySubline?: string
+    files: IFile[]
+    header?: HeadingLevel
+    isLoading?: boolean
+    isScrollable?: boolean
+    searchTerm: string
+    setSortBy?: (sortBy: SortBy) => void
+    sortBy: SortBy
+    title?: string
 }
 
-const PeriodList = ({ files, headline, sortBy }) => {
-    if (files.length > 0) {
-        return (
-            <>
-                <div className={s.FileList_tagline}>{headline}</div>
-                <FileListPartial files={files} sortBy={sortBy} />
-            </>
-        )
-    } else {
-        return null
-    }
-}
+export default function FileListComponent({
+    emptyIcon,
+    emptyMessage,
+    emptySubline,
+    files,
+    header,
+    isLoading,
+    searchTerm,
+    setSortBy,
+    sortBy,
+    title,
+}: FileListComponentProps) {
+    const headingTag = header ?? "h1"
 
-/**
- *
- * @param {{files: File[], sortBy: SortBy}} param0
- */
-
-const Periods = ({ files, sortBy }) => {
-    const createFilter = (older, younger = new Date()) => {
-        return file => {
-            // @ts-ignore
-            const date = parseInt(Date.parse(file[sortBy]))
-
-            return (
-                date > parseInt(older.getTime()) &&
-                // @ts-ignore
-                date < parseInt(younger.getTime())
-            )
-        }
-    }
-
-    const newTimeBorder = (daysBack = 0) => {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        today.setDate(today.getDate() - daysBack)
-        return new Date(today.getTime())
-    }
-
-    const today = newTimeBorder()
-    const todayFilter = createFilter(today)
-    const todayFiles = files.filter(todayFilter)
-
-    const yesterday = newTimeBorder(1)
-    const yesterdayFilter = createFilter(yesterday, today)
-    const yesterdayFiles = files.filter(yesterdayFilter)
-
-    const lastWeek = newTimeBorder(7)
-    const lastWeekFilter = createFilter(lastWeek, yesterday)
-    const lastWeekFiles = files.filter(lastWeekFilter)
-
-    const lastMonth = newTimeBorder(30)
-    const lastMonthFilter = createFilter(lastMonth, lastWeek)
-    const lastMonthFiles = files.filter(lastMonthFilter)
-
-    const earlier = new Date(0) // 1970
-    const earlierFilter = createFilter(earlier, lastMonth)
-    const earlierFiles = files.filter(earlierFilter)
-
-    return (
-        <>
-            <PeriodList files={todayFiles} headline="Today" sortBy={sortBy} />
-            <PeriodList
-                files={yesterdayFiles}
-                headline="Yesterday"
-                sortBy={sortBy}
-            />
-            <PeriodList
-                files={lastWeekFiles}
-                headline="Previous 7 Days"
-                sortBy={sortBy}
-            />
-            <PeriodList
-                files={lastMonthFiles}
-                headline="Previous 30 Days"
-                sortBy={sortBy}
-            />
-            <PeriodList
-                files={earlierFiles}
-                headline="Earlier"
-                sortBy={sortBy}
-            />
-        </>
-    )
-}
-
-/**
- * @typedef {object} FileListComponentProps
- * @property {MdiReactIconComponentType} [emptyIcon]
- * @prop {string} [emptyMessage]
- * @prop {string} [emptySubline]
- * @prop {File[]} files
- * @prop {boolean} [isLoading]
- * @prop {boolean} [isScrollable]
- * @prop {SortBy} sortBy
- * @prop {string} searchTerm
- * @prop {function} setSortBy
- * @prop {string} [title]
- * @prop {'h1'|'h2'|'h3'|'h4'|'h5'|'h6'} [header]
- */
-
-/**
- * @param {FileListComponentProps} props
- */
-const FileListComponent = props => {
-    const {
-        emptyIcon,
-        emptyMessage,
-        emptySubline,
-        files,
-        header,
-        searchTerm,
-        setSortBy,
-        sortBy,
-        title,
-    } = props
-    const Header = header ? header : 'h1'
     if (searchTerm || title) {
-        document.title = `${
-            searchTerm ? 'Search Result' : title
-        } – Fulcrum.wiki`
+        document.title = `${searchTerm ? "Search Result" : (title ?? "")} – Fulcrum.wiki`
     }
+
+    const hasFiles = files.length > 0
+
     return (
         <div className="filelist">
-            <div className={s.FileList_header}>
-                {title && (
-                    <Header className={s.FileList_header_title}>{title}</Header>
+            <div>
+                {isLoading && <Spinner />}
+                {!isLoading && hasFiles && (
+                    <GridList
+                        aria-label="Wiki pages"
+                        className="flex flex-col gap-0.5 px-2"
+                    >
+                        <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)">
+                            {title ? (
+                                <>
+                                    {createElement(headingTag, {}, title)}
+                                    <Spacer />
+                                </>
+                            ) : null}
+                            {setSortBy ? (
+                                <div className="flex items-center">
+                                    <strong className="font-semibold mr-2 text-text-muted translate-y-px"
+                                    >
+                                        {sortBy === "viewedByMeTime"
+                                            ? "Last opened by me"
+                                            : "Last modified by me"}
+                                    </strong>
+                                    <ButtonMenu
+                                        items={[
+                                            {
+                                                key: 1,
+                                                name: "Last modified by me",
+                                                handler: () => setSortBy("modifiedByMeTime"),
+                                                active: sortBy === "modifiedByMeTime",
+                                            },
+                                            {
+                                                key: 2,
+                                                name: "Last opened by me",
+                                                handler: () => setSortBy("viewedByMeTime"),
+                                                active: sortBy === "viewedByMeTime",
+                                            },
+                                        ]}
+                                        selectable={true}
+                                    >
+                                        <SortAlphabeticalIcon />
+                                    </ButtonMenu>
+                                </div>
+                            ) : null}
+                        </GridListItem>
+                        {files
+                            .filter(shouldFileDisplay)
+                            .sort((file1, file2) =>
+                                sortBy === "viewedByMeTime"
+                                    ? sortByDate(file1.viewedByMeTime, file2.viewedByMeTime)
+                                    : sortByDate(file1.modifiedByMeTime, file2.modifiedByMeTime),
+                            )
+                            .map((file) => (
+                                <GridListItemLink
+                                    key={file.id}
+                                    textValue={getTitleFromFile(file)}
+                                    className="bg-surface-paper flex cursor-pointer rounded-lg p-3 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)"
+                                    preload="intent"
+                                    params={{ id: file.id }}
+                                    to="/page/$id"
+                                >
+                                    <div className="flex items-center justify-center pr-3">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-icon-surface">
+                                            <FileDocumentIcon className="text-icon-blue" size={30} />
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col justify-between">
+                                        <p className="text-lg">{getTitleFromFile(file)}</p>
+                                        <p className="flex font-medium text-sm text-text-muted">
+                                            {file.starred && (
+                                                <StarIcon className='inline h-3 mr-1 translate-y-0.75 w-3' />
+                                            )}
+                                            {formatFileModifiedCaption(file.modifiedTime)}
+                                        </p>
+                                    </div>
+                                </GridListItemLink>
+                            ))}
+                    </GridList>
                 )}
-                <Spacer />
-                {!_.isEmpty(files) && setSortBy && (
-                    <div className={s.FileList_header_buttons}>
-                        <strong
-                            className={s.sortCriteria}
-                            style={{ fontWeight: 500, marginRight: '.5rem' }}
-                        >
-                            {sortBy === 'viewedByMeTime'
-                                ? 'Last opened by me'
-                                : 'Last modified by me'}
-                        </strong>
-                        <ButtonMenu
-                            items={[
-                                {
-                                    key: 1,
-                                    name: 'Last modified by me',
-                                    handler: () =>
-                                        setSortBy('modifiedByMeTime'),
-                                    active: sortBy === 'modifiedByMeTime',
-                                },
-                                {
-                                    key: 2,
-                                    name: 'Last opened by me',
-                                    handler: () => setSortBy('viewedByMeTime'),
-                                    active: sortBy === 'viewedByMeTime',
-                                },
-                            ]}
-                            selectable={true}
-                        >
-                            <SortAlphabeticalIcon />
-                        </ButtonMenu>
-                    </div>
-                )}
-            </div>
-            <div
-                className={clsx(s.FileList_content, {
-                    isScrollable: s.FileList_content__scrollable,
-                })}
-            >
-                {/* 
-                // @ts-ignore */}
-                {props.isLoading && <Spinner />}
-                {!props.isLoading && <Periods files={files} sortBy={sortBy} />}
-                {files.length === 0 && !props.isLoading && (
+                {files.length === 0 && !isLoading && (
                     <EmptyPlaceholder
                         icon={emptyIcon}
                         subline={emptySubline}
@@ -323,38 +167,97 @@ const FileListComponent = props => {
         </div>
     )
 }
-export default FileListComponent
 
-function useStyles() {
-    const useStyles = makeStyles(theme => {
-        return {
-            icon: {
-                color: theme.palette.primary.main,
-                minWidth: theme.spacing(4),
-            },
-            link: {
-                display: 'flex',
-                flexGrow: 1,
-                textDecoration: 'none',
-                alignItems: 'center',
-            },
-            listitem: {
-                padding: 0,
-                paddingRight: theme.spacing(2),
-            },
-        }
-    })
-    return useStyles()
+type FormatFileModifiedCaptionOptions = {
+    locale?: Intl.LocalesArgument
+    now?: Date
 }
 
 /**
- * @param {File} file
+ * ISO-Zeitstempel (z. B. Google&nbsp;Drive `modifiedTime`) für die Dateiliste:
+ * nur Uhrzeit (heute), „Gestern“/„Yesterday“ … (über `RelativeTimeFormat`), Datum ohne Jahr
+ * (&gt;= 2 lokale Kalendertage, gleiches Jahr), sonst Datum mit Jahr.
  */
-function shouldFileDisplay(file) {
+function formatFileModifiedCaption(
+    modifiedTimeIso: string | undefined,
+    options?: FormatFileModifiedCaptionOptions,
+): string {
+    const { locale, now = new Date() } = options ?? {}
+
+    if (modifiedTimeIso === undefined || modifiedTimeIso === "") {
+        return ""
+    }
+
+    const modified = new Date(modifiedTimeIso)
+    if (Number.isNaN(modified.getTime())) {
+        return modifiedTimeIso
+    }
+
+    const calendarDaysBehind = calendarDaysBehindLocal(now, modified)
+
+    if (calendarDaysBehind < 0) {
+        return new Intl.DateTimeFormat(locale, {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+        }).format(modified)
+    }
+
+    if (calendarDaysBehind === 0) {
+        return new Intl.DateTimeFormat(locale, {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        }).format(modified)
+    }
+
+    if (calendarDaysBehind === 1) {
+        return new Intl.RelativeTimeFormat(locale, {
+            numeric: "auto",
+        }).format(-1, "day")
+    }
+
+    const sameCalendarYear = modified.getFullYear() === now.getFullYear()
+
+    if (!sameCalendarYear) {
+        return new Intl.DateTimeFormat(locale, {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+        }).format(modified)
+    }
+
+    return new Intl.DateTimeFormat(locale, {
+        day: "numeric",
+        month: "short",
+    }).format(modified)
+}
+
+/**
+ * Ganze Kalendertage, die `past` relativ zu `later` zurückliegt (lokaler Kalender).
+ * `0` = selber Tag, `1` = gestern, …
+ */
+function calendarDaysBehindLocal(later: Date, past: Date): number {
+    const laterStart = Date.UTC(
+        later.getFullYear(),
+        later.getMonth(),
+        later.getDate(),
+    )
+    const pastStart = Date.UTC(
+        past.getFullYear(),
+        past.getMonth(),
+        past.getDate(),
+    )
+    const msDay = 24 * 60 * 60 * 1000
+    return Math.round((laterStart - pastStart) / msDay)
+}
+
+function shouldFileDisplay(file: IFile): boolean {
     const { mimeType, name, trashed } = file
     return (
-        mimeType === 'application/json' &&
-        name.endsWith(EXT) &&
-        trashed === false
+        (mimeType === "application/json" && name.endsWith(EXT) && !trashed) ||
+        ((mimeType as string) === "text/markdown" &&
+            name.endsWith(".md") &&
+            !trashed)
     )
 }

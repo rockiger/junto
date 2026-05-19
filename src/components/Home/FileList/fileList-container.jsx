@@ -17,8 +17,8 @@ export default FileList;
  * @property {boolean} [isLoading]
  * @property {boolean} [isScrollable]
  * @property {import('reactn/default').IFile[]} files
- * @property {SortBy} [sortBy]
- * @property {()=>{}} [setSortBy]
+ * @property {SortBy | undefined} [sortBy]
+ * @property {(sortBy: SortBy) => void} [setSortBy]
  * @property {string} [title]
  */
 

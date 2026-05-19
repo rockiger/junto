@@ -16,11 +16,12 @@
         'header  header'
         'sidebar main';
     grid-template-columns: 256px 1fr;
-    grid-template-rows: 64px 1fr;
+    grid-template-rows: 64px 1fr 64px;
     height: 100vh;
     @media (max-width: $md-max) {
         grid-template-areas:
             'header  header'
-            'main main';
+            'main main'
+            'footer footer';
     }
 }

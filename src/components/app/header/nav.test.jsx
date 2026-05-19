@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { setGlobal } from 'reactn'
 
-import { TestRouter } from '../../test-router'
+import { TestRouter } from '../../../test-router'
 
 const baseGlobal = {
     isCreatingNewFile: false,

@@ -159,11 +159,11 @@ export const showHint = (
     return _.thread(
         scopedHints,
         _.keys,
-        [_.map, el => ({ ...scopedHints[el], id: el })],
+        [_.map, (el: string) => ({ ...scopedHints[el], id: el })],
         [_.filter, ['unread', true]],
         [_.sortBy, ['rank', 'title', 'message']],
         [_.findIndex, ['id', currentId]],
-        [pos => pos === 0]
+        [(pos: number) => pos === 0]
     )
 }
 

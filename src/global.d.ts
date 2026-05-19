@@ -6,20 +6,25 @@ declare const gapi: {
     load: ( module: string, callback?: () => void ) => void
 }
 
+declare module 'react-tooltip-lite' {
+    export interface TooltipProps {
+        children?: import('react').ReactNode
+    }
+}
+
 declare module 'reactn/default' {
     export interface Reducers {
-        clearSearch: (
+        /** `dispatch` typed as DispatchFunction only to avoid TS circularity (full Dispatch embeds Reducers). */
+        clearSearchComplete: (
             global: State,
-            dispatch: Dispatch
+            _dispatch: import('reactn/types/dispatch-function').default<State>,
         ) => Pick<
             State,
-            [
-                'files',
-                'isSearchFieldActive',
-                'oldSearchTerm',
-                'searchTerm',
-                'searchValue'
-            ]
+            | 'files'
+            | 'isSearchFieldActive'
+            | 'oldSearchTerm'
+            | 'searchTerm'
+            | 'searchValue'
         >
     }
 

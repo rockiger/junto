@@ -1,38 +1,40 @@
-import React from 'react'
 import { format } from 'date-fns'
-import { Story, Meta } from '@storybook/react/types-6-0'
+import type { Meta } from '@storybook/react'
 import DotsVerticalIcon from 'mdi-react/DotsVerticalIcon'
 
-import { List, ListItem, ListItemProps, ListProps } from './list'
+import { List, ListItem, type ListProps } from './grid-list'
 import { ButtonMenu } from 'components/ButtonMenu'
 
 export default {
     title: 'List',
     component: List,
+    args: {
+        'aria-label': 'Example list',
+    },
 } as Meta
 
-export const Empty = args => <List {...args} />
+export const Empty = (args: ListProps) => <List {...args} />
 
-export const OneItem = args => (
+export const OneItem = (args: ListProps) => (
     <List {...args}>
         <ListItem>{data[0].lastModifyingUser.displayName}</ListItem>
     </List>
 )
 
-export const ManyItemsSimple = args => (
+export const ManyItemsSimple = (args: ListProps) => (
     <List {...args}>
         {data.map(rev => (
-            <ListItem>{rev.lastModifyingUser.displayName}</ListItem>
+            <ListItem key={rev.id}>{rev.lastModifyingUser.displayName}</ListItem>
         ))}
     </List>
 )
 
-export const ManyItemsComplex = args => (
+export const ManyItemsComplex = (args: ListProps) => (
     <List {...args} divided>
         {data.map((rev, index, array) => (
             <ListItem
                 active={index === 0}
-                key={index}
+                key={rev.id}
                 menu={menu}
                 title={format(new Date(rev.modifiedTime), 'MMMM d, Y, p')}
             >
