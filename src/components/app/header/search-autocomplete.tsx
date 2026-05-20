@@ -1,54 +1,64 @@
-// @ts-nocheck
-import React, { useEffect } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
-import clsx from 'clsx'
+import { Link, useNavigate } from "@tanstack/react-router"
+import clsx from "clsx"
+import { Event } from "components/Tracking"
+import { EXT } from "lib/constants"
+import { getExtFromFileName, getTitleFromFile, sortByDate } from "lib/helper"
+import FileDocumentIcon from "mdi-react/FileDocumentIcon"
+import { type FC, useEffect } from "react"
+import type { IFile } from "reactn/default"
 
-import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
+export type SearchAutocompleteProps = {
+    clearSearch: () => void
+    files: IFile[]
+    filteredFiles: IFile[]
+    height?: number
+    searchValue: string
+    selectedRow: number | null
+    setFilteredFiles: (files: IFile[]) => void
+    setSubmitSelected: (v: boolean) => void
+    submitSelected: boolean
+    width?: number
+}
 
-import { Event } from 'components/Tracking'
-import { getTitleFromFile, getExtFromFileName, sortByDate } from 'lib/helper'
-import { EXT } from 'lib/constants'
-
-import styles from './search-autocomplete.module.scss'
-
-export const SearchAutocomplete = ({
+export const SearchAutocomplete: FC<SearchAutocompleteProps> = ({
     clearSearch,
     files,
     filteredFiles,
-    height,
+    height = 48,
     searchValue,
     selectedRow,
     setFilteredFiles,
     setSubmitSelected,
     submitSelected,
-    width,
 }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
         setFilteredFiles(
             files
-                .filter(file =>
-                    file.name.toLowerCase().includes(searchValue.toLowerCase())
+                .filter((file) =>
+                    file.name.toLowerCase().includes(searchValue.toLowerCase()),
                 )
-                .filter(file => {
+                .filter((file) => {
                     const ext = getExtFromFileName(file.name)
                     return ext === EXT
                 })
                 .sort((file1, file2) => {
                     let result = sortByDate(
                         file1.viewedByMeTime,
-                        file2.viewedByMeTime
+                        file2.viewedByMeTime,
                     )
 
                     if (result === 0) {
                         result = sortByDate(
-                            file1.modifiedByMe,
-                            file2.modifiedByMe
+                            (file1 as IFile & { modifiedByMe?: string })
+                                .modifiedByMe,
+                            (file2 as IFile & { modifiedByMe?: string })
+                                .modifiedByMe,
                         )
                     }
                     return result
-                })
+                }),
         )
     }, [files, searchValue, setFilteredFiles])
 
@@ -56,14 +66,14 @@ export const SearchAutocomplete = ({
         if (
             submitSelected &&
             selectedRow !== null &&
-            filteredFiles.length >= selectedRow
+            filteredFiles.length > selectedRow
         ) {
             navigate({
-                to: '/page/$id',
+                to: "/page/$id",
                 params: { id: filteredFiles[selectedRow].id },
             })
             clearSearch()
-            Event('Search', 'Submit Selected', 'keydown Enter')
+            Event("Search", "Submit Selected", "keydown Enter")
         }
         setSubmitSelected(false)
     }, [
@@ -75,18 +85,16 @@ export const SearchAutocomplete = ({
         submitSelected,
     ])
 
-    window.files = files
     if (filteredFiles.length < 1) return null
+
     return (
         <div
-            elevation={1}
-            className={styles.SearchAutocomplete}
-            style={{
-                top: height || 48,
-            }}
+            className={clsx(
+                "fixed left-0 top-16 w-full h-[calc(100vh-64px)]",
+            )}
         >
             <div
-                class={styles.SearchAutocomplete_MenuList}
+                className="bg-surface-paper flex flex-col h-full"
                 id="SearchAutocomplete_MenuList"
             >
                 {filteredFiles.slice(0, 7).map((file, index) => {
@@ -94,28 +102,22 @@ export const SearchAutocomplete = ({
                     return (
                         <Link
                             className={clsx(
-                                styles.SearchAutocomplete_MenuItem,
-                                styles.SearcAutocomplete_MenuItem_Link,
-                                index === selectedRow &&
-                                    styles.SearchAutocomplete_MenuItem__selected
+                                "flex h-14 items-center no-underline",
+                                "text-fg-default hover:bg-grey-200",
+                                index === selectedRow && "bg-grey-200",
                             )}
                             key={file.id}
-                            selected={index === selectedRow}
                             onClick={() => {
                                 setTimeout(clearSearch, 100)
-                                Event('Search', 'Submit Selected', 'click')
+                                Event("Search", "Submit Selected", "click")
                             }}
                             to="/page/$id"
                             params={{ id: file.id }}
                         >
-                            <div
-                                className={
-                                    styles.SearcAutocomplete_MenuItem_icon
-                                }
-                            >
+                            <div className="flex w-14 flex-col items-center text-accent">
                                 <FileDocumentIcon />
                             </div>
-                            <div>{filename}</div>
+                            <div className="flex flex-1 items-center">{filename}</div>
                         </Link>
                     )
                 })}

@@ -8,7 +8,7 @@
 --- [x] Repair placeholder of SharedWithMe
 --- [x] Filter SharedWithMe files
 -- [x] Archive
--- [] Search
+-- [x] Search
 -- [] Page-View
 --- [] Convert Page to Markdown-it
 -- [] Page-Edit

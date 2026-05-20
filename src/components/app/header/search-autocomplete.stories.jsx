@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
     Outlet,
     RouterProvider,
@@ -9,8 +9,8 @@ import {
 } from '@tanstack/react-router'
 import { storiesOf } from '@storybook/react'
 
-import { SearchAutocomplete } from './SearchAutocomplete'
-import testState from './testState.js'
+import SearchAutocomplete from './search-autocomplete'
+import testState from './search-autocomplete-test-state'
 
 const rootRoute = createRootRoute({
     component: SearchStoryShell,
@@ -26,7 +26,7 @@ const storyRouteTree = rootRoute.addChildren([pageRoute])
 
 storiesOf('SearchAutocomplete', module)
     .addDecorator(story => (
-        <div style={{ padding: '1rem', border: '1px solid rgba(0,0,0, 0.2' }}>
+        <div style={{ padding: '1rem', border: '1px solid rgba(0,0,0,0.2)' }}>
             {story()}
         </div>
     ))
@@ -35,6 +35,8 @@ storiesOf('SearchAutocomplete', module)
 function SearchStoryShell() {
     const { files } = testState
     const [filteredFiles, setFilteredFiles] = useState(files)
+    const [selectedRow] = useState(null)
+    const [submitSelected, setSubmitSelected] = useState(false)
 
     return (
         <>
@@ -43,8 +45,10 @@ function SearchStoryShell() {
                 files={files}
                 filteredFiles={filteredFiles}
                 searchValue={''}
+                selectedRow={selectedRow}
                 setFilteredFiles={setFilteredFiles}
-                setSubmitSelected={() => {}}
+                setSubmitSelected={setSubmitSelected}
+                submitSelected={submitSelected}
             />
             <Outlet />
         </>
