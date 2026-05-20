@@ -165,7 +165,7 @@ export function DashboardSectionToolbar({ title, className }) {
 
 const NAV = [
     {
-        to: '/',
+        to: '/home',
         label: 'Home',
         Icon: HomeOutlineIcon,
         IconSelected: HomeIcon,

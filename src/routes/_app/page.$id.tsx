@@ -1,8 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
+
+import FocusLayout from 'components/layouts/FocusLayout'
 import Page from 'components/Page'
 import { useGlobal } from 'reactn'
 
-export const Route = createFileRoute('/page/$id')({
+export const Route = createFileRoute('/_app/page/$id')({
     component: PageRoute,
 })
 
@@ -12,15 +14,14 @@ function PageRoute() {
     const [isSigningIn] = useGlobal('isSigningIn')
     const [, setGoToNewFile] = useGlobal('goToNewFile')
 
-    console.log({ isSigningIn, isCreatingNewFile, isSignedIn })
-    console.log((!isSignedIn && isSigningIn), isCreatingNewFile)
-
     return (
-        <Page
-            isCreatingNewFile={isCreatingNewFile}
-            isSignedIn={isSignedIn}
-            isSigningIn={isSigningIn}
-            setGoToNewFile={setGoToNewFile}
-        />
+        <FocusLayout>
+            <Page
+                isCreatingNewFile={isCreatingNewFile}
+                isSignedIn={isSignedIn}
+                isSigningIn={isSigningIn}
+                setGoToNewFile={setGoToNewFile}
+            />
+        </FocusLayout>
     )
 }

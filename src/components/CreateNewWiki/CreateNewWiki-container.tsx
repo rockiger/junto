@@ -58,7 +58,7 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                     } catch (err) {
                         console.log({ err })
                         setIsCreatingNewFile(false)
-                        if (!err) navigate({ to: '/' })
+                        if (!err) navigate({ to: '/home' })
                     }
                 }
             } catch (err) {

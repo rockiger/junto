@@ -57,7 +57,7 @@ export default function Page( {
     setGoToNewFile: _setGoToNewFile,
 }: PageProps ) {
     const navigate = useNavigate()
-    const params = useParams( { from: '/page/$id' } )
+    const params = useParams( { from: '/_app/page/$id' } )
     const [ files ] = useGlobal( 'files' )
 
     const [ canEdit, setCanEdit ] = useState( false )
@@ -115,7 +115,7 @@ export default function Page( {
                 } else {
                     alert( `Couldn't find file` )
                     console.log( { error } )
-                    void navigate( { to: '/' } )
+                    void navigate( { to: '/home' } )
                 }
                 return undefined
             }
@@ -127,7 +127,7 @@ export default function Page( {
         async ( explicitFileId?: string ) => {
             const id = explicitFileId ?? fileId
             if ( !id ) {
-                void navigate( { to: '/' } )
+                void navigate( { to: '/home' } )
                 return
             }
 
@@ -143,7 +143,7 @@ export default function Page( {
             }
 
             if ( !fileDescription ) {
-                void navigate( { to: '/' } )
+                void navigate( { to: '/home' } )
                 return
             }
 
@@ -188,8 +188,6 @@ export default function Page( {
     }, [ pageHead ] )
 
     useEffect( () => {
-        if ( files.length === 0 ) return
-
         if ( prevParamsIdRef.current === null ) {
             prevParamsIdRef.current = params.id
             return
@@ -202,14 +200,13 @@ export default function Page( {
         setFileId( params.id )
         setFileLoaded( false )
         void loadEditorContent( params.id )
-    }, [ params.id, files.length, loadEditorContent ] )
+    }, [ params.id, loadEditorContent ] )
 
     useEffect( () => {
+        if ( !isSignedIn || isSigningIn ) return
         if (
-            !isSignedIn ||
             fileLoaded ||
-            fileLoading ||
-            files.length === 0
+            fileLoading
         ) {
             return
         }
@@ -229,9 +226,9 @@ export default function Page( {
         updateMetadata( fileId, { viewedByMeTime: now } )
     }, [
         isSignedIn,
+        isSigningIn,
         fileLoaded,
         fileLoading,
-        files.length,
         loadEditorContent,
         fileId,
     ] )
@@ -300,7 +297,7 @@ export default function Page( {
             'this.state.canEdit': canEdit,
         } )
         return (
-            <div className="page">
+            <div className="page bg-white flex min-h-0 min-w-0 flex-1 flex-col">
                 <div className="editorContainer">
                     { fileLoaded && (
                         <h1 className="editorHeader">
@@ -359,9 +356,16 @@ export default function Page( {
                 <style>{ `
                         .page {
                             display: flex;
+                            flex-direction: column;
+                            flex: 1;
+                            min-height: 0;
+                            min-width: 0;
                         }
                         .editorContainer {
-                            height: calc(100vh - 65px);
+                            flex: 1;
+                            min-height: 0;
+                            display: flex;
+                            flex-direction: column;
                             width: 100%;
                         }
                         .editorHeader {

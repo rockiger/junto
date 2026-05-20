@@ -18,7 +18,6 @@ import { useEffect } from "react"
 import { SelectionIndicator } from 'react-aria-components'
 import { useGlobal, useState } from "reactn"
 import FileList from "./FileList"
-import FrontPage from "./front-page"
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 const sortByLS = localStorage.getItem(localStorageKey)
@@ -40,7 +39,7 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 		if (searchTerm) {
 			PageView({ pathname: "/search" })
 		} else {
-			PageView({ pathname: "/" })
+			PageView({ pathname: "/home" })
 		}
 	}, [searchTerm])
 
@@ -130,15 +129,13 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 				)}
 			</>
 		)
-	} else if ((!isSignedIn && isSigningIn) || isCreatingNewFile) {
-		return (
-			<div style={{ marginTop: "2rem" }}>
-				<Spinner />
-			</div>
-		)
-	} else {
-		return <FrontPage />
 	}
+
+	return (
+		<div style={{ marginTop: "2rem" }}>
+			<Spinner />
+		</div>
+	)
 }
 
 export default Home

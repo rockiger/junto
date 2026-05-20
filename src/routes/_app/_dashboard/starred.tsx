@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useGlobal } from 'reactn'
-import StarredPage from 'components/Starred/StarredPage'
 
-export const Route = createFileRoute('/starred')({
+import StarredPage from 'components/Starred/StarredPage'
+import { useGlobal } from 'reactn'
+
+export const Route = createFileRoute('/_app/_dashboard/starred')({
     component: StarredRoute,
 })
 

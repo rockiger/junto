@@ -1,19 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useGlobal } from 'reactn'
-import Home from 'components/Home'
 
-export const Route = createFileRoute('/')({
-    component: HomeRoute,
+import { SharedWithMe } from 'components/SharedWithMe'
+import { useGlobal } from 'reactn'
+
+export const Route = createFileRoute('/_app/_dashboard/shared-with-me')({
+    component: SharedWithMeRoute,
 })
 
-function HomeRoute() {
+function SharedWithMeRoute() {
     const [isCreatingNewFile] = useGlobal('isCreatingNewFile')
     const [isSignedIn] = useGlobal('isSignedIn')
     const [isSigningIn] = useGlobal('isSigningIn')
     const [, setGoToNewFile] = useGlobal('goToNewFile')
 
     return (
-        <Home
+        <SharedWithMe
             isCreatingNewFile={isCreatingNewFile}
             isSignedIn={isSignedIn}
             isSigningIn={isSigningIn}

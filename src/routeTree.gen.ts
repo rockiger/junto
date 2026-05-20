@@ -9,221 +9,198 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WikisRouteImport } from './routes/wikis'
-import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
-import { Route as StarredRouteImport } from './routes/starred'
-import { Route as SharedWithMeRouteImport } from './routes/shared-with-me'
-import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
-import { Route as NewRouteImport } from './routes/new'
-import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DriveRouteImport } from './routes/drive'
-import { Route as ArchiveRouteImport } from './routes/archive'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as PageIdRouteImport } from './routes/page.$id'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicTermsOfServiceRouteImport } from './routes/_public/terms-of-service'
+import { Route as PublicPrivacyPolicyRouteImport } from './routes/_public/privacy-policy'
+import { Route as PublicFaqRouteImport } from './routes/_public/faq'
+import { Route as AppDashboardRouteImport } from './routes/_app/_dashboard'
+import { Route as AppPageIdRouteImport } from './routes/_app/page.$id'
+import { Route as AppDashboardWikisRouteImport } from './routes/_app/_dashboard/wikis'
+import { Route as AppDashboardStarredRouteImport } from './routes/_app/_dashboard/starred'
+import { Route as AppDashboardSharedWithMeRouteImport } from './routes/_app/_dashboard/shared-with-me'
+import { Route as AppDashboardNewRouteImport } from './routes/_app/_dashboard/new'
+import { Route as AppDashboardHomeRouteImport } from './routes/_app/_dashboard/home'
+import { Route as AppDashboardArchiveRouteImport } from './routes/_app/_dashboard/archive'
 
-const WikisRoute = WikisRouteImport.update({
-  id: '/wikis',
-  path: '/wikis',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
-  id: '/terms-of-service',
-  path: '/terms-of-service',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StarredRoute = StarredRouteImport.update({
-  id: '/starred',
-  path: '/starred',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SharedWithMeRoute = SharedWithMeRouteImport.update({
-  id: '/shared-with-me',
-  path: '/shared-with-me',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
-  id: '/privacy-policy',
-  path: '/privacy-policy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewRoute = NewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DriveRoute = DriveRouteImport.update({
   id: '/drive',
   path: '/drive',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArchiveRoute = ArchiveRouteImport.update({
-  id: '/archive',
-  path: '/archive',
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
 } as any)
-const PageIdRoute = PageIdRouteImport.update({
+const PublicTermsOfServiceRoute = PublicTermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicPrivacyPolicyRoute = PublicPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicFaqRoute = PublicFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => PublicRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/_dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPageIdRoute = AppPageIdRouteImport.update({
   id: '/page/$id',
   path: '/page/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardWikisRoute = AppDashboardWikisRouteImport.update({
+  id: '/wikis',
+  path: '/wikis',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppDashboardStarredRoute = AppDashboardStarredRouteImport.update({
+  id: '/starred',
+  path: '/starred',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppDashboardSharedWithMeRoute =
+  AppDashboardSharedWithMeRouteImport.update({
+    id: '/shared-with-me',
+    path: '/shared-with-me',
+    getParentRoute: () => AppDashboardRoute,
+  } as any)
+const AppDashboardNewRoute = AppDashboardNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppDashboardHomeRoute = AppDashboardHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
+const AppDashboardArchiveRoute = AppDashboardArchiveRouteImport.update({
+  id: '/archive',
+  path: '/archive',
+  getParentRoute: () => AppDashboardRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/archive': typeof ArchiveRoute
+  '/': typeof PublicIndexRoute
   '/drive': typeof DriveRoute
-  '/faq': typeof FaqRoute
-  '/new': typeof NewRoute
-  '/privacy-policy': typeof PrivacyPolicyRoute
-  '/shared-with-me': typeof SharedWithMeRoute
-  '/starred': typeof StarredRoute
-  '/terms-of-service': typeof TermsOfServiceRoute
-  '/wikis': typeof WikisRoute
-  '/page/$id': typeof PageIdRoute
+  '/faq': typeof PublicFaqRoute
+  '/privacy-policy': typeof PublicPrivacyPolicyRoute
+  '/terms-of-service': typeof PublicTermsOfServiceRoute
+  '/archive': typeof AppDashboardArchiveRoute
+  '/home': typeof AppDashboardHomeRoute
+  '/new': typeof AppDashboardNewRoute
+  '/shared-with-me': typeof AppDashboardSharedWithMeRoute
+  '/starred': typeof AppDashboardStarredRoute
+  '/wikis': typeof AppDashboardWikisRoute
+  '/page/$id': typeof AppPageIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/archive': typeof ArchiveRoute
+  '/': typeof PublicIndexRoute
   '/drive': typeof DriveRoute
-  '/faq': typeof FaqRoute
-  '/new': typeof NewRoute
-  '/privacy-policy': typeof PrivacyPolicyRoute
-  '/shared-with-me': typeof SharedWithMeRoute
-  '/starred': typeof StarredRoute
-  '/terms-of-service': typeof TermsOfServiceRoute
-  '/wikis': typeof WikisRoute
-  '/page/$id': typeof PageIdRoute
+  '/faq': typeof PublicFaqRoute
+  '/privacy-policy': typeof PublicPrivacyPolicyRoute
+  '/terms-of-service': typeof PublicTermsOfServiceRoute
+  '/archive': typeof AppDashboardArchiveRoute
+  '/home': typeof AppDashboardHomeRoute
+  '/new': typeof AppDashboardNewRoute
+  '/shared-with-me': typeof AppDashboardSharedWithMeRoute
+  '/starred': typeof AppDashboardStarredRoute
+  '/wikis': typeof AppDashboardWikisRoute
+  '/page/$id': typeof AppPageIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/archive': typeof ArchiveRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_public': typeof PublicRouteWithChildren
   '/drive': typeof DriveRoute
-  '/faq': typeof FaqRoute
-  '/new': typeof NewRoute
-  '/privacy-policy': typeof PrivacyPolicyRoute
-  '/shared-with-me': typeof SharedWithMeRoute
-  '/starred': typeof StarredRoute
-  '/terms-of-service': typeof TermsOfServiceRoute
-  '/wikis': typeof WikisRoute
-  '/page/$id': typeof PageIdRoute
+  '/_app/_dashboard': typeof AppDashboardRouteWithChildren
+  '/_public/faq': typeof PublicFaqRoute
+  '/_public/privacy-policy': typeof PublicPrivacyPolicyRoute
+  '/_public/terms-of-service': typeof PublicTermsOfServiceRoute
+  '/_public/': typeof PublicIndexRoute
+  '/_app/_dashboard/archive': typeof AppDashboardArchiveRoute
+  '/_app/_dashboard/home': typeof AppDashboardHomeRoute
+  '/_app/_dashboard/new': typeof AppDashboardNewRoute
+  '/_app/_dashboard/shared-with-me': typeof AppDashboardSharedWithMeRoute
+  '/_app/_dashboard/starred': typeof AppDashboardStarredRoute
+  '/_app/_dashboard/wikis': typeof AppDashboardWikisRoute
+  '/_app/page/$id': typeof AppPageIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/archive'
     | '/drive'
     | '/faq'
-    | '/new'
     | '/privacy-policy'
+    | '/terms-of-service'
+    | '/archive'
+    | '/home'
+    | '/new'
     | '/shared-with-me'
     | '/starred'
-    | '/terms-of-service'
     | '/wikis'
     | '/page/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/archive'
     | '/drive'
     | '/faq'
-    | '/new'
     | '/privacy-policy'
+    | '/terms-of-service'
+    | '/archive'
+    | '/home'
+    | '/new'
     | '/shared-with-me'
     | '/starred'
-    | '/terms-of-service'
     | '/wikis'
     | '/page/$id'
   id:
     | '__root__'
-    | '/'
-    | '/archive'
+    | '/_app'
+    | '/_public'
     | '/drive'
-    | '/faq'
-    | '/new'
-    | '/privacy-policy'
-    | '/shared-with-me'
-    | '/starred'
-    | '/terms-of-service'
-    | '/wikis'
-    | '/page/$id'
+    | '/_app/_dashboard'
+    | '/_public/faq'
+    | '/_public/privacy-policy'
+    | '/_public/terms-of-service'
+    | '/_public/'
+    | '/_app/_dashboard/archive'
+    | '/_app/_dashboard/home'
+    | '/_app/_dashboard/new'
+    | '/_app/_dashboard/shared-with-me'
+    | '/_app/_dashboard/starred'
+    | '/_app/_dashboard/wikis'
+    | '/_app/page/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ArchiveRoute: typeof ArchiveRoute
+  AppRoute: typeof AppRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
   DriveRoute: typeof DriveRoute
-  FaqRoute: typeof FaqRoute
-  NewRoute: typeof NewRoute
-  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
-  SharedWithMeRoute: typeof SharedWithMeRoute
-  StarredRoute: typeof StarredRoute
-  TermsOfServiceRoute: typeof TermsOfServiceRoute
-  WikisRoute: typeof WikisRoute
-  PageIdRoute: typeof PageIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/wikis': {
-      id: '/wikis'
-      path: '/wikis'
-      fullPath: '/wikis'
-      preLoaderRoute: typeof WikisRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms-of-service': {
-      id: '/terms-of-service'
-      path: '/terms-of-service'
-      fullPath: '/terms-of-service'
-      preLoaderRoute: typeof TermsOfServiceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/starred': {
-      id: '/starred'
-      path: '/starred'
-      fullPath: '/starred'
-      preLoaderRoute: typeof StarredRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/shared-with-me': {
-      id: '/shared-with-me'
-      path: '/shared-with-me'
-      fullPath: '/shared-with-me'
-      preLoaderRoute: typeof SharedWithMeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy-policy': {
-      id: '/privacy-policy'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy'
-      preLoaderRoute: typeof PrivacyPolicyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/new': {
-      id: '/new'
-      path: '/new'
-      fullPath: '/new'
-      preLoaderRoute: typeof NewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/drive': {
       id: '/drive'
       path: '/drive'
@@ -231,42 +208,162 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriveRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/archive': {
-      id: '/archive'
-      path: '/archive'
-      fullPath: '/archive'
-      preLoaderRoute: typeof ArchiveRouteImport
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/page/$id': {
-      id: '/page/$id'
+    '/_public/terms-of-service': {
+      id: '/_public/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof PublicTermsOfServiceRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/privacy-policy': {
+      id: '/_public/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PublicPrivacyPolicyRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/faq': {
+      id: '/_public/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof PublicFaqRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_app/_dashboard': {
+      id: '/_app/_dashboard'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/page/$id': {
+      id: '/_app/page/$id'
       path: '/page/$id'
       fullPath: '/page/$id'
-      preLoaderRoute: typeof PageIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppPageIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/_dashboard/wikis': {
+      id: '/_app/_dashboard/wikis'
+      path: '/wikis'
+      fullPath: '/wikis'
+      preLoaderRoute: typeof AppDashboardWikisRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/_dashboard/starred': {
+      id: '/_app/_dashboard/starred'
+      path: '/starred'
+      fullPath: '/starred'
+      preLoaderRoute: typeof AppDashboardStarredRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/_dashboard/shared-with-me': {
+      id: '/_app/_dashboard/shared-with-me'
+      path: '/shared-with-me'
+      fullPath: '/shared-with-me'
+      preLoaderRoute: typeof AppDashboardSharedWithMeRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/_dashboard/new': {
+      id: '/_app/_dashboard/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof AppDashboardNewRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/_dashboard/home': {
+      id: '/_app/_dashboard/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppDashboardHomeRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
+    '/_app/_dashboard/archive': {
+      id: '/_app/_dashboard/archive'
+      path: '/archive'
+      fullPath: '/archive'
+      preLoaderRoute: typeof AppDashboardArchiveRouteImport
+      parentRoute: typeof AppDashboardRoute
     }
   }
 }
 
+interface AppDashboardRouteChildren {
+  AppDashboardArchiveRoute: typeof AppDashboardArchiveRoute
+  AppDashboardHomeRoute: typeof AppDashboardHomeRoute
+  AppDashboardNewRoute: typeof AppDashboardNewRoute
+  AppDashboardSharedWithMeRoute: typeof AppDashboardSharedWithMeRoute
+  AppDashboardStarredRoute: typeof AppDashboardStarredRoute
+  AppDashboardWikisRoute: typeof AppDashboardWikisRoute
+}
+
+const AppDashboardRouteChildren: AppDashboardRouteChildren = {
+  AppDashboardArchiveRoute: AppDashboardArchiveRoute,
+  AppDashboardHomeRoute: AppDashboardHomeRoute,
+  AppDashboardNewRoute: AppDashboardNewRoute,
+  AppDashboardSharedWithMeRoute: AppDashboardSharedWithMeRoute,
+  AppDashboardStarredRoute: AppDashboardStarredRoute,
+  AppDashboardWikisRoute: AppDashboardWikisRoute,
+}
+
+const AppDashboardRouteWithChildren = AppDashboardRoute._addFileChildren(
+  AppDashboardRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRouteWithChildren
+  AppPageIdRoute: typeof AppPageIdRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppDashboardRoute: AppDashboardRouteWithChildren,
+  AppPageIdRoute: AppPageIdRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface PublicRouteChildren {
+  PublicFaqRoute: typeof PublicFaqRoute
+  PublicPrivacyPolicyRoute: typeof PublicPrivacyPolicyRoute
+  PublicTermsOfServiceRoute: typeof PublicTermsOfServiceRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicFaqRoute: PublicFaqRoute,
+  PublicPrivacyPolicyRoute: PublicPrivacyPolicyRoute,
+  PublicTermsOfServiceRoute: PublicTermsOfServiceRoute,
+  PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ArchiveRoute: ArchiveRoute,
+  AppRoute: AppRouteWithChildren,
+  PublicRoute: PublicRouteWithChildren,
   DriveRoute: DriveRoute,
-  FaqRoute: FaqRoute,
-  NewRoute: NewRoute,
-  PrivacyPolicyRoute: PrivacyPolicyRoute,
-  SharedWithMeRoute: SharedWithMeRoute,
-  StarredRoute: StarredRoute,
-  TermsOfServiceRoute: TermsOfServiceRoute,
-  WikisRoute: WikisRoute,
-  PageIdRoute: PageIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

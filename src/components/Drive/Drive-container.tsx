@@ -22,8 +22,8 @@ export const createPath = search => {
     if (stateString && typeof stateString === 'string') {
         const state = JSON.parse(stateString)
         const id = state.ids ? state.ids[0] : ''
-        const path = id ? `/page/${id}` : '/'
+        const path = id ? `/page/${id}` : '/home'
         return path
     }
-    return '/'
+    return '/home'
 }

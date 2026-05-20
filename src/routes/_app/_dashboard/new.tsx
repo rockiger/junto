@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useGlobal } from 'reactn'
-import { CreateNewWiki } from 'components/CreateNewWiki'
 
-export const Route = createFileRoute('/new')({
+import { CreateNewWiki } from 'components/CreateNewWiki'
+import { useGlobal } from 'reactn'
+
+export const Route = createFileRoute('/_app/_dashboard/new')({
     component: NewWikiRoute,
 })
 

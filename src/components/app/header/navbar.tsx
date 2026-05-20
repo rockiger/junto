@@ -33,7 +33,7 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
     const submit = () => {
         setSearchTerm(searchValue)
         setIsSearchFieldActive(false)
-        navigate({ to: "/" })
+        navigate({ to: isSignedIn ? '/home' : '/' })
     }
 
     return (
@@ -56,7 +56,7 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
                     "flex items-center pl-6 text-xl font-normal text-fg-default no-underline",
                     isSignedIn && clsx("hidden w-sidebar md:flex"),
                 )}
-                to="/"
+                to={isSignedIn ? '/home' : '/'}
             >
                 <img
                     className={clsx("mr-3 max-h-6 md:max-h-10")}
