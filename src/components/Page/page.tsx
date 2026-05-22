@@ -357,7 +357,7 @@ export default function Page({
                     )}
                 </header>
                 <div className="page bg-white flex min-h-0 min-w-0 flex-1 flex-col">
-                    <div className="editorContainer prose prose-stone">
+                    <div className="editorContainer max-w-full prose prose-stone">
                         {fileLoaded && editor}
                         {!fileLoaded && <Spinner />}
                     </div>

@@ -87,14 +87,14 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                     </TabList>
                     <TabPanels>
                         <TabPanel id="pages" className="flex items-center justify-center">
-                            <div> <FileList
+                            <FileList
                                 emptyIcon={FileDocumentIcon}
                                 emptyMessage="Your archive is empty."
                                 emptySubline="The archive will show pages you archived"
                                 files={archivedFiles}
                                 sortBy={sortBy as SortBy}
                                 setSortBy={setSortByAndLocalStorage}
-                            /></div>
+                            />
                         </TabPanel>
                         <TabPanel id="wikis" className="flex items-center justify-center">
                             <WikiList

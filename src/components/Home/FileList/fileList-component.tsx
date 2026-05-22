@@ -54,7 +54,7 @@ export default function FileListComponent({
     const hasFiles = files.length > 0
 
     return (
-        <div className="filelist">
+        <div className="filelist w-full">
             <div>
                 {isLoading && <Spinner />}
                 {!isLoading && hasFiles && (

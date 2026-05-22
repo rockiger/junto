@@ -40,7 +40,7 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
         <div className="navbar flex h-header w-full">
             {isSignedIn && (
                 <div
-                    className={clsx("flex items-center pr-2 md:hidden")}
+                    className={clsx("flex items-center pr-2 lg:hidden")}
                 >
                     <IconButton
                         onClick={() => {
