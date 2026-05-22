@@ -1,41 +1,38 @@
 /* global gapi */
+
+
+import { Chip } from '@material-ui/core'
+import {
+    Navigate,
+    useNavigate,
+    useParams,
+    useRouter,
+} from '@tanstack/react-router'
+import Editor from 'components/Editor'
+import { FlexInput } from 'components/FlexInput'
+import IconButton from 'components/gsuite-components/icon-button'
+import Spinner from 'components/gsuite-components/spinner'
+import { PageView } from 'components/Tracking'
+import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
+import {
+    downloadFile,
+    getFileDescription,
+    refreshSession,
+    renameFile as renameFileInGdrive,
+    updateMetadata,
+} from 'lib/gdrive'
+import { filesUpdater, getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
+import { getPageById, putPage } from 'lib/localDB'
+import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
+import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
+import type { ChangeEvent, KeyboardEvent } from 'react'
 import {
     useCallback,
     useEffect,
     useRef,
     useState,
 } from 'react'
-import type { ChangeEvent, KeyboardEvent } from 'react'
 import { getGlobal, setGlobal, useGlobal } from 'reactn'
-import {
-    Navigate,
-    useNavigate,
-    useParams,
-} from '@tanstack/react-router'
-
-import { Chip } from '@material-ui/core'
-import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
-
-import {
-    renameFile as renameFileInGdrive,
-    downloadFile,
-    getFileDescription,
-    refreshSession,
-    updateMetadata,
-} from 'lib/gdrive'
-
-import Editor from 'components/Editor'
-import { PageView } from 'components/Tracking'
-
-import Spinner from 'components/gsuite-components/spinner'
-
-import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
-import { getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
-import { FlexInput } from 'components/FlexInput'
-
-import { BreadcrumbsBar } from './Breadcrumbs'
-import { filesUpdater } from 'lib/helper'
-import { getPageById, putPage } from 'lib/localDB'
 import type { IFile } from 'reactn/default'
 
 // biome-ignore lint/suspicious/noExplicitAny: `Editor` is a JS `forwardRef` without exported props
@@ -47,211 +44,223 @@ type PageProps = {
     isSignedIn: boolean
     isSigningIn: boolean
     isCreatingNewFile: boolean
-    setGoToNewFile: ( v: boolean ) => void
+    setGoToNewFile: (v: boolean) => void
 }
 
-export default function Page( {
+export default function Page({
     isSignedIn,
     isSigningIn,
     isCreatingNewFile,
     setGoToNewFile: _setGoToNewFile,
-}: PageProps ) {
+}: PageProps) {
     const navigate = useNavigate()
-    const params = useParams( { from: '/_app/page/$id' } )
-    const [ files ] = useGlobal( 'files' )
+    const router = useRouter()
+    const params = useParams({ from: '/_app/page/$id' })
+    const [files] = useGlobal('files')
 
-    const [ canEdit, setCanEdit ] = useState( false )
-    const [ , setEditorDeltaState ] = useState<Record<string, unknown>>( {} )
-    const [ fileId, setFileId ] = useState( () => params.id )
-    const [ fileName, setFileName ] = useState( UNTITLEDFILE )
-    const [ pageHead, setPageHead ] = useState( UNTITLEDNAME )
-    const [ fileLoaded, setFileLoaded ] = useState( false )
-    const [ fileLoading, setFileLoading ] = useState( false )
-    const [ initialContent, setInitialContent ] = useState<string | undefined>(
+    const [canEdit, setCanEdit] = useState(false)
+    const [, setEditorDeltaState] = useState<Record<string, unknown>>({})
+    const [fileId, setFileId] = useState(() => params.id)
+    const [fileName, setFileName] = useState(UNTITLEDFILE)
+    const [pageHead, setPageHead] = useState(UNTITLEDNAME)
+    const [fileLoaded, setFileLoaded] = useState(false)
+    const [fileLoading, setFileLoading] = useState(false)
+    const [initialContent, setInitialContent] = useState<string | undefined>(
         undefined
     )
 
-    const editorRef = useRef<{ focus?: () => void } | null>( null )
-    const inputRef = useRef<HTMLInputElement | null>( null )
-    const prevParamsIdRef = useRef<string | null>( null )
+    const editorRef = useRef<{ focus?: () => void } | null>(null)
+    const inputRef = useRef<HTMLInputElement | null>(null)
+    const prevParamsIdRef = useRef<string | null>(null)
+
+    const onBack = () => {
+        if (router.history.canGoBack()) {
+            router.history.back()
+        } else {
+            void navigate({ to: '/home' })
+        }
+    }
 
     const setEditorDelta = useCallback(
-        ( delta: Record<string, unknown> ) => {
-            setEditorDeltaState( delta )
+        (delta: Record<string, unknown>) => {
+            setEditorDeltaState(delta)
         },
         []
     )
 
     const loadEditorContentRef = useRef<
-        ( explicitFileId?: string ) => Promise<void>
-    >( async () => {} )
+        (explicitFileId?: string) => Promise<void>
+    >(async () => { })
 
     const downloadFileContent = useCallback(
-        async ( driveFileId: string ) => {
+        async (driveFileId: string) => {
             try {
-                const fileContent = await downloadFile( driveFileId )
+                const fileContent = await downloadFile(driveFileId)
                 return fileContent
-            } catch ( err: unknown ) {
-                console.log( { err } )
+            } catch (err: unknown) {
+                console.log({ err })
                 const rawBody =
                     err &&
-                    typeof err === 'object' &&
-                    'body' in err &&
-                    typeof ( err as { body: string } ).body === 'string'
-                        ? ( err as { body: string } ).body
+                        typeof err === 'object' &&
+                        'body' in err &&
+                        typeof (err as { body: string }).body === 'string'
+                        ? (err as { body: string }).body
                         : '{}'
-                const body = JSON.parse( rawBody ) as {
+                const body = JSON.parse(rawBody) as {
                     error?: { message?: string }
                 }
                 const { error = {} } = body
-                if ( error.message === 'Invalid Credentials' ) {
+                if (error.message === 'Invalid Credentials') {
                     try {
                         await refreshSession()
                         void loadEditorContentRef.current()
-                    } catch ( e ) {
-                        alert( `Couldn't refresh session:` )
-                        console.log( { err: e } )
+                    } catch (e) {
+                        alert(`Couldn't refresh session:`)
+                        console.log({ err: e })
                     }
                 } else {
-                    alert( `Couldn't find file` )
-                    console.log( { error } )
-                    void navigate( { to: '/home' } )
+                    alert(`Couldn't find file`)
+                    console.log({ error })
+                    void navigate({ to: '/home' })
                 }
                 return undefined
             }
         },
-        [ navigate ]
+        [navigate]
     )
 
     const loadEditorContent = useCallback(
-        async ( explicitFileId?: string ) => {
+        async (explicitFileId?: string) => {
             const id = explicitFileId ?? fileId
-            if ( !id ) {
-                void navigate( { to: '/home' } )
+            if (!id) {
+                void navigate({ to: '/home' })
                 return
             }
 
             let fileContent: string | undefined
             let fileDescription: IFile | undefined = files.find(
-                ( el: IFile ) => el.id === id
+                (el: IFile) => el.id === id
             )
 
-            if ( !fileDescription ) {
-                fileDescription = ( await getFileDescription(
+            if (!fileDescription) {
+                fileDescription = (await getFileDescription(
                     id
-                ) ) as IFile
+                )) as IFile
             }
 
-            if ( !fileDescription ) {
-                void navigate( { to: '/home' } )
+            if (!fileDescription) {
+                void navigate({ to: '/home' })
                 return
             }
 
-            const nextPageHead = getTitleFromFile( fileDescription )
+            const nextPageHead = getTitleFromFile(fileDescription)
 
-            const page = await getPageById( id )
-            console.log( page )
+            const page = await getPageById(id)
+            console.log(page)
             const remoteModified = fileDescription.modifiedTime ?? ''
-            if ( page && page.editedTime >= remoteModified ) {
-                console.log( page.editedTime )
+            if (page && page.editedTime >= remoteModified) {
+                console.log(page.editedTime)
                 fileContent = page.content
             } else {
-                console.log( 'Need to look for file in server' )
-                fileContent = await downloadFileContent( id )
+                console.log('Need to look for file in server')
+                fileContent = await downloadFileContent(id)
                 const contentToStore = fileContent ?? ''
-                await putPage( {
+                await putPage({
                     id,
                     content: contentToStore,
                     editedTime: remoteModified,
                     modifiedTime: remoteModified,
-                } )
+                })
             }
-            setCanEdit( Boolean( fileDescription.capabilities?.canEdit ) )
-            setInitialContent( fileContent ? fileContent : '' )
-            setFileLoaded( true )
-            setFileLoading( false )
-            setFileName( fileDescription.name )
-            setPageHead( nextPageHead )
+            setCanEdit(Boolean(fileDescription.capabilities?.canEdit))
+            setInitialContent(fileContent ? fileContent : '')
+            setFileLoaded(true)
+            setFileLoading(false)
+            setFileName(fileDescription.name)
+            setPageHead(nextPageHead)
         },
-        [ downloadFileContent, fileId, files, navigate ]
+        [downloadFileContent, fileId, files, navigate]
     )
 
     loadEditorContentRef.current = loadEditorContent
 
-    useEffect( () => {
-        setGlobal( { goToNewFile: false } )
-        PageView( { pathname: '/page' } )
-    }, [] )
+    useEffect(() => {
+        setGlobal({ goToNewFile: false })
+        PageView({ pathname: '/page' })
+    }, [])
 
-    useEffect( () => {
-        document.title = `${ pageHead } – Fulcrum.wiki`
-    }, [ pageHead ] )
+    useEffect(() => {
+        document.title = `${pageHead} – Fulcrum.wiki`
+    }, [pageHead])
 
-    useEffect( () => {
-        if ( prevParamsIdRef.current === null ) {
+    useEffect(() => {
+        if (files.length === 0) return
+
+        if (prevParamsIdRef.current === null) {
             prevParamsIdRef.current = params.id
             return
         }
 
-        if ( prevParamsIdRef.current === params.id ) return
+        if (prevParamsIdRef.current === params.id) return
 
         prevParamsIdRef.current = params.id
-        setGlobal( { goToNewFile: false } )
-        setFileId( params.id )
-        setFileLoaded( false )
-        void loadEditorContent( params.id )
-    }, [ params.id, loadEditorContent ] )
+        setGlobal({ goToNewFile: false })
+        setFileId(params.id)
+        setFileLoaded(false)
+        void loadEditorContent(params.id)
+    }, [params.id, files.length, loadEditorContent])
 
-    useEffect( () => {
-        if ( !isSignedIn || isSigningIn ) return
+    useEffect(() => {
         if (
+            !isSignedIn ||
             fileLoaded ||
-            fileLoading
+            fileLoading ||
+            files.length === 0
         ) {
             return
         }
 
-        setFileLoading( true )
+        setFileLoading(true)
         void loadEditorContent()
-        gapi.load( 'picker', () => {
-            console.log( 'Picker loaded' )
-        } )
+        gapi.load('picker', () => {
+            console.log('Picker loaded')
+        })
 
         const now = new Date().toISOString()
         const change = {
             viewedByMe: true,
             viewedByMeTime: now,
         }
-        setGlobal( filesUpdater( change, getGlobal(), fileId ) )
-        updateMetadata( fileId, { viewedByMeTime: now } )
+        setGlobal(filesUpdater(change, getGlobal(), fileId))
+        updateMetadata(fileId, { viewedByMeTime: now })
     }, [
         isSignedIn,
-        isSigningIn,
         fileLoaded,
         fileLoading,
+        files.length,
         loadEditorContent,
         fileId,
-    ] )
+    ])
 
     const onBlurInput = async () => {
         let nextHead = pageHead
-        if ( !nextHead ) {
+        if (!nextHead) {
             nextHead = 'Untitled page'
-            setPageHead( nextHead )
+            setPageHead(nextHead)
         }
 
-        const nextFileName = getFileNameFromTitle( nextHead )
-        if ( fileName !== nextFileName ) {
-            await renameFile( fileId, nextFileName )
+        const nextFileName = getFileNameFromTitle(nextHead)
+        if (fileName !== nextFileName) {
+            await renameFile(fileId, nextFileName)
         }
     }
 
-    const onChangeInput = ( ev: ChangeEvent<HTMLInputElement> ) => {
-        setPageHead( ev.target.value )
+    const onChangeInput = (ev: ChangeEvent<HTMLInputElement>) => {
+        setPageHead(ev.target.value)
     }
 
-    const onKeyDownInput = ( ev: KeyboardEvent<HTMLInputElement> ) => {
-        switch ( ev.key ) {
+    const onKeyDownInput = (ev: KeyboardEvent<HTMLInputElement>) => {
+        switch (ev.key) {
             case `ArrowDown`:
             case `Tab`:
                 ev.preventDefault()
@@ -265,24 +274,24 @@ export default function Page( {
         ev.stopPropagation()
     }
 
-    const renameFile = async ( id: string, name: string ) => {
+    const renameFile = async (id: string, name: string) => {
         const change = { name }
 
-        setFileName( name )
-        setGlobal( filesUpdater( change, getGlobal(), id ) )
-        await renameFileInGdrive( fileId, name )
+        setFileName(name)
+        setGlobal(filesUpdater(change, getGlobal(), id))
+        await renameFileInGdrive(fileId, name)
     }
 
     const editor = (
         <EditorWithFileProps
-            canEdit={ canEdit }
-            fileId={ fileId }
-            fileLoaded={ fileLoaded }
-            fileName={ fileName }
-            initialValue={ initialContent ?? '' }
-            inputRef={ inputRef }
-            ref={ editorRef }
-            setEditorDelta={ setEditorDelta }
+            canEdit={canEdit}
+            fileId={fileId}
+            fileLoaded={fileLoaded}
+            fileName={fileName}
+            initialValue={initialContent ?? ''}
+            inputRef={inputRef}
+            ref={editorRef}
+            setEditorDelta={setEditorDelta}
         />
     )
 
@@ -291,69 +300,68 @@ export default function Page( {
         params.id &&
         !isCreatingNewFile
     ) {
-        console.log( {
+        console.log({
             'this.state.fileLoaded': fileLoaded,
             'this.state.fileName': fileName,
             'this.state.canEdit': canEdit,
-        } )
+        })
         return (
-            <div className="page bg-white flex min-h-0 min-w-0 flex-1 flex-col">
-                <div className="editorContainer">
-                    { fileLoaded && (
-                        <h1 className="editorHeader">
-                            { canEdit &&
-                                ( fileName === OVERVIEW_NAME ? (
-                                    <div
-                                        style={ {
-                                            color: 'grey',
-                                            paddingLeft: '.5rem',
-                                        } }
+            <>
+                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-sidebar px-2 md:px-3">
+                    <IconButton ariaLabel="Back" onClick={onBack}>
+                        <ArrowLeftIcon aria-hidden />
+                    </IconButton>
+                    {fileLoaded && (
+                        <h1 className="flex items-center text-xl overflow-clip text-ellipsis max-w-[calc(100vw-200px)]">
+                            {canEdit &&
+                                (fileName === OVERVIEW_NAME ? (
+                                    <div className='flex items-baseline text-text-muted'
                                     >
-                                        { pageHead }
+                                        {pageHead}
                                         <LockOutlineIcon size=".75em" />
                                     </div>
                                 ) : (
-                                    <BreadcrumbsBar fileId={ fileId }>
-                                        <FlexInputField
-                                            id="editorInput"
-                                            onBlur={ onBlurInput }
-                                            value={
-                                                pageHead !== 'Untitled page'
-                                                    ? pageHead
-                                                    : ''
-                                            }
-                                            placeholder="Untitled page"
-                                            ref={ inputRef }
-                                            onKeyDown={ onKeyDownInput }
-                                            onChange={ onChangeInput }
-                                        />
-                                    </BreadcrumbsBar>
-                                ) ) }
-                            { !canEdit && (
+                                    <FlexInputField
+                                        id="editorInput"
+                                        className="translate-y-0.5"
+                                        onBlur={onBlurInput}
+                                        value={pageHead !== 'Untitled page'
+                                            ? pageHead
+                                            : ''}
+                                        placeholder="Untitled page"
+                                        ref={inputRef}
+                                        onKeyDown={onKeyDownInput}
+                                        onChange={onChangeInput} />
+                                ))}
+                            {/* <BreadcrumbsBar fileId={fileId}>
+                                    </BreadcrumbsBar> */}
+                            {!canEdit && (
                                 <div
-                                    style={ {
+                                    style={{
                                         color: 'grey',
                                         paddingLeft: '.5rem',
-                                    } }
+                                    }}
                                 >
-                                    { pageHead }
+                                    {pageHead}
                                     <Chip
                                         id="Readonly-Chip"
                                         color="primary"
                                         label="Readonly"
                                         size="small"
-                                        style={ {
+                                        style={{
                                             margin: '0 0 3px 1rem',
-                                        } }
-                                    />
+                                        }} />
                                 </div>
-                            ) }
+                            )}
                         </h1>
-                    ) }
-                    { fileLoaded && editor }
-                    { !fileLoaded && <Spinner /> }
-                </div>
-                <style>{ `
+                    )}
+                </header>
+                <div className="page bg-white flex min-h-0 min-w-0 flex-1 flex-col">
+                    <div className="editorContainer prose prose-stone">
+                        {fileLoaded && editor}
+                        {!fileLoaded && <Spinner />}
+                    </div>
+                    <style>{`
                         .page {
                             display: flex;
                             flex-direction: column;
@@ -375,15 +383,15 @@ export default function Page( {
                             margin: 0;
                             padding: 0 0.5rem;
                         }                       
-                    ` }</style>
-            </div>
+                    `}</style>
+                </div></>
         )
     } else if (
-        ( !isSignedIn && isSigningIn ) ||
+        (!isSignedIn && isSigningIn) ||
         isCreatingNewFile
     ) {
         return <Spinner />
-    } else if ( !isSignedIn && !isSigningIn ) {
+    } else if (!isSignedIn && !isSigningIn) {
         return <Navigate to="/" replace />
     }
     return null
@@ -405,14 +413,14 @@ export function getUserRole(
     }[],
     userEmail: string
 ): DrivePermRole {
-    const fileMeta = files.find( file => file.id === fileId )
-    console.log( fileMeta )
+    const fileMeta = files.find(file => file.id === fileId)
+    console.log(fileMeta)
     let userRole: DrivePermRole = 'owner'
-    if ( fileMeta?.permissions ) {
+    if (fileMeta?.permissions) {
         const userPermission = fileMeta.permissions.find(
             el => el.emailAddress === userEmail
         )
-        if ( userPermission ) userRole = userPermission.role as DrivePermRole
+        if (userPermission) userRole = userPermission.role as DrivePermRole
     }
 
     return userRole

@@ -1,27 +1,26 @@
 // @ts-nocheck
-import React, { useEffect, useGlobal, useState } from 'reactn'
-import { Beforeunload } from 'react-beforeunload'
-import { Value } from 'slate'
-import { isHotkey } from 'is-hotkey'
-import { useLocation } from '@tanstack/react-router'
-import { debounce } from 'lodash'
 
+import { useLocation } from '@tanstack/react-router'
 import { Hint } from 'components/gsuite-components/hint'
 import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
+import { PageMenu } from 'components/pageButtons/PageMenu'
+import { ToggleStarredButton } from 'components/pageButtons/ToggleStarredButton'
 import { Event } from 'components/Tracking'
+import { isHotkey } from 'is-hotkey'
 import { API_KEY } from 'lib/constants'
-import { filesUpdater, getMetaById } from 'lib/helper'
 import { updateMetadata } from 'lib/gdrive'
-
-import MaterialEditor from './material-editor'
+import { filesUpdater, getMetaById } from 'lib/helper'
+import { debounce } from 'lodash'
+import { Beforeunload } from 'react-beforeunload'
+import React, { useEffect, useGlobal, useState } from 'reactn'
+import { Value } from 'slate'
 import {
     convertFilesToAutocompletItems,
     initStorage,
     save,
     updateModifiedTimeInGlobalState,
 } from './Editor-helper'
-import { PageMenu } from 'components/pageButtons/PageMenu'
-import { ToggleStarredButton } from 'components/pageButtons/ToggleStarredButton'
+import MaterialEditor from './material-editor'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -47,7 +46,7 @@ const EditorLogic = React.forwardRef(
             (searchStr.startsWith('?') &&
                 new URLSearchParams(searchStr.slice(1)).has('edit'))
         const [readOnly, setReadOnly] = useState(!hasEdit)
-        const [height, setHeight] = useState('calc(100vh - 65px - 57px)')
+        const [_height, setHeight] = useState('calc(100vh - 65px - 57px)')
         //const editorRef = useRef(null)
 
         const initialState = Value.fromJSON(JSON.parse(initialValue))
@@ -94,7 +93,7 @@ const EditorLogic = React.forwardRef(
             // eslint-disable-next-line
         }, [])
 
-        useEffect(() => {}, [initialFiles, fileId])
+        useEffect(() => { }, [initialFiles, fileId])
 
         async function saveToDriveAndLocalDB(fileId, initialValue) {
             console.log('saveToDriveAndLocalDB')
@@ -147,7 +146,7 @@ const EditorLogic = React.forwardRef(
                 ev.stopPropagation()
             }
         }
-        const onKeyDownEditor = (event, editor, next) => {
+        const onKeyDownEditor = (event, _editor, next) => {
             if (event.key === 'Tab' && event.shiftKey) {
                 event.preventDefault()
                 inputRef.current.focus()
@@ -203,9 +202,7 @@ const EditorLogic = React.forwardRef(
                                 )}
                                 onClick={() => {
                                     if (
-                                        getMetaById(fileId, initialFiles)[
-                                            'starred'
-                                        ]
+                                        getMetaById(fileId, initialFiles).starred
                                     ) {
                                         unstar(fileId)
                                     } else {
@@ -229,18 +226,15 @@ const EditorLogic = React.forwardRef(
                     readOnly={readOnly}
                     style={{
                         fontSize: '1rem',
-                        height,
-                        padding: `.7rem 1rem ${
-                            !readOnly ? '20rem' : '.7rem'
-                        } .7rem`,
+                        //! height,
+                        padding: "0 1.25rem",
                         overflowY: 'auto',
                     }}
                 />
                 <Beforeunload
                     onBeforeunload={async () => {
                         if (
-                            editorRef.current &&
-                            !!editorRef.current.state.readOnly
+                            editorRef.current?.state.readOnly
                         ) {
                             await saveToDriveAndLocalDB(fileId, initialValue)
                         }

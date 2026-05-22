@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 
-import { PageChrome } from 'components/Page/PageChrome'
 
 type FocusLayoutProps = {
     children: ReactNode
@@ -12,7 +11,6 @@ type FocusLayoutProps = {
 export default function FocusLayout({ children }: FocusLayoutProps) {
     return (
         <div className="flex min-h-dvh flex-col bg-surface-paper">
-            <PageChrome />
             <div className="min-h-0 flex-1">{children}</div>
         </div>
     )

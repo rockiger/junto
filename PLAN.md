@@ -9,9 +9,8 @@
 --- [x] Filter SharedWithMe files
 -- [x] Archive
 -- [x] Search
--- [] Page-View
---- [] Convert Page to Markdown-it
--- [] Page-Edit
+-- [x] Page-View
+-- [x] Page-Edit
 ----------------------------------------------------------
 - [] Make desktop views working again
 -- [] Home
@@ -21,9 +20,12 @@
 -- [] Search
 -- [] Page-View
 -- [] Page-Edit
+----------------------------------------------------------
 - [] Add react-compiler
 - [] Deploy to Hostinger
 ----------------------------------------------------------
+----------------------------------------------------------
+- [] Repair Hints
 - [] Migrate to markdown-it backend
 - [] Migrate to React-Lexical
 - [] List Markdown-it Wiki files from Google Drive

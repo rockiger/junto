@@ -1,15 +1,14 @@
 .pageButtons {
-    align-items: center;
-    display: flex;
-    padding-right: 24px;
-    position: absolute;
-    right: 0;
-    top: 64px;
+	align-items: center;
+	display: flex;
+	padding-right: 24px;
+	position: absolute;
+	right: 0;
+	top: 64px;
 }
 
 @media screen and (max-width: 930px) {
-    .pageButtons {
-        padding-right: 12px;
-        top: 64px;
-    }
+	.pageButtons {
+		top: 8px;
+	}
 }

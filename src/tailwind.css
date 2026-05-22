@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /*
  * Design tokens: values from src/static/styles/_palette.scss + Drive-like UI.
