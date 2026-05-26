@@ -54,7 +54,7 @@ export function SidebarTreeLinkComponent(props) {
                     style={{
                         flexGrow: 1,
                         lineHeight: 1.5,
-                        maxWidth: 'calc(100% - 30px)',
+                        maxWidth: 'calc(100% - 40px)',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',

@@ -208,7 +208,7 @@ export function DashboardMobileDock() {
     return (
         <>
             <div
-                className="fixed right-5 z-10 flex max-[949px]:flex-col min-[950px]:hidden gap-3 transition-[opacity,transform] duration-200 ease-out"
+                className="fixed right-5 z-10 flex flex-col gap-3 transition-[opacity,transform] duration-200 ease-out lg:hidden"
                 style={{
                     bottom: 'calc(6.75rem + env(safe-area-inset-bottom, 0px))',
                     opacity: fabVisible ? 1 : 0,
@@ -230,7 +230,7 @@ export function DashboardMobileDock() {
 
             <nav
                 aria-label="Main"
-                className="fixed inset-x-0 bottom-0 z-10 flex justify-around border-divider bg-sidebar pt-2"
+                className="fixed inset-x-0 bottom-0 z-10 flex justify-around border-divider bg-surface-container pt-2 lg:hidden"
             >
                 {NAV.map(({ to, label, Icon, IconSelected, exact }) => {
                     const active = linkActive(to, exact)

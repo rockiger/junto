@@ -14,6 +14,7 @@ export default function Sidebar(props: any) {
             <div
                 className={clsx(
                     styles.Sidebar_overlay,
+                    "lg:hidden",
                     showSidebarOnMobile && styles.Sidebar_overlay__show
                 )}
                 onClick={() => setShowSidebarOnMobile(false)}
@@ -21,7 +22,8 @@ export default function Sidebar(props: any) {
             <div
                 className={clsx(
                     styles.Sidebar,
-                    showSidebarOnMobile && styles.Sidebar__show
+                    showSidebarOnMobile && styles.Sidebar__show,
+                    "p-4 lg:py-0"
                 )}
             >
                 <SidebarContent />

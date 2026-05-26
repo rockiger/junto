@@ -9,7 +9,7 @@ export default function PublicLayout() {
     return (
         <>
             <Header />
-            <div className="bg-sidebar min-h-[calc(100dvh-64px)]">
+            <div className="bg-surface-container min-h-[calc(100dvh-64px)]">
                 <Outlet />
             </div>
             <Footer />

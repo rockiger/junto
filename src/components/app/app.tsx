@@ -11,7 +11,7 @@ export default function App() {
 
     return (
         <div
-            className="flex flex-col bg-surface"
+            className="bg-surface-container"
         >
             <SnackbarProvider maxSnack={3}>
                 <RouterProvider router={router} />

@@ -307,7 +307,7 @@ export default function Page({
         })
         return (
             <>
-                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-sidebar px-2 md:px-3">
+                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-surface-container px-2 md:px-3">
                     <IconButton ariaLabel="Back" onClick={onBack}>
                         <ArrowLeftIcon aria-hidden />
                     </IconButton>

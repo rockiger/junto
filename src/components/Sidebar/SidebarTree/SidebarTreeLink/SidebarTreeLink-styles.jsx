@@ -13,7 +13,7 @@ export const useStyles = makeStyles(theme => {
         },
         link: {
             alignItems: 'center',
-            borderRadius: '0 66px 66px 0',
+            borderRadius: '66px 66px 66px 66px',
             display: 'flex',
             flexGrow: 1,
             textDecoration: 'none',

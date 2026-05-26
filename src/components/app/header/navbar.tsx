@@ -4,8 +4,6 @@ import IconButton from "components/gsuite-components/icon-button"
 import MenuIcon from "mdi-react/MenuIcon"
 import type { ReactNode } from "react"
 import { useDispatch, useEffect, useGlobal } from "reactn"
-
-import logo from "../../../static/logo_48.svg"
 import Search from "./search"
 
 
@@ -51,20 +49,6 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
                     </IconButton>
                 </div>
             )}
-            <Link
-                className={clsx(
-                    "flex items-center pl-6 text-xl font-normal text-fg-default no-underline",
-                    isSignedIn && clsx("hidden w-sidebar md:flex"),
-                )}
-                to={isSignedIn ? '/home' : '/'}
-            >
-                <img
-                    className={clsx("mr-3 max-h-6 md:max-h-10")}
-                    src={logo}
-                    alt="App logo"
-                />
-                <div>Fulcrum Wiki</div>
-            </Link>
             <div className="flex flex-1 items-center">
                 {isSignedIn && <Search clearSearch={clearSearch} submit={submit} />}
             </div>

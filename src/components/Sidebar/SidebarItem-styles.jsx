@@ -4,8 +4,7 @@ export const useStyles = makeStyles(theme => {
     return {
         link: {
             alignItems: 'center',
-            borderRadius: '0 66px 66px 0',
-            display: 'flex',
+            borderRadius: '66px 66px 66px 66px',
             flexGrow: 1,
             textDecoration: 'none',
             color: '#3c4043',

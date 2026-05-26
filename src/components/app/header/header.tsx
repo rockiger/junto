@@ -22,7 +22,7 @@ export default function Header() {
     const [initialFiles] = useGlobal('initialFiles')
 
     return (
-        <div className="bg-sidebar" style={{ gridArea: 'header' }}>
+        <div className="bg-surface-container px-2" style={{ gridArea: 'navigation' }}>
             <Navbar isSignedIn={isSignedIn}>
                 {isSignedIn &&
                     isInitialFileListLoading &&

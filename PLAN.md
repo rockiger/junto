@@ -1,6 +1,6 @@
 - [x] Move to tanstack start
 - [x] Update React to 19
-- [] Make mobile views working again
+- [x] Make mobile views working again
 -- [x] Home
 -- [x] Starred
 --- [x] Filter Starred files
@@ -13,6 +13,8 @@
 -- [x] Page-Edit
 ----------------------------------------------------------
 - [] Make desktop views working again
+-- [x] Layout to show Sidebar and Main content
+-- [] Sidebar breakpoints
 -- [] Home
 -- [] Starred
 -- [] Shared
@@ -48,3 +50,4 @@
 - [] Deploy to Hostinger
 - [] Read Hints to guide users
 - [] Star a file in the file list
+- [] Known issue with the sidebar hover and the pill background for selected items

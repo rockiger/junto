@@ -1,20 +1,21 @@
 // @ts-nocheck
 //@ts-check
-import React, { useDispatch } from 'reactn'
+import { useDispatch } from 'reactn'
 import { Link, useLocation } from '@tanstack/react-router'
 import { Tooltip } from 'components/gsuite-components'
 
 import { useStyles } from './SidebarItem-styles'
+import clsx from 'clsx'
 
-/**
- * @typedef SidebarItemProps
- * @property {any}    icon the icon
- * @property {string} name the link name
- * @property {string} path the path to compare activeness agains
- * @property {string} [tooltip] tooltip text
- */
+type SidebarItemProps = {
+    icon: React.ReactNode
+    name: string
+    path: string
+    tooltip?: string
+    className?: string
+}
 
-export const SidebarItem = ({ icon: Icon, name, path, tooltip }) => {
+export const SidebarItem = ({ icon: Icon, name, path, tooltip, className }: SidebarItemProps) => {
     const clearSearch = useDispatch('clearSearchComplete')
     const location = useLocation()
     const classes = useStyles()
@@ -24,7 +25,7 @@ export const SidebarItem = ({ icon: Icon, name, path, tooltip }) => {
     return (
         <Tooltip content={tooltip ? tooltip : name}>
             <Link
-                className={classes.link}
+                className={clsx(classes.link, "hidden lg:flex", className)}
                 onClick={clearSearch}
                 style={{
                     backgroundColor: pathname === path ? '#e8f0fe' : '',
@@ -45,7 +46,7 @@ export const SidebarItem = ({ icon: Icon, name, path, tooltip }) => {
                         flexGrow: 1,
                         lineHeight: 1.5,
                         marginLeft: '.15rem',
-                        maxWidth: 'calc(100% - 30px)',
+                        maxWidth: 'calc(100% - 40px)',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',

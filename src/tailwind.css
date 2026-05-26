@@ -10,8 +10,8 @@
 	--font-sans:
 		Metropolis, Roboto, "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
-	/* Sidebar and header background colors */
-	--color-sidebar: hsl(249.99998, 33%, 96%);
+	/* Mobile surface container (tabs, header, dock) */
+	--color-surface-container: hsl(249.99998, 33%, 96%);
 	--color-search-bg: hsl(247.5, 20%, 92%);
 	--color-search-placeholder: hsl(223.84615, 13%, 39%);
 	--color-tab-selected: hsl(222.97298, 34%, 42%);
@@ -21,6 +21,7 @@
 	--color-icon-surface: hsl(251.99998, 16%, 94%);
 	--color-text-default: hsl(230.00002, 10%, 11%);
 	--color-text-muted: hsl(240, 7%, 29%);
+
 
 	/* Accent / brand (primary-* from palette) */
 	--color-accent: #4285f4;
@@ -78,6 +79,12 @@
 	/* Stacking (fixed chrome above content) */
 	--z-1000: 1000;
 }
+
+/* Changed colors for screen size >= lg */
+	@media (min-width: 1024px) {
+		@theme {
+		--color-surface-container: hsl(216, 56%, 98%);
+	}}
 
 html {
 	@apply text-text-default;

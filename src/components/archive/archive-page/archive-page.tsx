@@ -60,10 +60,10 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                 {true && (<Tabs className="w-full">
                     <TabList
                         aria-label="Tabs"
-                        className="bg-sidebar flex w-full justify-around sticky top-0 z-10"
+                        className="bg-surface-container flex w-full justify-around sticky top-0 z-10"
                     >
                         <Tab
-                            className="flex min-w-0 flex-1 cursor-pointer flex-col items-center py-0 text-fg-muted outline-none data-focus-visible:ring-2 data-focus-visible:ring-accent/35 data-focus-visible:ring-offset-2 data-focus-visible:ring-offset-sidebar data-selected:text-tab-selected"
+                            className="flex min-w-0 flex-1 cursor-pointer flex-col items-center py-0 text-fg-muted outline-none data-focus-visible:ring-2 data-focus-visible:ring-accent/35 data-focus-visible:ring-offset-2 data-focus-visible:ring-offset-surface-container data-selected:text-tab-selected"
                             id="pages"
                         >
                             <div className="inline-flex max-w-full flex-col items-center gap-3 pt-3.5">
@@ -74,7 +74,7 @@ function ArchivePage({ isSignedIn, isSigningIn }) {
                             </div>
                         </Tab>
                         <Tab
-                            className="flex min-w-0 flex-1 cursor-pointer flex-col items-center py-0 text-fg-muted outline-none data-focus-visible:ring-2 data-focus-visible:ring-accent/35 data-focus-visible:ring-offset-2 data-focus-visible:ring-offset-sidebar data-selected:text-tab-selected"
+                            className="flex min-w-0 flex-1 cursor-pointer flex-col items-center py-0 text-fg-muted outline-none data-focus-visible:ring-2 data-focus-visible:ring-accent/35 data-focus-visible:ring-offset-2 data-focus-visible:ring-offset-surface-container data-selected:text-tab-selected"
                             id="wikis"
                         >
                             <div className="inline-flex max-w-full flex-col items-center gap-3 pt-3.5">

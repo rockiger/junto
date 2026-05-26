@@ -63,25 +63,6 @@
     }
 }
 
-.hidden {
-    display: none;
-    &__sm {
-        @media (max-width: $sm - 1) {
-            display: none;
-        }
-    }
-    &__md {
-        @media (max-width: $md - 1) {
-            display: none;
-        }
-    }
-    &__lg {
-        @media (max-width: $lg - 1) {
-            display: none;
-        }
-    }
-}
-
 .show {
     display: inherit;
     &__sm {
@@ -106,9 +87,6 @@
 .md {
     @media (min-width: $md) {
         display: flex;
-        &.hidden {
-            display: none;
-        }
     }
 }
 
