@@ -1,22 +1,22 @@
-table {
+.editor table {
     width: 100%;
     border-collapse: collapse;
     border-top: 1px solid black;
 }
 
-table tr {
+.editor table tr {
     border: none;
     border-bottom: 1px solid black;
     border-right: 1px solid black;
 }
 
-table thead tr {
+.editor table thead tr {
     background: #f5f5f5;
     font-weight: bold;
 }
 
-table td,
-table th {
+.editor table td,
+.editor table th {
     border: 1px solid black;
     border-top: none;
     border-bottom: none;
@@ -26,8 +26,8 @@ table th {
     text-align: left;
 }
 
-/* for nested tables */
-table td > table {
+/* for nested .editor tables */
+.editor table td > table {
     width: 100%;
 }
 

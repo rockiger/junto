@@ -58,9 +58,9 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
             {(isDashboard && myFulcrum) || wikis.length ? <GridList
 
                 aria-label="Wiki pages"
-                className="flex flex-col gap-0.5 px-2"
+                className="flex flex-col gap-0.5 px-2 lg:flex-row lg:px-0"
             >
-                <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)">
+                <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus) lg:hidden ">
                     <h2 className="text-lg font-medium">Wikis</h2>
                 </GridListItem>
                 {wikis.map(f => {
@@ -162,7 +162,7 @@ function WikiCard({
 }: Partial<IFile>) {
     return (
         <GridListItemLink
-            className="bg-surface-paper flex cursor-pointer rounded-lg p-3 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)"
+            className="bg-surface-paper flex cursor-pointer rounded-lg p-3 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus) lg:bg-surface-container lg:max-w-sm lg:rounded-xl lg:w-1/4"
             textValue={pageName}
             key={id}
             to="/page/$id"
@@ -184,8 +184,8 @@ function WikiCard({
                 )}
             </div>
             <div className="flex flex-col justify-between">
-                <p className="text-lg">{pageName}</p>
-                <p className="font-medium text-sm text-text-muted">
+                <p className="text-lg lg:text-sm lg:font-medium">{pageName}</p>
+                <p className="font-medium text-sm text-text-muted lg:text-xs lg:text-fg-muted">
                     {teamDriveId ? (
                         <>
                             in Shared with me

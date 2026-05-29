@@ -6,6 +6,10 @@ declare const gapi: {
     load: ( module: string, callback?: () => void ) => void
 }
 
+interface Window {
+    gapi?: typeof gapi
+}
+
 declare module 'react-tooltip-lite' {
     export interface TooltipProps {
         children?: import('react').ReactNode

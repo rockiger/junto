@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import { Spinner } from "components/gsuite-components/"
 import { Hint } from "components/gsuite-components/hint"
 import {
@@ -16,8 +15,11 @@ import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import FileSearchIcon from "mdi-react/FileSearchIcon"
 import { useEffect } from "react"
 import { SelectionIndicator } from 'react-aria-components'
-import { useGlobal, useState } from "reactn"
+import { useDispatch, useGlobal, useState } from "reactn"
 import FileList from "./FileList"
+import Search from 'components/app/header/search'
+import { useNavigate } from '@tanstack/react-router'
+import { Disclosure, DisclosureHeader, DisclosurePanel } from 'components/gsuite-components/disclosure'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 const sortByLS = localStorage.getItem(localStorageKey)
@@ -27,13 +29,19 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 
 
 	const [files] = useGlobal("files")
-	const [searchTerm] = useGlobal("searchTerm")
+	const [searchTerm, setSearchTerm] = useGlobal("searchTerm")
 	const [sortBy, setSortBy] = useState(
 		sortByLS &&
 			(sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")
 			? sortByLS
 			: "modifiedByMeTime",
 	)
+
+
+	const navigate = useNavigate()
+	const [, setIsSearchFieldActive] = useGlobal("isSearchFieldActive")
+	const [searchValue, setSearchValue] = useGlobal("searchValue")
+	const clearSearch = useDispatch("clearSearchComplete")
 
 	useEffect(() => {
 		if (searchTerm) {
@@ -49,13 +57,25 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 		localStorage.setItem(localStorageKey, sortBy)
 	}
 
+
+
+	const submit = () => {
+		setSearchTerm(searchValue)
+		setIsSearchFieldActive(false)
+		navigate({ to: isSignedIn ? '/home' : '/' })
+	}
+
+
 	if (isSignedIn && !isSigningIn && !isCreatingNewFile) {
 		return (
 			<>
-				{!searchTerm && (<Tabs className="w-full">
+				<div className="dashboard-inline-search hidden lg:flex lg:justify-center">
+					<Search clearSearch={clearSearch} submit={submit} />
+				</div>
+				{!searchTerm && (<Tabs className="w-full lg:hidden">
 					<TabList
 						aria-label="Tabs"
-						className="bg-surface-container flex w-full justify-around sticky top-0 z-10"
+						className="bg-surface-container flex w-full justify-around sticky top-0 z-10 lg:static"
 					>
 						<Tab
 							className="flex min-w-0 flex-1 cursor-pointer flex-col items-center py-0 text-fg-muted outline-none data-focus-visible:ring-2 data-focus-visible:ring-accent/35 data-focus-visible:ring-offset-2 data-focus-visible:ring-offset-surface-container data-selected:text-tab-selected"
@@ -96,11 +116,41 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 								files={filterIsNotArchived(files)}
 								isDashboard
 								orderBy="date"
-							/>					</TabPanel>
+							/>
+						</TabPanel>
 					</TabPanels>
 				</Tabs>
 				)}
-				<Hint id="dashboard" scope="dashboard">
+				{!searchTerm && <div className="hidden flex-col gap-4 pb-4 px-6 pt-20 lg:flex">
+					<Disclosure className="grow" defaultExpanded>
+						<DisclosureHeader>
+							Wikis
+						</DisclosureHeader>
+						<DisclosurePanel>
+							<WikiList
+								files={filterIsNotArchived(files)}
+								isDashboard
+								orderBy="date"
+							/>
+						</DisclosurePanel>
+					</Disclosure>
+					<Disclosure className="grow" defaultExpanded>
+						<DisclosureHeader>
+							Notes
+						</DisclosureHeader>
+						<DisclosurePanel>
+							<FileList
+								emptyIcon={FileDocumentIcon}
+								emptyMessage="Your archive is empty."
+								emptySubline="The archive will show pages you archived"
+								files={filterIsNotArchived(files)}
+								sortBy={"viewedByMeTime" as SortBy}
+							/>
+						</DisclosurePanel>
+					</Disclosure>
+				</div>}
+				{/*{!searchTerm && (
+					<Hint id="dashboard" scope="dashboard">
 					<h1
 						className={clsx(
 							"m-0 border-b border-edge-strong px-2 py-2 text-2xl font-normal max-[949px]:hidden",
@@ -108,7 +158,7 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 					>
 						{searchTerm ? "Search results" : "Dashboard"}
 					</h1>
-				</Hint>
+				</Hint> */}
 				{searchTerm && (
 					<FileList
 						emptyIcon={FileSearchIcon}

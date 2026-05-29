@@ -14,8 +14,8 @@
 ----------------------------------------------------------
 - [] Make desktop views working again
 -- [x] Layout to show Sidebar and Main content
--- [] Sidebar breakpoints
--- [] Home
+-- [x] Sidebar breakpoints
+-- [x] Home (Add Menu button)
 -- [] Starred
 -- [] Shared
 -- [] Archive

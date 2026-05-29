@@ -76,14 +76,73 @@
 
 	--shadow-focus: 0 0 0 2px rgb(66 133 244 / 0.35);
 
-	/* Stacking (fixed chrome above content) */
-	--z-1000: 1000;
+    /* Stacking (fixed chrome above content) */
+    --z-1000: 1000;
+}
+
+/* Desktop search bar swap: toggled synchronously via #dashboard-layout[data-main-scrolled] */
+@media (min-width: 1024px) {
+    #dashboard-layout {
+        --dashboard-scroll-fade-duration: 200ms;
+    }
+
+    .dashboard-inline-search,
+    .dashboard-header-search--swappable {
+        transition:
+            opacity var(--dashboard-scroll-fade-duration) ease,
+            visibility var(--dashboard-scroll-fade-duration) ease;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #dashboard-layout[data-main-scrolled="true"] .dashboard-inline-search {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    #dashboard-layout:not([data-main-scrolled="true"]) .dashboard-header-search--swappable {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .dashboard-headline {
+        position: relative;
+    }
+
+    .dashboard-headline__center,
+    .dashboard-headline__left {
+        transition: opacity var(--dashboard-scroll-fade-duration) ease;
+    }
+
+    .dashboard-headline__center {
+        display: block;
+        text-align: center;
+        opacity: 1;
+    }
+
+    .dashboard-headline__left {
+        position: absolute;
+        inset: 0;
+        text-align: left;
+        opacity: 0;
+    }
+
+    #dashboard-layout[data-main-scrolled="true"] .dashboard-headline__center {
+        opacity: 0;
+    }
+
+    #dashboard-layout[data-main-scrolled="true"] .dashboard-headline__left {
+        opacity: 1;
+    }
 }
 
 /* Changed colors for screen size >= lg */
 	@media (min-width: 1024px) {
 		@theme {
 		--color-surface-container: hsl(216, 56%, 98%);
+		--color-search-bg: hsl(216.92308, 42%, 94%);
 	}}
 
 html {

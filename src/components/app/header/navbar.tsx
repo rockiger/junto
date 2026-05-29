@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router"
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router"
 import clsx from "clsx"
 import IconButton from "components/gsuite-components/icon-button"
 import MenuIcon from "mdi-react/MenuIcon"
@@ -20,6 +20,10 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
     const [showSidebarOnMobile, setShowSidebarOnMobile] = useGlobal(
         "showSidebarOnMobile",
     )
+    //! Check if this is needed
+    const pathname = useRouterState({ select: (s) => s.location.pathname })
+    const isHome = pathname === "/home" || pathname === "/"
+    const swapHeaderSearchOnDesktop = isHome && !searchTerm
 
     const clearSearch = useDispatch("clearSearchComplete")
 
@@ -50,7 +54,13 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
                 </div>
             )}
             <div className="flex flex-1 items-center">
-                {isSignedIn && <Search clearSearch={clearSearch} submit={submit} />}
+                {isSignedIn && (
+                    <Search
+                        clearSearch={clearSearch}
+                        submit={submit}
+                        className={swapHeaderSearchOnDesktop ? "dashboard-header-search--swappable" : undefined}
+                    />
+                )}
             </div>
             <div className={clsx("flex items-center pl-2 md:pr-2")}>
                 {children}

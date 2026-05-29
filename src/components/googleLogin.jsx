@@ -1,6 +1,5 @@
 // look into https://github.com/anthonyjgrove/react-google-login for more information
 // and posibilitys with google authentication
-/* global gapi */
 
 import Button from "components/gsuite-components/button";
 import { mergeHintData } from "components/gsuite-components/hint";
@@ -12,7 +11,9 @@ import React from "reactn";
 import { OVERVIEW_NAME, OVERVIEW_VALUE } from "../lib/constants";
 import {
 	downloadFile,
+	ensureGapi,
 	getFolderId,
+	getGapi,
 	listAppDataFiles,
 	listFilesChunked as listFiles,
 	refreshSession,
@@ -46,9 +47,14 @@ export default class GoogleLogin extends React.Component {
 	/**
 	 *  On load, called to load the auth2 library and API client library.
 	 */
-	handleClientLoad = () => {
+	handleClientLoad = async () => {
 		this.setGlobal({ isSigningIn: true });
-		gapi.load("client:auth2", this.initClient);
+		try {
+			await ensureGapi();
+			getGapi().load("client:auth2", this.initClient);
+		} catch (error) {
+			this.onFailure(error);
+		}
 	};
 
 	/**
@@ -57,7 +63,7 @@ export default class GoogleLogin extends React.Component {
 	 */
 	initClient = () => {
 		const { clientId, apiKey, discoveryDocs, scope } = this.props;
-		window.gapi.client
+		getGapi().client
 			.init({
 				apiKey,
 				clientId,
@@ -76,10 +82,10 @@ export default class GoogleLogin extends React.Component {
 
 	onSuccess = () => {
 		// Listen for sign-in state changes.
-		gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
+		getGapi().auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
 		// Handle the initial sign-in state.
 		this.updateSigninStatus(
-			window.gapi.auth2.getAuthInstance().isSignedIn.get(),
+			getGapi().auth2.getAuthInstance().isSignedIn.get(),
 		);
 	};
 
@@ -160,7 +166,7 @@ export default class GoogleLogin extends React.Component {
 
 	initUser = () => {
 		try {
-			const userId = window.gapi.auth2
+			const userId = getGapi().auth2
 				.getAuthInstance()
 				.currentUser.get()
 				.getId();
@@ -234,7 +240,7 @@ export default class GoogleLogin extends React.Component {
 	 */
 	handleAuthClick = (_event) => {
 		this.setGlobal({ isSigningIn: true });
-		window.gapi.auth2
+		getGapi().auth2
 			.getAuthInstance()
 			.signIn()
 			.then(
@@ -283,7 +289,7 @@ export default class GoogleLogin extends React.Component {
  *  Sign out the user upon button click.
  */
 function handleSignoutClick(event) {
-	window.gapi.auth2.getAuthInstance().signOut();
+	getGapi().auth2.getAuthInstance().signOut();
 	event.preventDefault();
 	Event("Header", "Sign Out Button");
 }

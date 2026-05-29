@@ -1,5 +1,6 @@
+import { ensureGapi, getGapi } from "./ensureGapi";
+
 const driveUploadPath = "https://www.googleapis.com/upload/drive/v3/files";
-const gapi = window.gapi;
 
 // 'id' is driveId - unique file id on google drive
 // 'version' is driveVersion - version of file on google drive
@@ -45,14 +46,21 @@ export function isLoaded() {
  * @return {Promise}
  */
 export function init() {
-	return new Promise((resolve) => {
-		gapi.load("client", () =>
-			gapi.client.load("drive", "v3", () => {
-				clientLoaded = true;
-				resolve();
-			}),
-		);
-	});
+	return ensureGapi()
+		.then(
+			() =>
+				new Promise((resolve) => {
+					getGapi().load("client", () =>
+						getGapi().client.load("drive", "v3", () => {
+							clientLoaded = true;
+							resolve();
+						}),
+					);
+				}),
+		)
+		.catch((err) => {
+			console.error("Failed to load gapi", err);
+		});
 }
 
 /**
@@ -65,7 +73,7 @@ export function init() {
  */
 export function listAppDataFiles() {
 	return new Promise((resolve, _reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.list({
 				spaces: "appDataFolder",
 				fields: "nextPageToken, files(id, name)",
@@ -91,7 +99,7 @@ export function listFiles(searchTerm = "", orderBy = "") {
 		order = orderBy;
 	}
 	return new Promise((resolve, _reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.list({
 				corpora: "allDrives",
 				pageSize: 100,
@@ -123,7 +131,7 @@ export async function listFilesChunked(searchTerm = "", orderBy = "") {
 		order = orderBy;
 	}
 	while (typeof pageToken !== "undefined") {
-		const response = await gapi.client.drive.files.list({
+		const response = await getGapi().client.drive.files.list({
 			corpora: "allDrives",
 			pageToken: pageToken,
 			fields: `files(${fileFields}), nextPageToken`,
@@ -147,7 +155,7 @@ export async function listFilesChunked(searchTerm = "", orderBy = "") {
  * returns an array of revision descriptions.
  */
 export function listRevisions(fileId) {
-	return gapi.client.drive.revisions.list({
+	return getGapi().client.drive.revisions.list({
 		fileId,
 		fields: "*",
 	});
@@ -178,7 +186,7 @@ export async function createFile({
 	if (pageName) fileMetadata.properties = { pageName };
 
 	try {
-		const response = await window.gapi.client.drive.files.create({
+		const response = await getGapi().client.drive.files.create({
 			fields: fileFields,
 			resource: fileMetadata,
 			supportsAllDrives,
@@ -190,7 +198,7 @@ export async function createFile({
 			// create permission
 			const domain = getDomainOfCurrentUser();
 			// eslint-disable-next-line
-			const _permissionResult = await gapi.client.drive.permissions.create({
+			const _permissionResult = await getGapi().client.drive.permissions.create({
 				fields: "*",
 				fileId: file.id,
 				resource: {
@@ -242,7 +250,7 @@ export async function createNewWiki({
 	if (isWikiRoot) fileMetadata.properties = { wikiRoot: true };
 
 	try {
-		const result = await gapi.client.drive.files.create({
+		const result = await getGapi().client.drive.files.create({
 			fields: fileFields,
 			resource: fileMetadata,
 			supportsAllDrives,
@@ -254,7 +262,7 @@ export async function createNewWiki({
 			// create permission
 			const domain = getDomainOfCurrentUser();
 			// eslint-disable-next-line
-			const _permissionResult = await gapi.client.drive.permissions.create({
+			const _permissionResult = await getGapi().client.drive.permissions.create({
 				fields: "*",
 				fileId: folder.id,
 				resource: {
@@ -311,7 +319,7 @@ export function createFileWithContent(name, ifid, data) {
 		close_delim;
 
 	return new Promise((resolve, _reject) => {
-		gapi.client
+		getGapi().client
 			.request({
 				path: driveUploadPath,
 				method: "POST",
@@ -341,7 +349,7 @@ export function createFileWithContent(name, ifid, data) {
  */
 export function getFileDescription(driveId) {
 	return new Promise((resolve, _reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.get({
 				fileId: driveId,
 				fields: fileFields,
@@ -362,7 +370,7 @@ export function getFileDescription(driveId) {
  */
 export async function getFolderId(name = "Fulcrum Documents") {
 	try {
-		const result = await gapi.client.drive.files.list({
+		const result = await getGapi().client.drive.files.list({
 			q: `name="${name}"`,
 			pageSize: 100,
 			fields: "nextPageToken, files(id, name, createdTime)",
@@ -392,7 +400,7 @@ export async function getFolderId(name = "Fulcrum Documents") {
  */
 export function downloadFile(driveId) {
 	return new Promise((resolve, reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.get({
 				fileId: driveId,
 				alt: "media",
@@ -412,7 +420,7 @@ export function downloadFile(driveId) {
  */
 export function renameFile(driveId, newName, supportsAllDrives = true) {
 	return new Promise((resolve, reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.update({
 				fileId: driveId,
 				name: newName,
@@ -437,7 +445,7 @@ export function renameFile(driveId, newName, supportsAllDrives = true) {
  */
 export function updateMetadata(driveId, metadata) {
 	return new Promise((resolve, reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.update({
 				fileId: driveId,
 				...metadata,
@@ -463,7 +471,7 @@ export function updateMetadata(driveId, metadata) {
  */
 export function moveFile(driveId, sourceId, targetId) {
 	return new Promise((resolve, reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.update({
 				fileId: driveId,
 				removeParents: sourceId,
@@ -488,7 +496,7 @@ export function moveFile(driveId, sourceId, targetId) {
  */
 export function deleteFile(driveId) {
 	return new Promise((resolve, reject) => {
-		gapi.client.drive.files
+		getGapi().client.drive.files
 			.delete({
 				fileId: driveId,
 			})
@@ -506,7 +514,7 @@ export function deleteFile(driveId) {
  */
 export function deleteRevision(fileId, revisionId) {
 	return new Promise((resolve, reject) => {
-		gapi.client.drive.revisions
+		getGapi().client.drive.revisions
 			.delete({
 				fileId,
 				revisionId,
@@ -526,7 +534,7 @@ export function deleteRevision(fileId, revisionId) {
  */
 export function updateFile(driveId, newData, supportsAllDrives = true) {
 	return new Promise((resolve, reject) => {
-		gapi.client
+		getGapi().client
 			.request({
 				path: `${driveUploadPath}/${driveId}`,
 				method: "PATCH",
@@ -554,7 +562,7 @@ export function updateFile(driveId, newData, supportsAllDrives = true) {
  */
 export function refreshSession() {
 	const isTokenValid = () => {
-		var token = gapi.auth.getToken();
+		var token = getGapi().auth.getToken();
 		return token && Date.now() < token.expires_at;
 	};
 	console.log(isTokenValid());
@@ -567,7 +575,7 @@ export function refreshSession() {
  * @returns {Promise|Object}
  */
 export function reloadAuthResponse() {
-	return gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse();
+	return getGapi().auth2.getAuthInstance().currentUser.get().reloadAuthResponse();
 }
 
 // helpers
@@ -588,7 +596,7 @@ function formatResult(response) {
  * @returns email string
  */
 function getDomainOfCurrentUser() {
-	const email = gapi.auth2
+	const email = getGapi().auth2
 		.getAuthInstance()
 		.currentUser.get()
 		.getBasicProfile()

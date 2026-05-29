@@ -13,9 +13,10 @@ import SearchAutocomplete from "./search-autocomplete"
 export type SearchProps = {
     clearSearch: () => void
     submit: () => void
+    className?: string
 }
 
-export const Search: FC<SearchProps> = ({ clearSearch, submit }) => {
+export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
     const [files] = useGlobal("files")
     const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         "isSearchFieldActive",
@@ -62,13 +63,14 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit }) => {
 
     if (!showSearch) {
         return (
-            <Button className="bg-search-bg font-normal rounded-full text-base text-search-placeholder w-full h-13" onPress={() => activateSearch("click")}><div className="translate-y-[2px]">Search in Fulcrum</div></Button>
+            <Button className={clsx("bg-search-bg font-normal rounded-full text-base text-search-placeholder w-full h-13 lg:h-12 lg:max-w-[832px]", className)} onPress={() => activateSearch("click")}><div className="translate-y-[2px] lg:leading-5 lg:text-left">Search in Fulcrum</div></Button>
         )
     }
     return (
         <div
             className={clsx(
                 "fixed top-0 left-0 z-1000 flex h-16 w-full flex-1  bg-surface pt-1 px-1",
+                className,
             )}
             ref={searchRef}
         >
@@ -172,7 +174,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit }) => {
             {isSearchFieldActive ? (
                 <div
                     className={clsx(
-                        "pointer-events-none max-[949px]:absolute max-[949px]:top-14 max-[949px]:left-0 max-[949px]:h-[calc(100vh-56px)] max-[949px]:w-screen max-[949px]:bg-surface",
+                        "pointer-events-none absolute top-14 left-0 h-[calc(100vh-56px)] w-screen bg-surface",
                     )}
                 />
             ) : null}

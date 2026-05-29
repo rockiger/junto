@@ -10,24 +10,21 @@ import { SidebarTree } from './SidebarTree'
 import { SidebarItem } from './SidebarItem'
 
 import styles from './sidebar.module.scss'
-import { Hint } from 'components/gsuite-components/hint'
 import { clsx } from 'clsx';
+import HomeIcon from 'mdi-react/HomeOutlineIcon'
 window.isMobileDevice = isMobileDevice
 
 const SidebarRenderer = props => {
     return (
         <>
-            {/* {isMobileDevice() && (
-                <Fab
-                    arial-label="Add"
-                    className={styles.fab}
-                    color="secondary"
-                    onClick={props.onClickNewButton}
-                >
-                    <AddIcon className={styles.addIcon} />
-                </Fab>
-            )} */}
-            <div className={clsx(styles.sidebar, "mt-4")}>
+                        <SidebarItem
+                        icon={HomeIcon}
+                        name="Home"
+                        path="/home"
+                        tooltip="Your home page"
+                        className="mt-4"
+                    />
+            <div className={clsx(styles.sidebar)}>
                 <div
                     className={styles.Sidebar_navigation}
                     id="Sidebar-Navigation"
