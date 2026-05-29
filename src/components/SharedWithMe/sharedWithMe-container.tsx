@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useGlobal } from 'reactn'
+import React, { useEffect, useMemo, useGlobal } from 'reactn'
 import PropTypes from 'prop-types'
 import { Navigate } from '@tanstack/react-router'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
@@ -13,6 +13,7 @@ import { isArchived } from 'lib/helper'
 function SharedWithMe(props) {
     const { isSignedIn, isSigningIn } = props
     const [files] = useGlobal('files')
+    const sharedFiles = useMemo(() => filterSharedWithMe(files), [files])
 
     useEffect(() => PageView({ pathname: '/wikis' }), [])
 
@@ -22,7 +23,7 @@ function SharedWithMe(props) {
                 emptyIcon={AccountMultipleOutlineIcon}
                 emptyMessage="Pages, others shared with you."
                 emptySubline="If you open wiki pages others shared with from Google Drive they will be shown here."
-                files={filterSharedWithMe(files)}
+                files={sharedFiles}
                 sortBy="sharedWithMeTime"
                 title="Shared With Me"
             />

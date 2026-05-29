@@ -7,14 +7,38 @@ import FileDocumentIcon from "mdi-react/FileDocumentIcon"
 import { type FC, useEffect } from "react"
 import type { IFile } from "reactn/default"
 
+export function filterSearchAutocompleteFiles(
+    files: IFile[],
+    searchValue: string,
+): IFile[] {
+    const query = searchValue.toLowerCase()
+    return files
+        .filter((file) => file.name.toLowerCase().includes(query))
+        .filter((file) => {
+            const ext = getExtFromFileName(file.name)
+            return ext === EXT
+        })
+        .sort((file1, file2) => {
+            let result = sortByDate(
+                file1.viewedByMeTime,
+                file2.viewedByMeTime,
+            )
+
+            if (result === 0) {
+                result = sortByDate(
+                    (file1 as IFile & { modifiedByMe?: string }).modifiedByMe,
+                    (file2 as IFile & { modifiedByMe?: string }).modifiedByMe,
+                )
+            }
+            return result
+        })
+}
+
 export type SearchAutocompleteProps = {
     clearSearch: () => void
-    files: IFile[]
     filteredFiles: IFile[]
     height?: number
-    searchValue: string
     selectedRow: number | null
-    setFilteredFiles: (files: IFile[]) => void
     setSubmitSelected: (v: boolean) => void
     submitSelected: boolean
     width?: number
@@ -22,45 +46,13 @@ export type SearchAutocompleteProps = {
 
 export const SearchAutocomplete: FC<SearchAutocompleteProps> = ({
     clearSearch,
-    files,
     filteredFiles,
     height = 48,
-    searchValue,
     selectedRow,
-    setFilteredFiles,
     setSubmitSelected,
     submitSelected,
 }) => {
     const navigate = useNavigate()
-
-    useEffect(() => {
-        setFilteredFiles(
-            files
-                .filter((file) =>
-                    file.name.toLowerCase().includes(searchValue.toLowerCase()),
-                )
-                .filter((file) => {
-                    const ext = getExtFromFileName(file.name)
-                    return ext === EXT
-                })
-                .sort((file1, file2) => {
-                    let result = sortByDate(
-                        file1.viewedByMeTime,
-                        file2.viewedByMeTime,
-                    )
-
-                    if (result === 0) {
-                        result = sortByDate(
-                            (file1 as IFile & { modifiedByMe?: string })
-                                .modifiedByMe,
-                            (file2 as IFile & { modifiedByMe?: string })
-                                .modifiedByMe,
-                        )
-                    }
-                    return result
-                }),
-        )
-    }, [files, searchValue, setFilteredFiles])
 
     useEffect(() => {
         if (

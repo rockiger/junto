@@ -4,11 +4,13 @@ import { Event } from "components/Tracking"
 
 import ArrowLeftIcon from "mdi-react/ArrowLeftIcon"
 import CloseIcon from "mdi-react/CloseIcon"
-import { type FC, useCallback, useEffect, useRef, useState } from "react"
+import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Button } from 'react-aria-components'
 import useDimensions from "react-use-dimensions"
 import { useGlobal } from "reactn"
-import SearchAutocomplete from "./search-autocomplete"
+import SearchAutocomplete, {
+    filterSearchAutocompleteFiles,
+} from "./search-autocomplete"
 
 export type SearchProps = {
     clearSearch: () => void
@@ -26,7 +28,10 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
 
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [submitSelected, setSubmitSelected] = useState(false)
-    const [filteredFiles, setFilteredFiles] = useState(files)
+    const filteredFiles = useMemo(
+        () => filterSearchAutocompleteFiles(files, searchValue),
+        [files, searchValue],
+    )
 
     const [searchRef, { height, width }] = useDimensions()
     const inputRef = useRef<HTMLInputElement>(null)
@@ -181,12 +186,9 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
             {isSearchFieldActive ? (
                 <SearchAutocomplete
                     clearSearch={clearSearch}
-                    height={height}
-                    files={files}
                     filteredFiles={filteredFiles}
-                    searchValue={searchValue}
+                    height={height}
                     selectedRow={selectedRow}
-                    setFilteredFiles={setFilteredFiles}
                     setSubmitSelected={setSubmitSelected}
                     submitSelected={submitSelected}
                     width={width}

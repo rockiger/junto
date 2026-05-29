@@ -14,6 +14,7 @@ import { sortBy } from 'lodash'
 import CheckboxMultipleBlankOutlineIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
 import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
 import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
+import { useMemo } from 'react'
 import { GridList, GridListItem } from 'react-aria-components'
 import { useGlobal } from 'reactn'
 import type { IFile } from 'reactn/default'
@@ -38,9 +39,14 @@ export { WikiList }
 function WikiList({ files, isDashboard, orderBy = 'name' }) {
     const [isFileListLoading] = useGlobal('isFileListLoading')
     const [rootFolderId] = useGlobal('rootFolderId')
-    const wikis = sortWikisBy(orderBy, filterWikis(files))
-    console.log('wikis', wikis)
-    const myFulcrum = getOverviewFile(files, rootFolderId)
+    const wikis = useMemo(
+        () => sortWikisBy(orderBy, filterWikis(files)),
+        [files, orderBy],
+    )
+    const myFulcrum = useMemo(
+        () => getOverviewFile(files, rootFolderId),
+        [files, rootFolderId],
+    )
     return (
         <div className="w-full">
             {(!_.isEmpty(files) || !isFileListLoading) &&

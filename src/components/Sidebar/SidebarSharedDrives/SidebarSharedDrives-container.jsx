@@ -1,4 +1,4 @@
-import React, { useGlobal } from 'reactn'
+import React, { useMemo, useGlobal } from 'reactn'
 import { OVERVIEW_NAME } from 'lib/constants'
 
 import { SidebarTreeItem } from '../SidebarTree/SidebarTreeItem'
@@ -6,37 +6,42 @@ import { useStyles } from '../SidebarTree/SidebarTree-styles'
 import { getTitleFromFile, isArchived } from 'lib/helper'
 import { filterWikis, sortWikisBy } from 'components/wiki-list'
 import { filterIsNotArchived } from 'lib/helper/globalStateHelper'
+import { buildSidebarTreeIndexes } from '../SidebarTree/SidebarTree-helper'
 
 export function SidebarSharedDrives() {
     const [initialFiles] = useGlobal('initialFiles')
     const classes = useStyles()
     window['initialFiles'] = initialFiles
 
+    const sharedDriveWikiItems = useMemo(
+        () =>
+            sortWikisBy(
+                'name',
+                filterIsNotArchived(filterWikis(initialFiles)),
+            ),
+        [initialFiles],
+    )
+    const treeIndexes = useMemo(
+        () => buildSidebarTreeIndexes(initialFiles),
+        [initialFiles],
+    )
+
     return (
         <ul className={classes.mydrive}>
             <li>
                 <ul className={classes.mydrive}>
-                    {thread(
-                        '->>',
-                        initialFiles,
-                        filterWikis,
-                        filterIsNotArchived,
-                        [sortWikisBy, 'name'],
-                        [
-                            map,
-                            (file, index) => (
-                                <SidebarTreeItem
-                                    expand={false}
-                                    key={index}
-                                    initialFiles={initialFiles}
-                                    label={getTitleFromFile(file)}
-                                    level={0}
-                                    pageId={file.id}
-                                    parentId={file.parents[0]}
-                                />
-                            ),
-                        ]
-                    )}
+                    {sharedDriveWikiItems.map((file, index) => (
+                        <SidebarTreeItem
+                            expand={false}
+                            key={file.id ?? index}
+                            initialFiles={initialFiles}
+                            label={getTitleFromFile(file)}
+                            level={0}
+                            pageId={file.id}
+                            parentId={file.parents[0]}
+                            treeIndexes={treeIndexes}
+                        />
+                    ))}
                 </ul>
             </li>
         </ul>

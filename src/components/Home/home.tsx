@@ -13,7 +13,8 @@ import { LOCALSTORAGE_NAME } from "lib/constants"
 import { filterIsNotArchived } from "lib/helper/globalStateHelper"
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import FileSearchIcon from "mdi-react/FileSearchIcon"
-import { useEffect } from "react"
+import { useIsDesktop } from "lib/hooks/useMediaQuery"
+import { useEffect, useMemo } from "react"
 import { SelectionIndicator } from 'react-aria-components'
 import { useDispatch, useGlobal, useState } from "reactn"
 import FileList from "./FileList"
@@ -29,6 +30,11 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 
 
 	const [files] = useGlobal("files")
+	const isDesktop = useIsDesktop()
+	const notArchivedFiles = useMemo(
+		() => filterIsNotArchived(files),
+		[files],
+	)
 	const [searchTerm, setSearchTerm] = useGlobal("searchTerm")
 	const [sortBy, setSortBy] = useState(
 		sortByLS &&
@@ -72,7 +78,7 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 				<div className="dashboard-inline-search hidden lg:flex lg:justify-center">
 					<Search clearSearch={clearSearch} submit={submit} />
 				</div>
-				{!searchTerm && (<Tabs className="w-full lg:hidden">
+				{!searchTerm && !isDesktop && (<Tabs className="w-full">
 					<TabList
 						aria-label="Tabs"
 						className="bg-surface-container flex w-full justify-around sticky top-0 z-10 lg:static"
@@ -106,14 +112,14 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 								emptyIcon={FileDocumentIcon}
 								emptyMessage="Your archive is empty."
 								emptySubline="The archive will show pages you archived"
-								files={filterIsNotArchived(files)}
+								files={notArchivedFiles}
 								sortBy={sortBy as SortBy}
 								setSortBy={setSortByAndLocalStorage}
 							/>
 						</TabPanel>
 						<TabPanel id="wikis" className="flex items-center justify-center">
 							<WikiList
-								files={filterIsNotArchived(files)}
+								files={notArchivedFiles}
 								isDashboard
 								orderBy="date"
 							/>
@@ -121,14 +127,14 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 					</TabPanels>
 				</Tabs>
 				)}
-				{!searchTerm && <div className="hidden flex-col gap-4 pb-4 px-6 pt-20 lg:flex">
+				{!searchTerm && isDesktop && <div className="flex flex-col gap-4 pb-4 px-6 pt-20">
 					<Disclosure className="grow" defaultExpanded>
 						<DisclosureHeader>
 							Wikis
 						</DisclosureHeader>
 						<DisclosurePanel>
 							<WikiList
-								files={filterIsNotArchived(files)}
+								files={notArchivedFiles}
 								isDashboard
 								orderBy="date"
 							/>
@@ -143,7 +149,7 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 								emptyIcon={FileDocumentIcon}
 								emptyMessage="Your archive is empty."
 								emptySubline="The archive will show pages you archived"
-								files={filterIsNotArchived(files)}
+								files={notArchivedFiles}
 								sortBy={"viewedByMeTime" as SortBy}
 							/>
 						</DisclosurePanel>

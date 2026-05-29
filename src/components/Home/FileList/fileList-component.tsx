@@ -2,6 +2,7 @@ import { createLink } from "@tanstack/react-router"
 import { ButtonMenu } from "components/ButtonMenu"
 import { Spacer, Spinner } from "components/gsuite-components"
 import { EXT, FOLDER_NAME, OVERVIEW_NAME } from "lib/constants"
+import { useIsDesktop } from "lib/hooks/useMediaQuery"
 import {
     getMetaById,
     getTitleFromFile,
@@ -11,12 +12,10 @@ import {
 import type { MdiReactIconComponentType } from "mdi-react"
 import AccountMultipleOutlineIcon from "mdi-react/AccountMultipleOutlineIcon"
 import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
-import DotsVerticalIcon from "mdi-react/DotsVerticalIcon"
 import FileDocumentIcon from "mdi-react/FileDocumentIcon"
-import FolderIcon from "mdi-react/FolderIcon"
 import SortAlphabeticalIcon from "mdi-react/SortAlphabeticalVariantIcon"
 import StarIcon from 'mdi-react/StarIcon'
-import { createElement } from "react"
+import { createElement, useMemo } from "react"
 import {
     Cell,
     Column,
@@ -54,6 +53,24 @@ export type FileListComponentProps = {
     title?: string
 }
 
+function sortDisplayFiles(files: IFile[], sortBy: SortBy): IFile[] {
+    return [...files]
+        .filter(shouldFileDisplay)
+        .sort((file1, file2) =>
+            sortBy === "viewedByMeTime"
+                ? sortByDate(file1.viewedByMeTime, file2.viewedByMeTime)
+                : sortByDate(file1.modifiedByMeTime, file2.modifiedByMeTime),
+        )
+}
+
+function buildLocationLabelByFileId(files: IFile[]): Map<string, string> {
+    const labels = new Map<string, string>()
+    for (const file of files) {
+        labels.set(file.id, getLocationLabel(file, files))
+    }
+    return labels
+}
+
 export default function FileListComponent({
     emptyIcon,
     emptyMessage,
@@ -67,6 +84,7 @@ export default function FileListComponent({
     title,
 }: FileListComponentProps) {
     const headingTag = header ?? "h1"
+    const isDesktop = useIsDesktop()
 
     if (searchTerm || title) {
         document.title = `${searchTerm ? "Search Result" : (title ?? "")} – Fulcrum.wiki`
@@ -74,234 +92,38 @@ export default function FileListComponent({
 
     const hasFiles = files.length > 0
 
-    const displayFiles = files
-        .filter(shouldFileDisplay)
-        .sort((file1, file2) =>
-            sortBy === "viewedByMeTime"
-                ? sortByDate(file1.viewedByMeTime, file2.viewedByMeTime)
-                : sortByDate(file1.modifiedByMeTime, file2.modifiedByMeTime),
-        )
+    const displayFiles = useMemo(
+        () => sortDisplayFiles(files, sortBy),
+        [files, sortBy],
+    )
+
+    const locationLabelByFileId = useMemo(
+        () => buildLocationLabelByFileId(files),
+        [files],
+    )
 
     return (
         <div className="filelist w-full">
             <div>
                 {isLoading && <Spinner />}
-                {!isLoading && hasFiles && (
-                    <GridList
-                        aria-label="Wiki pages"
-                        className="flex flex-col gap-0.5 px-2 lg:hidden"
-                    >
-                        <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)">
-                            {title ? (
-                                <>
-                                    {createElement(headingTag, {}, title)}
-                                    <Spacer />
-                                </>
-                            ) : null}
-                            {setSortBy ? (
-                                <div className="flex items-center">
-                                    <strong className="font-semibold mr-2 text-text-muted translate-y-px"
-                                    >
-                                        {sortBy === "viewedByMeTime"
-                                            ? "Last opened by me"
-                                            : "Last modified by me"}
-                                    </strong>
-                                    <ButtonMenu
-                                        items={[
-                                            {
-                                                key: 1,
-                                                name: "Last modified by me",
-                                                handler: () => setSortBy("modifiedByMeTime"),
-                                                active: sortBy === "modifiedByMeTime",
-                                            },
-                                            {
-                                                key: 2,
-                                                name: "Last opened by me",
-                                                handler: () => setSortBy("viewedByMeTime"),
-                                                active: sortBy === "viewedByMeTime",
-                                            },
-                                        ]}
-                                        selectable={true}
-                                    >
-                                        <SortAlphabeticalIcon />
-                                    </ButtonMenu>
-                                </div>
-                            ) : null}
-                        </GridListItem>
-                        {files
-                            .filter(shouldFileDisplay)
-                            .sort((file1, file2) =>
-                                sortBy === "viewedByMeTime"
-                                    ? sortByDate(file1.viewedByMeTime, file2.viewedByMeTime)
-                                    : sortByDate(file1.modifiedByMeTime, file2.modifiedByMeTime),
-                            )
-                            .map((file) => (
-                                <GridListItemLink
-                                    key={file.id}
-                                    textValue={getTitleFromFile(file)}
-                                    className="bg-surface-paper flex cursor-pointer rounded-lg p-3 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)"
-                                    preload="intent"
-                                    params={{ id: file.id }}
-                                    to="/page/$id"
-                                >
-                                    <div className="flex items-center justify-center pr-3">
-                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-icon-surface">
-                                            <FileDocumentIcon className="text-icon-blue" size={30} />
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col justify-between">
-                                        <p className="text-lg">{getTitleFromFile(file)}</p>
-                                        <p className="flex font-medium text-sm text-text-muted">
-                                            {file.starred && (
-                                                <StarIcon className='inline h-3 mr-1 translate-y-0.75 w-3' />
-                                            )}
-                                            {formatFileModifiedCaption(file.modifiedTime)}
-                                        </p>
-                                    </div>
-                                </GridListItemLink>
-                            ))}
-                    </GridList>
+                {!isLoading && hasFiles && !isDesktop && (
+                    <FileListMobileView
+                        displayFiles={displayFiles}
+                        headingTag={headingTag}
+                        setSortBy={setSortBy}
+                        sortBy={sortBy}
+                        title={title}
+                    />
                 )}
-                {!isLoading && hasFiles && (
-                    <div className="hidden w-full px-2 lg:block">
-                        {(title || setSortBy) && (
-                            <div className="bg-surface-paper mb-1 flex items-center rounded-t-2xl px-3 py-5">
-                                {title ? (
-                                    <>
-                                        {createElement(headingTag, {}, title)}
-                                        <Spacer />
-                                    </>
-                                ) : null}
-                                {setSortBy ? (
-                                    <div className="flex items-center">
-                                        <strong className="font-semibold mr-2 text-text-muted translate-y-px">
-                                            {sortBy === "viewedByMeTime"
-                                                ? "Last opened by me"
-                                                : sortBy === "sharedWithMeTime"
-                                                    ? "Shared with me"
-                                                    : "Last modified by me"}
-                                        </strong>
-                                        <ButtonMenu
-                                            items={[
-                                                {
-                                                    key: 1,
-                                                    name: "Last modified by me",
-                                                    handler: () =>
-                                                        setSortBy("modifiedByMeTime"),
-                                                    active: sortBy === "modifiedByMeTime",
-                                                },
-                                                {
-                                                    key: 2,
-                                                    name: "Last opened by me",
-                                                    handler: () =>
-                                                        setSortBy("viewedByMeTime"),
-                                                    active: sortBy === "viewedByMeTime",
-                                                },
-                                            ]}
-                                            selectable={true}
-                                        >
-                                            <SortAlphabeticalIcon />
-                                        </ButtonMenu>
-                                    </div>
-                                ) : null}
-                            </div>
-                        )}
-                        <Table
-                            aria-label="Wiki pages"
-                            className="w-full border-collapse border-none bg-surface-paper text-sm"
-                        >
-                            <TableHeader className="border-b border-divider">
-                                <Column
-                                    className="px-3 py-2 text-left font-normal text-text-muted"
-                                    id="name"
-                                    isRowHeader
-                                >
-                                    Name
-                                </Column>
-                                <Column
-                                    className="px-3 py-2 text-left font-normal text-text-muted"
-                                    id="reason"
-                                >
-                                    Reason suggested
-                                </Column>
-                                <Column
-                                    className="max-w-48 px-3 py-2 text-left font-normal text-text-muted"
-                                    id="location"
-                                >
-                                    Location
-                                </Column>
-                                {/* <Column
-                                    className="w-12 px-3 py-2"
-                                    id="actions"
-                                >
-                                    <span className="sr-only">Actions</span>
-                                </Column> */}
-                            </TableHeader>
-                            <TableBody>
-                                {displayFiles.map((file) => (
-                                    <TableRowLink
-                                        key={file.id}
-                                        className="cursor-pointer outline-none last:[&>td]:border-b-0 hover:bg-surface-hover focus-visible:shadow-(--shadow-focus)"
-                                        id={file.id}
-                                        params={{ id: file.id }}
-                                        preload="intent"
-                                        textValue={getTitleFromFile(file)}
-                                        to="/page/$id"
-                                    >
-                                        <Cell className="border-b border-divider px-3 py-3">
-                                            <div className="flex min-w-0 items-center gap-3">
-                                                <FileDocumentIcon
-                                                    className="text-icon-blue"
-                                                    size={22}
-                                                />
-                                                <span className="flex min-w-0 items-center gap-1.5 truncate text-text-default">
-                                                    {file.starred && (
-                                                        <StarIcon className="inline h-3 w-3 shrink-0 text-text-muted" />
-                                                    )}
-                                                    <span className="truncate">
-                                                        {getTitleFromFile(file)}
-                                                    </span>
-                                                    {file.shared && (
-                                                        <AccountMultipleOutlineIcon
-                                                            className="shrink-0 text-fg-muted"
-                                                            size={16}
-                                                        />
-                                                    )}
-                                                </span>
-                                            </div>
-                                        </Cell>
-                                        <Cell className="border-b border-divider px-3 py-3 text-text-muted">
-                                            {getReasonSuggestedCaption(sortBy, file)}
-                                        </Cell>
-                                        <Cell className="max-w-48 border-b border-divider px-3 py-3 text-text-muted">
-                                            <div className="flex min-w-0 items-center gap-2">
-                                                <FolderGoogleDriveIcon
-                                                    className="shrink-0 text-fg-muted"
-                                                    size={18}
-                                                />
-                                                <span className="truncate">
-                                                    {getLocationLabel(file, files)}
-                                                </span>
-                                            </div>
-                                        </Cell>
-                                        {/* <Cell className="border-b border-divider px-3 py-3 text-right">
-                                            <button
-                                                aria-label="More actions"
-                                                className="inline-flex rounded-full p-1 text-fg-muted outline-none hover:bg-surface-hover focus-visible:shadow-(--shadow-focus)"
-                                                type="button"
-                                                onClick={(event) => event.stopPropagation()}
-                                                onPointerDown={(event) =>
-                                                    event.stopPropagation()
-                                                }
-                                            >
-                                                <DotsVerticalIcon size={20} />
-                                            </button>
-                                        </Cell> */}
-                                    </TableRowLink>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
+                {!isLoading && hasFiles && isDesktop && (
+                    <FileListDesktopView
+                        displayFiles={displayFiles}
+                        headingTag={headingTag}
+                        locationLabelByFileId={locationLabelByFileId}
+                        setSortBy={setSortBy}
+                        sortBy={sortBy}
+                        title={title}
+                    />
                 )}
                 {files.length === 0 && !isLoading && (
                     <EmptyPlaceholder
@@ -334,6 +156,222 @@ export default function FileListComponent({
                         vertical-align: middle;
                     }
                 `}</style>
+        </div>
+    )
+}
+
+type FileListHeaderProps = {
+    headingTag: HeadingLevel
+    setSortBy?: (sortBy: SortBy) => void
+    sortBy: SortBy
+    title?: string
+}
+
+function FileListSortHeader({
+    headingTag,
+    setSortBy,
+    sortBy,
+    title,
+}: FileListHeaderProps) {
+    const sortLabel =
+        sortBy === "viewedByMeTime"
+            ? "Last opened by me"
+            : sortBy === "sharedWithMeTime"
+                ? "Shared with me"
+                : "Last modified by me"
+
+    return (
+        <>
+            {title ? (
+                <>
+                    {createElement(headingTag, {}, title)}
+                    <Spacer />
+                </>
+            ) : null}
+            {setSortBy ? (
+                <div className="flex items-center">
+                    <strong className="font-semibold mr-2 text-text-muted translate-y-px">
+                        {sortLabel}
+                    </strong>
+                    <ButtonMenu
+                        items={[
+                            {
+                                key: 1,
+                                name: "Last modified by me",
+                                handler: () => setSortBy("modifiedByMeTime"),
+                                active: sortBy === "modifiedByMeTime",
+                            },
+                            {
+                                key: 2,
+                                name: "Last opened by me",
+                                handler: () => setSortBy("viewedByMeTime"),
+                                active: sortBy === "viewedByMeTime",
+                            },
+                        ]}
+                        selectable={true}
+                    >
+                        <SortAlphabeticalIcon />
+                    </ButtonMenu>
+                </div>
+            ) : null}
+        </>
+    )
+}
+
+type FileListMobileViewProps = FileListHeaderProps & {
+    displayFiles: IFile[]
+}
+
+function FileListMobileView({
+    displayFiles,
+    headingTag,
+    setSortBy,
+    sortBy,
+    title,
+}: FileListMobileViewProps) {
+    return (
+        <GridList
+            aria-label="Wiki pages"
+            className="flex flex-col gap-0.5 px-2"
+        >
+            <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)">
+                <FileListSortHeader
+                    headingTag={headingTag}
+                    setSortBy={setSortBy}
+                    sortBy={sortBy}
+                    title={title}
+                />
+            </GridListItem>
+            {displayFiles.map((file) => (
+                <GridListItemLink
+                    key={file.id}
+                    textValue={getTitleFromFile(file)}
+                    className="bg-surface-paper flex cursor-pointer rounded-lg p-3 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)"
+                    preload="intent"
+                    params={{ id: file.id }}
+                    to="/page/$id"
+                >
+                    <div className="flex items-center justify-center pr-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-icon-surface">
+                            <FileDocumentIcon className="text-icon-blue" size={30} />
+                        </div>
+                    </div>
+                    <div className="flex flex-col justify-between">
+                        <p className="text-lg">{getTitleFromFile(file)}</p>
+                        <p className="flex font-medium text-sm text-text-muted">
+                            {file.starred && (
+                                <StarIcon className='inline h-3 mr-1 translate-y-0.75 w-3' />
+                            )}
+                            {formatFileModifiedCaption(file.modifiedTime)}
+                        </p>
+                    </div>
+                </GridListItemLink>
+            ))}
+        </GridList>
+    )
+}
+
+type FileListDesktopViewProps = FileListHeaderProps & {
+    displayFiles: IFile[]
+    locationLabelByFileId: Map<string, string>
+}
+
+function FileListDesktopView({
+    displayFiles,
+    headingTag,
+    locationLabelByFileId,
+    setSortBy,
+    sortBy,
+    title,
+}: FileListDesktopViewProps) {
+    return (
+        <div className="w-full px-2">
+            {(title || setSortBy) && (
+                <div className="bg-surface-paper mb-1 flex items-center rounded-t-2xl px-3 py-5">
+                    <FileListSortHeader
+                        headingTag={headingTag}
+                        setSortBy={setSortBy}
+                        sortBy={sortBy}
+                        title={title}
+                    />
+                </div>
+            )}
+            <Table
+                aria-label="Wiki pages"
+                className="w-full border-collapse border-none bg-surface-paper text-sm"
+            >
+                <TableHeader className="border-b border-divider">
+                    <Column
+                        className="px-3 py-2 text-left font-normal text-text-muted"
+                        id="name"
+                        isRowHeader
+                    >
+                        Name
+                    </Column>
+                    <Column
+                        className="px-3 py-2 text-left font-normal text-text-muted"
+                        id="reason"
+                    >
+                        Reason suggested
+                    </Column>
+                    <Column
+                        className="max-w-48 px-3 py-2 text-left font-normal text-text-muted"
+                        id="location"
+                    >
+                        Location
+                    </Column>
+                </TableHeader>
+                <TableBody>
+                    {displayFiles.map((file) => (
+                        <TableRowLink
+                            key={file.id}
+                            className="cursor-pointer outline-none last:[&>td]:border-b-0 hover:bg-surface-hover focus-visible:shadow-(--shadow-focus)"
+                            id={file.id}
+                            params={{ id: file.id }}
+                            preload="intent"
+                            textValue={getTitleFromFile(file)}
+                            to="/page/$id"
+                        >
+                            <Cell className="border-b border-divider px-3 py-3">
+                                <div className="flex min-w-0 items-center gap-3">
+                                    <FileDocumentIcon
+                                        className="text-icon-blue"
+                                        size={22}
+                                    />
+                                    <span className="flex min-w-0 items-center gap-1.5 truncate text-text-default">
+                                        {file.starred && (
+                                            <StarIcon className="inline h-3 w-3 shrink-0 text-text-muted" />
+                                        )}
+                                        <span className="truncate">
+                                            {getTitleFromFile(file)}
+                                        </span>
+                                        {file.shared && (
+                                            <AccountMultipleOutlineIcon
+                                                className="shrink-0 text-fg-muted"
+                                                size={16}
+                                            />
+                                        )}
+                                    </span>
+                                </div>
+                            </Cell>
+                            <Cell className="border-b border-divider px-3 py-3 text-text-muted">
+                                {getReasonSuggestedCaption(sortBy, file)}
+                            </Cell>
+                            <Cell className="max-w-48 border-b border-divider px-3 py-3 text-text-muted">
+                                <div className="flex min-w-0 items-center gap-2">
+                                    <FolderGoogleDriveIcon
+                                        className="shrink-0 text-fg-muted"
+                                        size={18}
+                                    />
+                                    <span className="truncate">
+                                        {locationLabelByFileId.get(file.id) ?? ""}
+                                    </span>
+                                </div>
+                            </Cell>
+                        </TableRowLink>
+                    ))}
+                </TableBody>
+            </Table>
         </div>
     )
 }

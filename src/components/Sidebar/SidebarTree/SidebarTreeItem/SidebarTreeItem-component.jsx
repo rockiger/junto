@@ -3,6 +3,13 @@ import React from 'reactn'
 import { SidebarTreeItem } from './SidebarTreeItem-container'
 import { SidebarTreeLink } from '../SidebarTreeLink'
 import { getFolderId, shouldFileDisplay } from '../SidebarTree-helper'
+
+function resolveFolderId(fileId, initialFiles, treeIndexes) {
+    if (treeIndexes) {
+        return treeIndexes.folderIdByPageId.get(fileId) ?? null
+    }
+    return getFolderId(fileId, initialFiles)
+}
 import { getTitleFromFile } from '../../../../lib/helper'
 
 export function SidebarTreeItemComponent(props) {
@@ -15,6 +22,7 @@ export function SidebarTreeItemComponent(props) {
         pageId,
         parentId,
         setExpanded,
+        treeIndexes,
     } = props
     return (
         <li>
@@ -29,7 +37,11 @@ export function SidebarTreeItemComponent(props) {
             {isExpanded && initialFiles && (
                 <ul className={classes.ul}>
                     {initialFiles.map(file => {
-                        const folderId = getFolderId(file.id, initialFiles)
+                        const folderId = resolveFolderId(
+                            file.id,
+                            initialFiles,
+                            treeIndexes,
+                        )
                         if (shouldFileDisplay(file, parentId)) {
                             return (
                                 <SidebarTreeItem
@@ -39,6 +51,7 @@ export function SidebarTreeItemComponent(props) {
                                     level={level + 1}
                                     pageId={file.id}
                                     parentId={folderId}
+                                    treeIndexes={treeIndexes}
                                 />
                             )
                         }

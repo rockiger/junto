@@ -17,7 +17,7 @@ import { LOCALSTORAGE_NAME } from 'lib/constants'
 import { isArchived } from 'lib/helper'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import { SelectionIndicator } from 'react-aria-components'
-import { useEffect, useGlobal, useState } from 'reactn'
+import { useEffect, useMemo, useGlobal, useState } from 'reactn'
 
 export default ArchivePage
 export { ArchivePage }
@@ -39,7 +39,7 @@ const sortByLS = localStorage.getItem(localStorageKey)
  */
 function ArchivePage({ isSignedIn, isSigningIn }) {
     const [files] = useGlobal('files')
-    const archivedFiles = filterIsArchived(files)
+    const archivedFiles = useMemo(() => filterIsArchived(files), [files])
     const [sortBy, setSortBy] = useState(
         sortByLS &&
             (sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")

@@ -7,7 +7,7 @@ import type { SortBy } from 'components/Home/FileList/fileList-component'
 import { PageView } from 'components/Tracking'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 import StarIcon from 'mdi-react/StarIcon'
-import { useEffect, useGlobal, useState } from 'reactn'
+import { useEffect, useMemo, useGlobal, useState } from 'reactn'
 import type { IFile } from 'reactn/default'
 
 export default StarredPage
@@ -28,6 +28,7 @@ const sortByLS = localStorage.getItem(localStorageKey)
  */
 function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigningIn: boolean }) {
     const [files] = useGlobal('files')
+    const starredFiles = useMemo(() => filterStarred(files), [files])
     const [sortBy, setSortBy] = useState(
         sortByLS &&
             (sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")
@@ -43,14 +44,13 @@ function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigni
         PageView({ pathname: '/starred' })
     }, [])
 
-    console.log({ files, starred: filterStarred(files) })
     if (isSignedIn && !isSigningIn) {
         return (
             <FileList
                 emptyIcon={StarIcon}
                 emptyMessage="No starred pages."
                 emptySubline="Add stars to pages you want to easily refer to later."
-                files={_.thread(files, filterStarred)}
+                files={starredFiles}
                 sortBy={sortBy as SortBy}
                 setSortBy={setSortByAndLocalStorage}
             />

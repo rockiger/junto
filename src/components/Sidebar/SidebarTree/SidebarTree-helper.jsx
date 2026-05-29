@@ -10,21 +10,69 @@ import { isArchived, isPage } from 'lib/helper'
  * @returns {string | null}
  */
 export function getFolderId(fileId, files) {
-    const folder = files.find(file => file.name === fileId)
+    const indexes = buildSidebarTreeIndexes(files)
+    return indexes.folderIdByPageId.get(fileId) ?? null
+}
 
-    if (folder) {
-        const children = files.filter(file => {
-            return file.parents && file.parents.includes(folder.id)
-        })
+/**
+ * @param {string} fileId
+ * @param {Map<string, any>} filesByName
+ * @param {Map<string, any[]>} childrenByParentId
+ * @returns {string | null}
+ */
+export function getFolderIdFromIndexes(
+    fileId,
+    filesByName,
+    childrenByParentId,
+) {
+    const folder = filesByName.get(fileId)
+    if (!folder) {
+        return null
+    }
 
-        for (const child of children) {
-            const hasChildThatCounts = isPage(child) && !isArchived(child)
-            if (hasChildThatCounts) {
-                return folder.id
-            }
+    const children = childrenByParentId.get(folder.id) ?? []
+    for (const child of children) {
+        const hasChildThatCounts = isPage(child) && !isArchived(child)
+        if (hasChildThatCounts) {
+            return folder.id
         }
     }
     return null
+}
+
+/**
+ * @param {any[]} files
+ */
+export function buildSidebarTreeIndexes(files) {
+    const filesByName = new Map()
+    const childrenByParentId = new Map()
+
+    for (const file of files) {
+        filesByName.set(file.name, file)
+        const parentId = file.parents?.[0]
+        if (parentId) {
+            const siblings = childrenByParentId.get(parentId)
+            if (siblings) {
+                siblings.push(file)
+            } else {
+                childrenByParentId.set(parentId, [file])
+            }
+        }
+    }
+
+    const folderIdByPageId = new Map()
+    for (const file of files) {
+        const folderId = getFolderIdFromIndexes(
+            file.id,
+            filesByName,
+            childrenByParentId,
+        )
+        if (folderId) {
+            folderIdByPageId.set(file.id, folderId)
+        }
+    }
+
+    return { filesByName, childrenByParentId, folderIdByPageId }
 }
 
 /**
@@ -81,7 +129,7 @@ export function shouldFileDisplay(file, parentId) {
 }
 
 export function sortFilesByName(files) {
-    return files.sort((a, b) => {
+    return [...files].sort((a, b) => {
         if (a.name < b.name) {
             return -1
         }

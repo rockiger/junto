@@ -1,14 +1,27 @@
-import React, { useGlobal } from 'reactn'
+import React, { useMemo, useGlobal } from 'reactn'
 
 import { useStyles } from './SidebarTree-styles'
 import { SidebarTreeItem } from './SidebarTreeItem'
-import { getOverviewFileId, sortFilesByName } from './SidebarTree-helper'
+import {
+    buildSidebarTreeIndexes,
+    getOverviewFileId,
+    sortFilesByName,
+} from './SidebarTree-helper'
 import Spinner from '../../gsuite-components/spinner'
 import { MYHOME } from '../../../lib/constants'
 
 export const SidebarTreeComponent = ({ rootFolderId, initialFiles }) => {
     const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
     const classes = useStyles()
+
+    const sortedInitialFiles = useMemo(
+        () => sortFilesByName(initialFiles),
+        [initialFiles],
+    )
+    const treeIndexes = useMemo(
+        () => buildSidebarTreeIndexes(initialFiles),
+        [initialFiles],
+    )
 
     return (
         <>
@@ -19,11 +32,12 @@ export const SidebarTreeComponent = ({ rootFolderId, initialFiles }) => {
                 <ul className={classes.mydrive}>
                     <SidebarTreeItem
                         expand={false}
-                        initialFiles={sortFilesByName(initialFiles)}
+                        initialFiles={sortedInitialFiles}
                         label={MYHOME}
                         level={0}
                         pageId={getOverviewFileId(initialFiles, rootFolderId)}
                         parentId={rootFolderId}
+                        treeIndexes={treeIndexes}
                     />
                 </ul>
             )}

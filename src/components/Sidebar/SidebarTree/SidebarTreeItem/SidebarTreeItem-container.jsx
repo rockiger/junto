@@ -11,6 +11,7 @@ export function SidebarTreeItem(props) {
         level,
         pageId,
         parentId,
+        treeIndexes,
     } = props
 
     const [isExpanded, setExpanded] = useState(expand)
@@ -27,6 +28,7 @@ export function SidebarTreeItem(props) {
             pageId={pageId}
             parentId={parentId}
             setExpanded={setExpanded}
+            treeIndexes={treeIndexes}
         />
     )
 }
