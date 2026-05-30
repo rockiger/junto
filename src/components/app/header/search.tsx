@@ -4,6 +4,7 @@ import { Event } from "components/Tracking"
 
 import ArrowLeftIcon from "mdi-react/ArrowLeftIcon"
 import CloseIcon from "mdi-react/CloseIcon"
+import { useIsDesktop } from "lib/hooks/useMediaQuery"
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Button } from 'react-aria-components'
 import useDimensions from "react-use-dimensions"
@@ -19,6 +20,7 @@ export type SearchProps = {
 }
 
 export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
+    const isDesktop = useIsDesktop()
     const [files] = useGlobal("files")
     const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         "isSearchFieldActive",
@@ -66,20 +68,31 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
     }, [activateSearch, isSearchFieldActive])
 
 
-    if (!showSearch) {
+    if (!isDesktop && !showSearch) {
         return (
-            <Button className={clsx("bg-search-bg font-normal rounded-full text-base text-search-placeholder w-full h-13 lg:h-12 lg:max-w-[832px]", className)} onPress={() => activateSearch("click")}><div className="translate-y-[2px] lg:leading-5 lg:text-left">Search in Fulcrum</div></Button>
+            <Button
+                aria-label="Open search"
+                className={clsx(
+                    "bg-search-bg font-normal rounded-full text-base text-search-placeholder w-full h-13",
+                    className,
+                )}
+                onPress={() => activateSearch("click")}
+            >
+                <div className="translate-y-[2px]">Search in Fulcrum</div>
+            </Button>
         )
     }
     return (
         <div
             className={clsx(
-                "fixed top-0 left-0 z-1000 flex h-16 w-full flex-1  bg-surface pt-1 px-1",
+                "flex flex-1",
+                "max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:z-1000 max-lg:h-16 max-lg:w-full max-lg:bg-surface max-lg:pt-1 max-lg:px-1",
+                "lg:relative lg:h-12 lg:w-full lg:max-w-[832px] lg:items-center lg:rounded-full lg:bg-search-bg lg:px-4",
                 className,
             )}
             ref={searchRef}
         >
-            <div className="flex w-14 flex-col px-[5px] pt-px md:hidden">
+            <div className="flex w-14 flex-col px-[5px] pt-px lg:hidden">
                 {/* <IconButton
                     ariaLabel="Search"
                     className={clsx(
@@ -106,7 +119,9 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                     name="search-input"
                     aria-label="Search in Fulcrum"
                     placeholder="Search in Fulcrum"
-                    className={clsx("w-full border-0 bg-transparent p-0 font-inherit placeholder-search-placeholder placeholder- text-base text-fg-default outline-none pt-2.5")}
+                    className={clsx(
+                        "w-full border-0 bg-transparent p-0 font-inherit placeholder-search-placeholder text-base text-fg-default outline-none pt-2.5 lg:pt-0",
+                    )}
                     onClick={() => activateSearch("click")}
                     onFocus={() => activateSearch("focus")}
                     onBlur={() =>
@@ -155,12 +170,12 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                             ev.stopPropagation()
                         }
                     }}
-                    readOnly={!isSearchFieldActive}
+                    readOnly={!isDesktop && !isSearchFieldActive}
                     ref={inputRef}
                     value={searchValue}
                 />
             </div>
-            <div className="flex w-[49px] flex-col items-center md:hidden">
+            <div className="flex w-[49px] flex-col items-center lg:hidden">
                 {searchValue ? (
                     <IconButton
                         ariaLabel="Clear search"
@@ -176,7 +191,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                     </IconButton>
                 ) : null}
             </div>
-            {isSearchFieldActive ? (
+            {!isDesktop && isSearchFieldActive ? (
                 <div
                     className={clsx(
                         "pointer-events-none absolute top-14 left-0 h-[calc(100vh-56px)] w-screen bg-surface",
