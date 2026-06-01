@@ -22,19 +22,17 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 addReducers({
-    clearSearchComplete: (global, _dispatch) => ({
-        files: [...global.initialFiles],
+    clearSearchComplete: (_global, _dispatch) => ({
+        files: [],
         isSearchFieldActive: false,
-        oldSearchTerm: '',
         searchTerm: '',
         searchValue: '',
     }),
-    clearSearchFiles: (global, _dispatch) => ({
-        files: [...global.initialFiles],
+    clearSearchFiles: (_global, _dispatch) => ({
+        files: [],
     }),
     clearSearchMeta: (_global, _dispatch) => ({
         isSearchFieldActive: false,
-        oldSearchTerm: '',
         searchTerm: '',
         searchValue: '',
     }),
@@ -54,7 +52,6 @@ const initialState: State = {
     isSearchFieldActive: false,
     isSignedIn: false,
     isSigningIn: true,
-    oldSearchTerm: '',
     redirect: false,
     rootFolderId: null,
     searchTerm: '',
@@ -68,7 +65,7 @@ initReactnPersist({
     // REQUIRED.
     storage: localStorage, // localStorage, sessionStorage or any instance with Storage API interface support.
     // Optional.
-    whitelist: ['files', 'hints', 'initialFiles', 'rootFolderId'], // List of top-level keys in global, like ['users', 'token']. Default [].
+    whitelist: ['hints', 'initialFiles', 'rootFolderId'], // List of top-level keys in global, like ['users', 'token']. Default [].
     //debug: true,
     key: '@reactn', // Key in storage. Default '@reactn'.
     initialValue: initialState,

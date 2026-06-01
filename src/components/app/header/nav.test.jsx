@@ -10,7 +10,6 @@ const baseGlobal = {
     isFileListLoading: false,
     isSearchFieldActive: false,
     goToNewFile: false,
-    oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
     searchValue: '',

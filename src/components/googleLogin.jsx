@@ -26,24 +26,6 @@ export default class GoogleLogin extends React.Component {
 		this.handleClientLoad();
 	}
 
-	componentDidUpdate() {
-		const { isFileListLoading, isSignedIn, oldSearchTerm, searchTerm } =
-			this.global;
-		console.log(
-			"componentDidUpdate:",
-			isFileListLoading,
-			oldSearchTerm,
-			searchTerm,
-		);
-		if (!isFileListLoading && oldSearchTerm !== searchTerm && isSignedIn) {
-			if (searchTerm) {
-				this.updateFiles();
-			} else {
-				this.setGlobal({ files: this.global.initialFiles });
-			}
-		}
-	}
-
 	/**
 	 *  On load, called to load the auth2 library and API client library.
 	 */
@@ -104,7 +86,7 @@ export default class GoogleLogin extends React.Component {
 				const files = await listFiles();
 				this.setState({ isLoading: false });
 				this.setGlobal({
-					files,
+					files: [],
 					initialFiles: files,
 					isFileListLoading: false,
 					rootFolderId,
@@ -176,42 +158,6 @@ export default class GoogleLogin extends React.Component {
 			console.log({ userId });
 		} catch (e) {
 			console.error("Couldn't get userId", e);
-		}
-	};
-
-	/**
-	 * Initially load files, get the rootFolderId
-	 */
-	updateFiles = async () => {
-		console.log("updateFiles");
-		this.setGlobal({ isFileListLoading: true });
-		const { rootFolderId, searchTerm } = this.global;
-		if (rootFolderId) {
-			try {
-				const files = await listFiles(searchTerm);
-				console.log("listFiles:", files);
-				this.setState({ isLoading: false });
-				this.setGlobal({
-					files,
-					isFileListLoading: false,
-					oldSearchTerm: searchTerm,
-				});
-			} catch (err) {
-				const body = JSON.parse(err.body);
-				const { error } = body;
-				if (error.message === "Invalid Credentials") {
-					try {
-						await refreshSession();
-						this.updateFiles();
-					} catch (err) {
-						alert(`Couldn't refresh session: ${err.message}`);
-						console.log({ err });
-					}
-				} else {
-					alert(`Couldn't load files ${err}`);
-					console.log({ error });
-				}
-			}
 		}
 	};
 

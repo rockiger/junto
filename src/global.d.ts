@@ -20,13 +20,12 @@ declare module 'reactn/default' {
     export interface Reducers {
         /** `dispatch` typed as DispatchFunction only to avoid TS circularity (full Dispatch embeds Reducers). */
         clearSearchComplete: (
-            global: State,
+            _global: State,
             _dispatch: import('reactn/types/dispatch-function').default<State>,
         ) => Pick<
             State,
             | 'files'
             | 'isSearchFieldActive'
-            | 'oldSearchTerm'
             | 'searchTerm'
             | 'searchValue'
         >
@@ -43,12 +42,13 @@ declare module 'reactn/default' {
         isSignedIn: boolean
         isSigningIn: boolean
         goToNewFile: boolean
-        oldSearchTerm: '' | string
         redirect: boolean
         searchTerm: '' | string
         searchValue: '' | string // The value in the searchfield
         showSidebarOnMobile: boolean
+        /** Drive full-text search results; empty when not on /search. */
         files: IFile[]
+        /** Canonical file tree after login and incremental CRUD updates. */
         initialFiles: IFile[]
         isInitialFileListLoading: boolean
         backgroundUpdate: boolean

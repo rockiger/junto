@@ -12,8 +12,8 @@ import { isArchived } from 'lib/helper'
 
 function SharedWithMe(props) {
     const { isSignedIn, isSigningIn } = props
-    const [files] = useGlobal('files')
-    const sharedFiles = useMemo(() => filterSharedWithMe(files), [files])
+    const [initialFiles] = useGlobal('initialFiles')
+    const sharedFiles = useMemo(() => filterSharedWithMe(initialFiles), [initialFiles])
 
     useEffect(() => PageView({ pathname: '/wikis' }), [])
 

@@ -31,7 +31,6 @@ setGlobal({
     isSignedIn: false,
     isSigningIn: true,
     goToNewFile: false,
-    oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
     searchValue: '', // The value in the searchfield

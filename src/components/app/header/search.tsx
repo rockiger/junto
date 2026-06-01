@@ -25,7 +25,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
     const navigate = useNavigate()
     const pathname = useRouterState({ select: (s) => s.location.pathname })
     const isDesktop = useIsDesktop()
-    const [files] = useGlobal("files")
+    const [initialFiles] = useGlobal("initialFiles")
     const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
         "isSearchFieldActive",
     )
@@ -35,8 +35,8 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [submitSelected, setSubmitSelected] = useState(false)
     const filteredFiles = useMemo(
-        () => filterSearchAutocompleteFiles(files, searchValue),
-        [files, searchValue],
+        () => filterSearchAutocompleteFiles(initialFiles, searchValue),
+        [initialFiles, searchValue],
     )
 
     const [searchRef] = useDimensions()

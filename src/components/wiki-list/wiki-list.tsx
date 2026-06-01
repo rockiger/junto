@@ -37,7 +37,7 @@ export { WikiList }
  * @param {WikiListProps} props
  */
 function WikiList({ files, isDashboard, orderBy = 'name' }) {
-    const [isFileListLoading] = useGlobal('isFileListLoading')
+    const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
     const [rootFolderId] = useGlobal('rootFolderId')
     const wikis = useMemo(
         () => sortWikisBy(orderBy, filterWikis(files)),
@@ -49,7 +49,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
     )
     return (
         <div className="w-full">
-            {(!_.isEmpty(files) || !isFileListLoading) &&
+            {(!_.isEmpty(files) || !isInitialFileListLoading) &&
                 !myFulcrum &&
                 wikis.length === 0 &&
                 (isDashboard ? (
@@ -60,7 +60,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                         title="You don't have any archived wikis."
                     />
                 ))}
-            {_.isEmpty(files) && isFileListLoading && <Spinner />}
+            {_.isEmpty(files) && isInitialFileListLoading && <Spinner />}
             {(isDashboard && myFulcrum) || wikis.length ? <GridList
 
                 aria-label="Wiki pages"

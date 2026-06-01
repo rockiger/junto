@@ -12,7 +12,6 @@ setGlobal({
     isSignedIn: true,
     isSigningIn: true,
     goToNewFile: false,
-    oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
     searchValue: '',

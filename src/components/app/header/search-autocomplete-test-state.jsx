@@ -5,11 +5,11 @@ const testState = {
     isSignedIn: true,
     isSigningIn: false,
     goToNewFile: false,
-    oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
     searchValue: '',
-    files: [
+    files: [],
+    initialFiles: [
         {
           "kind": "drive#file",
           "id": "10t_Nrv_DUoOSbp9MoYGmfm1Cdj--Zc0D",

@@ -27,8 +27,8 @@ const sortByLS = localStorage.getItem(localStorageKey)
  * @param {ArchivePageProps} props
  */
 function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigningIn: boolean }) {
-    const [files] = useGlobal('files')
-    const starredFiles = useMemo(() => filterStarred(files), [files])
+    const [initialFiles] = useGlobal('initialFiles')
+    const starredFiles = useMemo(() => filterStarred(initialFiles), [initialFiles])
     const [sortBy, setSortBy] = useState(
         sortByLS &&
             (sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")

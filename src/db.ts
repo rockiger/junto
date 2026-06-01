@@ -17,16 +17,12 @@ import { filesUpdater } from 'lib/helper'
  * @return {Promise|void}
  */
 export const backgroundUpdateFiles = async () => {
-    const { searchTerm } = getGlobal()
     setGlobal({ backgroundUpdate: true })
     try {
-        const files = await listFilesChunked(searchTerm)
+        const initialFiles = await listFilesChunked('')
         setGlobal({
             backgroundUpdate: false,
-            files,
-            initialFiles: files,
-            isFileListLoading: false,
-            oldSearchTerm: searchTerm,
+            initialFiles,
         })
     } catch (err) {
         const body = JSON.parse(err.body)
@@ -69,10 +65,9 @@ export const createFile = async (
         })
         const result = await updateFileBase(newFileId, fileContent)
         console.log({ result })
-        const { files, initialFiles } = getGlobal()
+        const { initialFiles } = getGlobal()
         setGlobal({
             backgroundUpdate: true,
-            files: [...files, result],
             initialFiles: [...initialFiles, result],
             isCreatingNewFile: false,
         })
@@ -104,11 +99,10 @@ export const createNewWiki = async opts => {
     try {
         const result = await createNewWikiBase(opts)
         console.log({ newWikiResult: result })
-        const { files, initialFiles } = getGlobal()
+        const { initialFiles } = getGlobal()
         // Unlike create new file we don't need to reset the isCreatingNewFile
         // propery, because there should always be a new file created.
         setGlobal({
-            files: [...files, result],
             initialFiles: [...initialFiles, result],
         })
         return result.id

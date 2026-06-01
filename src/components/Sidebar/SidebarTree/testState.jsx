@@ -5,7 +5,6 @@ const testState = {
     isSignedIn: true,
     isSigningIn: false,
     goToNewFile: false,
-    oldSearchTerm: '',
     redirect: false,
     searchTerm: '',
     searchValue: '',

@@ -56,7 +56,7 @@ export default function Page({
     const navigate = useNavigate()
     const router = useRouter()
     const params = useParams({ from: '/_app/page/$id' })
-    const [files] = useGlobal('files')
+    const [initialFiles] = useGlobal('initialFiles')
 
     const [canEdit, setCanEdit] = useState(false)
     const [, setEditorDeltaState] = useState<Record<string, unknown>>({})
@@ -138,7 +138,7 @@ export default function Page({
             }
 
             let fileContent: string | undefined
-            let fileDescription: IFile | undefined = files.find(
+            let fileDescription: IFile | undefined = initialFiles.find(
                 (el: IFile) => el.id === id
             )
 
@@ -179,7 +179,7 @@ export default function Page({
             setFileName(fileDescription.name)
             setPageHead(nextPageHead)
         },
-        [downloadFileContent, fileId, files, navigate]
+        [downloadFileContent, fileId, initialFiles, navigate]
     )
 
     loadEditorContentRef.current = loadEditorContent
@@ -194,7 +194,7 @@ export default function Page({
     }, [pageHead])
 
     useEffect(() => {
-        if (files.length === 0) return
+        if (initialFiles.length === 0) return
 
         if (prevParamsIdRef.current === null) {
             prevParamsIdRef.current = params.id
@@ -208,14 +208,14 @@ export default function Page({
         setFileId(params.id)
         setFileLoaded(false)
         void loadEditorContent(params.id)
-    }, [params.id, files.length, loadEditorContent])
+    }, [params.id, initialFiles.length, loadEditorContent])
 
     useEffect(() => {
         if (
             !isSignedIn ||
             fileLoaded ||
             fileLoading ||
-            files.length === 0
+            initialFiles.length === 0
         ) {
             return
         }
@@ -237,7 +237,7 @@ export default function Page({
         isSignedIn,
         fileLoaded,
         fileLoading,
-        files.length,
+        initialFiles.length,
         loadEditorContent,
         fileId,
     ])

@@ -42,8 +42,11 @@ type IChange = {
  * @param id - the file to update
  */
 const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
-    const files = filesUpdaterHelper(change, global.files, id)
     const initialFiles = filesUpdaterHelper(change, global.initialFiles, id)
+    const hasFileInSearchResults = global.files.some(item => item.id === id)
+    const files = hasFileInSearchResults
+        ? filesUpdaterHelper(change, global.files, id)
+        : global.files
     return {
         files,
         initialFiles,

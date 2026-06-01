@@ -36,7 +36,11 @@ function FileList({
 	title,
 }) {
 	const [isFileListLoading] = useGlobal("isFileListLoading");
+	const [isInitialFileListLoading] = useGlobal("isInitialFileListLoading");
 	const [searchTerm] = useGlobal("searchTerm");
+	const isLoading =
+		_.isEmpty(files) &&
+		(searchTerm ? isFileListLoading : isInitialFileListLoading);
 
 	return (
 		<FileListComponent
@@ -47,7 +51,7 @@ function FileList({
 			emptySubline={emptySubline}
 			files={files}
 			header={header}
-			isLoading={_.isEmpty(files) && isFileListLoading}
+			isLoading={isLoading}
 			searchTerm={searchTerm}
 			setSortBy={setSortBy}
 			sortBy={sortBy}

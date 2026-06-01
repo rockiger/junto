@@ -28,11 +28,11 @@ type SortBy = "modifiedByMeTime" | "viewedByMeTime" | "sharedWithMeTime"
 function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: boolean, isSigningIn: boolean, isCreatingNewFile: boolean }) {
 
 
-	const [files] = useGlobal("files")
+	const [initialFiles] = useGlobal("initialFiles")
 	const isDesktop = useIsDesktop()
 	const notArchivedFiles = useMemo(
-		() => filterIsNotArchived(files),
-		[files],
+		() => filterIsNotArchived(initialFiles),
+		[initialFiles],
 	)
 	const [sortBy, setSortBy] = useState(
 		sortByLS &&
