@@ -1,4 +1,4 @@
-import { Link, Outlet } from '@tanstack/react-router'
+import { Link, Outlet, useRouterState } from '@tanstack/react-router'
 import clsx from 'clsx'
 import Header from 'components/app/header'
 import Sidebar from 'components/app/sidebar'
@@ -11,7 +11,12 @@ import PlusIcon from 'mdi-react/PlusIcon'
 /**
  * Logged-in list/overview shell: header, sidebar, mobile dock, main padding.
  */
+const DASHBOARD_HEADLINE = 'Welcome to Fulcrum Wiki'
+const SEARCH_HEADLINE = 'Search results'
+
 export default function DashboardLayout() {
+    const pathname = useRouterState({ select: (s) => s.location.pathname })
+    const isSearchPage = pathname === '/search'
     const [isSignedIn] = useGlobal('isSignedIn')
     const clearSearch = useDispatch('clearSearchComplete')
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
@@ -83,10 +88,16 @@ export default function DashboardLayout() {
             <div id="headline" className="hidden px-6 pt-6 lg:bg-surface-paper lg:rounded-t-2xl lg:block" style={{
                 gridArea: 'headline',
             }}>
-                <h1 className="dashboard-headline font-medium text-2xl text-text-muted">
-                    <span className="dashboard-headline__center">Welcome to Fulcrum Wiki</span>
-                    <span className="dashboard-headline__left" aria-hidden="true">Welcome to Fulcrum Wiki</span>
-                </h1>
+                {isSearchPage ? (
+                    <h1 className="m-0 text-left text-2xl font-medium text-text-muted">
+                        {SEARCH_HEADLINE}
+                    </h1>
+                ) : (
+                    <h1 className="dashboard-headline font-medium text-2xl text-text-muted">
+                        <span className="dashboard-headline__center">{DASHBOARD_HEADLINE}</span>
+                        <span className="dashboard-headline__left" aria-hidden="true">{DASHBOARD_HEADLINE}</span>
+                    </h1>
+                )}
             </div>
             <Sidebar />
             {/* <!-- Main content headline --> */}

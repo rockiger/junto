@@ -34,7 +34,7 @@ storiesOf('SearchAutocomplete', module)
 
 function SearchStoryShell() {
     const { files } = testState
-    const [filteredFiles, setFilteredFiles] = useState(files)
+    const [filteredFiles] = useState(files)
     const [selectedRow] = useState(null)
     const [submitSelected, setSubmitSelected] = useState(false)
 
@@ -42,11 +42,10 @@ function SearchStoryShell() {
         <>
             <SearchAutocomplete
                 clearSearch={() => {}}
-                files={files}
                 filteredFiles={filteredFiles}
-                searchValue={''}
+                onSubmitSearch={() => {}}
+                searchValue=""
                 selectedRow={selectedRow}
-                setFilteredFiles={setFilteredFiles}
                 setSubmitSelected={setSubmitSelected}
                 submitSelected={submitSelected}
             />

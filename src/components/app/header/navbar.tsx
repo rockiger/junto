@@ -4,6 +4,7 @@ import IconButton from "components/gsuite-components/icon-button"
 import MenuIcon from "mdi-react/MenuIcon"
 import type { ReactNode } from "react"
 import { useDispatch, useEffect, useGlobal } from "reactn"
+import { navigateToSearch } from "lib/search/navigate-to-search"
 import Search from "./search"
 
 
@@ -22,7 +23,8 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
     )
     //! Check if this is needed
     const pathname = useRouterState({ select: (s) => s.location.pathname })
-    const isHome = pathname === "/home" || pathname === "/"
+    const isHome =
+        pathname === "/home" || pathname === "/" || pathname === "/search"
     const swapHeaderSearchOnDesktop = isHome && !searchTerm
 
     const clearSearch = useDispatch("clearSearchComplete")
@@ -33,9 +35,11 @@ function Navbar({ isSignedIn, children }: NavbarProps) {
     }, [searchTerm])
 
     const submit = () => {
-        setSearchTerm(searchValue)
-        setIsSearchFieldActive(false)
-        navigate({ to: isSignedIn ? '/home' : '/' })
+        navigateToSearch(navigate, searchValue, {
+            setSearchTerm,
+            setSearchValue,
+            setIsSearchFieldActive,
+        })
     }
 
     return (

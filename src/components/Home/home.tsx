@@ -1,5 +1,4 @@
 import { Spinner } from "components/gsuite-components/"
-import { Hint } from "components/gsuite-components/hint"
 import {
 	Tab,
 	TabList,
@@ -12,13 +11,13 @@ import WikiList from "components/wiki-list"
 import { LOCALSTORAGE_NAME } from "lib/constants"
 import { filterIsNotArchived } from "lib/helper/globalStateHelper"
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
-import FileSearchIcon from "mdi-react/FileSearchIcon"
 import { useIsDesktop } from "lib/hooks/useMediaQuery"
 import { useEffect, useMemo } from "react"
 import { SelectionIndicator } from 'react-aria-components'
 import { useDispatch, useGlobal, useState } from "reactn"
 import FileList from "./FileList"
 import Search from 'components/app/header/search'
+import { navigateToSearch } from 'lib/search/navigate-to-search'
 import { useNavigate } from '@tanstack/react-router'
 import { Disclosure, DisclosureHeader, DisclosurePanel } from 'components/gsuite-components/disclosure'
 
@@ -35,7 +34,6 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 		() => filterIsNotArchived(files),
 		[files],
 	)
-	const [searchTerm, setSearchTerm] = useGlobal("searchTerm")
 	const [sortBy, setSortBy] = useState(
 		sortByLS &&
 			(sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")
@@ -45,17 +43,14 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 
 
 	const navigate = useNavigate()
+	const [, setSearchTerm] = useGlobal("searchTerm")
 	const [, setIsSearchFieldActive] = useGlobal("isSearchFieldActive")
 	const [searchValue, setSearchValue] = useGlobal("searchValue")
 	const clearSearch = useDispatch("clearSearchComplete")
 
 	useEffect(() => {
-		if (searchTerm) {
-			PageView({ pathname: "/search" })
-		} else {
-			PageView({ pathname: "/home" })
-		}
-	}, [searchTerm])
+		PageView({ pathname: "/home" })
+	}, [])
 
 
 	const setSortByAndLocalStorage = (sortBy: SortBy) => {
@@ -66,9 +61,11 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 
 
 	const submit = () => {
-		setSearchTerm(searchValue)
-		setIsSearchFieldActive(false)
-		navigate({ to: isSignedIn ? '/home' : '/' })
+		navigateToSearch(navigate, searchValue, {
+			setSearchTerm,
+			setSearchValue,
+			setIsSearchFieldActive,
+		})
 	}
 
 
@@ -78,7 +75,7 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 				<div className="dashboard-inline-search hidden lg:flex lg:justify-center">
 					<Search clearSearch={clearSearch} submit={submit} />
 				</div>
-				{!searchTerm && !isDesktop && (<Tabs className="w-full">
+				{!isDesktop && (<Tabs className="w-full">
 					<TabList
 						aria-label="Tabs"
 						className="bg-surface-container flex w-full justify-around sticky top-0 z-10 lg:static"
@@ -127,7 +124,7 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 					</TabPanels>
 				</Tabs>
 				)}
-				{!searchTerm && isDesktop && <div className="flex flex-col gap-4 pb-4 px-6 pt-20">
+				{isDesktop && <div className="flex flex-col gap-4 pb-4 px-6 pt-20">
 					<Disclosure className="grow" defaultExpanded>
 						<DisclosureHeader>
 							Wikis
@@ -155,34 +152,6 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 						</DisclosurePanel>
 					</Disclosure>
 				</div>}
-				{/*{!searchTerm && (
-					<Hint id="dashboard" scope="dashboard">
-					<h1
-						className={clsx(
-							"m-0 border-b border-edge-strong px-2 py-2 text-2xl font-normal max-[949px]:hidden",
-						)}
-					>
-						{searchTerm ? "Search results" : "Dashboard"}
-					</h1>
-				</Hint> */}
-				{searchTerm && (
-					<FileList
-						emptyIcon={FileSearchIcon}
-						emptyMessage={
-							searchTerm
-								? "None of your pages matched this search."
-								: "There are no pages in this view."
-						}
-						emptySubline={
-							searchTerm ? "Try another search with a broader keyword." : ""
-						}
-						files={files}
-						header="h2"
-						sortBy={sortBy as SortBy}
-						setSortBy={setSortByAndLocalStorage}
-						title={searchTerm ? "" : "Pages"}
-					/>
-				)}
 			</>
 		)
 	}

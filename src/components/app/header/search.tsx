@@ -4,7 +4,9 @@ import { Event } from "components/Tracking"
 
 import ArrowLeftIcon from "mdi-react/ArrowLeftIcon"
 import CloseIcon from "mdi-react/CloseIcon"
+import SearchIcon from "mdi-react/MagnifyIcon"
 import { useIsDesktop } from "lib/hooks/useMediaQuery"
+import { useNavigate, useRouterState } from "@tanstack/react-router"
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Button } from 'react-aria-components'
 import useDimensions from "react-use-dimensions"
@@ -20,6 +22,8 @@ export type SearchProps = {
 }
 
 export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
+    const navigate = useNavigate()
+    const pathname = useRouterState({ select: (s) => s.location.pathname })
     const isDesktop = useIsDesktop()
     const [files] = useGlobal("files")
     const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
@@ -35,8 +39,15 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
         [files, searchValue],
     )
 
-    const [searchRef, { height, width }] = useDimensions()
+    const [searchRef] = useDimensions()
     const inputRef = useRef<HTMLInputElement>(null)
+
+    const clearSearchOnPage = useCallback(() => {
+        clearSearch()
+        if (pathname === "/search") {
+            void navigate({ to: "/search", search: { q: "" } })
+        }
+    }, [clearSearch, navigate, pathname])
 
     const activateSearch = useCallback((kind: string) => {
         setIsSearchFieldActive(true)
@@ -82,27 +93,22 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
             </Button>
         )
     }
+
+    const desktopSearchActive = isDesktop && isSearchFieldActive
+
     return (
         <div
+            id="search-container"
             className={clsx(
                 "flex flex-1",
-                "max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:z-1000 max-lg:h-16 max-lg:w-full max-lg:bg-surface max-lg:pt-1 max-lg:px-1",
-                "lg:relative lg:h-12 lg:w-full lg:max-w-[832px] lg:items-center lg:rounded-full lg:bg-search-bg lg:px-4",
+                desktopSearchActive
+                    ? "lg:relative lg:flex-col lg:w-full lg:max-w-[832px] lg:bg-surface-paper   "
+                    : "absolute left-0 w-full z-20 bg-surface-container lg:relative lg:h-12 lg:w-full lg:max-w-[832px] lg:items-center lg:rounded-full lg:bg-search-bg lg:px-2",
                 className,
             )}
             ref={searchRef}
         >
             <div className="flex w-14 flex-col px-[5px] pt-px lg:hidden">
-                {/* <IconButton
-                    ariaLabel="Search"
-                    className={clsx(
-                        "mt-px ml-[5px] h-10 w-10",
-                    )}
-                    onClick={() => submitSearch("click")}
-                >
-                    <SearchIcon />
-                </IconButton> */}
-
                 <IconButton
                     ariaLabel="Clear search"
                     className=""
@@ -114,13 +120,29 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                     <ArrowLeftIcon />
                 </IconButton>
             </div>
-            <div className="flex flex-1 flex-col items-start">
+            <div
+                className={clsx(
+                    "flex flex-1 items-center",
+                    desktopSearchActive && "lg:gap-3 lg:px-2 lg:py-3 lg:border lg:border-b-0 lg:border-edge-strong lg:rounded-t-3xl lg:shadow-md",
+                )}
+            ><IconButton
+                ariaLabel="Clear search"
+                className="hidden lg:flex"
+                onClick={() => {
+                    submitSearch("click")
+                }}
+            >
+                    <SearchIcon
+                        aria-hidden
+                        className="hidden shrink-0 text-search-placeholder lg:block"
+                    /></IconButton>
                 <input
+                    autoComplete="off"
                     name="search-input"
                     aria-label="Search in Fulcrum"
                     placeholder="Search in Fulcrum"
                     className={clsx(
-                        "w-full border-0 bg-transparent p-0 font-inherit placeholder-search-placeholder text-base text-fg-default outline-none pt-2.5 lg:pt-0",
+                        "w-full flex-1 border-0 bg-transparent p-0 font-inherit placeholder-search-placeholder text-base text-fg-default outline-none pt-2.5 lg:pt-0",
                     )}
                     onClick={() => activateSearch("click")}
                     onFocus={() => activateSearch("focus")}
@@ -142,7 +164,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                             }
                         } else if (ev.key === "Escape") {
                             ev.preventDefault()
-                            clearSearch()
+                            clearSearchOnPage()
                             setShowSearch(false)
                         } else if (ev.key === "ArrowDown") {
                             ev.preventDefault()
@@ -174,13 +196,26 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                     ref={inputRef}
                     value={searchValue}
                 />
+                {desktopSearchActive && searchValue ? (
+                    <IconButton
+                        ariaLabel="Clear search"
+                        className="hidden lg:flex"
+                        onClick={() => {
+                            clearSearchOnPage()
+                            setSearchValue("")
+                            inputRef.current?.focus()
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                ) : null}
             </div>
             <div className="flex w-[49px] flex-col items-center lg:hidden">
                 {searchValue ? (
                     <IconButton
                         ariaLabel="Clear search"
                         onClick={() => setTimeout(() => {
-                            clearSearch()
+                            clearSearchOnPage()
                             setSearchValue("")
                             inputRef.current?.focus()
 
@@ -200,13 +235,13 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
             ) : null}
             {isSearchFieldActive ? (
                 <SearchAutocomplete
-                    clearSearch={clearSearch}
+                    clearSearch={clearSearchOnPage}
                     filteredFiles={filteredFiles}
-                    height={height}
+                    onSubmitSearch={() => submitSearch("footer")}
+                    searchValue={searchValue}
                     selectedRow={selectedRow}
                     setSubmitSelected={setSubmitSelected}
                     submitSelected={submitSelected}
-                    width={width}
                 />
             ) : null}
         </div>

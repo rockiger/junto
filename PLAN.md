@@ -16,9 +16,9 @@
 -- [x] Layout to show Sidebar and Main content
 -- [x] Sidebar breakpoints
 -- [x] Home (Add Menu button)
--- [] Search
---- [] Search Autocomplete
---- [] Results for search (Check if results are correct)
+-- [x] Search
+--- [x] Search Autocomplete
+--- [x] Results for search (Check if results are correct)
 -- [] Starred
 -- [] Shared
 -- [] Archive

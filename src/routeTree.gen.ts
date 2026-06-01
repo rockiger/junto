@@ -21,6 +21,7 @@ import { Route as AppPageIdRouteImport } from './routes/_app/page.$id'
 import { Route as AppDashboardWikisRouteImport } from './routes/_app/_dashboard/wikis'
 import { Route as AppDashboardStarredRouteImport } from './routes/_app/_dashboard/starred'
 import { Route as AppDashboardSharedWithMeRouteImport } from './routes/_app/_dashboard/shared-with-me'
+import { Route as AppDashboardSearchRouteImport } from './routes/_app/_dashboard/search'
 import { Route as AppDashboardNewRouteImport } from './routes/_app/_dashboard/new'
 import { Route as AppDashboardHomeRouteImport } from './routes/_app/_dashboard/home'
 import { Route as AppDashboardArchiveRouteImport } from './routes/_app/_dashboard/archive'
@@ -83,6 +84,11 @@ const AppDashboardSharedWithMeRoute =
     path: '/shared-with-me',
     getParentRoute: () => AppDashboardRoute,
   } as any)
+const AppDashboardSearchRoute = AppDashboardSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AppDashboardRoute,
+} as any)
 const AppDashboardNewRoute = AppDashboardNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/archive': typeof AppDashboardArchiveRoute
   '/home': typeof AppDashboardHomeRoute
   '/new': typeof AppDashboardNewRoute
+  '/search': typeof AppDashboardSearchRoute
   '/shared-with-me': typeof AppDashboardSharedWithMeRoute
   '/starred': typeof AppDashboardStarredRoute
   '/wikis': typeof AppDashboardWikisRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/archive': typeof AppDashboardArchiveRoute
   '/home': typeof AppDashboardHomeRoute
   '/new': typeof AppDashboardNewRoute
+  '/search': typeof AppDashboardSearchRoute
   '/shared-with-me': typeof AppDashboardSharedWithMeRoute
   '/starred': typeof AppDashboardStarredRoute
   '/wikis': typeof AppDashboardWikisRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/_app/_dashboard/archive': typeof AppDashboardArchiveRoute
   '/_app/_dashboard/home': typeof AppDashboardHomeRoute
   '/_app/_dashboard/new': typeof AppDashboardNewRoute
+  '/_app/_dashboard/search': typeof AppDashboardSearchRoute
   '/_app/_dashboard/shared-with-me': typeof AppDashboardSharedWithMeRoute
   '/_app/_dashboard/starred': typeof AppDashboardStarredRoute
   '/_app/_dashboard/wikis': typeof AppDashboardWikisRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/archive'
     | '/home'
     | '/new'
+    | '/search'
     | '/shared-with-me'
     | '/starred'
     | '/wikis'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/archive'
     | '/home'
     | '/new'
+    | '/search'
     | '/shared-with-me'
     | '/starred'
     | '/wikis'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/_app/_dashboard/archive'
     | '/_app/_dashboard/home'
     | '/_app/_dashboard/new'
+    | '/_app/_dashboard/search'
     | '/_app/_dashboard/shared-with-me'
     | '/_app/_dashboard/starred'
     | '/_app/_dashboard/wikis'
@@ -285,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardSharedWithMeRouteImport
       parentRoute: typeof AppDashboardRoute
     }
+    '/_app/_dashboard/search': {
+      id: '/_app/_dashboard/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AppDashboardSearchRouteImport
+      parentRoute: typeof AppDashboardRoute
+    }
     '/_app/_dashboard/new': {
       id: '/_app/_dashboard/new'
       path: '/new'
@@ -313,6 +332,7 @@ interface AppDashboardRouteChildren {
   AppDashboardArchiveRoute: typeof AppDashboardArchiveRoute
   AppDashboardHomeRoute: typeof AppDashboardHomeRoute
   AppDashboardNewRoute: typeof AppDashboardNewRoute
+  AppDashboardSearchRoute: typeof AppDashboardSearchRoute
   AppDashboardSharedWithMeRoute: typeof AppDashboardSharedWithMeRoute
   AppDashboardStarredRoute: typeof AppDashboardStarredRoute
   AppDashboardWikisRoute: typeof AppDashboardWikisRoute
@@ -322,6 +342,7 @@ const AppDashboardRouteChildren: AppDashboardRouteChildren = {
   AppDashboardArchiveRoute: AppDashboardArchiveRoute,
   AppDashboardHomeRoute: AppDashboardHomeRoute,
   AppDashboardNewRoute: AppDashboardNewRoute,
+  AppDashboardSearchRoute: AppDashboardSearchRoute,
   AppDashboardSharedWithMeRoute: AppDashboardSharedWithMeRoute,
   AppDashboardStarredRoute: AppDashboardStarredRoute,
   AppDashboardWikisRoute: AppDashboardWikisRoute,

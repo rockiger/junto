@@ -51,6 +51,8 @@ export type FileListComponentProps = {
     setSortBy?: (sortBy: SortBy) => void
     sortBy: SortBy
     title?: string
+    /** Full file tree for wiki/location labels; defaults to `files`. */
+    locationLookupFiles?: IFile[]
 }
 
 function sortDisplayFiles(files: IFile[], sortBy: SortBy): IFile[] {
@@ -63,10 +65,13 @@ function sortDisplayFiles(files: IFile[], sortBy: SortBy): IFile[] {
         )
 }
 
-function buildLocationLabelByFileId(files: IFile[]): Map<string, string> {
+function buildLocationLabelByFileId(
+    displayFiles: IFile[],
+    locationLookupFiles: IFile[],
+): Map<string, string> {
     const labels = new Map<string, string>()
-    for (const file of files) {
-        labels.set(file.id, getLocationLabel(file, files))
+    for (const file of displayFiles) {
+        labels.set(file.id, getLocationLabel(file, locationLookupFiles))
     }
     return labels
 }
@@ -82,6 +87,7 @@ export default function FileListComponent({
     setSortBy,
     sortBy,
     title,
+    locationLookupFiles,
 }: FileListComponentProps) {
     const headingTag = header ?? "h1"
     const isDesktop = useIsDesktop()
@@ -97,9 +103,10 @@ export default function FileListComponent({
         [files, sortBy],
     )
 
+    const lookupFiles = locationLookupFiles ?? files
     const locationLabelByFileId = useMemo(
-        () => buildLocationLabelByFileId(files),
-        [files],
+        () => buildLocationLabelByFileId(files, lookupFiles),
+        [files, lookupFiles],
     )
 
     return (
@@ -517,7 +524,6 @@ function getLocationLabel(file: IFile, files: IFile[]): string {
             break
         }
         visited.add(current.id)
-
         const parent = getMetaById(current.parents[0], files)
         if (!parent) {
             break
