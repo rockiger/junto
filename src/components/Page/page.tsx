@@ -307,12 +307,12 @@ export default function Page({
         })
         return (
             <>
-                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-surface-container px-2 md:px-3">
-                    <IconButton ariaLabel="Back" onClick={onBack}>
+                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-surface-container px-2 md:px-3 lg:bg-white">
+                    <IconButton className='lg:hidden!' ariaLabel="Back" onClick={onBack}>
                         <ArrowLeftIcon aria-hidden />
                     </IconButton>
                     {fileLoaded && (
-                        <h1 className="flex items-center text-xl overflow-clip text-ellipsis max-w-[calc(100vw-200px)]">
+                        <h1 className="flex items-center text-2xl font-semibold overflow-clip text-ellipsis max-w-[calc(100vw-200px)]">
                             {canEdit &&
                                 (fileName === OVERVIEW_NAME ? (
                                     <div className='flex items-baseline text-text-muted'

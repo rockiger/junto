@@ -18,7 +18,6 @@ import { Route as PublicPrivacyPolicyRouteImport } from './routes/_public/privac
 import { Route as PublicFaqRouteImport } from './routes/_public/faq'
 import { Route as AppDashboardRouteImport } from './routes/_app/_dashboard'
 import { Route as AppPageIdRouteImport } from './routes/_app/page.$id'
-import { Route as AppDashboardWikisRouteImport } from './routes/_app/_dashboard/wikis'
 import { Route as AppDashboardStarredRouteImport } from './routes/_app/_dashboard/starred'
 import { Route as AppDashboardSharedWithMeRouteImport } from './routes/_app/_dashboard/shared-with-me'
 import { Route as AppDashboardSearchRouteImport } from './routes/_app/_dashboard/search'
@@ -68,11 +67,6 @@ const AppPageIdRoute = AppPageIdRouteImport.update({
   path: '/page/$id',
   getParentRoute: () => AppRoute,
 } as any)
-const AppDashboardWikisRoute = AppDashboardWikisRouteImport.update({
-  id: '/wikis',
-  path: '/wikis',
-  getParentRoute: () => AppDashboardRoute,
-} as any)
 const AppDashboardStarredRoute = AppDashboardStarredRouteImport.update({
   id: '/starred',
   path: '/starred',
@@ -117,7 +111,6 @@ export interface FileRoutesByFullPath {
   '/search': typeof AppDashboardSearchRoute
   '/shared-with-me': typeof AppDashboardSharedWithMeRoute
   '/starred': typeof AppDashboardStarredRoute
-  '/wikis': typeof AppDashboardWikisRoute
   '/page/$id': typeof AppPageIdRoute
 }
 export interface FileRoutesByTo {
@@ -132,7 +125,6 @@ export interface FileRoutesByTo {
   '/search': typeof AppDashboardSearchRoute
   '/shared-with-me': typeof AppDashboardSharedWithMeRoute
   '/starred': typeof AppDashboardStarredRoute
-  '/wikis': typeof AppDashboardWikisRoute
   '/page/$id': typeof AppPageIdRoute
 }
 export interface FileRoutesById {
@@ -151,7 +143,6 @@ export interface FileRoutesById {
   '/_app/_dashboard/search': typeof AppDashboardSearchRoute
   '/_app/_dashboard/shared-with-me': typeof AppDashboardSharedWithMeRoute
   '/_app/_dashboard/starred': typeof AppDashboardStarredRoute
-  '/_app/_dashboard/wikis': typeof AppDashboardWikisRoute
   '/_app/page/$id': typeof AppPageIdRoute
 }
 export interface FileRouteTypes {
@@ -168,7 +159,6 @@ export interface FileRouteTypes {
     | '/search'
     | '/shared-with-me'
     | '/starred'
-    | '/wikis'
     | '/page/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -183,7 +173,6 @@ export interface FileRouteTypes {
     | '/search'
     | '/shared-with-me'
     | '/starred'
-    | '/wikis'
     | '/page/$id'
   id:
     | '__root__'
@@ -201,7 +190,6 @@ export interface FileRouteTypes {
     | '/_app/_dashboard/search'
     | '/_app/_dashboard/shared-with-me'
     | '/_app/_dashboard/starred'
-    | '/_app/_dashboard/wikis'
     | '/_app/page/$id'
   fileRoutesById: FileRoutesById
 }
@@ -276,13 +264,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPageIdRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/_dashboard/wikis': {
-      id: '/_app/_dashboard/wikis'
-      path: '/wikis'
-      fullPath: '/wikis'
-      preLoaderRoute: typeof AppDashboardWikisRouteImport
-      parentRoute: typeof AppDashboardRoute
-    }
     '/_app/_dashboard/starred': {
       id: '/_app/_dashboard/starred'
       path: '/starred'
@@ -335,7 +316,6 @@ interface AppDashboardRouteChildren {
   AppDashboardSearchRoute: typeof AppDashboardSearchRoute
   AppDashboardSharedWithMeRoute: typeof AppDashboardSharedWithMeRoute
   AppDashboardStarredRoute: typeof AppDashboardStarredRoute
-  AppDashboardWikisRoute: typeof AppDashboardWikisRoute
 }
 
 const AppDashboardRouteChildren: AppDashboardRouteChildren = {
@@ -345,7 +325,6 @@ const AppDashboardRouteChildren: AppDashboardRouteChildren = {
   AppDashboardSearchRoute: AppDashboardSearchRoute,
   AppDashboardSharedWithMeRoute: AppDashboardSharedWithMeRoute,
   AppDashboardStarredRoute: AppDashboardStarredRoute,
-  AppDashboardWikisRoute: AppDashboardWikisRoute,
 }
 
 const AppDashboardRouteWithChildren = AppDashboardRoute._addFileChildren(

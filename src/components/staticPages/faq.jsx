@@ -9,9 +9,7 @@ export function FAQ() {
 
     return (
         <>
-            <div className="container container__max640">
-                <FulcrumFaq />
-            </div>
+            <FulcrumFaq />
             <style>{`
                 body {
                     overflow-y: auto;

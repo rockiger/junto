@@ -39,6 +39,8 @@ export type SortBy = "modifiedByMeTime" | "sharedWithMeTime" | "viewedByMeTime"
 
 export type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
 
+export type FileListTableMiddleColumn = 'reason-suggested' | 'date'
+
 export type FileListComponentProps = {
     emptyIcon?: MdiReactIconComponentType
     emptyMessage?: string
@@ -53,6 +55,8 @@ export type FileListComponentProps = {
     title?: string
     /** Full file tree for wiki/location labels; defaults to `files`. */
     locationLookupFiles?: IFile[]
+    /** Home/Archive: reason text; Search/Starred/Shared: formatted date column. */
+    tableMiddleColumn?: FileListTableMiddleColumn
 }
 
 function sortDisplayFiles(files: IFile[], sortBy: SortBy): IFile[] {
@@ -88,6 +92,7 @@ export default function FileListComponent({
     sortBy,
     title,
     locationLookupFiles,
+    tableMiddleColumn = 'reason-suggested',
 }: FileListComponentProps) {
     const headingTag = header ?? "h1"
     const isDesktop = useIsDesktop()
@@ -129,6 +134,7 @@ export default function FileListComponent({
                         locationLabelByFileId={locationLabelByFileId}
                         setSortBy={setSortBy}
                         sortBy={sortBy}
+                        tableMiddleColumn={tableMiddleColumn}
                         title={title}
                     />
                 )}
@@ -281,6 +287,7 @@ function FileListMobileView({
 type FileListDesktopViewProps = FileListHeaderProps & {
     displayFiles: IFile[]
     locationLabelByFileId: Map<string, string>
+    tableMiddleColumn: FileListTableMiddleColumn
 }
 
 function FileListDesktopView({
@@ -289,8 +296,16 @@ function FileListDesktopView({
     locationLabelByFileId,
     setSortBy,
     sortBy,
+    tableMiddleColumn,
     title,
 }: FileListDesktopViewProps) {
+    const middleColumnLabel =
+        tableMiddleColumn === 'reason-suggested'
+            ? 'Reason suggested'
+            : sortBy === 'viewedByMeTime'
+              ? 'Date opened'
+              : 'Date modified'
+
     return (
         <div className="w-full px-2">
             {(title || setSortBy) && (
@@ -317,9 +332,9 @@ function FileListDesktopView({
                     </Column>
                     <Column
                         className="px-3 py-2 text-left font-normal text-text-muted"
-                        id="reason"
+                        id="date"
                     >
-                        Reason suggested
+                        {middleColumnLabel}
                     </Column>
                     <Column
                         className="max-w-48 px-3 py-2 text-left font-normal text-text-muted"
@@ -362,7 +377,9 @@ function FileListDesktopView({
                                 </div>
                             </Cell>
                             <Cell className="border-b border-divider px-3 py-3 text-text-muted">
-                                {getReasonSuggestedCaption(sortBy, file)}
+                                {tableMiddleColumn === 'reason-suggested'
+                                    ? getReasonSuggestedCaption(sortBy, file)
+                                    : getDateColumnCaption(sortBy, file)}
                             </Cell>
                             <Cell className="max-w-48 border-b border-divider px-3 py-3 text-text-muted">
                                 <div className="flex min-w-0 items-center gap-2">
@@ -491,6 +508,14 @@ function formatReasonSuggestedDate(
         day: "numeric",
         month: "short",
     }).format(date)
+}
+
+function getDateColumnCaption(sortBy: SortBy, file: IFile): string {
+    const timeIso =
+        sortBy === 'viewedByMeTime'
+            ? file.viewedByMeTime
+            : file.modifiedByMeTime ?? file.modifiedTime
+    return formatFileModifiedCaption(timeIso)
 }
 
 function getReasonSuggestedCaption(sortBy: SortBy, file: IFile): string {

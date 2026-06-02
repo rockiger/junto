@@ -15,7 +15,7 @@ function SharedWithMe(props) {
     const [initialFiles] = useGlobal('initialFiles')
     const sharedFiles = useMemo(() => filterSharedWithMe(initialFiles), [initialFiles])
 
-    useEffect(() => PageView({ pathname: '/wikis' }), [])
+    useEffect(() => PageView({ pathname: '/shared-with-me' }), [])
 
     if (isSignedIn && !isSigningIn) {
         return (
@@ -25,7 +25,8 @@ function SharedWithMe(props) {
                 emptySubline="If you open wiki pages others shared with from Google Drive they will be shown here."
                 files={sharedFiles}
                 sortBy="sharedWithMeTime"
-                title="Shared With Me"
+                tableMiddleColumn="date"
+                title="Shared with me"
             />
         )
     } else if (!props.isSignedIn && props.isSigningIn) {

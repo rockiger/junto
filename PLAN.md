@@ -19,11 +19,14 @@
 -- [x] Search
 --- [x] Search Autocomplete
 --- [x] Results for search (Check if results are correct)
--- [] Starred
--- [] Shared
--- [] Archive
+-- [x] Starred
+-- [x] Shared
+-- [x] Archive
 -- [] Page-View
 -- [] Page-Edit
+-- [] FAQ repaired
+-- [] Static pages
+-- [] Front page
 ----------------------------------------------------------
 - [] Add react-compiler
 - [] Deploy to Hostinger

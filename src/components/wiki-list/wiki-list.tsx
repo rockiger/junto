@@ -55,10 +55,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }) {
                 (isDashboard ? (
                     <h2>You don't have any wikis in your Google Drive.</h2>
                 ) : (
-                    <EmptyPlaceholder
-                        icon={CheckboxMultipleBlankOutlineIcon}
-                        title="You don't have any archived wikis."
-                    />
+                    <h2>You don't have any archived wikis.</h2>
                 ))}
             {_.isEmpty(files) && isInitialFileListLoading && <Spinner />}
             {(isDashboard && myFulcrum) || wikis.length ? <GridList

@@ -20,6 +20,8 @@ export default FileList;
  * @property {SortBy | undefined} [sortBy]
  * @property {(sortBy: SortBy) => void} [setSortBy]
  * @property {string} [title]
+ * @property {'reason-suggested' | 'date'} [tableMiddleColumn]
+ * @property {import('reactn/default').IFile[]} [locationLookupFiles]
  */
 
 /**
@@ -34,6 +36,8 @@ function FileList({
 	sortBy,
 	setSortBy,
 	title,
+	tableMiddleColumn = "reason-suggested",
+	locationLookupFiles,
 }) {
 	const [isFileListLoading] = useGlobal("isFileListLoading");
 	const [isInitialFileListLoading] = useGlobal("isInitialFileListLoading");
@@ -55,7 +59,9 @@ function FileList({
 			searchTerm={searchTerm}
 			setSortBy={setSortBy}
 			sortBy={sortBy}
+			tableMiddleColumn={tableMiddleColumn}
 			title={title}
+			locationLookupFiles={locationLookupFiles}
 		/>
 	);
 }

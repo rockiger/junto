@@ -1,7 +1,6 @@
 import React from 'react'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 import ArchiveOutlineIcon from 'mdi-react/ArchiveOutlineIcon'
-import CheckboxMultipleBlankIcon from 'mdi-react/CheckboxMultipleBlankOutlineIcon'
 import StarIcon from 'mdi-react/StarOutlineIcon'
 
 import { isMobileDevice } from 'lib/helper'
@@ -39,14 +38,8 @@ const SidebarRenderer = props => {
                         className="mt-4"
                     />
                     <SidebarItem
-                        icon={CheckboxMultipleBlankIcon}
-                        name="Wikis"
-                        path="/wikis"
-                        tooltip="All wikis you can access"
-                    />
-                    <SidebarItem
                         icon={AccountMultipleOutlineIcon}
-                        name="Shared With Me"
+                        name="Shared with me"
                         path="/shared-with-me"
                         tooltip="Pages shared with me"
                     />

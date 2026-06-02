@@ -53,6 +53,7 @@ function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigni
                 files={starredFiles}
                 sortBy={sortBy as SortBy}
                 setSortBy={setSortByAndLocalStorage}
+                tableMiddleColumn="date"
             />
         )
     } else if (!isSignedIn && isSigningIn) {

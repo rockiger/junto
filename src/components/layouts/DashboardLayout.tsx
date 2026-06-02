@@ -14,9 +14,17 @@ import PlusIcon from 'mdi-react/PlusIcon'
 const DASHBOARD_HEADLINE = 'Welcome to Fulcrum Wiki'
 const SEARCH_HEADLINE = 'Search results'
 
+/** Headlines for overview routes — must match SidebarItem `name` values. */
+const SECTION_HEADLINES: Record<string, string> = {
+    '/archive': 'Archive',
+    '/shared-with-me': 'Shared with me',
+    '/starred': 'Starred',
+}
+
 export default function DashboardLayout() {
     const pathname = useRouterState({ select: (s) => s.location.pathname })
     const isSearchPage = pathname === '/search'
+    const sectionHeadline = SECTION_HEADLINES[pathname]
     const [isSignedIn] = useGlobal('isSignedIn')
     const clearSearch = useDispatch('clearSearchComplete')
     const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
@@ -91,6 +99,10 @@ export default function DashboardLayout() {
                 {isSearchPage ? (
                     <h1 className="m-0 text-left text-2xl font-medium text-text-muted">
                         {SEARCH_HEADLINE}
+                    </h1>
+                ) : sectionHeadline ? (
+                    <h1 className="m-0 text-left text-2xl font-medium text-text-muted">
+                        {sectionHeadline}
                     </h1>
                 ) : (
                     <h1 className="dashboard-headline font-medium text-2xl text-text-muted">

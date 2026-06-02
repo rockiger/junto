@@ -74,6 +74,7 @@ export default function SearchResultsPage({ query }: SearchResultsPageProps) {
                     searchTerm={trimmedQuery}
                     setSortBy={setSortBy}
                     sortBy={sortBy}
+                    tableMiddleColumn="date"
                 />
             )}
         </div>
