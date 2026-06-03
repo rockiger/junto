@@ -5,7 +5,6 @@ export const useStyles = makeStyles(theme => {
         breadcrumbsBar: {
             height: 37,
             position: 'relative',
-            borderTop: `1px solid ${theme.palette.grey['A100']}`,
         },
         breadcrumbs: {
             margin: 0,

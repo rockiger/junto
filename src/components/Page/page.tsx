@@ -10,6 +10,7 @@ import {
 } from '@tanstack/react-router'
 import Editor from 'components/Editor'
 import { FlexInput } from 'components/FlexInput'
+import { BreadcrumbsBar } from 'components/Page/Breadcrumbs'
 import IconButton from 'components/gsuite-components/icon-button'
 import Spinner from 'components/gsuite-components/spinner'
 import { PageView } from 'components/Tracking'
@@ -34,6 +35,7 @@ import {
 } from 'react'
 import { getGlobal, setGlobal, useGlobal } from 'reactn'
 import type { IFile } from 'reactn/default'
+import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 
 // biome-ignore lint/suspicious/noExplicitAny: `Editor` is a JS `forwardRef` without exported props
 const EditorWithFileProps = Editor as any
@@ -72,6 +74,8 @@ export default function Page({
     const editorRef = useRef<{ focus?: () => void } | null>(null)
     const inputRef = useRef<HTMLInputElement | null>(null)
     const prevParamsIdRef = useRef<string | null>(null)
+
+    const isMobile = !useIsDesktop()
 
     const onBack = () => {
         if (router.history.canGoBack()) {
@@ -307,7 +311,7 @@ export default function Page({
         })
         return (
             <>
-                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-surface-container px-2 md:px-3 lg:bg-white">
+                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-surface-container px-2 md:px-3 lg:bg-white lg:sticky lg:top-0 lg:z-10">
                     <IconButton className='lg:hidden!' ariaLabel="Back" onClick={onBack}>
                         <ArrowLeftIcon aria-hidden />
                     </IconButton>
@@ -321,20 +325,33 @@ export default function Page({
                                         <LockOutlineIcon size=".75em" />
                                     </div>
                                 ) : (
-                                    <FlexInputField
-                                        id="editorInput"
-                                        className="translate-y-0.5"
-                                        onBlur={onBlurInput}
-                                        value={pageHead !== 'Untitled page'
-                                            ? pageHead
-                                            : ''}
-                                        placeholder="Untitled page"
-                                        ref={inputRef}
-                                        onKeyDown={onKeyDownInput}
-                                        onChange={onChangeInput} />
-                                ))}
-                            {/* <BreadcrumbsBar fileId={fileId}>
-                                    </BreadcrumbsBar> */}
+                                    isMobile ? (
+                                        <FlexInputField
+                                            id="editorInput"
+                                            className="translate-y-0.5"
+                                            onBlur={onBlurInput}
+                                            value={pageHead !== 'Untitled page'
+                                                ? pageHead
+                                                : ''}
+                                            placeholder="Untitled page"
+                                            ref={inputRef}
+                                            onKeyDown={onKeyDownInput}
+                                            onChange={onChangeInput} />
+                                    ) : (
+                                        <BreadcrumbsBar fileId={fileId}>
+                                            <FlexInputField
+                                                id="editorInput"
+                                                className="border border-transparent translate-y-0.5 text-xl text-text-muted hover:border-edge-strong"
+                                                onBlur={onBlurInput}
+                                                value={pageHead !== 'Untitled page'
+                                                    ? pageHead
+                                                    : ''}
+                                                placeholder="Untitled page"
+                                                ref={inputRef}
+                                                onKeyDown={onKeyDownInput}
+                                                onChange={onChangeInput} />
+                                        </BreadcrumbsBar>
+                                    )))}
                             {!canEdit && (
                                 <div
                                     style={{

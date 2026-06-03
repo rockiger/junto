@@ -22,11 +22,12 @@
 -- [x] Starred
 -- [x] Shared
 -- [x] Archive
--- [] Page-View
--- [] Page-Edit
--- [] FAQ repaired
--- [] Static pages
--- [] Front page
+-- [x] Page-View
+--- [] Relead-Site warning
+-- [x] Page-Edit
+-- [x] FAQ repaired
+-- [x] Static pages
+-- [x] Front page
 ----------------------------------------------------------
 - [] Add react-compiler
 - [] Deploy to Hostinger

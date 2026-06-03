@@ -29,11 +29,6 @@ export const FlexInputComponent = React.forwardRef((props, ref) => {
 					value={value}
 				/>
 			</div>
-			<style>{`
-                .flexInput:hover {
-                    border-color: #dadce0;
-                }
-            `}</style>
 		</>
 	);
 });

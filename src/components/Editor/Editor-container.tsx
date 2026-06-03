@@ -231,15 +231,13 @@ const EditorLogic = React.forwardRef(
                         overflowY: 'auto',
                     }}
                 />
-                <Beforeunload
-                    onBeforeunload={async () => {
-                        if (
-                            editorRef.current?.state.readOnly
-                        ) {
+                {!readOnly && (
+                    <Beforeunload
+                        onBeforeunload={async () => {
                             await saveToDriveAndLocalDB(fileId, initialValue)
-                        }
-                    }}
-                />
+                        }}
+                    />
+                )}
             </div>
         )
     }
