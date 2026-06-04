@@ -23,8 +23,6 @@ export const SCOPES = isPro
 	? "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.install https://www.googleapis.com/auth/drive.appdata"
 	: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.install https://www.googleapis.com/auth/drive.appdata";
 
-console.log({ isPro, CLIENT_ID, API_KEY, SCOPES });
-
 export const EXT = ".gwiki";
 export const EXTLENGTH = EXT.length;
 export const FOLDER_NAME = "Fulcrum Documents";

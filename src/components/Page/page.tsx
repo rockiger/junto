@@ -319,7 +319,7 @@ export default function Page({
                         <h1 className="flex items-center text-2xl font-semibold overflow-clip text-ellipsis max-w-[calc(100vw-200px)]">
                             {canEdit &&
                                 (fileName === OVERVIEW_NAME ? (
-                                    <div className='flex items-baseline text-text-muted'
+                                    <div className='flex font-normal items-baseline px-1.5 py-4 text-xl leading-none text-text-muted'
                                     >
                                         {pageHead}
                                         <LockOutlineIcon size=".75em" />

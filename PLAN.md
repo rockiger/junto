@@ -30,11 +30,16 @@
 -- [x] Front page
 ----------------------------------------------------------
 - [x] Add react-compiler
-- [] Deploy to Hostinger
+- [x] Deploy to Hostinger
 ----------------------------------------------------------
 ----------------------------------------------------------
+- [] Make webfonts for Metropolis
+- [] Optimize sidebar-wikitree behavior
+- [] Optimize update behavior
+- [] Remove MUI and use React-Aria components
 - [] Repair Hints
 - [] Repair Tests
+----------------------------------------------------------
 - [] Migrate to markdown-it backend
 - [] Migrate to React-Lexical
 - [] List Markdown-it Wiki files from Google Drive
@@ -42,15 +47,6 @@
 - [] Show file in React-Lexical
 - [] Use UI from DaisyUI
 - [] Build Sidebar to reflect Wiki structure
-- [] Build Editor to edit Wiki files
-- [] Build Toolbar to edit Wiki files
-- [] Build Preview to preview Wiki files
-- [] Build Footer to show Wiki files
-- [] Build Header to show Wiki files
-- [] Build Main to show Wiki files
-- [] Build Sidebar to show Wiki files
-- [] Build Sidebar to show Wiki files
-- [] Make webfonts for Metropolis
 - [] Convert .gwiki files to .md to use legacy files
 - [] Deploy to Hostinger
 - [] Details summary merken
