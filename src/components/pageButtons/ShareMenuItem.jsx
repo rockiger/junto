@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import AccountPlusIcon from 'mdi-react/AccountPlusOutlineIcon'
 
-export function ShareMenuItem({ fileId }) {
+export function useShareMenuItem({ fileId }) {
     useEffect(() => {
         gapi.load('drive-share', () => initPicker(fileId))
     }, [fileId])
@@ -14,6 +14,10 @@ export function ShareMenuItem({ fileId }) {
         },
         icon: AccountPlusIcon,
     }
+}
+
+export function ShareMenuItem(props) {
+    return useShareMenuItem(props)
 }
 
 function initPicker(fileId) {

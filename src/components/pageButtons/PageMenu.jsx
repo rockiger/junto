@@ -1,17 +1,17 @@
 import React from 'react'
 import DotsVerticalIcon from 'mdi-react/DotsVerticalIcon'
 
-import { ArchiveMenuEntry } from 'components/archive/archive-menu-entry' //! rename
+import { useArchiveMenuEntry } from 'components/archive/archive-menu-entry' //! rename
 import { ButtonMenu } from 'components/ButtonMenu'
-import { History as HistoryItem } from 'components/history/history'
-import { ShareMenuItem } from './ShareMenuItem'
+import { useHistoryMenu } from 'components/history/history'
+import { useShareMenuItem } from './ShareMenuItem'
 
 export function PageMenu({ fileId }) {
-    const archiveMenuEntry = ArchiveMenuEntry({ fileId })
+    const archiveMenuEntry = useArchiveMenuEntry({ fileId })
     const { ArchiveAlert } = archiveMenuEntry
-    const historyItem = HistoryItem({ fileId })
+    const historyItem = useHistoryMenu({ fileId })
     const { HistoryModal } = historyItem
-    const shareButton = ShareMenuItem({ fileId })
+    const shareButton = useShareMenuItem({ fileId })
     return (
         <ButtonMenu
             items={[

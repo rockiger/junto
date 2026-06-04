@@ -5,9 +5,7 @@ import { Modal, Spinner } from 'components/gsuite-components'
 
 const HistoryDialog = React.lazy(() => import('./history-dialog'))
 
-export { History }
-
-export default function History({ fileId, loadEditorContent }) {
+export function useHistoryMenu({ fileId, loadEditorContent }) {
     const [isOpen, setIsOpen] = useState(false)
 
     const HistoryModal = isOpen
@@ -44,4 +42,8 @@ export default function History({ fileId, loadEditorContent }) {
     function toggle() {
         setIsOpen(!isOpen)
     }
+}
+
+export default function History(props) {
+    return useHistoryMenu(props)
 }

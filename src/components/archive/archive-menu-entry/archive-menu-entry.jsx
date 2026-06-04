@@ -28,10 +28,9 @@ export { ArchiveMenuEntry }
  */
 
 /**
- * A archive-button component.
  * @param {ArchiveButtonProps} props
  */
-function ArchiveMenuEntry({ fileId }) {
+export function useArchiveMenuEntry({ fileId }) {
     const [global] = useGlobal()
     const [, setFiles] = useGlobal('files')
     const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
@@ -226,6 +225,14 @@ function ArchiveMenuEntry({ fileId }) {
     function onClose() {
         setAlert(initialAlert)
     }
+}
+
+/**
+ * A archive-button component.
+ * @param {ArchiveButtonProps} props
+ */
+function ArchiveMenuEntry(props) {
+    return useArchiveMenuEntry(props)
 }
 
 // Warning if has child pages
