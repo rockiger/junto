@@ -3,7 +3,8 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -41,6 +42,9 @@ export default defineConfig(() => {
 			}),
 			tailwindcss(),
 			react(),
+			babel({
+				presets: [reactCompilerPreset({ target: "18" })],
+			}),
 		],
 	};
 });

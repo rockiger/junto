@@ -23,9 +23,19 @@
         "noUncheckedSideEffectImports": true,
 
         "allowJs": true,
+        "types": ["vite/client"],
         "paths": {
             "*": ["./src/*"]
         }
     },
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.test.jsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "src/stories/**",
+        "src/**/*.bak/**"
+    ]
 }

@@ -76,8 +76,8 @@ const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
     })
 }
 
-function filterIsNotArchived(files) {
-    const filtered = files.filter(file => {
+function filterIsNotArchived(files: IFile[]) {
+    const filtered = files.filter((file: IFile) => {
         return !isArchived(file)
     })
     return filtered

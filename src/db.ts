@@ -1,5 +1,5 @@
 import { getGlobal, setGlobal } from 'reactn'
-import { SimpleMap } from 'reactn/default'
+import { IFile, SimpleMap } from 'reactn/default'
 
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import {
@@ -24,19 +24,29 @@ export const backgroundUpdateFiles = async () => {
             backgroundUpdate: false,
             initialFiles,
         })
-    } catch (err) {
-        const body = JSON.parse(err.body)
-        const { error } = body
-        if (error.message === 'Invalid Credentials') {
+    } catch (err: unknown) {
+        const apiErr = err as { body?: string; message?: string }
+        const body =
+            typeof apiErr.body === 'string'
+                ? (JSON.parse(apiErr.body) as {
+                      error?: { message?: string }
+                  })
+                : null
+        const error = body?.error
+        if (error?.message === 'Invalid Credentials') {
             try {
                 await refreshSession()
                 backgroundUpdateFiles()
-            } catch (err) {
-                alert(`Couldn't refresh session: ${err.message}`)
-                console.log({ err })
+            } catch (refreshErr: unknown) {
+                const message =
+                    refreshErr instanceof Error
+                        ? refreshErr.message
+                        : String(refreshErr)
+                alert(`Couldn't refresh session: ${message}`)
+                console.log({ err: refreshErr })
             }
         } else {
-            alert(`Couldn't update files ${err}`)
+            alert(`Couldn't update files ${String(err)}`)
             console.log({ error })
         }
     }
@@ -95,17 +105,24 @@ export const createFile = async (
  * @return {string} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export const createNewWiki = async opts => {
+export const createNewWiki = async (opts: {
+    name?: string
+    parentId?: string | null
+    supportsAllDrives?: boolean
+    description?: string
+    isWikiRoot?: boolean
+}) => {
     try {
         const result = await createNewWikiBase(opts)
         console.log({ newWikiResult: result })
         const { initialFiles } = getGlobal()
         // Unlike create new file we don't need to reset the isCreatingNewFile
         // propery, because there should always be a new file created.
+        const file = result as IFile
         setGlobal({
-            initialFiles: [...initialFiles, result],
+            initialFiles: [...initialFiles, file],
         })
-        return result.id
+        return file.id
     } catch (err) {
         setGlobal({ isCreatingNewFile: false })
         console.log(err)

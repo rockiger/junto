@@ -1,10 +1,10 @@
-import _ from 'lodash'
+import _ from 'lib/helper/globals'
 import { useEffect, useGlobal, useState } from 'reactn'
 import { IFile, IFileOrNull } from 'reactn/default'
 
 import { getChildren, getMetaById, getParents } from './Breadcrumbs-helper'
 
-export const useBreadcrumbs = (fileId) => {
+export const useBreadcrumbs = (fileId: string) => {
   const [files] = useGlobal('initialFiles')
   const [childPages, setChildren] = useState<IFile[]>([])
   const [file, setFile] = useState<IFileOrNull>(null)
@@ -20,7 +20,7 @@ export const useBreadcrumbs = (fileId) => {
       if (file && files.length > 0) {
           _.thread(file,
             [getParents, files],
-            [_.map, el => ({
+            [_.map, (el: IFile) => ({
                 file: el,
                 children: getChildren(el, files)
               })],

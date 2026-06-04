@@ -23,17 +23,18 @@
 -- [x] Shared
 -- [x] Archive
 -- [x] Page-View
---- [] Relead-Site warning
+--- [x] Releod-Site warning
 -- [x] Page-Edit
 -- [x] FAQ repaired
 -- [x] Static pages
 -- [x] Front page
 ----------------------------------------------------------
-- [] Add react-compiler
+- [x] Add react-compiler
 - [] Deploy to Hostinger
 ----------------------------------------------------------
 ----------------------------------------------------------
 - [] Repair Hints
+- [] Repair Tests
 - [] Migrate to markdown-it backend
 - [] Migrate to React-Lexical
 - [] List Markdown-it Wiki files from Google Drive

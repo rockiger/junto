@@ -13,7 +13,7 @@ import { putPage } from 'lib/localDB'
  * @return {any[]}
  */
 export function convertFilesToAutocompletItems(files) {
-    if (files && files.map) {
+    if (Array.isArray(files)) {
         const items = files
             .filter(file => {
                 const ext = getExtFromFileName(file.name)
@@ -34,8 +34,8 @@ export function convertFilesToAutocompletItems(files) {
 
 /**
  *
- * @param {object} initialValue
- * @param {object} localStorageId
+ * @param {string} initialValue
+ * @param {string} localStorageId
  * @returns {void}
  */
 export function initStorage(initialValue, localStorageId) {
@@ -47,7 +47,7 @@ export function initStorage(initialValue, localStorageId) {
  * Saves the content of the file if neccessary
  *
  * @param {string} fileId
- * @param {object} initialValue
+ * @param {string} initialValue
  *
  * @return a filedescription with the minium of id and modifiedTime
  */
@@ -56,9 +56,7 @@ export async function save(fileId, initialValue) {
     const newValue = localStorage.getItem(fileId) || ''
     if (initialValue === newValue) {
         console.log('SAME SAME')
-        return new Promise((resolve, reject) =>
-            resolve({ modifiedTime: undefined })
-        )
+        return Promise.resolve({ modifiedTime: undefined })
     }
 
     try {
@@ -72,9 +70,15 @@ export async function save(fileId, initialValue) {
         console.log('save:', fileId)
         return fileDescription
     } catch (err) {
+        const apiErr =
+            err && typeof err === 'object'
+                ? /** @type {{ status?: number, result?: { error?: { message?: string } } }} */ (
+                      err
+                  )
+                : null
         if (
-            err.status === 401 &&
-            err.result?.error?.message === 'Invalid Credentials'
+            apiErr?.status === 401 &&
+            apiErr.result?.error?.message === 'Invalid Credentials'
         ) {
             try {
                 await reloadAuthResponse()
@@ -119,6 +123,24 @@ export async function save(fileId, initialValue) {
     }
 }
 
+/** @param {import('reactn/default').IFile[]} items @param {string} id @param {Record<string, unknown>} change */
+const updateModifiedTimeItem = (items, id, change) =>
+    items.map(item => {
+        if (item.id === id) {
+            return { ...item, ...change }
+        } else {
+            return item
+        }
+    })
+
+/**
+ * @param {string} id
+ * @param {string} modifiedByMeTime
+ * @param {import('reactn/default').IFile[]} files
+ * @param {function} setFiles
+ * @param {import('reactn/default').IFile[]} initialFiles
+ * @param {function} setInitialFiles
+ */
 export const updateModifiedTimeInGlobalState = (
     id,
     modifiedByMeTime,
@@ -136,12 +158,3 @@ export const updateModifiedTimeInGlobalState = (
     setFiles(newFiles)
     setInitialFiles(newInitialFiles)
 }
-
-const updateModifiedTimeItem = (items, id, change) =>
-    items.map(item => {
-        if (item.id === id) {
-            return { ...item, ...change }
-        } else {
-            return item
-        }
-    })

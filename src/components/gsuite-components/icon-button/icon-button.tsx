@@ -1,11 +1,11 @@
-import React, { ReactElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import clsx from 'clsx'
 import { Tooltip } from 'components/gsuite-components/tooltip'
 import s from './icon-button.module.scss'
 
 interface Props {
     ariaLabel?: string
-    children: ReactElement
+    children: ReactNode
     className?: string
     id?: string
     onClick?: any

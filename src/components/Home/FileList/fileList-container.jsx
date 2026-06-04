@@ -1,4 +1,5 @@
 // @ts-check
+import _ from "lib/helper/globals";
 import { useGlobal } from "reactn";
 
 import FileListComponent from "./fileList-component";
@@ -7,6 +8,8 @@ export { FileList };
 export default FileList;
 
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
+
+/** @typedef {import('mdi-react').MdiReactIconComponentType} MdiReactIconComponentType */
 
 /**
  * @typedef FileListProps
@@ -58,7 +61,7 @@ function FileList({
 			isLoading={isLoading}
 			searchTerm={searchTerm}
 			setSortBy={setSortBy}
-			sortBy={sortBy}
+			sortBy={sortBy ?? 'modifiedByMeTime'}
 			tableMiddleColumn={tableMiddleColumn}
 			title={title}
 			locationLookupFiles={locationLookupFiles}

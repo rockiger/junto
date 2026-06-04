@@ -165,10 +165,8 @@ export function listRevisions(fileId) {
  * Creates file with name and a parentId.
  *
  * @method createFile
- * @param {String} name Name of the new file on Google Drive
- * @param {String} parentId Id of the parent where the file should be
- * 							created, needs to be a folder
- * @return {String} An id of the created file
+ * @param {{ name: string, parentId: string, supportsAllDrives?: boolean, pageName?: string }} params
+ * @return {Promise<string>} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export async function createFile({
@@ -465,7 +463,7 @@ export function updateMetadata(driveId, metadata) {
  * @method moveFile
  * @param {String} driveId id of the file to move
  * @param {String} sourceId id of the current parent folder
- * @param {object} targetId id of the new parent folder
+ * @param {String} targetId id of the new parent folder
  * @return {Promise|Object} A promise of the result that returns
  * a file description: {driveId, driveVersion, name, ifid}
  */

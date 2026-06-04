@@ -1,6 +1,4 @@
-// @ts-nocheck
 //@ts-check
-import React from 'react'
 import { Navigate, useLocation } from '@tanstack/react-router'
 
 export const Drive = () => {
@@ -10,12 +8,7 @@ export const Drive = () => {
     return <Navigate to={path} replace />
 }
 
-/**
- *
- * @param {string} search
- * @returns {string}
- */
-export const createPath = search => {
+export function createPath(search: string): string {
     const urlParams = new URLSearchParams(search)
     const stateString = urlParams.get('state')
 

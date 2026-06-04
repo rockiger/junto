@@ -1,13 +1,40 @@
 import 'reactn'
 import { HintMap } from 'components/gsuite-components/hint'
 
-/** Google API client (loaded at runtime). */
-declare const gapi: {
-    load: ( module: string, callback?: () => void ) => void
+declare module '*.css' {
+    const classes: { readonly [key: string]: string }
+    export default classes
 }
 
-interface Window {
-    gapi?: typeof gapi
+declare module '*.scss' {
+    const classes: { readonly [key: string]: string }
+    export default classes
+}
+
+declare module '*.module.css' {
+    const classes: { readonly [key: string]: string }
+    export default classes
+}
+
+declare module 'mdi-react' {
+    import type { FC, SVGProps } from 'react'
+    export type MdiReactIconComponentType = FC<
+        SVGProps<SVGSVGElement> & { size?: number | string }
+    >
+}
+
+declare module 'mdi-react/*' {
+    import type { MdiReactIconComponentType } from 'mdi-react'
+    const Icon: MdiReactIconComponentType
+    export default Icon
+}
+
+declare module 'lodash' {
+    interface LoDashStatic {
+        isNotEmpty: (col: unknown) => boolean
+        thread: (initialValue: unknown, ...forms: unknown[]) => unknown
+        trace: <T>(x: T) => T
+    }
 }
 
 declare module 'react-tooltip-lite' {

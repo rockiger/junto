@@ -1,5 +1,5 @@
 //@ts-check
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { ButtonMenuComponent } from './ButtonMenu-component'
 
@@ -7,7 +7,7 @@ import { ButtonMenuComponent } from './ButtonMenu-component'
  * @typedef {object} Props
  * @prop {'IconButton' | 'LinkButton'} [buttonType]
  * @prop {any} children
- * @prop {array} items
+ * @prop {Array<*>} items
  * @prop {'center' | 'left' | 'right'} [position]
  * @prop {boolean} [selectable]
  * @prop {string} [tooltip]
@@ -25,8 +25,9 @@ export function ButtonMenu({
     selectable,
     tooltip,
 }) {
-    const [anchorEl, setAnchorEl] = useState(null)
+    const [anchorEl, setAnchorEl] = useState(/** @type {HTMLElement | null} */ (null))
 
+    /** @param {import('react').MouseEvent<HTMLElement>} event */
     const onClick = event => {
         setAnchorEl(event.currentTarget)
     }

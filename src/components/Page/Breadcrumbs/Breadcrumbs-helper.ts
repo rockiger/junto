@@ -70,7 +70,9 @@ function isPersonalRoot(folder: IFile) {
 
 export function getChildren(parent: IFile, files: IFile[]) {
     const folderId = getParentFolderId(parent, files)
-    return filterChildFiles(folderId,files).filter(el => shouldFileDisplay(el, folderId))
+    return filterChildFiles(folderId, files).filter((el: IFile) =>
+        shouldFileDisplay(el, folderId),
+    )
 }
 
 /**
@@ -80,11 +82,11 @@ export function getChildren(parent: IFile, files: IFile[]) {
  * @param {any[]} files
  * @returns {string | null}
  */
-export function getParentFolderId(file, files) {
+export function getParentFolderId(file: IFile, files: IFile[]) {
     if (file.name === "_myDrive_overview_please_do_not_touch.gwiki") {
         return file.parents[0] ?? ''
     } else {
-        const folder = files.find(el => el.name === file.id)
+        const folder = files.find((el: IFile) => el.name === file.id)
     if (folder) {
         return folder.id
     }
@@ -99,9 +101,9 @@ export function getParentFolderId(file, files) {
  * @param {any[]} files
  * @returns {any[]}
  */
-export function filterChildFiles(folderId, files) {
+export function filterChildFiles(folderId: string, files: IFile[]) {
     if (folderId)
-        return files.filter(file => {
+        return files.filter((file: IFile) => {
             try {
                 return file.parents && file.parents.includes(folderId)
             } catch (err) {
@@ -118,7 +120,7 @@ export function filterChildFiles(folderId, files) {
  * @param {object} file
  * @param {string} parentId
  */
-export function shouldFileDisplay(file, parentId) {
+export function shouldFileDisplay(file: IFile, parentId: string) {
     const { mimeType, name, parents, trashed } = file
     return (
         mimeType === 'application/json' &&
@@ -131,8 +133,8 @@ export function shouldFileDisplay(file, parentId) {
     )
 }
 
-export function sortFilesByName(files) {
-    return files.sort((a, b) => {
+export function sortFilesByName(files: IFile[]) {
+    return files.sort((a: IFile, b: IFile) => {
         if (a.name < b.name) {
             return -1
         }

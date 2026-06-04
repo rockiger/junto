@@ -112,7 +112,7 @@ export function filterChildFiles(folderId, files) {
 
 /**
  *
- * @param {object} file
+ * @param {import('reactn/default').IFile} file
  * @param {string} parentId
  */
 export function shouldFileDisplay(file, parentId) {
@@ -128,6 +128,7 @@ export function shouldFileDisplay(file, parentId) {
     )
 }
 
+/** @param {import('reactn/default').IFile[]} files */
 export function sortFilesByName(files) {
     return [...files].sort((a, b) => {
         if (a.name < b.name) {

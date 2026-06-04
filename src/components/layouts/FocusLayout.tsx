@@ -8,8 +8,6 @@ import type { ReactNode } from 'react'
 import { useDispatch, useGlobal } from 'reactn'
 import logo from '../../static/logo_48.svg'
 
-const PAGE_HEADLINE = 'Wiki Page'
-
 type FocusLayoutProps = {
     children: ReactNode
 }

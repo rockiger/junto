@@ -1,11 +1,11 @@
-import React, { useGlobal } from 'reactn'
+import { useGlobal } from 'reactn'
 import clsx from 'clsx'
 
 import SidebarContent from 'components/Sidebar'
 
 import styles from './sidebar.module.scss'
 
-export default function Sidebar(props: any) {
+export default function Sidebar() {
     const [showSidebarOnMobile, setShowSidebarOnMobile] = useGlobal(
         'showSidebarOnMobile'
     )

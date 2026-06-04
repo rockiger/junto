@@ -1,6 +1,5 @@
-import { updateFile } from 'lib/gdrive'
 import _ from 'lib/helper/globals'
-import React, { useGlobal } from 'reactn'
+import React from 'react'
 import s from './hint.module.scss'
 
 export interface HintData {
@@ -50,30 +49,7 @@ interface Props {
     scope: string
 }
 
-export const Hint = ({ children, id, scope }: Props) => {
-    const [hints, setHints] = useGlobal('hints')
-    const [hintCounter, setHintCounter] = useGlobal('hintCounter')
-    const [hintsFileId] = useGlobal('hintsFileId')
-    const [_isOpen, setIsOpen] = React.useState(false)
-    const _show = showHint(id, hints[scope], hintCounter)
-    let hint
-    try {
-        hint = hints[scope][id]
-        if (!hint) throw new Error('Hint is undefined')
-    } catch (_e) {
-        hint = emptyHint()
-    }
-    const { message, title } = hint
-
-    const _onClickIconButton = () => {
-        setIsOpen(false)
-        // a bit complicated. It needs to change the nested hint in scope
-        const newHints = makeHintRead(hints, id, scope)
-        setHints(newHints)
-        setHintCounter(hintCounter + 1)
-        // write changes to config in gdrive
-        updateFile(hintsFileId, hintMap2HintMapAppConfig(newHints), false)
-    }
+export const Hint = ({ children }: Props) => {
     return (
         <div className={s.hint__wrapper_outer}>
             {children}
@@ -176,7 +152,7 @@ export const Hint = ({ children, id, scope }: Props) => {
     )
 }
 
-const emptyHint = (): HintData => ({
+export const emptyHint = (): HintData => ({
     message: '',
     rank: -1,
     title: '',

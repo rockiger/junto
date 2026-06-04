@@ -1,6 +1,5 @@
-// @ts-nocheck
 //@ts-check
-import React, { useEffect, useGlobal, useRef } from 'reactn'
+import { useEffect, useGlobal, useRef } from 'reactn'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 
 import { createFile, createNewWiki } from 'db'
@@ -9,35 +8,39 @@ import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
 
 import { CreateNewWikiModal } from './CreateNewWikiModal'
 
-export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
+interface CreateNewWikiProps {
+    isSignedIn: boolean
+    isSigningIn: boolean
+}
+
+type WikiModalHandle = {
+    show: () => Promise<{ description?: string; name: string }>
+}
+
+export const CreateNewWiki = ({ isSignedIn, isSigningIn }: CreateNewWikiProps) => {
     const [, setBackgroundUpdate] = useGlobal('backgroundUpdate')
     const [isCreatingNewFile, setIsCreatingNewFile] = useGlobal(
-        //@ts-ignore
-        'isCreatingNewFile'
+        'isCreatingNewFile',
     )
 
     const navigate = useNavigate()
-    const modalRef = useRef(null)
+    const modalRef = useRef<WikiModalHandle | null>(null)
 
     const { searchStr } = useLocation()
     const state = getState(searchStr)
-    //@ts-ignore
-    const { folderId } = state
+    const folderId = state?.folderId ?? ''
 
     useEffect(() => {
-        // Create an scoped async function in the hook
-        async function anyNameFunction(state) {
+        async function createWikiFlow() {
             try {
                 if (isSignedIn) {
                     console.log({ folderId })
                     const modal = modalRef.current
+                    if (!modal) return
                     try {
-                        // Wait for user input
                         const result = await modal.show()
                         console.log({ result })
                         const { description = '', name } = result
-                        // Create wiki folder with extra meta data and overview file
-                        // Show spinner
                         setIsCreatingNewFile(true)
                         const newRootFolderId = await createNewWiki({
                             name,
@@ -45,12 +48,14 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                             supportsAllDrives: true,
                             description,
                         })
+                        if (!newRootFolderId) return
                         const newFileId = await createFile(
                             OVERVIEW_NAME,
                             newRootFolderId,
                             OVERVIEW_VALUE,
-                            name
+                            name,
                         )
+                        if (!newFileId) return
                         navigate({
                             to: '/page/$id',
                             params: { id: newFileId },
@@ -65,7 +70,7 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                 console.log(err)
             }
         }
-        anyNameFunction(state)
+        void createWikiFlow()
     }, [
         folderId,
         navigate,
@@ -81,46 +86,28 @@ export const CreateNewWiki = ({ isSignedIn, isSigningIn }) => {
                 <Spinner />
             </div>
         )
-    } else {
-        return (
-            <>
-                <h1 style={{ padding: '.5rem' }}>Creating your Wiki ...</h1>
-                <CreateNewWikiModal ref={modalRef} />
-            </>
-        )
     }
+    return (
+        <>
+            <h1 style={{ padding: '.5rem' }}>Creating your Wiki ...</h1>
+            {/* @ts-expect-error modal ref typing */}
+            <CreateNewWikiModal ref={modalRef} />
+        </>
+    )
 }
 
-/**
- *
- * @param {string} search
- * @returns { {folderId: string, action: string, userId: string } | null}
- */
-export const getState = search => {
+export const getState = (
+    search: string,
+): { folderId: string; action: string; userId: string } | null => {
     const urlParams = new URLSearchParams(search)
-
     const stateString = urlParams.get('state')
 
     if (stateString && typeof stateString === 'string') {
-        const state = JSON.parse(stateString)
-        return state
+        return JSON.parse(stateString) as {
+            folderId: string
+            action: string
+            userId: string
+        }
     }
     return null
 }
-
-/**
- *
- * Metadata für the returned folderId can't be retrieved
- * But a folder can be created 
- * 
- * 
-var fileMetadata = {
-        name: 'Test',
-        mimeType: 'application/vnd.google-apps.folder',
-}
-fileMetadata.parent = ['0AG0tMzmAeEIiUk9PVA']
- 
-const result = await gapi.client.drive.files.create({
-            resource: fileMetadata,
-})
- */

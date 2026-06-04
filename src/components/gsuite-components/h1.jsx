@@ -1,9 +1,9 @@
 //@ts-check
-import React from 'react'
 import clsx from 'clsx'
 
 export { H1 }
 
+/** @param {{ children?: import('react').ReactNode, className?: string }} props */
 export default function H1({ children, ...restProps }) {
     return (
         <>

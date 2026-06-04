@@ -18,7 +18,7 @@ export const Footer = () => {
 	);
 };
 
-export const FooterLink = ({ children, title, to, className }) => {
+export const FooterLink = ({ children, title, to, className = '' }) => {
 	return (
 		<a className={clsx("footer__link col", className)} href={to} title={title}>
 			{children}

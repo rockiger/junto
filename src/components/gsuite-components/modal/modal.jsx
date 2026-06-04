@@ -1,5 +1,4 @@
 //@ts-check
-import React from 'react'
 import ReactModal from 'react-modal'
 import clsx from 'clsx'
 import CloseIcon from 'mdi-react/CloseIcon'
@@ -13,7 +12,7 @@ export default Modal
  * @typedef ModalProps
  * @property {any[]} [buttons]
  * @property {any} children
- * @property {(ev) => void} onClose
+ * @property {(ev: any) => void} onClose
  * @property {boolean} [fullHeight=false]
  * @property {boolean} [isOpen=true]
  * @property {('xs'|'sm'|'md'|'lg'|'xl'|false)} [maxWidth]

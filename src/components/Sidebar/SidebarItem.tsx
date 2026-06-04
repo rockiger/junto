@@ -6,9 +6,10 @@ import { Tooltip } from 'components/gsuite-components'
 
 import { useStyles } from './SidebarItem-styles'
 import clsx from 'clsx'
+import type { ComponentType, SVGProps } from 'react'
 
 type SidebarItemProps = {
-    icon: React.ReactNode
+    icon: ComponentType<SVGProps<SVGSVGElement> & { size?: number | string }>
     name: string
     path: string
     tooltip?: string

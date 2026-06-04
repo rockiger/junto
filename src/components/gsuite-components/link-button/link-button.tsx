@@ -1,12 +1,12 @@
-import React, { ReactElement } from 'react'
+import { ComponentType, ReactElement, ReactNode } from 'react'
 import clsx from 'clsx'
 import { Tooltip } from 'components/gsuite-components/tooltip'
 import s from './link-button.module.scss'
 
 interface Props {
     ariaLabel?: string
-    children: ReactElement
-    Icon?: ReactElement
+    children: ReactNode
+    Icon?: ComponentType<{ className?: string }>
     className?: string
     id?: string
     onClick?: any
@@ -36,7 +36,7 @@ export default function LinkButton({
                     selected && s.LinkButton__selected
                 )}
                 onClick={onClick}
-                style={{paddingRight: Icon ? 0 : null}}
+                style={{ paddingRight: Icon ? 0 : undefined }}
             >
                 {children}{Icon ? <Icon /> : null}
             </button>
