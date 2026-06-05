@@ -1,3 +1,4 @@
+@import "./static/fonts/metropolis/metropolis.css";
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -144,6 +145,12 @@
 		--color-surface-container: hsl(216, 56%, 98%);
 		--color-search-bg: hsl(216.92308, 42%, 94%);
 	}}
+
+@layer base {
+	body {
+		@apply font-sans antialiased;
+	}
+}
 
 html {
 	@apply text-text-default;

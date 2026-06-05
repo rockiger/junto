@@ -33,7 +33,7 @@
 - [x] Deploy to Hostinger
 ----------------------------------------------------------
 ----------------------------------------------------------
-- [] Make webfonts for Metropolis
+- [x] Make webfonts for Metropolis
 - [] Optimize sidebar-wikitree behavior
 - [] Optimize update behavior
 - [] Remove MUI and use React-Aria components
