@@ -65,7 +65,7 @@ export default function FocusLayout({ children }: FocusLayoutProps) {
                 id="main-content"
                 className={clsx(
                     'min-h-0 flex-1 bg-surface-paper',
-                    'lg:flex lg:flex-col lg:h-[calc(100vh-64px)] lg:min-h-0 lg:overflow-y-scroll lg:bg-surface-paper lg:rounded-t-2xl',
+                    'lg:flex lg:flex-col lg:h-[calc(100vh-64px)] lg:min-h-0 lg:overflow-y-auto lg:scrollbar-gutter-stable lg:bg-surface-paper lg:rounded-t-2xl',
                 )}
                 style={{ gridArea: 'main' }}
             >

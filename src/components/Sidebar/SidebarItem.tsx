@@ -3,8 +3,6 @@
 import { useDispatch } from 'reactn'
 import { Link, useLocation } from '@tanstack/react-router'
 import { Tooltip } from 'components/gsuite-components'
-
-import { useStyles } from './SidebarItem-styles'
 import clsx from 'clsx'
 import type { ComponentType, SVGProps } from 'react'
 
@@ -16,43 +14,37 @@ type SidebarItemProps = {
     className?: string
 }
 
-export const SidebarItem = ({ icon: Icon, name, path, tooltip, className }: SidebarItemProps) => {
+export const SidebarItem = ({
+    icon: Icon,
+    name,
+    path,
+    tooltip,
+    className,
+}: SidebarItemProps) => {
     const clearSearch = useDispatch('clearSearchComplete')
     const location = useLocation()
-    const classes = useStyles()
 
     const { pathname } = location
+    const isActive = pathname === path
 
     return (
         <Tooltip content={tooltip ? tooltip : name}>
             <Link
-                className={clsx(classes.link, "hidden lg:flex", className)}
+                className={clsx(
+                    'flex h-8 w-[226px] grow items-center overflow-hidden rounded-full p-1 text-base leading-4 text-fg-default no-underline hover:bg-black/4',
+                    'hidden lg:flex',
+                    isActive && 'bg-[#e8f0fe] text-accent',
+                    className,
+                )}
                 onClick={clearSearch}
-                style={{
-                    backgroundColor: pathname === path ? '#e8f0fe' : '',
-                    color: pathname === path ? '#4285f4' : '',
-                }}
                 to={path}
             >
                 <Icon
-                    style={{
-                        color:
-                            pathname === path
-                                ? '#4285f4'
-                                : 'rgba(0, 0, 0, 0.54)',
-                    }}
+                    className={clsx(
+                        isActive ? 'text-accent' : 'text-fg-muted',
+                    )}
                 />
-                <div
-                    style={{
-                        flexGrow: 1,
-                        lineHeight: 1.5,
-                        marginLeft: '.15rem',
-                        maxWidth: 'calc(100% - 40px)',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                    }}
-                >
+                <div className="max-w-[calc(100%-40px)] grow truncate leading-normal ml-0.5">
                     {name}
                 </div>
             </Link>

@@ -34,23 +34,31 @@
 ----------------------------------------------------------
 ----------------------------------------------------------
 - [x] Make webfonts for Metropolis
-- [] Optimize sidebar-wikitree behavior
+- [x] Optimize sidebar-wikitree behavior
+-- [x] Migrate to TypeScript
+-- [x] Migrate to TailwindCSS
+-- [x] Open leaf when page is opened
+-- [x] Fix sidebar overflow
+-- [x] Convert to react-aria components
+- [] Fix gapi errors
 - [] Optimize update behavior
 - [] Remove MUI and use React-Aria components
 - [] Repair Hints
 - [] Repair Tests
-----------------------------------------------------------
 - [] Migrate to markdown-it backend
 - [] Migrate to React-Lexical
 - [] List Markdown-it Wiki files from Google Drive
 - [] Create Sub-pages for Wiki files in Google Drive
 - [] Show file in React-Lexical
-- [] Use UI from DaisyUI
+----------------------------------------------------------
 - [] Build Sidebar to reflect Wiki structure
 - [] Convert .gwiki files to .md to use legacy files
-- [] Deploy to Hostinger
-- [] Details summary merken
 - [] Deploy to Hostinger
 - [] Read Hints to guide users
 - [] Star a file in the file list
 - [] Known issue with the sidebar hover and the pill background for selected items
+- [] Performance
+-- [] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
+-- [] Use route loaders to prefetch data
+-- [] Prerender static pages 
+-- [] Integrate Google Tasks to the app

@@ -113,7 +113,7 @@ export default function DashboardLayout() {
             </div>
             <Sidebar />
             {/* <!-- Main content headline --> */}
-            <main ref={mainContentRef} id="main-content" className="bg-surface-container pb-32 min-h-[calc(100dvh-64px)] lg:bg-surface-paper lg:h-[calc(100vh-64px-84px)] lg:min-h-0 lg:overflow-y-scroll">
+            <main ref={mainContentRef} id="main-content" className="bg-surface-container pb-32 min-h-[calc(100dvh-64px)] lg:bg-surface-paper lg:h-[calc(100vh-64px-84px)] lg:min-h-0 lg:overflow-y-auto lg:scrollbar-gutter-stable">
                 <Outlet />
             </main>
             <DashboardMobileDock />

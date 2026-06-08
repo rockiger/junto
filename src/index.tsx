@@ -13,8 +13,8 @@ setGA({ anonymizeIp: true })
 
 // addReactNDevTools()
 
-// Remove console from production builds
-if (process.env.NODE_ENV !== 'development') {
+// Remove console from production builds (import.meta.env.DEV is reliable under Vite)
+if (!import.meta.env.DEV) {
     function noop() { }
     console.log = noop
     console.warn = noop

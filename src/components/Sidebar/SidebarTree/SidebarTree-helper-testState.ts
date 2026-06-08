@@ -1,3 +1,4 @@
+import type { IFile } from 'reactn/default'
 export {
     subTest2Page,
     subTest2Folder,
@@ -714,7 +715,7 @@ const sub4dPage = {
     sub4dPage,
 ]
 */
-const testState = [
+const testState: IFile[] = [
     {
       id: '1sdF4_JC13Kyo6XIFeOXyYjYi8s5S2pKm',
       name: '10PaYVJl7NhyTGBw-VdzYHu7EdSB6Nn2b',

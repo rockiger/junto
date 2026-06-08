@@ -1,8 +1,8 @@
-import React, { useGlobal } from 'reactn'
+import { useGlobal } from 'reactn'
 
 import { SidebarTreeComponent } from './SidebarTree-component'
 
-export const SidebarTree = props => {
+export const SidebarTree = () => {
     const [rootFolderId] = useGlobal('rootFolderId')
     const [initialFiles] = useGlobal('initialFiles')
 

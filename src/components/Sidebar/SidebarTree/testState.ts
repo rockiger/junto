@@ -1,4 +1,19 @@
-const testState = {
+import type { IFile } from 'reactn/default'
+
+type StoryTestState = {
+    rootFolderId: string
+    isFileListLoading: boolean
+    isSearchFieldActive: boolean
+    isSignedIn: boolean
+    isSigningIn: boolean
+    goToNewFile: boolean
+    redirect: boolean
+    searchTerm: string
+    searchValue: string
+    files: IFile[]
+}
+
+const testState: StoryTestState = {
     rootFolderId: '10t_Nrv_DUoOSbp9MoYGmfm1Cdj--Zc0D',
     isFileListLoading: false,
     isSearchFieldActive: false,

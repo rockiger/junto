@@ -150,6 +150,48 @@
 	body {
 		@apply font-sans antialiased;
 	}
+
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: rgb(0 0 0 / 0.25) transparent;
+	}
+
+	*::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: rgb(0 0 0 / 0.25);
+		border-radius: 9999px;
+	}
+
+	*::-webkit-scrollbar-button,
+	*::-webkit-scrollbar-button:single-button,
+	*::-webkit-scrollbar-button:vertical:start:decrement,
+	*::-webkit-scrollbar-button:vertical:end:increment,
+	*::-webkit-scrollbar-button:horizontal:start:decrement,
+	*::-webkit-scrollbar-button:horizontal:end:increment,
+	*::-webkit-scrollbar-button:vertical:start:increment,
+	*::-webkit-scrollbar-button:vertical:end:decrement,
+	*::-webkit-scrollbar-button:horizontal:start:increment,
+	*::-webkit-scrollbar-button:horizontal:end:decrement {
+		display: none;
+		width: 0;
+		height: 0;
+		-webkit-appearance: none;
+		appearance: none;
+		background: transparent;
+		border: none;
+	}
+
+	*::-webkit-scrollbar-corner {
+		background: transparent;
+	}
 }
 
 html {

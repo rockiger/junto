@@ -1,4 +1,4 @@
-import React, { setGlobal } from 'reactn'
+import { setGlobal } from 'reactn'
 import ReactDOM from 'react-dom'
 
 import { TestRouter } from '../../test-router'
@@ -24,10 +24,7 @@ setGlobal({
 describe('Sidebar', () => {
     it('renders without crashing', () => {
         const div = document.createElement('div')
-        ReactDOM.render(
-            <TestRouter initialPath="/" />,
-            div
-        )
+        ReactDOM.render(<TestRouter initialPath="/" />, div)
         ReactDOM.unmountComponentAtNode(div)
     })
 })
