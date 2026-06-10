@@ -214,8 +214,18 @@ export function buildWikiTreeNode(
     files: IFile[],
     indexes: SidebarTreeIndexes,
 ): WikiTreeNode {
+    const seenChildIds = new Set<string>()
     const childFiles = sortFilesByName(
-        files.filter(file => shouldFileDisplay(file, parentFolderId)),
+        files.filter(file => {
+            if (!shouldFileDisplay(file, parentFolderId)) {
+                return false
+            }
+            if (seenChildIds.has(file.id)) {
+                return false
+            }
+            seenChildIds.add(file.id)
+            return true
+        }),
     )
 
     const children = childFiles.map(file => {

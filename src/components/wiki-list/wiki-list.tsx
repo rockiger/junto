@@ -32,14 +32,17 @@ interface WikiListProps {
 function WikiList({ files, isDashboard, orderBy = 'name' }: WikiListProps) {
     const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
     const [rootFolderId] = useGlobal('rootFolderId')
-    const wikis = useMemo(
-        () => sortWikisBy(orderBy, filterWikis(files)),
-        [files, orderBy],
-    )
     const myFulcrum = useMemo(
         () => (rootFolderId ? getOverviewFile(files, rootFolderId) : null),
         [files, rootFolderId],
     )
+    const wikis = useMemo(() => {
+        const filtered = filterWikis(files)
+        const withoutOverview = myFulcrum
+            ? filtered.filter(file => file.id !== myFulcrum.id)
+            : filtered
+        return sortWikisBy(orderBy, withoutOverview)
+    }, [files, orderBy, myFulcrum])
     return (
         <div className="w-full">
             {(!_.isEmpty(files) || !isInitialFileListLoading) &&
@@ -56,7 +59,10 @@ function WikiList({ files, isDashboard, orderBy = 'name' }: WikiListProps) {
                     aria-label="Wiki pages"
                     className="flex flex-col gap-0.5 px-2 lg:flex-row lg:px-0"
                 >
-                    <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus) lg:hidden ">
+                    <GridListItem
+                        className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus) lg:hidden "
+                        textValue="Wikis"
+                    >
                         <h2 className="text-lg font-medium">Wikis</h2>
                     </GridListItem>
                     {wikis.map(f => {

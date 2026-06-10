@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React from 'reactn'
-import PropTypes from 'prop-types'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 
 import {
@@ -75,8 +74,3 @@ function SidebarWithRouter(props) {
 }
 
 export default SidebarWithRouter
-
-Sidebar.propTypes = {
-    goToNewFile: PropTypes.bool.isRequired,
-    setGoToNewFile: PropTypes.func.isRequired,
-}

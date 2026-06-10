@@ -56,8 +56,19 @@ export type FileListComponentProps = {
     tableMiddleColumn?: FileListTableMiddleColumn
 }
 
+function dedupeFilesById(files: IFile[]): IFile[] {
+    const seen = new Set<string>()
+    return files.filter(file => {
+        if (seen.has(file.id)) {
+            return false
+        }
+        seen.add(file.id)
+        return true
+    })
+}
+
 function sortDisplayFiles(files: IFile[], sortBy: SortBy): IFile[] {
-    return [...files]
+    return dedupeFilesById(files)
         .filter(shouldFileDisplay)
         .sort((file1, file2) =>
             sortBy === "viewedByMeTime"
@@ -244,7 +255,10 @@ function FileListMobileView({
             aria-label="Wiki pages"
             className="flex flex-col gap-0.5 px-2"
         >
-            <GridListItem className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)">
+            <GridListItem
+                className="bg-surface-paper flex cursor-pointer rounded-b-lg rounded-t-2xl px-3 py-5 text-inherit no-underline outline-none focus-visible:shadow-(--shadow-focus)"
+                textValue={title ?? 'Wiki pages'}
+            >
                 <FileListSortHeader
                     headingTag={headingTag}
                     setSortBy={setSortBy}
