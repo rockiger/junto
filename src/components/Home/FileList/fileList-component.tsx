@@ -1,4 +1,4 @@
-import { createLink } from "@tanstack/react-router"
+import { createLink, useNavigate } from "@tanstack/react-router"
 import { ButtonMenu } from "components/ButtonMenu"
 import { Spacer, Spinner } from "components/gsuite-components"
 import { EXT, FOLDER_NAME, OVERVIEW_NAME } from "lib/constants"
@@ -31,9 +31,6 @@ import { EmptyPlaceholder } from "./EmptyPlaceHolder"
 
 /** RAC {@link GridListItem} als TanStack-Router-Link ([createLink](https://tanstack.com/router/latest/docs/guide/custom-link)). */
 const GridListItemLink = createLink(GridListItem)
-
-/** RAC {@link Row} als TanStack-Router-Link (Desktop-Tabelle). */
-const TableRowLink = createLink(Row)
 
 export type SortBy = "modifiedByMeTime" | "sharedWithMeTime" | "viewedByMeTime"
 
@@ -299,6 +296,7 @@ function FileListDesktopView({
     tableMiddleColumn,
     title,
 }: FileListDesktopViewProps) {
+    const navigate = useNavigate()
     const middleColumnLabel =
         tableMiddleColumn === 'reason-suggested'
             ? 'Reason suggested'
@@ -343,16 +341,18 @@ function FileListDesktopView({
                         Location
                     </Column>
                 </TableHeader>
-                <TableBody>
-                    {displayFiles.map((file) => (
-                        <TableRowLink
-                            key={file.id}
+                <TableBody items={displayFiles}>
+                    {(file) => (
+                        <Row
                             className="cursor-pointer outline-none last:[&>td]:border-b-0 hover:bg-surface-hover focus-visible:shadow-(--shadow-focus)"
                             id={file.id}
-                            params={{ id: file.id }}
-                            preload="intent"
+                            onAction={() => {
+                                navigate({
+                                    to: '/page/$id',
+                                    params: { id: file.id },
+                                })
+                            }}
                             textValue={getTitleFromFile(file)}
-                            to="/page/$id"
                         >
                             <Cell className="border-b border-divider px-3 py-3">
                                 <div className="flex min-w-0 items-center gap-3">
@@ -392,8 +392,8 @@ function FileListDesktopView({
                                     </span>
                                 </div>
                             </Cell>
-                        </TableRowLink>
-                    ))}
+                        </Row>
+                    )}
                 </TableBody>
             </Table>
         </div>
