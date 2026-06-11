@@ -41,18 +41,18 @@
 -- [x] Fix sidebar overflow
 -- [x] Convert to react-aria components
 - [x] Fix gapi errors
-- [] Migrate to Lexical
--- [] Migrate to markdown-it backend
--- [] Migrate to React-Lexical
--- [] List Markdown-it Wiki files from Google Drive
--- [] Create Sub-pages for Wiki files in Google Drive
--- [] Show file in React-Lexical
+- [x] Migrate to Lexical
+-- [x] Store wiki pages as Markdown (.md, text/markdown)
+-- [x] Replace Slate editor with React-Lexical (toolbar, tables, images, checklists, code highlighting)
+-- [x] List .md wiki files from Google Drive (tree, search, breadcrumbs)
+-- [x] Create new pages as .md in Google Drive
+-- [x] Round-trip safety: md -> Lexical -> md is byte-idempotent (bun test scripts/)
+- [x] Convert .gwiki files to .md to use legacy files (automatic in-app batch migration after sign-in)
 - [] Optimize update behavior
 - [] Remove MUI and use React-Aria components
 - [] Repair Hints
 - [] Repair Tests
 ----------------------------------------------------------
-- [] Convert .gwiki files to .md to use legacy files
 - [] Deploy to Hostinger
 - [] Read Hints to guide users
 - [] Star a file in the file list

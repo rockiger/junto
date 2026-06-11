@@ -32,7 +32,7 @@ export function useWikiTreeAddChild() {
                 const newFileId = await createFile(
                     UNTITLEDFILE,
                     parentFolderIdOfNewFile,
-                    JSON.stringify(EMPTYVALUE),
+                    EMPTYVALUE,
                 )
                 navigate({ href: `/page/${newFileId}?edit` })
             } catch (err) {

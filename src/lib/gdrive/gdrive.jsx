@@ -10,7 +10,7 @@ const driveUploadPath = "https://www.googleapis.com/upload/drive/v3/files";
 // 'appProperties' keep the custom `ifid` field
 
 const fileFields =
-	"capabilities,description,id,name,mimeType,modifiedByMeTime,modifiedTime,shared,ownedByMe,parents,properties,trashed,viewedByMeTime,starred";
+	"capabilities,description,iconLink,id,name,mimeType,modifiedByMeTime,modifiedTime,shared,ownedByMe,parents,properties,trashed,viewedByMeTime,starred";
 /* const fileFields = '*' */
 
 function formatFileDescription(response) {
@@ -179,7 +179,7 @@ export async function createFile({
 }) {
 	const fileMetadata = {
 		name: name,
-		mimeType: "text/json",
+		mimeType: "text/markdown",
 		parents: [parentId],
 		useContentAsIndexableText: true,
 	};
@@ -545,6 +545,61 @@ export function updateFile(driveId, newData, supportsAllDrives = true) {
 					supportsAllDrives,
 				},
 				body: newData,
+			})
+			.then(
+				(response) => resolve(formatFileDescription(response.result)),
+				reject,
+			);
+	});
+}
+
+/**
+ * Replaces file content and metadata (e.g. name, mimeType) in a single
+ * multipart request. The Drive file id stays the same, the previous content
+ * remains available as a revision. Can reject
+ *
+ * @method updateFileMultipart
+ * @param {String} driveId Google Drive file identifier
+ * @param {String} newData New file content
+ * @param {{ name?: string, mimeType?: string }} metadata Metadata to patch
+ * @return {Promise|Object} A promise of the result that returns
+ * a file description: {driveId, driveVersion, name, ifid}
+ */
+export function updateFileMultipart(
+	driveId,
+	newData,
+	metadata = {},
+	supportsAllDrives = true,
+) {
+	const boundary = "-batch-31415926579323846boundatydnfj111";
+	const delimiter = `\r\n--${boundary}\r\n`;
+	const close_delim = `\r\n--${boundary}--`;
+
+	const contentType = metadata.mimeType || "text/markdown";
+	const multipartRequestBody =
+		delimiter +
+		"Content-Type: application/json; charset=UTF-8\r\n\r\n" +
+		JSON.stringify(metadata) +
+		delimiter +
+		`Content-Type: ${contentType}; charset=UTF-8\r\n\r\n` +
+		newData +
+		close_delim;
+
+	return new Promise((resolve, reject) => {
+		getGapi().client
+			.request({
+				path: `${driveUploadPath}/${driveId}`,
+				method: "PATCH",
+				params: {
+					uploadType: "multipart",
+					fields: fileFields,
+					useContentAsIndexableText: true,
+					supportsAllDrives,
+				},
+				headers: {
+					"Content-Type": `multipart/related; boundary="${boundary}"`,
+				},
+				body: multipartRequestBody,
 			})
 			.then(
 				(response) => resolve(formatFileDescription(response.result)),

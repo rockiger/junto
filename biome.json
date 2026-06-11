@@ -17,7 +17,6 @@
 	},
 	"linter": {
 		"rules": {
-			"noUnusedVariables": "off",
 			"correctness": {
 				"noUnusedImports": "error",
 				"noUnusedVariables": "off"

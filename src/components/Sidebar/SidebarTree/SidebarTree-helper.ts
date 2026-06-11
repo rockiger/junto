@@ -107,11 +107,10 @@ export function shouldFileDisplay(
     file: IFile,
     parentId: string | null,
 ): boolean {
-    const { mimeType, name, parents, trashed } = file
+    const { name, parents, trashed } = file
 
     return !!(
         parentId &&
-        mimeType === 'application/json' &&
         name !== OVERVIEW_NAME &&
         name.endsWith(EXT) &&
         parents?.includes(parentId) &&

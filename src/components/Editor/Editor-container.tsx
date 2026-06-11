@@ -12,15 +12,20 @@ import { updateMetadata } from 'lib/gdrive'
 import { filesUpdater, getMetaById } from 'lib/helper'
 import { debounce } from 'lodash'
 import { Beforeunload } from 'react-beforeunload'
-import React, { useEffect, useGlobal, useState } from 'reactn'
-import { Value } from 'slate'
+import React, {
+    useCallback,
+    useEffect,
+    useGlobal,
+    useMemo,
+    useState,
+} from 'reactn'
 import {
     convertFilesToAutocompletItems,
     initStorage,
     save,
     updateModifiedTimeInGlobalState,
 } from './Editor-helper'
-import MaterialEditor from './material-editor'
+import LexicalWikiEditor from './lexical'
 
 const isSaveHotkey = isHotkey('mod+Enter')
 
@@ -48,8 +53,6 @@ const EditorLogic = React.forwardRef(
         const [readOnly, setReadOnly] = useState(!hasEdit)
         const [_height, setHeight] = useState('calc(100vh - 65px - 57px)')
         //const editorRef = useRef(null)
-
-        const initialState = Value.fromJSON(JSON.parse(initialValue))
 
         useEffect(() => {
             async function onKeyDown(ev) {
@@ -97,6 +100,7 @@ const EditorLogic = React.forwardRef(
 
         async function saveToDriveAndLocalDB(fileId, initialValue) {
             console.log('saveToDriveAndLocalDB')
+            onChangeMarkdown.flush()
             const { modifiedTime = undefined } = await save(
                 fileId,
                 initialValue
@@ -125,35 +129,44 @@ const EditorLogic = React.forwardRef(
                 await saveToDriveAndLocalDB(fileId, initialValue)
             }
         }
-        async function onChange({ value }, setValue, oldValue) {
-            const changeLocalStorage = debounce(() => {
-                if (value.document !== oldValue.document) {
-                    // check, if we really need to save changes
-                    const content = JSON.stringify(value.toJSON())
-                    localStorage.setItem(fileId, content)
-                }
-            }, 300)
-            changeLocalStorage()
-            if (readOnly) {
-                await saveToDriveAndLocalDB(fileId, initialValue)
+        const saveChecklistChanges = useMemo(
+            () =>
+                debounce(() => {
+                    saveToDriveAndLocalDB(fileId, initialValue)
+                }, 500),
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            [fileId, initialValue]
+        )
+
+        useEffect(() => {
+            return () => {
+                saveChecklistChanges.cancel()
             }
-            setValue(value)
-        }
+        }, [saveChecklistChanges])
+
+        const onChangeMarkdown = useMemo(
+            () =>
+                debounce(markdown => {
+                    localStorage.setItem(fileId, markdown)
+                }, 300),
+            [fileId]
+        )
+
+        const handleMarkdownChange = useCallback(
+            markdown => {
+                onChangeMarkdown(markdown)
+                if (readOnly && canEdit) {
+                    saveChecklistChanges()
+                }
+            },
+            [canEdit, onChangeMarkdown, readOnly, saveChecklistChanges]
+        )
 
         const onKeyDown = ev => {
             if (!readOnly) {
                 if (isSaveHotkey(ev)) return
                 ev.stopPropagation()
             }
-        }
-        const onKeyDownEditor = (event, _editor, next) => {
-            if (event.key === 'Tab' && event.shiftKey) {
-                event.preventDefault()
-                inputRef.current.focus()
-                return
-            }
-
-            return next()
         }
 
         const star = async fileId => {
@@ -216,12 +229,12 @@ const EditorLogic = React.forwardRef(
                         </Hint>
                     </PageButtons>
                 )}
-                <MaterialEditor
+                <LexicalWikiEditor
                     apiKey={API_KEY}
-                    initialValue={initialState}
+                    canEdit={canEdit}
+                    initialValue={initialValue}
                     items={convertFilesToAutocompletItems(initialFiles)}
-                    onChangeHandler={onChange}
-                    onKeyDownHandler={onKeyDownEditor}
+                    onChangeMarkdown={handleMarkdownChange}
                     ref={editorRef}
                     readOnly={readOnly}
                     style={{
@@ -231,9 +244,11 @@ const EditorLogic = React.forwardRef(
                         overflowY: 'auto',
                     }}
                 />
-                {!readOnly && (
+                {canEdit && (
                     <Beforeunload
                         onBeforeunload={async () => {
+                            saveChecklistChanges.flush()
+                            onChangeMarkdown.flush()
                             await saveToDriveAndLocalDB(fileId, initialValue)
                         }}
                     />

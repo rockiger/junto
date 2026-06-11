@@ -499,13 +499,8 @@ function calendarDaysBehindLocal(later: Date, past: Date): number {
 }
 
 function shouldFileDisplay(file: IFile): boolean {
-    const { mimeType, name, trashed } = file
-    return (
-        (mimeType === "application/json" && name.endsWith(EXT) && !trashed) ||
-        ((mimeType as string) === "text/markdown" &&
-            name.endsWith(".md") &&
-            !trashed)
-    )
+    const { name, trashed } = file
+    return name.endsWith(EXT) && !trashed
 }
 
 function formatReasonSuggestedDate(

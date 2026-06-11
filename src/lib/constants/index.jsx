@@ -1,2 +1,2 @@
 export * from './constants'
-export * from './defaultOverview'
+export * from './defaultOverview.md'

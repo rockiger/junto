@@ -72,10 +72,12 @@ function escapeHtml(s) {
 		.replace(/"/g, "&quot;")
 }
 
-/** Escape for markdown inline (avoid emphasis / link confusion) */
+/**
+ * Escape for markdown inline. The set of escaped chars matches exactly what
+ * @lexical/markdown escapes on export, so md -> Lexical -> md stays byte-stable.
+ */
 function escapeInlineMd(s) {
-	// do not escape ( ) or . — not needed in middle of line (CommonMark)
-	return String(s).replace(/[\\*_\[\]`]/g, (c) => "\\" + c)
+	return String(s).replace(/[\\*_`~]/g, (c) => "\\" + c)
 }
 
 function pickFence(s) {
@@ -111,26 +113,30 @@ function renderTextSegment(rawText, marks, out = "md") {
 		if (m.has("bold") && m.has("italic")) t = "<strong><em>" + t + "</em></strong>"
 		else if (m.has("bold")) t = "<strong>" + t + "</strong>"
 		else if (m.has("italic")) t = "<em>" + t + "</em>"
-		if (m.has("underline")) t = "<u>" + t + "</u>"
 		return t
 	}
 
-	let t = escapeInlineMd(String(rawText))
+	const escaped = escapeInlineMd(String(rawText))
+	// CommonMark flanking rules: delimiters go inside the whitespace boundaries
+	// (matches @lexical/markdown export; whitespace-only segments get no marks)
+	const ws = escaped.match(/^(\s*)([\s\S]*?)(\s*)$/)
+	const [, lead, core, trail] = ws
+	if (core === "") return escaped
+
+	let t = core
 	if (m.has("strikethrough")) t = "~~" + t + "~~"
 	if (m.has("bold") && m.has("italic")) t = "***" + t + "***"
 	else if (m.has("bold")) t = "**" + t + "**"
-	else if (m.has("italic")) t = "_" + t + "_"
-	if (m.has("underline")) t = "<u>" + t + "</u>"
+	else if (m.has("italic")) t = "*" + t + "*"
 
-	return t
+	return lead + t + trail
 }
 
 /**
  * @param {any} node
  * @param {"md"|"html"} out
- * @param {{ driveLinkMeta: "comment"|"none" }} [opts]
  */
-function serializeInline(node, out = "md", opts = { driveLinkMeta: "comment" }) {
+function serializeInline(node, out = "md") {
 	if (!node) return ""
 	if (node.object === "text") {
 		const parts = getTextParts(node)
@@ -142,35 +148,16 @@ function serializeInline(node, out = "md", opts = { driveLinkMeta: "comment" }) 
 	if (node.object === "inline") {
 		const d = getData(node.data)
 		const inner = (node.nodes || [])
-			.map((n) => serializeInline(n, out, opts))
+			.map((n) => serializeInline(n, out))
 			.join("")
 
-		if (node.type === "link") {
+		if (node.type === "link" || node.type === "drive-link") {
 			const href = d.href
 			if (href == null || href === "")
-				return inner + (out === "md" && opts.driveLinkMeta !== "none" ? " <!-- link: missing href -->" : "")
+				return inner
 			if (out === "html")
 				return '<a href="' + escapeHtml(String(href)) + '">' + inner + "</a>"
-			// title optional
 			return "[" + inner + "](" + String(href) + ")"
-		}
-		if (node.type === "drive-link") {
-			const href = d.href != null ? String(d.href) : ""
-			const line = href
-				? out === "html"
-					? '<a href="' + escapeHtml(href) + '">' + inner + "</a>"
-					: "[" + inner + "](" + href + ")"
-				: inner + (out === "md" ? " <!-- drive-link: missing href -->" : "")
-			const extra = []
-			if (d.id) extra.push("id=" + d.id)
-			if (d.name) extra.push("name=" + String(d.name).slice(0, 200))
-			if (d.internal != null) extra.push("internal=" + d.internal)
-			if (d.iconUrl) extra.push("iconUrl=" + String(d.iconUrl).slice(0, 200))
-			if (d.target) extra.push("target=" + d.target)
-			if (out === "md" && opts.driveLinkMeta === "comment" && extra.length) {
-				return line + " " + "<!-- drive " + extra.join(" ") + " -->"
-			}
-			return line
 		}
 		if (node.type === "drive-image") {
 			const src = d.src != null ? String(d.src) : ""
@@ -189,43 +176,12 @@ function serializeInline(node, out = "md", opts = { driveLinkMeta: "comment" }) 
  * @param {"md"|"html"} [out]
  * @param {any} [opts]
  */
-function serializeInlines(nodes, out = "md", opts) {
+function serializeInlines(nodes, out = "md") {
 	if (!nodes) return ""
-	return nodes.map((n) => serializeInline(n, out, opts)).join("")
+	return nodes.map((n) => serializeInline(n, out)).join("")
 }
 
 /* -------- blocks -------- */
-
-/**
- * @param {any} cell
- * @param {any} [tableData]
- */
-function isSimpleCellForPipe(cell) {
-	if (!cell || cell.type !== "table_cell") return true
-	const blocks = (cell.nodes || []).filter((n) => n.object === "block")
-	if (blocks.length === 0) return true
-	if (blocks.length > 1) return false
-	const b0 = blocks[0]
-	if (b0.type === "paragraph" || String(b0.type || "").startsWith("heading-")) return true
-	return false
-}
-
-/**
- * @param {any} table
- */
-function tableIsPipeFriendly(table) {
-	const d = getData(table.data)
-	if (d.headless) return false
-	const rows = (table.nodes || []).filter(
-		(n) => n.object === "block" && n.type === "table_row",
-	)
-	for (const row of rows) {
-		for (const cell of row.nodes || []) {
-			if (!isSimpleCellForPipe(cell)) return false
-		}
-	}
-	return true
-}
 
 /**
  * @param {string} s
@@ -235,174 +191,44 @@ function oneLineCell(s) {
 }
 
 /**
- * @param {any} table
- * @param {string} _indent
+ * Flatten arbitrary cell content (paragraphs, lists, nested blocks)
+ * into a single pipe-table-safe line.
+ * @param {any} cell
  */
-function serializeTablePipe(table, _indent) {
+function cellToPipeText(cell) {
+	const blocks = (cell.nodes || []).filter((n) => n.object === "block")
+	if (!blocks.length) return oneLineCell(serializeInlines(cell.nodes || []))
+	return blocks
+		.map((b) => oneLineCell(serializeBlockInner(b, "", 0)))
+		.filter((s) => s.length)
+		.join(" ")
+}
+
+/**
+ * Always emits a GFM pipe table; headless tables get an empty header row.
+ * @param {any} table
+ */
+function serializeTablePipe(table) {
 	const rows = (table.nodes || []).filter(
 		(n) => n.object === "block" && n.type === "table_row",
 	)
 	if (!rows.length) return "\n"
-	const lines = []
-	for (const row of rows) {
-		const cells = (row.nodes || []).filter(
+	const headless = Boolean(getData(table.data).headless)
+	const cellsPerRow = rows.map((row) =>
+		(row.nodes || []).filter(
 			(n) => n.object === "block" && n.type === "table_cell",
-		)
-		const parts = cells.map((cell) => {
-			const b = (cell.nodes || [])[0]
-			if (!b) return ""
-			if (b.type === "paragraph" || String(b.type).startsWith("heading-")) {
-				return oneLineCell(serializeInlines(b.nodes || []))
-			}
-			return ""
-		})
-		lines.push("| " + parts.join(" | ") + " |")
-	}
-	if (lines.length) {
-		const nCols = Math.max(1, lines[0].split("|").length - 2)
-		const sep = "|" + " --- |".repeat(nCols)
-		return [lines[0], sep, ...lines.slice(1)].join("\n") + "\n"
-	}
-	return "\n"
-}
-
-/**
- * @param {any} block
- * @param {"md"|"html"} out
- */
-function blockToCellHtmlFragment(block) {
-	if (!block || block.object !== "block") return ""
-	const d = getData(block.data)
-	const children = block.nodes || []
-	const t = block.type
-
-	if (t === "paragraph")
-		return "<p>" + serializeInlines(children, "html") + "</p>\n"
-	if (t && String(t).startsWith("heading-")) {
-		const n = t.replace("heading-", "")
-		const level = ["one", "two", "three", "four", "five", "six"].indexOf(n) + 1
-		const L = level > 0 ? level : 1
-		return "<h" + L + ">" + serializeInlines(children, "html") + "</h" + L + ">\n"
-	}
-	if (t === "code") {
-		const hasInline = children.some(
-			(n) => n.object === "inline",
-		)
-		if (hasInline) {
-			let inner = ""
-			for (const n of children) {
-				if (n.object === "text" || n.object === "inline")
-					inner += serializeInline(n, "html")
-			}
-			return (
-				'<pre><code class="language-' + escapeHtml(String(d.language || "")) + '">' + inner + "</code></pre>\n"
-			)
-		}
-		const text = (children || [])
-			.filter((n) => n.object === "text")
-			.flatMap((n) => getTextParts(n).map((p) => p.text))
-			.join("")
-		return (
-			'<pre><code class="language-' + escapeHtml(String(d.language || "")) + '">' + escapeHtml(text) + "</code></pre>\n"
-		)
-	}
-	if (t === "block-quote")
-		return (
-			"<blockquote>\n" +
-			children.map((b) => blockToCellHtmlFragment(b)).join("") +
-			"</blockquote>\n"
-		)
-	if (t === "bulleted-list" || t === "numbered-list") {
-		const tag = t === "bulleted-list" ? "ul" : "ol"
-		const lis = (children || [])
-			.filter((n) => n.object === "block" && n.type === "list-item")
-			.map((li) => {
-				return "<li>\n" + listItemToHtml(li) + "</li>\n"
-			})
-		return "<" + tag + ">\n" + lis.join("") + "</" + tag + ">\n"
-	}
-	if (t === "list-item")
-		return listItemToHtml(block)
-	if (t === "image") {
-		const src = d.src != null ? String(d.src) : ""
-		if (!src) return "<!-- image: missing src -->\n"
-		return '<p><img src="' + escapeHtml(src) + '" alt="" /></p>\n'
-	}
-	if (t === "table")
-		return serializeTableHtmlForEmbed(block, "")
-	return (
-		"<!-- cell-unknown: " + escapeHtml(String(t)) + " -->\n" + serializeInlines(children, "html")
+		),
 	)
-}
-
-/**
- * @param {any} li
- */
-function listItemToHtml(li) {
-	const nodes = li.nodes || []
-	const head = []
-	const blocks = []
-	for (const n of nodes) {
-		if (n.object === "text" || n.object === "inline") head.push(n)
-		else if (n.object === "block") blocks.push(n)
-	}
-	let s = ""
-	if (head.length) s += "<p>" + serializeInlines(head, "html") + "</p>\n"
-	for (const b of blocks) s += blockToCellHtmlFragment(b)
-	return s
-}
-
-/**
- * @param {any} table
- * @param {string} _ind
- */
-function serializeTableHtmlForEmbed(table, _ind) {
-	const rows = (table.nodes || []).filter(
-		(n) => n.object === "block" && n.type === "table_row",
+	const nCols = Math.max(1, ...cellsPerRow.map((cells) => cells.length))
+	const rowLines = cellsPerRow.map(
+		(cells) => "| " + cells.map(cellToPipeText).join(" | ") + " |",
 	)
-	if (!rows.length) return "<table><tbody></tbody></table>\n"
-	const d = getData(table.data)
-	const headless = Boolean(d.headless)
-	let h = "<table>\n"
-	if (!headless && rows.length) {
-		const first = rows[0]
-		h += "<thead><tr>\n"
-		for (const cell of first.nodes || []) {
-			if (cell.type === "table_cell")
-				h +=
-					"<th>" + cellInnerHtml(cell) + "</th>\n"
-		}
-		h += "</tr></thead>\n"
+	const sep = "|" + " --- |".repeat(nCols)
+	if (headless) {
+		const emptyHeader = "|" + "  |".repeat(nCols)
+		return [emptyHeader, sep, ...rowLines].join("\n") + "\n"
 	}
-	h += "<tbody>\n"
-	const bodyRows = headless ? rows : rows.slice(1)
-	for (const row of bodyRows) {
-		h += "<tr>\n"
-		for (const cell of row.nodes || []) {
-			if (cell.type === "table_cell")
-				h += "<td>" + cellInnerHtml(cell) + "</td>\n"
-		}
-		h += "</tr>\n"
-	}
-	h += "</tbody></table>\n"
-	return h
-}
-
-/**
- * @param {any} cell
- */
-function cellInnerHtml(cell) {
-	const blocks = (cell.nodes || []).filter((n) => n.object === "block")
-	if (!blocks.length) return ""
-	return blocks.map((b) => blockToCellHtmlFragment(b)).join("")
-}
-
-/**
- * @param {any} table
- * @param {string} _indent
- */
-function serializeTableHtml(table, _indent) {
-	return serializeTableHtmlForEmbed(table, _indent) + "\n"
+	return [rowLines[0], sep, ...rowLines.slice(1)].join("\n") + "\n"
 }
 
 /**
@@ -418,7 +244,8 @@ function serializeListItemMd(li, linePrefix, depth) {
 		if (n.object === "text" || n.object === "inline") head.push(n)
 		else if (n.object === "block") blocks.push(n)
 	}
-	const pad = "  ".repeat(depth)
+	// 4 spaces per level: @lexical/markdown's LIST_INDENT_SIZE
+	const pad = "    ".repeat(depth)
 	let s = pad + linePrefix
 	if (head.length) s += serializeInlines(head) + "\n"
 	else s += "\n"
@@ -505,7 +332,7 @@ function serializeBlockInner(block, baseIndent, depth) {
 			let inner = ""
 			for (const n of ch) {
 				if (n.object === "text" || n.object === "inline")
-					inner += serializeInline(n, "html", { driveLinkMeta: "comment" })
+					inner += serializeInline(n, "html")
 			}
 			return (
 				baseIndent + '<pre><code class="language-' + escapeHtml(String(d.language || "")) + '">' + inner + "</code></pre>\n"
@@ -520,11 +347,14 @@ function serializeBlockInner(block, baseIndent, depth) {
 		return baseIndent + fence + lang + "\n" + text + "\n" + baseIndent + fence + "\n"
 	}
 	if (t === "table")
-		return tableIsPipeFriendly(block)
-			? baseIndent + serializeTablePipe(block, baseIndent)
-			: baseIndent + serializeTableHtml(block, baseIndent)
+		return baseIndent + serializeTablePipe(block)
 	if (t === "bulleted-list" || t === "numbered-list")
 		return serializeListAsMd(block, t === "numbered-list", 0) || "\n"
+	if (t === "check-list-item") {
+		const checked = Boolean(d.checked)
+		const prefix = checked ? "- [x] " : "- [ ] "
+		return baseIndent + prefix + serializeInlines(ch) + "\n"
+	}
 	if (t === "list-item")
 		return serializeListItemMd(block, "- ", depth) // fallback
 	const inner = ch
@@ -559,7 +389,8 @@ export function documentToMarkdown(document, opts = { allowEmpty: true }) {
 				return serializeInlines([n])
 			return ""
 		})
-		.filter((s) => s.length)
+		// drop whitespace-only blocks: markdown has no empty paragraphs
+		.filter((s) => s.trim().length)
 		.join("\n\n") + "\n"
 }
 

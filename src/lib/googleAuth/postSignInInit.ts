@@ -9,6 +9,10 @@ import {
 	refreshSession,
 	updateFile,
 } from 'lib/gdrive'
+import {
+	findGwikiFiles,
+	migrateGwikiFiles,
+} from 'lib/migration/migrateGwikiFiles'
 import { isUndefined } from 'lodash'
 import { getGlobal, setGlobal } from 'reactn'
 
@@ -29,7 +33,8 @@ async function initFiles() {
 	const rootFolderId = await getFolderId()
 	if (rootFolderId) {
 		try {
-			const files = await listFiles()
+			let files = await listFiles()
+			files = await migrateLegacyGwikiFiles(files)
 			setGlobal({
 				files: [],
 				initialFiles: files,
@@ -65,6 +70,39 @@ async function initFiles() {
 	}
 	await createFile(OVERVIEW_NAME, newRootFolderId, OVERVIEW_VALUE)
 	await initFiles()
+}
+
+/**
+ * One-time batch migration of legacy Slate `.gwiki` files to Markdown.
+ * Runs whenever the loaded file list still contains `.gwiki` files and
+ * returns a freshly loaded list afterwards.
+ */
+async function migrateLegacyGwikiFiles(
+	files: Awaited<ReturnType<typeof listFiles>>,
+) {
+	const targets = findGwikiFiles(files)
+	if (targets.length === 0) {
+		return files
+	}
+
+	console.log(`Migrating ${targets.length} .gwiki file(s) to Markdown`)
+	setGlobal({
+		migration: { done: 0, running: true, total: targets.length },
+	})
+	try {
+		const result = await migrateGwikiFiles(targets, (done, total) =>
+			setGlobal({ migration: { done, running: true, total } }),
+		)
+		if (result.failed.length > 0) {
+			alert(
+				`${result.failed.length} page(s) couldn't be converted to Markdown. They were skipped – reloading the page will retry.`,
+			)
+		}
+		// reload so names and mimeTypes reflect the migration
+		return await listFiles()
+	} finally {
+		setGlobal({ migration: null })
+	}
 }
 
 async function initHints() {

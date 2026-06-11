@@ -83,7 +83,7 @@ export function getChildren(parent: IFile, files: IFile[]) {
  * @returns {string | null}
  */
 export function getParentFolderId(file: IFile, files: IFile[]) {
-    if (file.name === "_myDrive_overview_please_do_not_touch.gwiki") {
+    if (file.name === OVERVIEW_NAME) {
         return file.parents[0] ?? ''
     } else {
         const folder = files.find((el: IFile) => el.name === file.id)
@@ -121,9 +121,8 @@ export function filterChildFiles(folderId: string, files: IFile[]) {
  * @param {string} parentId
  */
 export function shouldFileDisplay(file: IFile, parentId: string) {
-    const { mimeType, name, parents, trashed } = file
+    const { name, parents, trashed } = file
     return (
-        mimeType === 'application/json' &&
         name !== OVERVIEW_NAME &&
         name.endsWith(EXT) &&
         parents &&

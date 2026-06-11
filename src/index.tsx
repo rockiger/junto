@@ -52,6 +52,7 @@ const initialState: State = {
     isSearchFieldActive: false,
     isSignedIn: false,
     isSigningIn: true,
+    migration: null,
     redirect: false,
     rootFolderId: null,
     searchTerm: '',

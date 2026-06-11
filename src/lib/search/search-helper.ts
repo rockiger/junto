@@ -10,11 +10,8 @@ export function isWikiPageForSearch(file: IFile): boolean {
     if (file.mimeType === FOLDER_MIME) {
         return false
     }
-    const { mimeType, name } = file
-    if (name.endsWith(EXT) && mimeType === "application/json") {
-        return true
-    }
-    if (name.endsWith(".md") && (mimeType as string) === "text/markdown") {
+    const { name } = file
+    if (name.endsWith(EXT)) {
         return true
     }
     if (name.endsWith(".mdf")) {

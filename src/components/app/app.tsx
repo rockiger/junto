@@ -1,5 +1,6 @@
 import { RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { MigrationProgress } from 'components/MigrationProgress'
 import { AppGoogleAuthProvider } from 'lib/googleAuth'
 import { SnackbarProvider } from 'notistack'
 import { useGlobal } from 'reactn'
@@ -17,6 +18,7 @@ export default function App() {
             <AppGoogleAuthProvider>
                 <SnackbarProvider maxSnack={3}>
                     <RouterProvider router={router} />
+                    <MigrationProgress />
                     {import.meta.env?.DEV ? (
                         <TanStackRouterDevtools router={router} />
                     ) : null}

@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises"
+import { readdir, readFile } from "node:fs/promises"
 import path from "node:path"
 import { describe, expect, it } from "bun:test"
 import {
@@ -20,6 +20,19 @@ describe("Slate 0.47 → Markdown", () => {
 		expect(getTextParts(j)).toEqual([{ text: "x", marks: [] }])
 	})
 
+	it("check-list-item: GFM task list", async () => {
+		const raw = await readFile(
+			path.join(import.meta.dirname, "fixtures", "checkListValue.json"),
+			"utf8",
+		)
+		const md = slate0ValueToMarkdown(raw)
+		expect(md).toContain("- [x] Slide to the left.")
+		expect(md).toContain("- [x] Slide to the right.")
+		expect(md).toContain("- [ ] Criss-cross.")
+		const v = validateWithMarkdownIt(md)
+		expect(v.ok).toBe(true)
+	})
+
 	it("Button Test: GFM and validation", async () => {
 		const raw = await sample("Button Test.gwiki")
 		const md = slate0ValueToMarkdown(raw)
@@ -39,21 +52,21 @@ describe("Slate 0.47 → Markdown", () => {
 		expect(v.ok).toBe(true)
 	})
 
-	it("Find Paste: headless table → HTML and nested lists", async () => {
+	it("Find Paste: headless table → pipe table with empty header", async () => {
 		const raw = await sample("Find Paste Bug.gwiki")
 		const md = slate0ValueToMarkdown(raw)
-		expect(md).toContain("<table>")
-		expect(md).toContain("<ol>")
+		expect(md).not.toContain("<table>")
+		expect(md).toContain("|  |\n| --- |\n|")
 		expect(md).toContain("How To Design Functions (HtDF)")
 		const v = validateWithMarkdownIt(md)
 		expect(v.ok).toBe(true)
 	})
 
-	it("Picker Test: drive-link comments", async () => {
+	it("Picker Test: drive-link as plain markdown link", async () => {
 		const raw = await sample("Picker Test.gwiki")
 		const md = slate0ValueToMarkdown(raw)
-		expect(md).toContain("<!-- drive")
-		expect(md).toContain("Entrepreneurship.gwiki")
+		expect(md).not.toContain("<!-- drive")
+		expect(md).toContain("[Entrepreneurship](https://drive.google.com/file/d/")
 		const v = validateWithMarkdownIt(md)
 		expect(v.ok).toBe(true)
 	})
@@ -71,5 +84,19 @@ describe("Slate 0.47 → Markdown", () => {
 		expect(documentToMarkdown({ object: "document", nodes: [] })).toBe(
 			"",
 		)
+	})
+
+	it("golden snapshots for all slate_samples", async () => {
+		const files = (await readdir(root)).filter((f) =>
+			f.toLowerCase().endsWith(".gwiki"),
+		)
+		expect(files.length).toBeGreaterThan(0)
+		for (const file of files) {
+			const raw = await sample(file)
+			const md = slate0ValueToMarkdown(raw)
+			expect(md).toMatchSnapshot(file)
+			const v = validateWithMarkdownIt(md)
+			expect(v.ok).toBe(true)
+		}
 	})
 })

@@ -80,6 +80,8 @@ declare module 'reactn/default' {
         isInitialFileListLoading: boolean
         backgroundUpdate: boolean
         userId: string
+        /** Progress of the one-time .gwiki -> .md migration; null when idle. */
+        migration: null | { done: number; running: boolean; total: number }
     }
 
     export interface IFile {
@@ -88,7 +90,10 @@ declare module 'reactn/default' {
         id: string
         name: string
         parents: Array<string> // the id of the parrent of a file
-        mimeType: 'application/vnd.google-apps.folder' | 'application/json'
+        mimeType:
+            | 'application/vnd.google-apps.folder'
+            | 'application/json'
+            | 'text/markdown'
         modifiedByMeTime?: string
         modifiedTime?: string
         shared?: boolean

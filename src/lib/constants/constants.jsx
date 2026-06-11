@@ -23,7 +23,7 @@ export const SCOPES = isPro
 	? "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.install https://www.googleapis.com/auth/drive.appdata"
 	: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.install https://www.googleapis.com/auth/drive.appdata";
 
-export const EXT = ".gwiki";
+export const EXT = ".md";
 export const EXTLENGTH = EXT.length;
 export const FOLDER_NAME = "Fulcrum Documents";
 export const LOCALSTORAGE_NAME = "junto-content-xlc";
@@ -75,19 +75,5 @@ export const THEME = createTheme({
 
 window.THEME = THEME;
 
-export const EMPTYVALUE = {
-	document: {
-		nodes: [
-			{
-				object: "block",
-				type: "paragraph",
-				nodes: [
-					{
-						object: "text",
-						text: "",
-					},
-				],
-			},
-		],
-	},
-};
+// Pages are stored as Markdown; a new page starts empty.
+export const EMPTYVALUE = "";

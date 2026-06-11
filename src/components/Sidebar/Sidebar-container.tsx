@@ -51,7 +51,7 @@ class Sidebar extends React.Component {
             const newFileId = await createFile(
                 UNTITLEDFILE,
                 parentFolderIdOfNewFile,
-                JSON.stringify(EMPTYVALUE)
+                EMPTYVALUE
             )
             this.props.navigate({
                 href: `/page/${newFileId}?edit`,
