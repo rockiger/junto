@@ -1,4 +1,6 @@
 import { ensureGapi, getGapi } from "./ensureGapi";
+import { getUserEmail } from "../googleAuth/userInfo";
+import { getAccessToken, isTokenValid, refreshToken } from "../googleAuth/tokenStore";
 
 const driveUploadPath = "https://www.googleapis.com/upload/drive/v3/files";
 
@@ -559,11 +561,10 @@ export function updateFile(driveId, newData, supportsAllDrives = true) {
  * a story description: {driveId, driveVersion, name, ifid}
  */
 export function refreshSession() {
-	const isTokenValid = () => {
-		var token = getGapi().auth.getToken();
-		return token && Date.now() < token.expires_at;
-	};
 	console.log(isTokenValid());
+	if (isTokenValid()) {
+		return Promise.resolve();
+	}
 	return reloadAuthResponse();
 }
 
@@ -573,7 +574,13 @@ export function refreshSession() {
  * @returns {Promise|Object}
  */
 export function reloadAuthResponse() {
-	return getGapi().auth2.getAuthInstance().currentUser.get().reloadAuthResponse();
+	return refreshToken().then(() => {
+		const accessToken = getAccessToken();
+		if (!accessToken) {
+			throw new Error("No access token available after refresh");
+		}
+		getGapi().client.setToken({ access_token: accessToken });
+	});
 }
 
 // helpers
@@ -594,11 +601,7 @@ function formatResult(response) {
  * @returns email string
  */
 function getDomainOfCurrentUser() {
-	const email = getGapi().auth2
-		.getAuthInstance()
-		.currentUser.get()
-		.getBasicProfile()
-		.getEmail();
+	const email = getUserEmail();
 	const domain = email.split("@")[1];
 	if (domain) {
 		return domain;

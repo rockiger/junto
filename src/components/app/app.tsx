@@ -1,5 +1,6 @@
 import { RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { AppGoogleAuthProvider } from 'lib/googleAuth'
 import { SnackbarProvider } from 'notistack'
 import { useGlobal } from 'reactn'
 
@@ -13,12 +14,14 @@ export default function App() {
         <div
             className="bg-surface-container"
         >
-            <SnackbarProvider maxSnack={3}>
-                <RouterProvider router={router} />
-                {import.meta.env?.DEV ? (
-                    <TanStackRouterDevtools router={router} />
-                ) : null}
-            </SnackbarProvider>
+            <AppGoogleAuthProvider>
+                <SnackbarProvider maxSnack={3}>
+                    <RouterProvider router={router} />
+                    {import.meta.env?.DEV ? (
+                        <TanStackRouterDevtools router={router} />
+                    ) : null}
+                </SnackbarProvider>
+            </AppGoogleAuthProvider>
         </div>
     )
 }

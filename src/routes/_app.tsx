@@ -1,4 +1,4 @@
-import GoogleLoginUntyped from 'components/googleLogin'
+import GoogleLogin from 'components/googleLogin.tsx'
 import {
     createFileRoute,
     Outlet,
@@ -6,18 +6,8 @@ import {
     useMatch,
     useNavigate,
 } from '@tanstack/react-router'
-import { API_KEY, CLIENT_ID, DISCOVERY_DOCS, SCOPES } from 'lib/constants'
-import type { ComponentType } from 'react'
 import { useEffect } from 'react'
 import { getGlobal, useGlobal } from 'reactn'
-
-const GoogleLogin = GoogleLoginUntyped as unknown as ComponentType<{
-    apiKey: string
-    buttonText?: string
-    clientId: string
-    discoveryDocs: string[]
-    scope: string
-}>
 
 export const Route = createFileRoute('/_app')({
     beforeLoad: () => {
@@ -57,13 +47,7 @@ function AppShell() {
                             : 'fixed bottom-3 left-3 z-1000 max-w-[min(100vw-1.5rem,280px)]'
                     }
                 >
-                    <GoogleLogin
-                        clientId={CLIENT_ID}
-                        apiKey={API_KEY}
-                        discoveryDocs={DISCOVERY_DOCS}
-                        scope={SCOPES}
-                        buttonText="Sign in"
-                    />
+                    <GoogleLogin buttonText="Sign in" />
                 </div>
             ) : null}
             <Outlet />

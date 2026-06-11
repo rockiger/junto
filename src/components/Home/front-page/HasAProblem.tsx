@@ -1,8 +1,11 @@
 import { Event } from "components/Tracking"
+import { useGoogleAuth } from "lib/googleAuth"
 import assistant from "static/img/assistant_small.webp"
 import { GoogleButton } from "./GoogleButton"
 
 export function HasAProblem() {
+	const { signIn } = useGoogleAuth()
+
 	return (
 		<div className="mx-auto -mt-2 max-w-7xl py-12 px-8 sm:py-20 sm:px-[6%]">
 			<div className="mx-auto flex max-w-7xl flex-col lg:-mx-6 lg:-mt-6 lg:flex-row">
@@ -23,7 +26,10 @@ export function HasAProblem() {
 						<li>Never came back to that great idea you wrote down?</li>
 					</ul>
 					<GoogleButton
-						onClick={() => Event("Frontpage", "GoogleButton", "HasAProblem")}
+						onClick={() => {
+							Event("Frontpage", "GoogleButton", "HasAProblem")
+							signIn()
+						}}
 					/>
 				</div>
 				<div className="mx-auto flex grow-0 shrink flex-col justify-center px-6 py-6 max-lg:mt-8 md:flex-row lg:px-6 lg:max-w-[35%]">

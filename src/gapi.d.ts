@@ -2,6 +2,11 @@
 export interface GapiClient {
     load: (module: string, callback?: () => void) => void
     client?: {
+        init: (config: {
+            apiKey?: string
+            discoveryDocs?: string[]
+        }) => Promise<void>
+        setToken: (token: { access_token: string } | null) => void
         drive: {
             files: {
                 create: (params: Record<string, unknown>) => Promise<{ body: string }>
@@ -12,6 +17,18 @@ export interface GapiClient {
             }
         }
     }
+    drive?: {
+        share?: {
+            ShareClient: new () => {
+                setOAuthToken: (token: string) => void
+                setItemIds: (ids: string[]) => void
+            }
+        }
+    }
+}
+
+interface GoogleAccountsOAuth2 {
+    revoke: (token: string, callback: () => void) => void
 }
 
 declare global {
@@ -19,6 +36,15 @@ declare global {
 
     interface Window {
         gapi?: GapiClient
+        google?: {
+            accounts?: {
+                oauth2?: GoogleAccountsOAuth2
+            }
+            picker?: Record<string, unknown>
+        }
+        share?: {
+            showSettingsDialog: () => void
+        }
     }
 
     interface HTMLScriptElement {

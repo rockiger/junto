@@ -1,5 +1,6 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { Event, PageView } from "components/Tracking"
+import { useGoogleAuth } from "lib/googleAuth"
 import GoogleDriveLogo from "static/googleDriveLogo.svg"
 import gsuiteIntegrations from "static/img/gsuite-integrations.png"
 import instantSearch from "static/img/instant-search.png"
@@ -15,6 +16,16 @@ const imgShadow =
 	"w-full max-w-full rounded-lg border border-[#eee] shadow-[0px_1px_8px_0px_rgba(0,0,0,0.2),0px_3px_4px_0px_rgba(0,0,0,0.14),0px_3px_3px_-2px_rgba(0,0,0,0.12)]"
 
 export default function FrontPage() {
+	const { signIn } = useGoogleAuth()
+
+	const handleFrontpageSignIn = useCallback(
+		(label: string) => {
+			Event("Frontpage", "GoogleButton", label)
+			signIn()
+		},
+		[signIn],
+	)
+
 	useEffect(() => {
 		const prevTitle = document.title
 		document.title = "Fulcrum.wiki - The knowledge base made for Google Drive"
@@ -75,7 +86,7 @@ export default function FrontPage() {
 						<div className="flex items-center">
 							<GoogleButton
 								signIn={false}
-								onClick={() => Event("Frontpage", "GoogleButton", "First")}
+								onClick={() => handleFrontpageSignIn("First")}
 							/>
 							<strong className="ml-1.5">- it&apos;s free!</strong>
 						</div>
@@ -90,7 +101,7 @@ export default function FrontPage() {
 			</div>
 			<div className="fixed right-5 bottom-5 max-sm:hidden">
 				<GoogleButton
-					onClick={() => Event("Frontpage", "GoogleButton", "Floating")}
+					onClick={() => handleFrontpageSignIn("Floating")}
 				/>
 			</div>
 			<HasAProblem />
@@ -177,7 +188,7 @@ export default function FrontPage() {
 			<HasAPlan />
 			<div className="mb-20 flex flex-col items-center">
 				<GoogleButton
-					onClick={() => Event("Frontpage", "GoogleButton", "HasAPlan")}
+					onClick={() => handleFrontpageSignIn("HasAPlan")}
 				/>
 			</div>
 		</>

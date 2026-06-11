@@ -40,18 +40,18 @@
 -- [x] Open leaf when page is opened
 -- [x] Fix sidebar overflow
 -- [x] Convert to react-aria components
-- [] Fix gapi errors
+- [x] Fix gapi errors
+- [] Migrate to Lexical
+-- [] Migrate to markdown-it backend
+-- [] Migrate to React-Lexical
+-- [] List Markdown-it Wiki files from Google Drive
+-- [] Create Sub-pages for Wiki files in Google Drive
+-- [] Show file in React-Lexical
 - [] Optimize update behavior
 - [] Remove MUI and use React-Aria components
 - [] Repair Hints
 - [] Repair Tests
-- [] Migrate to markdown-it backend
-- [] Migrate to React-Lexical
-- [] List Markdown-it Wiki files from Google Drive
-- [] Create Sub-pages for Wiki files in Google Drive
-- [] Show file in React-Lexical
 ----------------------------------------------------------
-- [] Build Sidebar to reflect Wiki structure
 - [] Convert .gwiki files to .md to use legacy files
 - [] Deploy to Hostinger
 - [] Read Hints to guide users

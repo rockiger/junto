@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import AccountPlusIcon from 'mdi-react/AccountPlusOutlineIcon'
+import { getAccessToken } from 'lib/googleAuth'
 
 export function useShareMenuItem({ fileId }) {
     useEffect(() => {
@@ -22,10 +23,10 @@ export function ShareMenuItem(props) {
 
 function initPicker(fileId) {
     try {
-        const oauthToken = gapi.auth2
-            .getAuthInstance()
-            .currentUser.get()
-            .getAuthResponse().access_token
+        const oauthToken = getAccessToken()
+        if (!oauthToken) {
+            throw new Error('No Google access token available')
+        }
         window.share = new gapi.drive.share.ShareClient()
         window.share.setOAuthToken(oauthToken)
         window.share.setItemIds([fileId])

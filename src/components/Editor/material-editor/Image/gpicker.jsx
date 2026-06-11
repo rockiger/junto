@@ -1,5 +1,6 @@
-/* global gapi */
 /* global google */
+
+import { getAccessToken } from 'lib/googleAuth'
 
 export function getImage(apiKey) {
     return new Promise((resolve, reject) => {
@@ -32,10 +33,11 @@ export function getImage(apiKey) {
         }
 
         const openPicker = (onChange, value) => {
-            const accessToken = gapi.auth2
-                .getAuthInstance()
-                .currentUser.get()
-                .getAuthResponse().access_token
+            const accessToken = getAccessToken()
+            if (!accessToken) {
+                reject(new Error('No Google access token available'))
+                return
+            }
 
             const myImages = new google.picker.DocsView(
                 google.picker.ViewId.DOCS_IMAGES

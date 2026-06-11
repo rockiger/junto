@@ -1,5 +1,6 @@
-/* global gapi */
 /* global google */
+
+import { getAccessToken } from 'lib/googleAuth'
 
 export function getDocument(apiKey) {
     return new Promise((resolve, reject) => {
@@ -34,10 +35,11 @@ export function getDocument(apiKey) {
         }
 
         const openPicker = (onChange, value) => {
-            const accessToken = gapi.auth2
-                .getAuthInstance()
-                .currentUser.get()
-                .getAuthResponse().access_token
+            const accessToken = getAccessToken()
+            if (!accessToken) {
+                reject(new Error('No Google access token available'))
+                return
+            }
 
             const myDocuments = new google.picker.DocsView(
                 google.picker.ViewId.DOCS
