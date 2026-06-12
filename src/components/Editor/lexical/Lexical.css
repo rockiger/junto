@@ -64,6 +64,10 @@
     --drive-link-icon: url('https://drive-thirdparty.googleusercontent.com/16/type/application%2Foctet-stream');
 }
 
+.lexical-drive-link--wiki {
+    --drive-link-icon: url('../../../static/logo_48.svg');
+}
+
 .lexical-text-underline {
     text-decoration: underline;
 }

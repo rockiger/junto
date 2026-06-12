@@ -11,6 +11,7 @@ export function undecorateDriveLink(anchor) {
     }
     anchor.style.removeProperty('--drive-link-icon')
     delete anchor.dataset.driveLinkFileId
+    delete anchor.dataset.wikiPageId
 }
 
 /**
@@ -28,7 +29,9 @@ export function decorateDriveLink(anchor, url) {
 
     undecorateDriveLink(anchor)
     anchor.classList.add('lexical-drive-link', `${KIND_CLASS_PREFIX}${info.kind}`)
-    if (info.fileId) {
+    if (info.kind === 'wiki' && info.fileId) {
+        anchor.dataset.wikiPageId = info.fileId
+    } else if (info.fileId) {
         anchor.dataset.driveLinkFileId = info.fileId
     }
     if (info.iconUrl) {

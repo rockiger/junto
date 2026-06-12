@@ -1,5 +1,6 @@
 import { LinkNode } from '@lexical/link'
 import { $applyNodeReplacement } from 'lexical'
+import { classifyLinkUrl } from '../lib/classifyLinkUrl'
 import { decorateDriveLink, undecorateDriveLink } from '../lib/decorateDriveLink'
 
 /**
@@ -19,9 +20,23 @@ export class WikiLinkNode extends LinkNode {
         )
     }
 
+    applyPresentation(anchor) {
+        decorateDriveLink(anchor, this.__url)
+        const info = classifyLinkUrl(this.__url)
+        if (info?.kind === 'wiki') {
+            anchor.removeAttribute('target')
+            anchor.removeAttribute('rel')
+            return
+        }
+        if (info) {
+            anchor.target = '_blank'
+            anchor.rel = 'noopener noreferrer'
+        }
+    }
+
     createDOM(config) {
         const element = super.createDOM(config)
-        decorateDriveLink(element, this.__url)
+        this.applyPresentation(element)
         return element
     }
 
@@ -30,7 +45,7 @@ export class WikiLinkNode extends LinkNode {
         if (!prevNode || prevNode.__url !== this.__url) {
             undecorateDriveLink(anchor)
         }
-        decorateDriveLink(anchor, this.__url)
+        this.applyPresentation(anchor)
         return result
     }
 

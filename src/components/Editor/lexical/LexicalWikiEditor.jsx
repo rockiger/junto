@@ -28,6 +28,7 @@ import {
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import GoogleDriveLinkPlugin from "./plugins/GoogleDriveLinkPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
+import InternalWikiLinkPlugin from "./plugins/InternalWikiLinkPlugin";
 import ReadOnlyCheckListPlugin from "./plugins/ReadOnlyCheckListPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import { wikiTheme } from "./theme";
@@ -113,6 +114,7 @@ const LexicalWikiEditor = forwardRef(
 				)}
 				<LinkPlugin />
 				<GoogleDriveLinkPlugin />
+				<InternalWikiLinkPlugin readOnly={readOnly} />
 				<ClickableLinkPlugin />
 				<TablePlugin />
 				<TabIndentationPlugin />

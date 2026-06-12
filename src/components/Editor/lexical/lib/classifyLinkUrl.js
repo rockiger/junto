@@ -15,14 +15,31 @@ export function googleIconUrlForMime(mimeType) {
     return `${GOOGLE_ICON_BASE}${encodeURIComponent(mimeType)}`
 }
 
+const WIKI_PAGE_RE = /^(?:https?:\/\/[^/?#]+)?\/page\/([^/?#]+)/
+
+/** Drive file id or wiki page id from `/page/{id}` (absolute or same-origin). */
+export function parseWikiPageId(url) {
+    if (!url || typeof url !== 'string') return null
+    const match = url.match(WIKI_PAGE_RE)
+    return match ? match[1] : null
+}
+
 /**
- * Classify a link URL for editor-only Google Drive / Docs styling.
+ * Classify a link URL for editor-only pill styling (Google Drive / internal wiki).
  * Returns null for regular links so markdown stays a plain `[text](url)`.
  *
  * @returns {{ kind: string, fileId?: string, iconUrl?: string, needsFetch?: boolean } | null}
  */
 export function classifyLinkUrl(url) {
     if (!url || typeof url !== 'string') return null
+
+    const wikiPageId = parseWikiPageId(url)
+    if (wikiPageId) {
+        return {
+            fileId: wikiPageId,
+            kind: 'wiki',
+        }
+    }
 
     const doc = url.match(/docs\.google\.com\/document\/d\/([^/?#]+)/)
     if (doc) {

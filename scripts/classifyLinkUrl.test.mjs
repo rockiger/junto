@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import {
     classifyLinkUrl,
     googleIconUrlForMime,
+    parseWikiPageId,
 } from '../src/components/Editor/lexical/lib/classifyLinkUrl.js'
 
 describe('classifyLinkUrl', () => {
@@ -25,9 +26,27 @@ describe('classifyLinkUrl', () => {
         expect(info?.needsFetch).toBe(true)
     })
 
-    it('ignores regular and internal wiki links', () => {
+    it('detects internal wiki page links', () => {
+        expect(classifyLinkUrl('/page/abc')).toEqual({
+            fileId: 'abc',
+            kind: 'wiki',
+        })
+        expect(
+            classifyLinkUrl('https://app.example.com/page/xyz?edit=1')
+        ).toEqual({
+            fileId: 'xyz',
+            kind: 'wiki',
+        })
+    })
+
+    it('parseWikiPageId extracts page ids', () => {
+        expect(parseWikiPageId('/page/abc')).toBe('abc')
+        expect(parseWikiPageId('https://example.com/page/xyz')).toBe('xyz')
+        expect(parseWikiPageId('https://example.com')).toBeNull()
+    })
+
+    it('ignores regular links', () => {
         expect(classifyLinkUrl('https://example.com')).toBeNull()
-        expect(classifyLinkUrl('/page/abc')).toBeNull()
         expect(classifyLinkUrl('[not a url]')).toBeNull()
     })
 })
