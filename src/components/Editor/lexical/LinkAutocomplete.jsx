@@ -11,7 +11,7 @@ class LinkAutocomplete extends React.Component {
     }
 
     componentDidMount() {
-        setTimeout(() => document.getElementById('Autocomplete').focus(), 100)
+        setTimeout(() => document.getElementById('Autocomplete')?.focus(), 100)
     }
 
     onEnter = event => {

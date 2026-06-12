@@ -11,6 +11,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig(() => {
     return {
+        define: {
+            // react-autocomplete references `global.window` (Node-style); browsers only have globalThis.
+            global: 'globalThis',
+        },
         // `.env`, `.env.local`, `.env.[mode]`, `.env.[mode].local` — loaded from here.
         // Only variables prefixed with `VITE_` are exposed to client code via `import.meta.env`.
         envDir: path.resolve(__dirname),

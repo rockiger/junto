@@ -14,10 +14,11 @@ import { putPage } from 'lib/localDB'
  */
 export function convertFilesToAutocompletItems(files) {
     if (Array.isArray(files)) {
+        const seen = new Set()
         const items = files
             .filter(file => {
                 const ext = getExtFromFileName(file.name)
-                return ext === EXT
+                return ext === EXT && !seen.has(file.id) && seen.add(file.id)
             })
             .map(file => {
                 return {
