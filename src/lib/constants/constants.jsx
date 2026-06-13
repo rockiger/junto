@@ -12,6 +12,8 @@ export const API_KEY = isPro
 	? import.meta.env.VITE_API_KEY_PRO
 	: import.meta.env.VITE_API_KEY;
 
+export const APP_ID = import.meta.env.VITE_GOOGLE_APP_ID;
+
 // Array of API discovery doc URLs for APIs used by the quickstart
 export const DISCOVERY_DOCS = [
 	"https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
