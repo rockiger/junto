@@ -1,38 +1,82 @@
 import Skeleton from '@material-ui/lab/Skeleton'
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection'
+import { downloadFileBlob, parseDriveImageFileId } from 'lib/gdrive'
 import { $applyNodeReplacement, DecoratorNode } from 'lexical'
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function ImageComponent({ src, altText, nodeKey }) {
     const [isSelected, setSelected, clearSelection] =
         useLexicalNodeSelection(nodeKey)
+    const driveFileId = parseDriveImageFileId(src)
+    const [displaySrc, setDisplaySrc] = useState(driveFileId ? null : src)
     const [loading, setLoading] = useState(true)
+    const [failed, setFailed] = useState(false)
+
+    useEffect(() => {
+        if (!driveFileId) {
+            setDisplaySrc(src)
+            setFailed(false)
+            setLoading(true)
+            return
+        }
+
+        let objectUrl = null
+        let cancelled = false
+        setDisplaySrc(null)
+        setFailed(false)
+        setLoading(true)
+
+        downloadFileBlob(driveFileId)
+            .then(blob => {
+                if (cancelled) return
+                objectUrl = URL.createObjectURL(blob)
+                setDisplaySrc(objectUrl)
+            })
+            .catch(() => {
+                if (!cancelled) setFailed(true)
+            })
+
+        return () => {
+            cancelled = true
+            if (objectUrl) URL.revokeObjectURL(objectUrl)
+        }
+    }, [src, driveFileId])
+
+    if (failed) {
+        return (
+            <span style={{ color: '#999', fontStyle: 'italic' }}>
+                {altText || 'Image failed to load'}
+            </span>
+        )
+    }
+
     return (
         <>
-            <Skeleton
-                variant="rect"
-                style={{
-                    display: loading ? 'block' : 'none',
-                    height: '10rem',
-                    width: '20em',
-                }}
-            />
-            <img
-                src={src}
-                alt={altText}
-                draggable="false"
-                onClick={event => {
-                    if (!event.shiftKey) clearSelection()
-                    setSelected(!isSelected)
-                }}
-                style={{
-                    display: loading ? 'none' : 'block',
-                    maxHeight: '20em',
-                    maxWidth: '100%',
-                    boxShadow: isSelected ? '0 0 0 1px blue' : 'none',
-                }}
-                onLoad={() => setLoading(false)}
-            />
+            {loading && (
+                <Skeleton
+                    variant="rect"
+                    style={{ height: '10rem', width: '20em' }}
+                />
+            )}
+            {displaySrc && (
+                <img
+                    src={displaySrc}
+                    alt={altText}
+                    draggable="false"
+                    onClick={event => {
+                        if (!event.shiftKey) clearSelection()
+                        setSelected(!isSelected)
+                    }}
+                    onError={() => setFailed(true)}
+                    onLoad={() => setLoading(false)}
+                    style={{
+                        display: loading ? 'none' : 'block',
+                        maxHeight: '20em',
+                        maxWidth: '100%',
+                        boxShadow: isSelected ? '0 0 0 1px blue' : 'none',
+                    }}
+                />
+            )}
         </>
     )
 }

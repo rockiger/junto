@@ -149,6 +149,37 @@ export async function listFilesChunked(searchTerm = "", orderBy = "") {
 	return files;
 }
 
+const imageListFields = "id,name,mimeType,thumbnailLink,hasThumbnail";
+
+/**
+ * Lists all image files accessible to the app on Google Drive.
+ *
+ * @return {Promise<Array<{ id: string, name: string, mimeType: string, thumbnailLink?: string, iconLink?: string }>>}
+ */
+export async function listImageFiles() {
+	await refreshSession();
+	let files = [];
+	let pageToken;
+	const q = "trashed=false and mimeType contains 'image/'";
+
+	do {
+		const response = await getGapi().client.drive.files.list({
+			corpora: "allDrives",
+			pageSize: 100,
+			pageToken,
+			fields: `files(${imageListFields}), nextPageToken`,
+			includeItemsFromAllDrives: true,
+			orderBy: "modifiedTime desc",
+			q,
+			supportsAllDrives: true,
+		});
+		files = files.concat(response.result.files || []);
+		pageToken = response.result.nextPageToken;
+	} while (pageToken);
+
+	return files;
+}
+
 /**
  * Get all revisions of a file.
  *
@@ -337,6 +368,154 @@ export function createFileWithContent(name, ifid, data) {
 				(_error) => resolve(formatFileDescription()),
 			);
 	});
+}
+
+/**
+ * @param {string} fileId Google Drive file id
+ * @returns {string} Image src URL for markdown / img tags
+ */
+export function driveImageSrc(fileId) {
+	return `https://drive.google.com/uc?id=${fileId}&export=download`;
+}
+
+/**
+ * @param {string} src Image src from markdown or editor
+ * @returns {string|null} Google Drive file id if src is a Drive image URL
+ */
+export function parseDriveImageFileId(src) {
+	if (!src || typeof src !== "string") return null;
+	const normalized = src.replace(/&amp;/g, "&");
+	const uc = normalized.match(/drive\.google\.com\/uc\?[^#]*\bid=([^&#]+)/);
+	if (uc) return uc[1];
+	const file = normalized.match(/drive\.google\.com\/file\/d\/([^/?#]+)/);
+	if (file) return file[1];
+	return null;
+}
+
+/**
+ * Downloads a Drive file as a Blob (for images and other binary content).
+ *
+ * @param {string} driveId Google Drive file identifier
+ * @param {boolean} [supportsAllDrives=true]
+ * @return {Promise<Blob>}
+ */
+export async function downloadFileBlob(driveId, supportsAllDrives = true) {
+	await refreshSession();
+	const accessToken = getAccessToken();
+	if (!accessToken) {
+		throw new Error("No access token available");
+	}
+
+	const params = new URLSearchParams({
+		alt: "media",
+		supportsAllDrives: String(supportsAllDrives),
+	});
+
+	const response = await fetch(
+		`https://www.googleapis.com/drive/v3/files/${driveId}?${params}`,
+		{
+			headers: { Authorization: `Bearer ${accessToken}` },
+		},
+	);
+
+	if (!response.ok) {
+		throw new Error(`Drive download failed: ${response.status}`);
+	}
+
+	return response.blob();
+}
+
+/**
+ * Fetches a thumbnail blob for a Drive image file.
+ *
+ * @param {string} fileId
+ * @param {string} [thumbnailLink]
+ * @return {Promise<Blob>}
+ */
+export async function fetchDriveImageThumbnailBlob(fileId, thumbnailLink) {
+	await refreshSession();
+	const accessToken = getAccessToken();
+	if (!accessToken) {
+		throw new Error("No access token available");
+	}
+
+	const authHeaders = { Authorization: `Bearer ${accessToken}` };
+	const candidates = [
+		thumbnailLink,
+		`https://drive.google.com/thumbnail?id=${fileId}&sz=w220`,
+	].filter(Boolean);
+
+	for (const url of candidates) {
+		try {
+			const response = await fetch(url, { headers: authHeaders });
+			if (!response.ok) continue;
+			const blob = await response.blob();
+			if (blob.size > 0) return blob;
+		} catch {
+			// try next source
+		}
+	}
+
+	return downloadFileBlob(fileId);
+}
+
+/**
+ * Uploads a binary file to Google Drive in the given parent folder.
+ *
+ * @param {{ file: File, parentId: string, name?: string, supportsAllDrives?: boolean }} params
+ * @return {Promise<object>} Drive file metadata
+ */
+export async function uploadBinaryFile({
+	file,
+	parentId,
+	name,
+	supportsAllDrives = true,
+}) {
+	await refreshSession();
+	const accessToken = getAccessToken();
+	if (!accessToken) {
+		throw new Error("No access token available");
+	}
+
+	const boundary = "-batch-31415926579323846boundatydnfj111";
+	const delimiter = `\r\n--${boundary}\r\n`;
+	const close_delim = `\r\n--${boundary}--`;
+	const mimeType = file.type || "application/octet-stream";
+
+	const metadata = {
+		name: name || file.name,
+		mimeType,
+		parents: [parentId],
+	};
+
+	const metadataPart =
+		delimiter +
+		"Content-Type: application/json; charset=UTF-8\r\n\r\n" +
+		JSON.stringify(metadata);
+	const mediaHeader = delimiter + `Content-Type: ${mimeType}\r\n\r\n`;
+	const body = new Blob([metadataPart, mediaHeader, file, close_delim]);
+
+	const params = new URLSearchParams({
+		uploadType: "multipart",
+		fields: fileFields,
+		supportsAllDrives: String(supportsAllDrives),
+	});
+
+	const response = await fetch(`${driveUploadPath}?${params}`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			"Content-Type": `multipart/related; boundary="${boundary}"`,
+		},
+		body,
+	});
+
+	if (!response.ok) {
+		const errBody = await response.text();
+		throw new Error(`Drive upload failed: ${response.status} ${errBody}`);
+	}
+
+	return response.json();
 }
 
 /**

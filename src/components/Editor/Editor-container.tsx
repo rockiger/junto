@@ -232,6 +232,7 @@ const EditorLogic = React.forwardRef(
                 <LexicalWikiEditor
                     apiKey={API_KEY}
                     canEdit={canEdit}
+                    fileId={fileId}
                     initialValue={initialValue}
                     items={convertFilesToAutocompletItems(initialFiles)}
                     onChangeMarkdown={handleMarkdownChange}

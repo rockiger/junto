@@ -51,7 +51,16 @@ function EditablePlugin({ readOnly }) {
  */
 const LexicalWikiEditor = forwardRef(
 	(
-		{ apiKey, canEdit, initialValue, items, onChangeMarkdown, readOnly, style },
+		{
+			apiKey,
+			canEdit,
+			fileId,
+			initialValue,
+			items,
+			onChangeMarkdown,
+			readOnly,
+			style,
+		},
 		ref,
 	) => {
 		const editorRef = useRef(null);
@@ -77,7 +86,9 @@ const LexicalWikiEditor = forwardRef(
 
 		return (
 			<LexicalComposer initialConfig={initialConfig}>
-				{!readOnly && <ToolbarPlugin apiKey={apiKey} items={items} />}
+				{!readOnly && (
+					<ToolbarPlugin apiKey={apiKey} fileId={fileId} items={items} />
+				)}
 				<div style={{ position: "relative" }}>
 					<RichTextPlugin
 						contentEditable={

@@ -32,8 +32,9 @@ import {
 	$getNearestNodeOfType,
 	mergeRegister,
 } from "@lexical/utils";
-import { Tooltip } from "@material-ui/core";
+import { Menu, MenuItem, ListItemIcon, ListItemText, Tooltip } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { getParentFolderId } from "components/Sidebar/Sidebar-helper";
 import {
 	$createParagraphNode,
 	$createTextNode,
@@ -44,6 +45,7 @@ import {
 	FORMAT_TEXT_COMMAND,
 	SELECTION_CHANGE_COMMAND,
 } from "lexical";
+import { driveImageSrc, uploadBinaryFile } from "lib/gdrive";
 import CodeBracesIcon from "mdi-react/CodeBracesIcon";
 import CodeTagsIcon from "mdi-react/CodeTagsIcon";
 import FormatBoldIcon from "mdi-react/FormatBoldIcon";
@@ -57,7 +59,9 @@ import FormatQuoteCloseIcon from "mdi-react/FormatQuoteCloseIcon";
 import FormatStrikethroughIcon from "mdi-react/FormatStrikethroughVariantIcon";
 import FormatUnderlineIcon from "mdi-react/FormatUnderlineIcon";
 import GoogleDriveIcon from "mdi-react/GoogleDriveIcon";
+import ImageIcon from "mdi-react/ImageIcon";
 import LinkIcon from "mdi-react/LinkIcon";
+import LinkVariantIcon from "mdi-react/LinkVariantIcon";
 import PageLayoutHeaderIcon from "mdi-react/PageLayoutHeaderIcon";
 import TableColumnPlusAfterIcon from "mdi-react/TableColumnPlusAfterIcon";
 import TableColumnRemoveIcon from "mdi-react/TableColumnRemoveIcon";
@@ -65,13 +69,18 @@ import TableLargeIcon from "mdi-react/TableLargeIcon";
 import TableLargeRemoveIcon from "mdi-react/TableLargeRemoveIcon";
 import TableRowPlusAfterIcon from "mdi-react/TableRowPlusAfterIcon";
 import TableRowRemoveIcon from "mdi-react/TableRowRemoveIcon";
+import UploadIcon from "mdi-react/UploadIcon";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getDocument, getImage } from "../gpicker";
+import { useGlobal } from "reactn";
+import { getDocument } from "../gpicker";
+import { DriveImagePickerModal } from "../DriveImagePickerModal";
+import { ImageUrlModal } from "../ImageUrlModal";
 import { LinkModal } from "../LinkModal";
 import { $createWikiLinkNode } from "../nodes/WikiLinkNode";
 import { INSERT_IMAGE_COMMAND } from "./ImagesPlugin";
 
 const ICON_STYLE = { height: 18 };
+const MENU_ICON_STYLE = { height: 20 };
 
 const EditorToolbar = (props) => {
 	return (
@@ -97,9 +106,15 @@ const ToolbarButton = ({ active, value, title, ...props }) => {
 	);
 };
 
-export default function ToolbarPlugin({ apiKey, items }) {
+export default function ToolbarPlugin({ apiKey, fileId, items }) {
 	const [editor] = useLexicalComposerContext();
+	const [files, setFiles] = useGlobal("files");
+	const [initialFiles, setInitialFiles] = useGlobal("initialFiles");
 	const modalRef = useRef(null);
+	const imageUrlModalRef = useRef(null);
+	const driveImagePickerRef = useRef(null);
+	const imageInputRef = useRef(null);
+	const [imageMenuAnchor, setImageMenuAnchor] = useState(null);
 	const [blockType, setBlockType] = useState("paragraph");
 	const [formats, setFormats] = useState({});
 	const [isLink, setIsLink] = useState(false);
@@ -240,19 +255,64 @@ export default function ToolbarPlugin({ apiKey, items }) {
 		}
 	}
 
-	const onClickImage = async (event) => {
+	const closeImageMenu = () => setImageMenuAnchor(null);
+
+	const onClickImage = (event) => {
 		event.preventDefault();
-		if (window.gapi && window.google) {
-			try {
-				const src = await getImage(apiKey);
-				editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src });
-			} catch (err) {
-				if (err.message === "cancel") console.log("Picker canceled");
-			}
-		} else {
-			const src = window.prompt("Enter the URL of the image:");
-			if (!src) return;
+		setImageMenuAnchor(event.currentTarget);
+	};
+
+	const onImageMenuUpload = () => {
+		closeImageMenu();
+		imageInputRef.current?.click();
+	};
+
+	const onImageMenuByUrl = async () => {
+		closeImageMenu();
+		try {
+			const src = await imageUrlModalRef.current.show();
 			editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src });
+		} catch {
+			// dialog cancelled
+		}
+		editor.focus();
+	};
+
+	const onImageMenuGoogleDrive = async () => {
+		closeImageMenu();
+		try {
+			const picked = await driveImagePickerRef.current.show();
+			editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+				src: driveImageSrc(picked.id),
+				altText: picked.name,
+			});
+		} catch {
+			// dialog cancelled or load failed
+		}
+		editor.focus();
+	};
+
+	const onImageFileSelected = async (event) => {
+		const file = event.target.files?.[0];
+		event.target.value = "";
+		if (!file?.type?.startsWith("image/")) return;
+		if (!fileId) {
+			console.error("No page id for image upload");
+			return;
+		}
+
+		try {
+			const parentId = getParentFolderId(fileId, initialFiles ?? []);
+			const uploaded = await uploadBinaryFile({ file, parentId });
+			setFiles([...(files ?? []), uploaded]);
+			setInitialFiles([...(initialFiles ?? []), uploaded]);
+			editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+				src: driveImageSrc(uploaded.id),
+				altText: uploaded.name || file.name,
+			});
+		} catch (err) {
+			console.error("Image upload failed", err);
+			alert("Could not upload image. Please try again.");
 		}
 		editor.focus();
 	};
@@ -335,6 +395,13 @@ export default function ToolbarPlugin({ apiKey, items }) {
 
 	return (
 		<>
+			<input
+				ref={imageInputRef}
+				accept="image/*"
+				onChange={onImageFileSelected}
+				style={{ display: "none" }}
+				type="file"
+			/>
 			<EditorToolbar>
 				<ToggleButtonGroup style={{ marginRight: "1rem" }}>
 					<ToolbarButton
@@ -415,14 +482,14 @@ export default function ToolbarPlugin({ apiKey, items }) {
 					>
 						<LinkIcon style={ICON_STYLE} />
 					</ToolbarButton>
-					{/* <ToolbarButton
-                        active={false}
-                        onMouseDown={onClickImage}
-                        title="Image"
-                        value="image"
-                    >
-                        <ImageIcon style={ICON_STYLE} />
-                    </ToolbarButton> */}
+					<ToolbarButton
+						active={false}
+						onMouseDown={onClickImage}
+						title="Image"
+						value="image"
+					>
+						<ImageIcon style={ICON_STYLE} />
+					</ToolbarButton>
 					<ToolbarButton
 						active={false}
 						onMouseDown={onClickDrive}
@@ -539,7 +606,36 @@ export default function ToolbarPlugin({ apiKey, items }) {
 					)}
 				</ToggleButtonGroup>
 			</EditorToolbar>
+			<Menu
+				anchorEl={imageMenuAnchor}
+				anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+				getContentAnchorEl={null}
+				onClose={closeImageMenu}
+				open={Boolean(imageMenuAnchor)}
+				transformOrigin={{ vertical: "top", horizontal: "left" }}
+			>
+				<MenuItem onClick={onImageMenuUpload}>
+					<ListItemIcon style={{ minWidth: "2.25rem" }}>
+						<UploadIcon style={MENU_ICON_STYLE} />
+					</ListItemIcon>
+					<ListItemText primary="Upload from Computer" />
+				</MenuItem>
+				<MenuItem onClick={onImageMenuByUrl}>
+					<ListItemIcon style={{ minWidth: "2.25rem" }}>
+						<LinkVariantIcon style={MENU_ICON_STYLE} />
+					</ListItemIcon>
+					<ListItemText primary="By URL" />
+				</MenuItem>
+				<MenuItem onClick={onImageMenuGoogleDrive}>
+					<ListItemIcon style={{ minWidth: "2.25rem" }}>
+						<GoogleDriveIcon style={MENU_ICON_STYLE} />
+					</ListItemIcon>
+					<ListItemText primary="Google Drive" />
+				</MenuItem>
+			</Menu>
 			<LinkModal ref={modalRef} items={items} />
+			<ImageUrlModal ref={imageUrlModalRef} />
+			<DriveImagePickerModal ref={driveImagePickerRef} />
 		</>
 	);
 }
