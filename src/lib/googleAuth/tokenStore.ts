@@ -1,7 +1,12 @@
 import type { LoginTrigger, StoredToken } from './types'
 
 const TOKEN_STORAGE_KEY = 'junto-google-token'
+const WAS_AUTHENTICATED_KEY = 'junto-was-authenticated'
 const REFRESH_BEFORE_EXPIRY_MS = 5 * 60 * 1000
+
+export type RefreshTokenOptions = {
+	force?: boolean
+}
 
 let currentToken: StoredToken | null = null
 let loginTrigger: LoginTrigger | null = null
@@ -47,13 +52,13 @@ function scheduleProactiveRefresh() {
 
 	const delay = currentToken.expires_at - Date.now() - REFRESH_BEFORE_EXPIRY_MS
 	if (delay <= 0) {
-		void refreshToken().catch(() => {})
+		void refreshToken({ force: true }).catch(() => {})
 		return
 	}
 
 	refreshTimerId = setTimeout(() => {
 		refreshTimerId = null
-		void refreshToken().catch(() => {})
+		void refreshToken({ force: true }).catch(() => {})
 	}, delay)
 }
 
@@ -72,12 +77,37 @@ export function isTokenValid(): boolean {
 	return getAccessToken() !== null
 }
 
+export function markWasAuthenticated() {
+	try {
+		getTokenStorage().setItem(WAS_AUTHENTICATED_KEY, '1')
+	} catch {
+		// Storage may be unavailable in some environments.
+	}
+}
+
+export function wasAuthenticated(): boolean {
+	try {
+		return getTokenStorage().getItem(WAS_AUTHENTICATED_KEY) === '1'
+	} catch {
+		return false
+	}
+}
+
+export function clearWasAuthenticated() {
+	try {
+		getTokenStorage().removeItem(WAS_AUTHENTICATED_KEY)
+	} catch {
+		// Storage may be unavailable in some environments.
+	}
+}
+
 export function setAccessToken(accessToken: string, expiresInSeconds = 3600) {
 	currentToken = {
 		access_token: accessToken,
 		expires_at: Date.now() + expiresInSeconds * 1000 - 60_000,
 	}
 	getTokenStorage().setItem(TOKEN_STORAGE_KEY, JSON.stringify(currentToken))
+	markWasAuthenticated()
 	scheduleProactiveRefresh()
 }
 
@@ -127,8 +157,22 @@ export function rejectRefreshWaiters(error: Error) {
 	refreshWaiters.length = 0
 }
 
-export function refreshToken(): Promise<void> {
-	if (isTokenValid()) {
+function shouldRefreshToken(force: boolean): boolean {
+	if (!currentToken) {
+		return true
+	}
+
+	const msUntilExpiry = currentToken.expires_at - Date.now()
+	if (msUntilExpiry <= 0) {
+		return true
+	}
+
+	return force && msUntilExpiry <= REFRESH_BEFORE_EXPIRY_MS
+}
+
+export function refreshToken(options?: RefreshTokenOptions): Promise<void> {
+	const force = options?.force ?? false
+	if (!shouldRefreshToken(force)) {
 		return Promise.resolve()
 	}
 

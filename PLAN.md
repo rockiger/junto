@@ -40,7 +40,7 @@
 -- [x] Open leaf when page is opened
 -- [x] Fix sidebar overflow
 -- [x] Convert to react-aria components
-- [x] Fix gapi errors
+- [x] Fix gapi errors 
 - [x] Migrate to Lexical
 -- [x] Store wiki pages as Markdown (.md, text/markdown)
 -- [x] Replace Slate editor with React-Lexical (toolbar, tables, images, checklists, code highlighting)
@@ -48,15 +48,18 @@
 -- [x] Create new pages as .md in Google Drive
 -- [x] Round-trip safety: md -> Lexical -> md is byte-idempotent (bun test scripts/)
 - [x] Convert .gwiki files to .md to use legacy files (automatic in-app batch migration after sign-in)
-- [] Optimize update behavior
+- [x] Optimize login time (reverse changes or improve new solution)
+- [x] Reload-Site warning
 - [] Remove MUI and use React-Aria components
+- [] Update React to 19
+- [] Add editor features
+-- [] tbd.
 - [] Repair Hints
 - [] Repair Tests
 ----------------------------------------------------------
 - [] Deploy to Hostinger
 - [] Read Hints to guide users
 - [] Star a file in the file list
-- [] Known issue with the sidebar hover and the pill background for selected items
 - [] Performance
 -- [] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
 -- [] Use route loaders to prefetch data

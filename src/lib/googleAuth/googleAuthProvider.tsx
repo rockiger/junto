@@ -19,11 +19,15 @@ import {
 } from './postSignInInit'
 import {
 	clearAccessToken,
+	clearWasAuthenticated,
 	loadStoredToken,
+	markWasAuthenticated,
 	registerLoginTrigger,
 	rejectRefreshWaiters,
 	resolveRefreshWaiters,
+	refreshToken,
 	setAccessToken,
+	wasAuthenticated,
 } from './tokenStore'
 import {
 	clearCachedUserInfo,
@@ -133,6 +137,7 @@ export function GoogleAuthProvider({ children }: GoogleAuthProviderProps) {
 						if (cancelled) {
 							return
 						}
+						markWasAuthenticated()
 						setGlobal({
 							isSignedIn: true,
 							isSigningIn: false,
@@ -144,6 +149,17 @@ export function GoogleAuthProvider({ children }: GoogleAuthProviderProps) {
 						clearAccessToken()
 						clearCachedUserInfo()
 						applyTokenToGapiClient(null)
+					}
+				}
+
+				if (wasAuthenticated()) {
+					try {
+						await refreshToken()
+						if (!cancelled) {
+							return
+						}
+					} catch {
+						// Silent refresh failed; fall through to signed-out state.
 					}
 				}
 
@@ -179,6 +195,7 @@ export function GoogleAuthProvider({ children }: GoogleAuthProviderProps) {
 		}
 
 		clearAccessToken()
+		clearWasAuthenticated()
 		clearCachedUserInfo()
 		resetPostSignInInit()
 		applyTokenToGapiClient(null)

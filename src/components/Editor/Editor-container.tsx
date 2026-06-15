@@ -245,7 +245,7 @@ const EditorLogic = React.forwardRef(
                         overflowY: 'auto',
                     }}
                 />
-                {canEdit && (
+                {canEdit && !readOnly && (
                     <Beforeunload
                         onBeforeunload={async () => {
                             saveChecklistChanges.flush()
