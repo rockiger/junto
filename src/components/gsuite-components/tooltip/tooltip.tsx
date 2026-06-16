@@ -8,6 +8,8 @@ import {
 const tooltipSurfaceClass =
 	'box-border flex min-h-[22px] min-w-14 items-center justify-center rounded-[2px] border-0 bg-grey-700 px-2 py-[5px] text-center text-sm font-medium whitespace-nowrap text-white opacity-90 shadow-none'
 
+export { tooltipSurfaceClass }
+
 export interface TooltipProps extends Omit<TooltipTriggerComponentProps, 'children'> {
 	content?: string
 	children: ReactElement

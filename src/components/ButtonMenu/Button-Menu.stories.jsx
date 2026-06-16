@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions'
 
 import MenuIcon from 'mdi-react/MenuIcon'
 
-import { ButtonMenu } from './ButtonMenu-container'
+import { ButtonMenu } from './index'
 
 storiesOf('ButtonMenu', module)
     .addDecorator(story => (

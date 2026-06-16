@@ -7,7 +7,7 @@ import '@testing-library/jest-dom/extend-expect'
 
 import MenuIcon from 'mdi-react/MenuIcon'
 
-import { ButtonMenu } from './ButtonMenu-container'
+import { ButtonMenu } from './ButtonMenu'
 
 const getById = queryByAttribute.bind(null, 'id')
 const getByAriaHidden = queryByAttribute.bind(null, 'aria-hidden')
