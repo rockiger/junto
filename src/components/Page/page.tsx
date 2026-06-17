@@ -10,9 +10,9 @@ import {
 } from '@tanstack/react-router'
 import Editor from 'components/Editor'
 import { FlexInput } from 'components/FlexInput'
-import { BreadcrumbsBar } from 'components/Page/Breadcrumbs'
 import IconButton from 'components/gsuite-components/icon-button'
 import Spinner from 'components/gsuite-components/spinner'
+import { BreadcrumbsBar } from 'components/Page/Breadcrumbs'
 import { PageView } from 'components/Tracking'
 import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
 import {
@@ -23,6 +23,7 @@ import {
     updateMetadata,
 } from 'lib/gdrive'
 import { filesUpdater, getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
+import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 import { getPageById, putPage } from 'lib/localDB'
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 import LockOutlineIcon from 'mdi-react/LockOutlineIcon'
@@ -35,7 +36,6 @@ import {
 } from 'react'
 import { getGlobal, setGlobal, useGlobal } from 'reactn'
 import type { IFile } from 'reactn/default'
-import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 
 // biome-ignore lint/suspicious/noExplicitAny: `Editor` is a JS `forwardRef` without exported props
 const EditorWithFileProps = Editor as any
@@ -316,7 +316,7 @@ export default function Page({
                         <ArrowLeftIcon aria-hidden />
                     </IconButton>
                     {fileLoaded && (
-                        <h1 className="flex items-center text-2xl font-semibold overflow-clip text-ellipsis max-w-[calc(100vw-200px)]">
+                        <h1 className="flex items-center text-2xl font-semibold text-ellipsis max-w-[calc(100vw-200px)]">
                             {canEdit &&
                                 (fileName === OVERVIEW_NAME ? (
                                     <div className='flex font-normal items-baseline px-1.5 py-4 text-xl leading-none text-text-muted'

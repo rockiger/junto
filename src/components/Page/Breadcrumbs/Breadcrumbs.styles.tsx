@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles'
 export const useStyles = makeStyles(() => {
     return {
         breadcrumbsBar: {
-            height: 37,
             position: 'relative',
         },
         breadcrumbs: {
