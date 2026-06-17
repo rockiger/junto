@@ -1,18 +1,14 @@
 import { useLocation, useNavigate } from '@tanstack/react-router'
+import { DialogModal } from 'components/gsuite-components/modal/dialog-modal'
 import Spinner from 'components/gsuite-components/spinner'
 import { createFile, createNewWiki } from 'db'
 import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
-import CloseIcon from 'mdi-react/CloseIcon'
 import { type FormEvent, useEffect, useState } from 'react'
 import {
     Button,
-    Dialog,
     Form,
-    Heading,
     Input,
     Label,
-    Modal,
-    ModalOverlay,
     TextArea,
     TextField,
 } from 'react-aria-components'
@@ -61,100 +57,78 @@ export function CreateNewWikiDialog({
     onSubmit,
 }: CreateNewWikiDialogProps) {
     return (
-        <ModalOverlay
+        <DialogModal
             isOpen={isOpen}
             onOpenChange={(open) => {
                 if (!open) onCancel()
             }}
-            isDismissable
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            title="Create New Wiki"
+            maxWidth="2xl"
+            contentClassName="px-0 pb-0"
         >
-            <Modal className="w-full max-w-2xl rounded-lg bg-surface-container shadow-lg outline-none">
-                <Dialog className="outline-none">
-                    {({ close }) => (
-                        <Form onSubmit={onSubmit} className="flex flex-col">
-                            <div className="flex items-center justify-between px-6 pt-6 pb-2">
-                                <Heading
-                                    slot="title"
-                                    className="text-xl font-medium text-heading"
-                                >
-                                    Create New Wiki
-                                </Heading>
-                                <Button
-                                    slot="close"
-                                    onPress={close}
-                                    aria-label="Close"
-                                    className="rounded-full p-2 outline-none transition-[color,background] duration-200 hover:bg-surface-hover data-focus-visible:shadow-focus"
-                                >
-                                    <CloseIcon className="h-5 w-5" />
-                                </Button>
-                            </div>
+            <Form onSubmit={onSubmit} className="flex flex-col">
+                <div className="grid gap-6 px-6 pb-6 sm:grid-cols-[1fr_minmax(0,12rem)]">
+                    <div className="flex flex-col gap-4">
+                        <TextField
+                            name="name"
+                            isRequired
+                            value={name}
+                            onChange={onNameChange}
+                            className="flex flex-col gap-1"
+                        >
+                            <Label className="text-sm font-semibold text-text-default">
+                                Fulcrum Name
+                            </Label>
+                            <Input className={fieldClassName} />
+                        </TextField>
 
-                            <div className="grid gap-6 p-6 sm:grid-cols-[1fr_minmax(0,12rem)]">
-                                <div className="flex flex-col gap-4">
-                                    <TextField
-                                        name="name"
-                                        isRequired
-                                        value={name}
-                                        onChange={onNameChange}
-                                        className="flex flex-col gap-1"
-                                    >
-                                        <Label className="text-sm font-semibold text-text-default">
-                                            Fulcrum Name
-                                        </Label>
-                                        <Input className={fieldClassName} />
-                                    </TextField>
+                        <TextField
+                            name="description"
+                            value={description}
+                            onChange={onDescriptionChange}
+                            className="flex flex-col gap-1"
+                        >
+                            <Label className="text-sm font-semibold text-text-default">
+                                Description
+                            </Label>
+                            <TextArea
+                                rows={4}
+                                placeholder="Optional: What is this wiki for?"
+                                className={`resize-none ${fieldClassName}`}
+                            />
+                        </TextField>
+                    </div>
 
-                                    <TextField
-                                        name="description"
-                                        value={description}
-                                        onChange={onDescriptionChange}
-                                        className="flex flex-col gap-1"
-                                    >
-                                        <Label className="text-sm font-semibold text-text-default">
-                                            Description
-                                        </Label>
-                                        <TextArea
-                                            rows={4}
-                                            placeholder="Optional: What is this wiki for?"
-                                            className={`resize-none ${fieldClassName}`}
-                                        />
-                                    </TextField>
-                                </div>
+                    <aside className="text-sm text-text-muted">
+                        <p className="mb-2 font-semibold text-text-default">
+                            About wikis
+                        </p>
+                        <p>
+                            Share knowledge, manage documentation and
+                            collaborate with your team. You can add pages
+                            and keep them organised in a hierarchy.
+                        </p>
+                    </aside>
+                </div>
 
-                                <aside className="text-sm text-text-muted">
-                                    <p className="mb-2 font-semibold text-text-default">
-                                        About wikis
-                                    </p>
-                                    <p>
-                                        Share knowledge, manage documentation and
-                                        collaborate with your team. You can add pages
-                                        and keep them organised in a hierarchy.
-                                    </p>
-                                </aside>
-                            </div>
-
-                            <div className="flex justify-end gap-3 px-6 pt-2 pb-6">
-                                <Button
-                                    type="button"
-                                    onPress={onCancel}
-                                    className="rounded-full bg-transparent px-6 py-2 capitalize text-accent-dark text-sm font-semibold outline-none transition-colors duration-200 hover:bg-icon-blue-lighter data-focus-visible:shadow-focus"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    isDisabled={!name.trim()}
-                                    className="rounded-full bg-icon-blue px-6 py-2 capitalize text-on-accent text-sm font-semibold outline-none disabled:opacity-50 data-focus-visible:shadow-focus"
-                                >
-                                    Apply
-                                </Button>
-                            </div>
-                        </Form>
-                    )}
-                </Dialog>
-            </Modal>
-        </ModalOverlay>
+                <div className="flex justify-end gap-3 px-6">
+                    <Button
+                        type="button"
+                        onPress={onCancel}
+                        className="rounded-full bg-transparent px-6 py-2 capitalize text-accent-dark text-sm font-semibold outline-none transition-colors duration-200 hover:bg-icon-blue-lighter data-focus-visible:shadow-focus"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        type="submit"
+                        isDisabled={!name.trim()}
+                        className="rounded-full bg-icon-blue px-6 capitalize text-on-accent text-sm font-semibold outline-none disabled:opacity-50 data-focus-visible:shadow-focus"
+                    >
+                        Apply
+                    </Button>
+                </div>
+            </Form>
+        </DialogModal>
     )
 }
 

@@ -73,9 +73,9 @@ import UploadIcon from "mdi-react/UploadIcon";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGlobal } from "reactn";
 import { getDocument } from "../gpicker";
-import { DriveImagePickerModal } from "../DriveImagePickerModal";
-import { ImageUrlModal } from "../ImageUrlModal";
-import { LinkModal } from "../LinkModal";
+import { DriveImagePickerModal } from "../drive-image-picker-modal";
+import { ImageUrlModal } from "../image-url-modal";
+import { LinkModal } from "../link-modal";
 import { $createWikiLinkNode } from "../nodes/WikiLinkNode";
 import { INSERT_IMAGE_COMMAND } from "./ImagesPlugin";
 
