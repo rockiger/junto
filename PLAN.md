@@ -59,6 +59,7 @@
 ----------------------------------------------------------
 - [] Deploy to Hostinger
 - [] Read Hints to guide users
+- [] Background color of Front-page
 - [] Star a file in the file list
 - [] Performance
 -- [] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching

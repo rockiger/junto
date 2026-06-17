@@ -30,7 +30,7 @@ export const BreadcrumbsBar = (props: IProps) => {
                 id="breadcrumbs"
                 className="m-0 flex h-10 flex-wrap items-center list-none p-0"
             >
-                {parentPages.map((el, index) => {
+                {parentPages.map((el) => {
                     const title = getTitleFromFile(el.file)
                     if (!title) return null
                     return (

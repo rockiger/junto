@@ -1,7 +1,6 @@
 /* global gapi */
 
 
-import { Chip } from '@material-ui/core'
 import {
     Navigate,
     useNavigate,
@@ -360,14 +359,12 @@ export default function Page({
                                     }}
                                 >
                                     {pageHead}
-                                    <Chip
+                                    <div
                                         id="Readonly-Chip"
-                                        color="primary"
-                                        label="Readonly"
-                                        size="small"
-                                        style={{
-                                            margin: '0 0 3px 1rem',
-                                        }} />
+                                        className="bg-surface font-normal inline text-xs text-text-default px-2 py-1 rounded-full"
+                                    >
+                                        Readonly
+                                    </div>
                                 </div>
                             )}
                         </h1>

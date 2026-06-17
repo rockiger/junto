@@ -1,5 +1,3 @@
-import { createTheme } from "@material-ui/core/styles";
-
 const isPro =
 	window.location.host === "localhost:5763" ||
 	window.location.host === "pro.fulcrum.wiki";
@@ -36,46 +34,6 @@ export const UNTITLEDNAME = "Untitled page";
 export const UNTITLEDFILE = UNTITLEDNAME + EXT;
 
 export const DEFAULTVALUE = {};
-
-export const THEMEVARS = {
-	background: "#fff",
-	backgroundDark: "#f1f3f4",
-	primary: "#4285f4",
-	grey: "#6e6f70",
-	secondary: "#ea4335",
-	text: "#3c4043",
-};
-
-export const THEME = createTheme({
-	palette: {
-		background: {
-			default: THEMEVARS.background,
-			alternative: THEMEVARS.backgroundDark,
-		},
-		primary: {
-			main: THEMEVARS.primary,
-		},
-		secondary: {
-			main: THEMEVARS.secondary,
-		},
-		grey: {
-			foreground: THEMEVARS.grey,
-		},
-		text: {
-			primary: THEMEVARS.text,
-		},
-	},
-	typography: {
-		h2: {
-			fontSize: "1.5rem",
-		},
-		h6: {
-			fontWeight: 400,
-		},
-	},
-});
-
-window.THEME = THEME;
 
 // Pages are stored as Markdown; a new page starts empty.
 export const EMPTYVALUE = "";
