@@ -1,8 +1,16 @@
-import { API_KEY, DISCOVERY_DOCS } from 'lib/constants'
+import { API_KEY, CLIENT_ID, DISCOVERY_DOCS, SCOPES } from 'lib/constants'
 
 import { ensureGapi, getGapi } from '../gdrive/ensureGapi'
 
 let gapiClientReady: Promise<void> | null = null
+
+export function getGapiAuthInstance() {
+	const auth2 = getGapi().auth2
+	if (!auth2) {
+		throw new Error('gapi auth2 is not loaded. Call ensureGapiClient() first.')
+	}
+	return auth2.getAuthInstance()
+}
 
 export function ensureGapiClient(): Promise<void> {
 	if (gapiClientReady) {
@@ -12,7 +20,7 @@ export function ensureGapiClient(): Promise<void> {
 	gapiClientReady = ensureGapi().then(
 		() =>
 			new Promise((resolve, reject) => {
-				getGapi().load('client', () => {
+				getGapi().load('client:auth2', () => {
 					const client = getGapi().client
 					if (!client) {
 						reject(new Error('gapi client is not available'))
@@ -21,7 +29,9 @@ export function ensureGapiClient(): Promise<void> {
 					client
 						.init({
 							apiKey: API_KEY,
+							clientId: CLIENT_ID,
 							discoveryDocs: DISCOVERY_DOCS,
+							scope: SCOPES,
 						})
 						.then(() => resolve(), reject)
 				})

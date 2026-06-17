@@ -2,11 +2,6 @@ import { configure } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import { vi } from 'vitest'
 
-vi.mock('@react-oauth/google', () => ({
-	GoogleOAuthProvider: ({ children }) => children,
-	useGoogleLogin: () => vi.fn(),
-}))
-
 vi.mock('lib/googleAuth', async () => {
 	const actual = await vi.importActual('lib/googleAuth/tokenStore')
 	return {
@@ -20,6 +15,22 @@ vi.mock('lib/googleAuth', async () => {
 	}
 })
 
+const auth2Instance = {
+	isSignedIn: {
+		get: () => false,
+		listen: () => {},
+	},
+	signIn: () => Promise.resolve(),
+	signOut: () => Promise.resolve(),
+	currentUser: {
+		get: () => ({
+			getAuthResponse: () => ({ access_token: '' }),
+			reloadAuthResponse: () =>
+				Promise.resolve({ access_token: '' }),
+		}),
+	},
+}
+
 // Mock gapi
 global.window.gapi = {
 	load: (_name, callback) => {
@@ -30,6 +41,12 @@ global.window.gapi = {
 	client: {
 		init: () => Promise.resolve(),
 		setToken: () => {},
+	},
+	auth2: {
+		getAuthInstance: () => auth2Instance,
+	},
+	auth: {
+		getToken: () => null,
 	},
 }
 

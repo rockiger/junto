@@ -1,6 +1,7 @@
 import { ensureGapi, getGapi } from "./ensureGapi";
 import { getUserEmail } from "../googleAuth/userInfo";
-import { getAccessToken, isTokenValid, refreshToken } from "../googleAuth/tokenStore";
+import { getAccessToken, isTokenValid } from "../googleAuth/tokenStore";
+import { getGapiAuthInstance } from "../googleAuth/gapiClient";
 
 const driveUploadPath = "https://www.googleapis.com/upload/drive/v3/files";
 
@@ -808,13 +809,12 @@ export function refreshSession() {
  * @returns {Promise|Object}
  */
 export function reloadAuthResponse() {
-	return refreshToken().then(() => {
-		const accessToken = getAccessToken();
-		if (!accessToken) {
-			throw new Error("No access token available after refresh");
-		}
-		getGapi().client.setToken({ access_token: accessToken });
-	});
+	return getGapiAuthInstance()
+		.currentUser.get()
+		.reloadAuthResponse()
+		.then((authResponse) => {
+			getGapi().client.setToken({ access_token: authResponse.access_token });
+		});
 }
 
 // helpers
