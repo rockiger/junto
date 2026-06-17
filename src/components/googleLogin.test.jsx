@@ -1,11 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
 import { vi } from 'vitest'
 
 import GoogleLogin from './googleLogin'
-
-let mockIsSignedIn = false
 
 vi.mock('reactn', () => ({
 	useGlobal: (key) => {
@@ -26,21 +22,19 @@ vi.mock('lib/googleAuth', () => ({
 
 describe('GoogleLogin', () => {
 	it('renders without crashing', () => {
-		const div = document.createElement('div')
-		ReactDOM.render(<GoogleLogin buttonText="Sign in" />, div)
-		ReactDOM.unmountComponentAtNode(div)
+		render(<GoogleLogin buttonText="Sign in" />)
 	})
 
 	it('has a signin button', () => {
 		mockIsSignedIn = false
-		const element = shallow(<GoogleLogin buttonText="Sign in" />)
-		expect(element.find('#authorize_button').exists()).toBe(true)
+		render(<GoogleLogin buttonText="Sign in" />)
+		expect(document.getElementById('authorize_button')).toBeTruthy()
 	})
 
 	it('has a signout button when signed in', () => {
 		mockIsSignedIn = true
-		const element = shallow(<GoogleLogin buttonText="Sign in" />)
-		expect(element.find('#LogoutButton').exists()).toBe(true)
+		render(<GoogleLogin buttonText="Sign in" />)
+		expect(document.getElementById('LogoutButton')).toBeTruthy()
 		mockIsSignedIn = false
 	})
 })

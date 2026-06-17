@@ -52,7 +52,7 @@ export default defineConfig(() => {
             tailwindcss(),
             react(),
             babel({
-                presets: [reactCompilerPreset({ target: '18' })],
+                presets: [reactCompilerPreset({ target: '19' })],
             }),
         ],
     }

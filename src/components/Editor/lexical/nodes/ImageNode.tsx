@@ -13,7 +13,7 @@ import {
 	type Spread,
 } from 'lexical'
 import { downloadFileBlob, parseDriveImageFileId } from 'lib/gdrive'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react'
 
 interface ImageComponentProps {
 	altText: string

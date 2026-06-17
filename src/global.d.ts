@@ -37,12 +37,6 @@ declare module 'lodash' {
     }
 }
 
-declare module 'react-tooltip-lite' {
-    export interface TooltipProps {
-        children?: import('react').ReactNode
-    }
-}
-
 declare module 'reactn/default' {
     export interface Reducers {
         /** `dispatch` typed as DispatchFunction only to avoid TS circularity (full Dispatch embeds Reducers). */

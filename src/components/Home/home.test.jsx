@@ -1,8 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { setGlobal } from 'reactn'
 
 import { TestRouter } from '../../test-router'
+import { renderToDiv } from '../../test-utils/renderToDiv'
 
 setGlobal({
     isCreatingNewFile: false,
@@ -24,8 +23,7 @@ setGlobal({
 
 describe('Home', () => {
     it('renders without crashing', () => {
-        const div = document.createElement('div')
-        ReactDOM.render(<TestRouter initialPath="/" />, div)
-        ReactDOM.unmountComponentAtNode(div)
+        const { unmount } = renderToDiv(<TestRouter initialPath="/" />)
+        unmount()
     })
 })

@@ -1,14 +1,14 @@
 import { setGlobal } from 'reactn'
-import ReactDOM from 'react-dom'
 
 import { TestRouter } from '../../test-router'
+import { renderToDiv } from '../../test-utils/renderToDiv'
 
 setGlobal({
     isCreatingNewFile: false,
     rootFolderId: null,
     isFileListLoading: false,
     isSearchFieldActive: false,
-    isSignedIn: false,
+    isSignedIn: true,
     isSigningIn: true,
     goToNewFile: false,
     redirect: false,
@@ -23,8 +23,7 @@ setGlobal({
 
 describe('Sidebar', () => {
     it('renders without crashing', () => {
-        const div = document.createElement('div')
-        ReactDOM.render(<TestRouter initialPath="/" />, div)
-        ReactDOM.unmountComponentAtNode(div)
+        const { unmount } = renderToDiv(<TestRouter initialPath="/" />)
+        unmount()
     })
 })

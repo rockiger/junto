@@ -1,8 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { setGlobal } from 'reactn'
 
 import { TestRouter } from '../../test-router'
+import { renderToDiv } from '../../test-utils/renderToDiv'
 
 setGlobal({
     isCreatingNewFile: false,
@@ -22,10 +21,11 @@ setGlobal({
     showSidebarOnMobile: false,
 })
 
-describe('Home', () => {
+describe('SharedWithMe', () => {
     it('renders without crashing', () => {
-        const div = document.createElement('div')
-        ReactDOM.render(<TestRouter initialPath="/shared-with-me" />, div)
-        ReactDOM.unmountComponentAtNode(div)
+        const { unmount } = renderToDiv(
+            <TestRouter initialPath="/shared-with-me" />,
+        )
+        unmount()
     })
 })

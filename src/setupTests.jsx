@@ -1,5 +1,3 @@
-import { configure } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
 import { vi } from 'vitest'
 
 vi.mock('lib/googleAuth', async () => {
@@ -49,5 +47,3 @@ global.window.gapi = {
 		getToken: () => null,
 	},
 }
-
-configure({ adapter: new Adapter() })
