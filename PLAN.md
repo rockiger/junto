@@ -50,8 +50,12 @@
 - [x] Convert .gwiki files to .md to use legacy files (automatic in-app batch migration after sign-in)
 - [x] Optimize login time (reverse changes or improve new solution)
 - [x] Reload-Site warning
-- [] Remove MUI and use React-Aria components
+- [x] Remove MUI and use React-Aria components
 - [] Update React to 19
+-- [] Update React itself to 19 
+-- [] Remove Reactn
+-- [] Replace react-use-dimensions
+-- [] Vorschlagsliste funktioniert die Verlinkung nicht immer
 - [] Add editor features
 -- [] tbd.
 - [] Repair Hints
@@ -64,6 +68,9 @@
 - [] Performance
 -- [] Remove json->md Migrator
 -- [] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
+-- [] Remove sass
 -- [] Use route loaders to prefetch data
 -- [] Prerender static pages 
 -- [] Integrate Google Tasks to the app
+- Repair Tests
+- Repair Storybook

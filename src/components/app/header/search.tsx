@@ -9,7 +9,6 @@ import { useIsDesktop } from "lib/hooks/useMediaQuery"
 import { useNavigate, useRouterState } from "@tanstack/react-router"
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Button } from 'react-aria-components'
-import useDimensions from "react-use-dimensions"
 import { useGlobal } from "reactn"
 import SearchAutocomplete, {
     filterSearchAutocompleteFiles,
@@ -39,7 +38,6 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
         [initialFiles, searchValue],
     )
 
-    const [searchRef] = useDimensions()
     const inputRef = useRef<HTMLInputElement>(null)
 
     const clearSearchOnPage = useCallback(() => {
@@ -106,7 +104,6 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                     : "absolute left-0 w-full z-20 bg-surface-container lg:relative lg:h-12 lg:w-full lg:max-w-[832px] lg:items-center lg:rounded-full lg:bg-search-bg lg:px-2",
                 className,
             )}
-            ref={searchRef}
         >
             <div className="flex w-14 flex-col px-[5px] pt-px lg:hidden">
                 <IconButton
@@ -235,7 +232,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
             ) : null}
             {isSearchFieldActive ? (
                 <SearchAutocomplete
-                    clearSearch={clearSearchOnPage}
+                    clearSearch={clearSearch}
                     filteredFiles={filteredFiles}
                     onSubmitSearch={() => submitSearch("footer")}
                     searchValue={searchValue}

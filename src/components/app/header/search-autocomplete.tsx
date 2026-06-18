@@ -153,6 +153,7 @@ export const SearchAutocomplete: FC<SearchAutocompleteProps> = ({
                     "lg:border-b lg:border-x lg:border-edge-strong lg:rounded-b-3xl lg:shadow-md",
                 )}
                 id="SearchAutocomplete_MenuList"
+                onMouseDown={(ev) => ev.preventDefault()}
             >
                 {results.map((file, index) => {
                     const filename = getTitleFromFile(file)
@@ -170,7 +171,7 @@ export const SearchAutocomplete: FC<SearchAutocompleteProps> = ({
                             )}
                             key={file.id}
                             onClick={() => {
-                                setTimeout(clearSearch, 100)
+                                clearSearch()
                                 Event("Search", "Submit Selected", "click")
                             }}
                             to="/page/$id"

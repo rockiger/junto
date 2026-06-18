@@ -1,11 +1,3 @@
-declare module 'react-use-dimensions' {
-    export default function useDimensions(): [
-        (node: Element | null) => void,
-        { width: number; height: number; [key: string]: number },
-        Element | null,
-    ]
-}
-
 declare module 'react-modal' {
     import type { ComponentType, ReactNode } from 'react'
     interface ReactModalProps {
