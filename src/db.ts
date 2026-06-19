@@ -6,7 +6,6 @@ import {
     createFile as createFileBase,
     createNewWiki as createNewWikiBase,
     listFilesChunked,
-    refreshSession,
     updateFile as updateFileBase,
     updateMetadata as updateMetadataBase,
 } from 'lib/gdrive'
@@ -25,30 +24,10 @@ export const backgroundUpdateFiles = async () => {
             initialFiles,
         })
     } catch (err: unknown) {
-        const apiErr = err as { body?: string; message?: string }
-        const body =
-            typeof apiErr.body === 'string'
-                ? (JSON.parse(apiErr.body) as {
-                      error?: { message?: string }
-                  })
-                : null
-        const error = body?.error
-        if (error?.message === 'Invalid Credentials') {
-            try {
-                await refreshSession()
-                backgroundUpdateFiles()
-            } catch (refreshErr: unknown) {
-                const message =
-                    refreshErr instanceof Error
-                        ? refreshErr.message
-                        : String(refreshErr)
-                alert(`Couldn't refresh session: ${message}`)
-                console.log({ err: refreshErr })
-            }
-        } else {
-            alert(`Couldn't update files ${String(err)}`)
-            console.log({ error })
-        }
+        setGlobal({ backgroundUpdate: false })
+        const message = err instanceof Error ? err.message : String(err)
+        alert(`Couldn't update files: ${message}`)
+        console.log({ err })
     }
 }
 

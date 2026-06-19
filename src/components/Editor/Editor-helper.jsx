@@ -1,7 +1,7 @@
 //@ts-check
 
 import FulcrumLogo from 'components/FulcrumLogo'
-import { reloadAuthResponse, updateFile } from 'lib/gdrive'
+import { updateFile } from 'lib/gdrive'
 import { getExtFromFileName, getTitleFromFile } from 'lib/helper'
 
 import { EXT } from 'lib/constants'
@@ -71,43 +71,6 @@ export async function save(fileId, initialValue) {
         console.log('save:', fileId)
         return fileDescription
     } catch (err) {
-        const apiErr =
-            err && typeof err === 'object'
-                ? /** @type {{ status?: number, result?: { error?: { message?: string } } }} */ (
-                      err
-                  )
-                : null
-        if (
-            apiErr?.status === 401 &&
-            apiErr.result?.error?.message === 'Invalid Credentials'
-        ) {
-            try {
-                await reloadAuthResponse()
-                const fileDescription = await updateFile(fileId, newValue)
-                await putPage({
-                    id: fileId,
-                    content: newValue,
-                    editedTime: String(fileDescription.modifiedTime),
-                    modifiedTime: String(fileDescription.modifiedTime),
-                })
-                console.log('save after reload auth instance:', fileId)
-                return fileDescription
-            } catch (err) {
-                const date = new Date().toISOString()
-                await putPage({
-                    id: fileId,
-                    content: newValue,
-                    editedTime: date,
-                    modifiedTime: date,
-                })
-                alert(
-                    `Couldn't save file with id: ${fileId}. to Google Drive.\nWe created a local copy.\nPlease copy the content to be save and reload the page.`
-                )
-                console.log("save: Couldn't save file with id:", fileId)
-                console.log('Error:', err)
-                return { id: fileId, modifiedTime: date }
-            }
-        }
         const date = new Date().toISOString()
         await putPage({
             id: fileId,
@@ -116,7 +79,7 @@ export async function save(fileId, initialValue) {
             modifiedTime: date,
         })
         alert(
-            `Couldn't save file with id: ${fileId}. to Google Drive.\nWe created a local copy.\nPlease copy the content to be save and reload the page.`
+            `Couldn't save to Google Drive after refreshing your session.\nYour changes are stored locally in this browser. Try saving again in a moment, or reload the page if the problem continues.`
         )
         console.log("save: Couldn't save file with id:", fileId)
         console.log('Error:', err)

@@ -2,6 +2,13 @@ import { getGapi } from '../gdrive/ensureGapi'
 
 import { getGapiAuthInstance } from './gapiClient'
 
+function applyAuthResponseToClient(accessToken: string) {
+	const client = getGapi().client
+	if (client) {
+		client.setToken({ access_token: accessToken })
+	}
+}
+
 function cleanupLegacyGisTokenStorage() {
 	try {
 		localStorage.removeItem('junto-google-token')
@@ -41,11 +48,7 @@ export function isTokenValid(): boolean {
 	return getAccessToken() !== null
 }
 
-export function refreshToken(): Promise<void> {
-	if (isTokenValid()) {
-		return Promise.resolve()
-	}
-
+export function forceRefreshAuth(): Promise<void> {
 	const authInstance = getGapiAuthInstance()
 	if (!authInstance.isSignedIn.get()) {
 		return Promise.reject(new Error('User is not signed in'))
@@ -55,9 +58,14 @@ export function refreshToken(): Promise<void> {
 		.get()
 		.reloadAuthResponse()
 		.then((authResponse) => {
-			const client = getGapi().client
-			if (client) {
-				client.setToken({ access_token: authResponse.access_token })
-			}
+			applyAuthResponseToClient(authResponse.access_token)
 		})
+}
+
+export function refreshToken(): Promise<void> {
+	if (isTokenValid()) {
+		return Promise.resolve()
+	}
+
+	return forceRefreshAuth()
 }

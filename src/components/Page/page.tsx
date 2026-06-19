@@ -17,7 +17,6 @@ import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
 import {
     downloadFile,
     getFileDescription,
-    refreshSession,
     renameFile as renameFileInGdrive,
     updateMetadata,
 } from 'lib/gdrive'
@@ -102,30 +101,9 @@ export default function Page({
                 return fileContent
             } catch (err: unknown) {
                 console.log({ err })
-                const rawBody =
-                    err &&
-                        typeof err === 'object' &&
-                        'body' in err &&
-                        typeof (err as { body: string }).body === 'string'
-                        ? (err as { body: string }).body
-                        : '{}'
-                const body = JSON.parse(rawBody) as {
-                    error?: { message?: string }
-                }
-                const { error = {} } = body
-                if (error.message === 'Invalid Credentials') {
-                    try {
-                        await refreshSession()
-                        void loadEditorContentRef.current()
-                    } catch (e) {
-                        alert(`Couldn't refresh session:`)
-                        console.log({ err: e })
-                    }
-                } else {
-                    alert(`Couldn't find file`)
-                    console.log({ error })
-                    void navigate({ to: '/home' })
-                }
+                const message = err instanceof Error ? err.message : String(err)
+                alert(`Couldn't load file: ${message}`)
+                void navigate({ to: '/home' })
                 return undefined
             }
         },

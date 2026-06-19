@@ -1,7 +1,11 @@
 import { ensureGapi, getGapi } from "./ensureGapi";
 import { getUserEmail } from "../googleAuth/userInfo";
-import { getAccessToken, isTokenValid } from "../googleAuth/tokenStore";
-import { getGapiAuthInstance } from "../googleAuth/gapiClient";
+import {
+	forceRefreshAuth,
+	getAccessToken,
+	isTokenValid,
+} from "../googleAuth/tokenStore";
+import { withAuthRetry } from "../googleAuth/withAuthRetry";
 
 const driveUploadPath = "https://www.googleapis.com/upload/drive/v3/files";
 
@@ -125,6 +129,10 @@ export function listFiles(searchTerm = "", orderBy = "") {
  * [{driveId, driveVersion, name, ifid}]
  */
 export async function listFilesChunked(searchTerm = "", orderBy = "") {
+	return withAuthRetry(() => listFilesChunkedRequest(searchTerm, orderBy));
+}
+
+async function listFilesChunkedRequest(searchTerm = "", orderBy = "") {
 	let files = [];
 	let order = "";
 	let pageToken = "";
@@ -579,14 +587,17 @@ export async function getFolderId(name = "Fulcrum Documents") {
  * a file data string
  */
 export function downloadFile(driveId) {
-	return new Promise((resolve, reject) => {
-		getGapi().client.drive.files
-			.get({
-				fileId: driveId,
-				alt: "media",
-			})
-			.then((data) => resolve(data.body), reject);
-	});
+	return withAuthRetry(
+		() =>
+			new Promise((resolve, reject) => {
+				getGapi().client.drive.files
+					.get({
+						fileId: driveId,
+						alt: "media",
+					})
+					.then((data) => resolve(data.body), reject);
+			}),
+	);
 }
 
 /**
@@ -713,24 +724,27 @@ export function deleteRevision(fileId, revisionId) {
  * a story description: {driveId, driveVersion, name, ifid}
  */
 export function updateFile(driveId, newData, supportsAllDrives = true) {
-	return new Promise((resolve, reject) => {
-		getGapi().client
-			.request({
-				path: `${driveUploadPath}/${driveId}`,
-				method: "PATCH",
-				params: {
-					uploadType: "media",
-					fields: fileFields,
-					useContentAsIndexableText: true,
-					supportsAllDrives,
-				},
-				body: newData,
-			})
-			.then(
-				(response) => resolve(formatFileDescription(response.result)),
-				reject,
-			);
-	});
+	return withAuthRetry(
+		() =>
+			new Promise((resolve, reject) => {
+				getGapi().client
+					.request({
+						path: `${driveUploadPath}/${driveId}`,
+						method: "PATCH",
+						params: {
+							uploadType: "media",
+							fields: fileFields,
+							useContentAsIndexableText: true,
+							supportsAllDrives,
+						},
+						body: newData,
+					})
+					.then(
+						(response) => resolve(formatFileDescription(response.result)),
+						reject,
+					);
+			}),
+	);
 }
 
 /**
@@ -795,12 +809,11 @@ export function updateFileMultipart(
  * @return {Promise|Object} A promise of the result that returns
  * a story description: {driveId, driveVersion, name, ifid}
  */
-export function refreshSession() {
-	console.log(isTokenValid());
-	if (isTokenValid()) {
+export function refreshSession(force = false) {
+	if (!force && isTokenValid()) {
 		return Promise.resolve();
 	}
-	return reloadAuthResponse();
+	return forceRefreshAuth();
 }
 
 /**
@@ -809,12 +822,7 @@ export function refreshSession() {
  * @returns {Promise|Object}
  */
 export function reloadAuthResponse() {
-	return getGapiAuthInstance()
-		.currentUser.get()
-		.reloadAuthResponse()
-		.then((authResponse) => {
-			getGapi().client.setToken({ access_token: authResponse.access_token });
-		});
+	return forceRefreshAuth();
 }
 
 // helpers

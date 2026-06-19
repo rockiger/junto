@@ -6,7 +6,6 @@ import {
 	getFolderId,
 	listAppDataFiles,
 	listFilesChunked as listFiles,
-	refreshSession,
 	updateFile,
 } from 'lib/gdrive'
 import {
@@ -43,23 +42,8 @@ async function initFiles() {
 				isInitialFileListLoading: false,
 			})
 		} catch (err: unknown) {
-			const error = err as { body?: string; message?: string }
-			const body = error.body ? JSON.parse(error.body) : {}
-			const apiError = body.error as { message?: string } | undefined
-			if (apiError?.message === 'Invalid Credentials') {
-				try {
-					await refreshSession()
-					await initFiles()
-				} catch (refreshError) {
-					const message =
-						refreshError instanceof Error
-							? refreshError.message
-							: String(refreshError)
-					alert(`Couldn't refresh session: ${message}`)
-				}
-			} else {
-				alert(`Couldn't load files ${String(err)}`)
-			}
+			const message = err instanceof Error ? err.message : String(err)
+			alert(`Couldn't load files: ${message}`)
 		}
 		return
 	}

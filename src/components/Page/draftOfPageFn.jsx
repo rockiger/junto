@@ -148,20 +148,8 @@ export default function Pagef(props) {
             return fileContent
         } catch (err) {
             console.log({ err })
-            const body = err.body ? JSON.parse(err.body) : {}
-            const { error = {} } = body
-            if (error.message === 'Invalid Credentials') {
-                try {
-                    await refreshSession()
-                    loadEditorContent()
-                } catch (err) {
-                    alert(`Couldn't refresh session:`)
-                    console.log({ err })
-                }
-            } else {
-                alert(`Couldn't load file`)
-                console.log({ error })
-            }
+            const message = err instanceof Error ? err.message : String(err)
+            alert(`Couldn't load file: ${message}`)
             return undefined
         }
     }
