@@ -86,9 +86,12 @@ const LexicalWikiEditor = forwardRef(
 
 		return (
 			<LexicalComposer initialConfig={initialConfig}>
-				{!readOnly && (
-					<ToolbarPlugin apiKey={apiKey} fileId={fileId} items={items} />
-				)}
+				<ToolbarPlugin
+					apiKey={apiKey}
+					fileId={fileId}
+					items={items}
+					readOnly={readOnly}
+				/>
 				<div style={{ position: "relative" }}>
 					<RichTextPlugin
 						contentEditable={

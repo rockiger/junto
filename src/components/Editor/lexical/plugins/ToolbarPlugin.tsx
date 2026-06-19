@@ -121,10 +121,12 @@ const toolbarToggleClass = ({
 const menuItemClass =
 	'flex cursor-default items-center gap-2 px-3 py-2 text-sm text-fg-default outline-none hover:bg-surface-hover focus:bg-surface-hover'
 
-function EditorToolbar({ children }: { children: ReactNode }) {
+function EditorToolbar({ children, readOnly }: { children: ReactNode, readOnly: boolean }) {
 	return (
-		<div className="bg-surface-container flex max-w-100vw mx-4 overflow-auto p-2 pl-5 rounded-full sticky top-0 z-10 lg:top-14">
-			{children}
+		<div className="bg-white border-b border-edge-strong sticky top-0 z-10 lg:top-14">
+			{!readOnly && <div className="bg-surface-container flex max-w-100vw mb-4 mx-4 overflow-auto p-2 pl-5 rounded-full">
+				{children}
+			</div>}
 		</div>
 	)
 }
@@ -168,12 +170,14 @@ export interface ToolbarPluginProps {
 	apiKey: string
 	fileId?: string
 	items: LinkItem[]
+	readOnly: boolean
 }
 
 export default function ToolbarPlugin({
 	apiKey,
 	fileId,
 	items,
+	readOnly,
 }: ToolbarPluginProps) {
 	const [editor] = useLexicalComposerContext()
 	const [files, setFiles] = useGlobal('files')
@@ -472,7 +476,7 @@ export default function ToolbarPlugin({
 				onChange={onImageFileSelected}
 				type="file"
 			/>
-			<EditorToolbar>
+			<EditorToolbar readOnly={readOnly}>
 				<ToolbarGroup>
 					<ToolbarButton
 						active={blockType === 'h2'}

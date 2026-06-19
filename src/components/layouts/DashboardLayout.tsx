@@ -4,10 +4,11 @@ import Header from 'components/app/header'
 import Sidebar from 'components/app/sidebar'
 import { Hint } from 'components/gsuite-components/hint'
 import { DashboardMobileDock } from 'components/Home/dashboard-mobile'
+import PlusIcon from 'mdi-react/PlusIcon'
 import { useEffect, useRef } from 'react'
 import { getGlobal, useDispatch, useGlobal } from 'reactn'
 import logo from "../../static/logo_48.svg"
-import PlusIcon from 'mdi-react/PlusIcon'
+
 /**
  * Logged-in list/overview shell: header, sidebar, mobile dock, main padding.
  */
@@ -88,7 +89,7 @@ export default function DashboardLayout() {
                         aria-label="New wiki or page"
                         to="/new"
                     >
-                        <PlusIcon size={28} />
+                        <PlusIcon size={24} />
                         <span>New</span>
                     </Link>
                 </Hint>

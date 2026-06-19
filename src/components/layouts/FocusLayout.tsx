@@ -51,12 +51,12 @@ export default function FocusLayout({ children }: FocusLayoutProps) {
                 <Hint id="new_page" scope="dashboard">
                     <Link
                         onClick={() => clearSearch()}
-                        className="inline-flex items-center justify-center gap-3 rounded-2xl bg-surface-paper px-4 py-4 font-medium shadow-md/50 outline-none hover:bg-surface-hover focus-visible:ring-4 focus-visible:ring-accent-light"
+                        className="inline-flex items-center justify-center gap-3 rounded-2xl bg-surface-paper px-4 py-4 font-medium shadow-md/50 text-sm outline-none hover:bg-surface-hover focus-visible:ring-4 focus-visible:ring-accent-light"
                         aria-label="New wiki or page"
                         to="/new"
                     >
-                        <PlusIcon size={28} />
-                        <span>New</span>
+                        <PlusIcon size={24} />
+                        <span className="leading-0">New</span>
                     </Link>
                 </Hint>
             </div>

@@ -101,9 +101,30 @@ export default function Page({
                 return fileContent
             } catch (err: unknown) {
                 console.log({ err })
-                const message = err instanceof Error ? err.message : String(err)
-                alert(`Couldn't load file: ${message}`)
-                void navigate({ to: '/home' })
+                const rawBody =
+                    err &&
+                        typeof err === 'object' &&
+                        'body' in err &&
+                        typeof (err as { body: string }).body === 'string'
+                        ? (err as { body: string }).body
+                        : '{}'
+                const body = JSON.parse(rawBody) as {
+                    error?: { message?: string }
+                }
+                const { error = {} } = body
+                if (error.message === 'Invalid Credentials') {
+                    try {
+                        await refreshSession()
+                        void loadEditorContentRef.current()
+                    } catch (e) {
+                        alert(`Couldn't refresh session:`)
+                        console.log({ err: e })
+                    }
+                } else {
+                    alert(`Couldn't find file`)
+                    console.log({ error })
+                    void navigate({ to: '/home' })
+                }
                 return undefined
             }
         },
@@ -288,7 +309,7 @@ export default function Page({
         })
         return (
             <>
-                <header className="flex h-14 shrink-0 items-center gap-2 border-b border-edge-strong bg-surface-container px-2 md:px-3 lg:bg-white lg:sticky lg:top-0 lg:z-10">
+                <header className="flex h-14 shrink-0 items-center gap-2 bg-surface-container px-2 md:px-3 lg:bg-white lg:sticky lg:top-0 lg:z-10">
                     <IconButton className='lg:hidden!' ariaLabel="Back" onClick={onBack}>
                         <ArrowLeftIcon aria-hidden />
                     </IconButton>

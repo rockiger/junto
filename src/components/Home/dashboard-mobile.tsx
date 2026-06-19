@@ -219,12 +219,12 @@ export function DashboardMobileDock() {
             >
                 <Link
                     onClick={() => clearSearch()}
-                    className="flex size-24 items-center justify-center rounded-3xl bg-icon-blue-light text-icon-blue shadow-lg/30 outline-none transition-transform active:scale-95 focus-visible:ring-4 focus-visible:ring-accent-light"
+                    className="flex size-20 items-center justify-center rounded-2xl bg-icon-blue-light text-icon-blue shadow-lg/30 outline-none transition-transform active:scale-95 focus-visible:ring-4 focus-visible:ring-accent-light"
                     aria-label="New wiki or page"
                     to="/new"
                     tabIndex={fabVisible ? 0 : -1}
                 >
-                    <PlusIcon size={44} />
+                    <PlusIcon size={36} />
                 </Link>
             </div>
 

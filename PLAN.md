@@ -51,16 +51,24 @@
 - [x] Optimize login time (reverse changes or improve new solution)
 - [x] Reload-Site warning
 - [x] Remove MUI and use React-Aria components
-- [] Update React to 19
--- [] Update React itself to 19 
--- [] Remove Reactn
--- [] Replace react-use-dimensions
--- [] Vorschlagsliste funktioniert die Verlinkung nicht immer
+- [x] Update React to 19
+-- [x] Update React itself to 19 
+-- [x] Replace react-use-dimensions
+-- [x] Vorschlagsliste funktioniert die Verlinkung nicht
+- [] Update token for saving
 - [] Add editor features
--- [] tbd.
+-- [] Block Drag & Drop
+-- [] Block Menü/Slash menüs
+-- [] Drag & Drop for Checklist items
+-- [] Farben
+-- [] Excalidraw
+-- [] Collapsible container
+-- [] Tweet, Youtube, Figma embeds
+-- [] Highlight text
 - [] Repair Hints
 - [] Repair Tests
 ----------------------------------------------------------
+- [] Remove Reactn
 - [] Deploy to Hostinger
 - [] Read Hints to guide users
 - [] Background color of Front-page
@@ -71,6 +79,6 @@
 -- [] Remove sass
 -- [] Use route loaders to prefetch data
 -- [] Prerender static pages 
--- [] Integrate Google Tasks to the app
+- [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
 - Repair Tests
 - Repair Storybook
