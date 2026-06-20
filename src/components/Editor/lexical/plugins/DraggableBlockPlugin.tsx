@@ -1,5 +1,5 @@
-import { DraggableBlockPlugin_EXPERIMENTAL } from '@lexical/react/LexicalDraggableBlockPlugin'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { $createListItemNode } from '@lexical/list'
 import clsx from 'clsx'
 import {
 	$createParagraphNode,
@@ -23,6 +23,8 @@ import {
 import { createPortal } from 'react-dom'
 import type { ImageUrlModalHandle } from '../image-url-modal'
 import { ImageUrlModal } from '../image-url-modal'
+import { $isCheckListItem } from './draggableBlock/checkListDragUtils'
+import { WikiDraggableBlockPlugin } from './draggableBlock/WikiDraggableBlockPlugin'
 import './DraggableBlockPlugin.css'
 import {
 	filterWikiComponentPickerOptions,
@@ -130,6 +132,23 @@ export default function DraggableBlockPlugin({
 			editor.update(() => {
 				const node = $getNodeByKey(pickerState.targetNodeKey)
 				if (!node) return
+
+				if ($isCheckListItem(node)) {
+					const newItem = $createListItemNode()
+					const paragraph = $createParagraphNode()
+					paragraph.append($createTextNode(''))
+					newItem.append(paragraph)
+
+					if (pickerState.insertBefore) {
+						node.insertBefore(newItem)
+					} else {
+						node.insertAfter(newItem)
+					}
+
+					paragraph.select()
+					option.onSelect(queryString)
+					return
+				}
 
 				const placeholder = $createParagraphNode()
 				const textNode = $createTextNode('')
@@ -270,7 +289,7 @@ export default function DraggableBlockPlugin({
 						document.body,
 					)
 				: null}
-			<DraggableBlockPlugin_EXPERIMENTAL
+			<WikiDraggableBlockPlugin
 				anchorElem={anchorElem}
 				isOnMenu={isOnMenu}
 				menuComponent={
