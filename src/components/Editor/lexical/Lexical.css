@@ -2,6 +2,21 @@
     outline: none;
 }
 
+.lexical-editor-scroller {
+    display: flex;
+    position: relative;
+}
+
+.lexical-editor-anchor {
+    flex: auto;
+    max-width: 100%;
+    position: relative;
+}
+
+.lexical-editor-anchor--gutter {
+    padding-left: 1.5rem;
+}
+
 .lexical-quote {
     border-left: 2px solid #ddd;
     margin-left: 0;

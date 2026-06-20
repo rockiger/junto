@@ -15,6 +15,7 @@ import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import {
 	forwardRef,
+	useCallback,
 	useEffect,
 	useImperativeHandle,
 	useRef,
@@ -26,6 +27,7 @@ import {
 	WIKI_NODES,
 } from "./markdown";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
+import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
 import GoogleDriveLinkPlugin from "./plugins/GoogleDriveLinkPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
 import LayoutPlugin from "./plugins/LayoutPlugin";
@@ -65,6 +67,13 @@ const LexicalWikiEditor = forwardRef(
 		ref,
 	) => {
 		const editorRef = useRef(null);
+		const [floatingAnchorElem, setFloatingAnchorElem] = useState(null);
+
+		const onAnchorRef = useCallback((elem) => {
+			if (elem !== null) {
+				setFloatingAnchorElem(elem);
+			}
+		}, []);
 
 		useImperativeHandle(ref, () => ({
 			focus: () => {
@@ -93,33 +102,45 @@ const LexicalWikiEditor = forwardRef(
 					items={items}
 					readOnly={readOnly}
 				/>
-				<div style={{ position: "relative" }}>
-					<RichTextPlugin
-						contentEditable={
-							<ContentEditable
-								aria-placeholder={PLACEHOLDER_TEXT}
-								className="lexical-content"
-								placeholder={
-									<div
-										style={{
-											color: "#999",
-											left: 0,
-											padding: style?.padding,
-											pointerEvents: "none",
-											position: "absolute",
-											top: 0,
-											userSelect: "none",
-										}}
-									>
-										{PLACEHOLDER_TEXT}
-									</div>
-								}
-								style={style}
-							/>
+				<div className="lexical-editor-scroller">
+					<div
+						className={
+							canEdit
+								? "lexical-editor-anchor lexical-editor-anchor--gutter"
+								: "lexical-editor-anchor"
 						}
-						ErrorBoundary={LexicalErrorBoundary}
-					/>
+						ref={onAnchorRef}
+					>
+						<RichTextPlugin
+							contentEditable={
+								<ContentEditable
+									aria-placeholder={PLACEHOLDER_TEXT}
+									className="lexical-content"
+									placeholder={
+										<div
+											style={{
+												color: "#999",
+												left: 0,
+												padding: style?.padding,
+												pointerEvents: "none",
+												position: "absolute",
+												top: 0,
+												userSelect: "none",
+											}}
+										>
+											{PLACEHOLDER_TEXT}
+										</div>
+									}
+									style={style}
+								/>
+							}
+							ErrorBoundary={LexicalErrorBoundary}
+						/>
+					</div>
 				</div>
+				{!readOnly && floatingAnchorElem && (
+					<DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+				)}
 				<HistoryPlugin />
 				<ListPlugin />
 				{readOnly && canEdit ? (
