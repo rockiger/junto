@@ -1,6 +1,7 @@
 import MarkdownIt from "markdown-it"
 import mdAnchor from "markdown-it-anchor"
 import multimd from "markdown-it-multimd-table"
+import { markdownItLayout } from "./lib/markdown-it-layout.mjs"
 
 /**
  * Same options as a typical "rich" static pipeline; use for --validate.
@@ -16,6 +17,7 @@ export function validateWithMarkdownIt(src) {
 	})
 		.use(mdAnchor, { permalink: false })
 		.use(multimd, { multiline: true, rowspan: true, headerless: true })
+		.use(markdownItLayout)
 	try {
 		const html = md.render(src)
 		return { ok: true, html }

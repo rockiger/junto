@@ -235,3 +235,23 @@
 .lexical-table-cell-header > p:last-child {
     margin-bottom: 0;
 }
+
+.lexical-layout-container {
+    display: grid;
+    gap: 10px;
+    margin: 0.5rem 0;
+}
+
+.lexical-layout-item {
+    border: 1px dashed #ddd;
+    min-width: 0;
+    padding: 8px 16px;
+}
+
+.lexical-layout-item > p:first-child {
+    margin-top: 0;
+}
+
+.lexical-layout-item > p:last-child {
+    margin-bottom: 0;
+}

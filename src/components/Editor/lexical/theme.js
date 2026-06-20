@@ -68,4 +68,6 @@ export const wikiTheme = {
     tableCell: 'lexical-table-cell',
     tableCellHeader: 'lexical-table-cell-header',
     tableRow: 'lexical-table-row',
+    layoutContainer: 'lexical-layout-container',
+    layoutItem: 'lexical-layout-item',
 }

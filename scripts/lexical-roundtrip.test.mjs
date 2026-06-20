@@ -74,6 +74,50 @@ describe("Markdown -> Lexical -> Markdown round trip", () => {
 		expect(roundTrip(md)).toBe(md)
 	})
 
+	it("column layouts are byte-idempotent", () => {
+		const md = [
+			"::: layout 1fr 1fr",
+			"Left **bold**",
+			":::column",
+			"Right column",
+			":::",
+			"",
+			"::: layout 3fr 1fr",
+			"Wide",
+			":::column",
+			"Narrow",
+			":::",
+			"",
+			"::: layout 1fr 1fr 1fr",
+			"One",
+			":::column",
+			"Two",
+			":::column",
+			"Three",
+			":::",
+			"",
+			"::: layout 1fr 2fr 1fr",
+			"A",
+			":::column",
+			"B",
+			":::column",
+			"C",
+			":::",
+			"",
+			"::: layout 1fr 1fr 1fr 1fr",
+			"Q1",
+			":::column",
+			"Q2",
+			":::column",
+			"Q3",
+			":::column",
+			"Q4",
+			":::",
+			"",
+		].join("\n")
+		expect(roundTrip(md)).toBe(md)
+	})
+
 	it("all converted slate_samples are byte-idempotent", async () => {
 		const files = (await readdir(root)).filter((f) =>
 			f.toLowerCase().endsWith(".gwiki"),

@@ -9,6 +9,8 @@ import {
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import { ImageNode } from './nodes/ImageNode'
+import { LayoutContainerNode } from './nodes/LayoutContainerNode'
+import { LayoutItemNode } from './nodes/LayoutItemNode'
 import { WIKI_TRANSFORMERS } from './transformers'
 
 /** All nodes the wiki editor (and headless conversions) need. */
@@ -35,6 +37,8 @@ export const WIKI_NODES = [
     TableRowNode,
     TableCellNode,
     ImageNode,
+    LayoutContainerNode,
+    LayoutItemNode,
 ]
 
 /** Must run inside editor.update() */

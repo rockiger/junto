@@ -28,6 +28,7 @@ import {
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import GoogleDriveLinkPlugin from "./plugins/GoogleDriveLinkPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
+import LayoutPlugin from "./plugins/LayoutPlugin";
 import InternalWikiLinkPlugin from "./plugins/InternalWikiLinkPlugin";
 import ReadOnlyCheckListPlugin from "./plugins/ReadOnlyCheckListPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
@@ -135,6 +136,7 @@ const LexicalWikiEditor = forwardRef(
 				<MarkdownShortcutPlugin transformers={WIKI_TRANSFORMERS} />
 				<CodeHighlightPlugin />
 				<ImagesPlugin />
+				<LayoutPlugin />
 				<EditablePlugin readOnly={readOnly} />
 				<EditorRefPlugin editorRef={editorRef} />
 				<OnChangePlugin

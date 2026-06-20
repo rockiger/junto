@@ -24,8 +24,22 @@ import {
     TableNode,
     TableRowNode,
 } from '@lexical/table'
-import { $isParagraphNode, $isTextNode } from 'lexical'
+import { $createParagraphNode, $isParagraphNode, $isTextNode } from 'lexical'
 import { $createImageNode, $isImageNode, ImageNode } from './nodes/ImageNode'
+import {
+    $createLayoutContainerNode,
+    $isLayoutContainerNode,
+    LayoutContainerNode,
+} from './nodes/LayoutContainerNode'
+import {
+    $createLayoutItemNode,
+    $isLayoutItemNode,
+    LayoutItemNode,
+} from './nodes/LayoutItemNode'
+import {
+    getLayoutColumnCount,
+    LAYOUT_COLUMN_SEPARATOR,
+} from './layoutPresets'
 
 export const IMAGE = {
     dependencies: [ImageNode],
@@ -193,8 +207,87 @@ export const TABLE = {
     type: 'element',
 }
 
+/* -------- Layout columns (::: layout … ::: with :::column separators) -------- */
+
+const LAYOUT_START_REG_EXP = /^::: layout (.+?)\s*$/
+const LAYOUT_END_REG_EXP = /^:::\s*$/
+
+function splitLayoutColumnLines(lines) {
+    const columns = []
+    let current = []
+    for (const line of lines) {
+        if (line.trim() === LAYOUT_COLUMN_SEPARATOR) {
+            columns.push(current.join('\n'))
+            current = []
+        } else {
+            current.push(line)
+        }
+    }
+    columns.push(current.join('\n'))
+    return columns
+}
+
+function createLayoutItemFromMarkdown(textContent) {
+    const item = $createLayoutItemNode()
+    const normalized = textContent.replace(/\\n/g, '\n')
+    if (normalized.trim().length > 0) {
+        $convertFromMarkdownString(normalized, WIKI_TRANSFORMERS, item)
+    } else {
+        item.append($createParagraphNode())
+    }
+    return item
+}
+
+export const LAYOUT = {
+    dependencies: [LayoutContainerNode, LayoutItemNode],
+    export: (node, traverseChildren) => {
+        if (!$isLayoutContainerNode(node)) return null
+
+        const template = node.getTemplateColumns()
+        const parts = []
+        let first = true
+        for (const child of node.getChildren()) {
+            if (!$isLayoutItemNode(child)) continue
+            const markdown = traverseChildren(child)
+            if (!first) parts.push(LAYOUT_COLUMN_SEPARATOR)
+            parts.push(markdown)
+            first = false
+        }
+
+        return `::: layout ${template}\n${parts.join('\n')}\n:::`
+    },
+    regExpEnd: LAYOUT_END_REG_EXP,
+    regExpStart: LAYOUT_START_REG_EXP,
+    replace: (
+        rootNode,
+        _children,
+        startMatch,
+        _endMatch,
+        linesInBetween,
+    ) => {
+        const template = startMatch[1].trim()
+        const expectedCount = getLayoutColumnCount(template)
+        let columnTexts = linesInBetween ? splitLayoutColumnLines(linesInBetween) : []
+
+        while (columnTexts.length < expectedCount) {
+            columnTexts.push('')
+        }
+        if (columnTexts.length > expectedCount) {
+            columnTexts = columnTexts.slice(0, expectedCount)
+        }
+
+        const container = $createLayoutContainerNode(template)
+        for (const columnText of columnTexts) {
+            container.append(createLayoutItemFromMarkdown(columnText))
+        }
+        rootNode.append(container)
+    },
+    type: 'multiline-element',
+}
+
 export const WIKI_TRANSFORMERS = [
     TABLE,
+    LAYOUT,
     IMAGE,
     UNDERLINE,
     CHECK_LIST,

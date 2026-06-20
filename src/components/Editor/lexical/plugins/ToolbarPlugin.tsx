@@ -73,6 +73,7 @@ import TableLargeRemoveIcon from 'mdi-react/TableLargeRemoveIcon'
 import TableRowPlusAfterIcon from 'mdi-react/TableRowPlusAfterIcon'
 import TableRowRemoveIcon from 'mdi-react/TableRowRemoveIcon'
 import UploadIcon from 'mdi-react/UploadIcon'
+import ViewColumnIcon from 'mdi-react/ViewColumnIcon'
 import {
 	type ComponentProps,
 	type MouseEvent,
@@ -101,6 +102,8 @@ import type { LinkItem, LinkModalHandle } from '../link-modal'
 import { LinkModal } from '../link-modal'
 import { $createWikiLinkNode } from '../nodes/WikiLinkNode'
 import { INSERT_IMAGE_COMMAND } from './ImagesPlugin'
+import { INSERT_LAYOUT_COMMAND } from './LayoutPlugin'
+import { LAYOUT_PRESETS } from '../layoutPresets'
 
 const ICON_CLASS = 'size-[18px]'
 const MENU_ICON_CLASS = 'size-5 shrink-0'
@@ -633,6 +636,42 @@ export default function ToolbarPlugin({
 				</ToolbarGroup>
 
 				<ToolbarGroup>
+					<MenuTrigger>
+						<Tooltip content="Columns layout">
+							<ToggleButton
+								aria-label="Columns layout"
+								className={toolbarToggleClass}
+								onMouseDown={preventMouseDown}
+							>
+								<ViewColumnIcon className={ICON_CLASS} />
+							</ToggleButton>
+						</Tooltip>
+						<Popover
+							className="z-1000 min-w-56 rounded-md border border-edge bg-surface-paper py-1 shadow-lg outline-none"
+							offset={4}
+							placement="bottom start"
+						>
+							<Menu className="outline-none">
+								{LAYOUT_PRESETS.map(({ label, template }) => (
+									<MenuItem
+										key={template}
+										className={menuItemClass}
+										id={template}
+										textValue={label}
+										onAction={() => {
+											editor.dispatchCommand(
+												INSERT_LAYOUT_COMMAND,
+												template,
+											)
+											editor.focus()
+										}}
+									>
+										{label}
+									</MenuItem>
+								))}
+							</Menu>
+						</Popover>
+					</MenuTrigger>
 					<ToolbarButton
 						onMouseDown={tableAction('insertTable')}
 						title="Insert table"
