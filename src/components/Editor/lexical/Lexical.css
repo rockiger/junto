@@ -1,272 +1,357 @@
 .lexical-content {
-    outline: none;
+	outline: none;
 }
 
 .lexical-editor-scroller {
-    display: flex;
-    position: relative;
+	display: flex;
+	position: relative;
 }
 
 .lexical-editor-anchor {
-    flex: auto;
-    max-width: 100%;
-    position: relative;
+	flex: auto;
+	max-width: 100%;
+	position: relative;
 }
 
 .lexical-editor-anchor--gutter {
-    padding-left: 1.5rem;
+	padding-left: 1.5rem;
 }
 
 .lexical-quote {
-    border-left: 2px solid #ddd;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 10px;
-    color: #aaa;
-    font-style: italic;
+	border-left: 2px solid #ddd;
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 10px;
+	color: #aaa;
+	font-style: italic;
 }
 
 .lexical-link {
-    color: #4285f4;
-    cursor: pointer;
+	color: #4285f4;
+	cursor: pointer;
+}
+
+.lexical-image {
+	display: inline-block;
+	position: relative;
+}
+
+.lexical-image img {
+	cursor: default;
+	margin: 0;
+	max-width: 100%;
+}
+
+.lexical-image img.lexical-image-focused {
+	outline: 2px solid rgb(60, 132, 244);
+	user-select: none;
+}
+
+.lexical-image img.lexical-image-draggable {
+	cursor: grab;
+}
+
+.lexical-image img.lexical-image-draggable:active {
+	cursor: grabbing;
+}
+
+.lexical-image .image-resizer {
+	background-color: rgb(60, 132, 244);
+	border: 1px solid #fff;
+	display: block;
+	height: 7px;
+	position: absolute;
+	width: 7px;
+}
+
+.lexical-image .image-resizer.image-resizer-n {
+	cursor: n-resize;
+	left: 48%;
+	top: -6px;
+}
+
+.lexical-image .image-resizer.image-resizer-ne {
+	cursor: ne-resize;
+	right: -6px;
+	top: -6px;
+}
+
+.lexical-image .image-resizer.image-resizer-e {
+	bottom: 48%;
+	cursor: e-resize;
+	right: -6px;
+}
+
+.lexical-image .image-resizer.image-resizer-se {
+	bottom: -2px;
+	cursor: nwse-resize;
+	right: -6px;
+}
+
+.lexical-image .image-resizer.image-resizer-s {
+	bottom: -2px;
+	cursor: s-resize;
+	left: 48%;
+}
+
+.lexical-image .image-resizer.image-resizer-sw {
+	bottom: -2px;
+	cursor: sw-resize;
+	left: -6px;
+}
+
+.lexical-image .image-resizer.image-resizer-w {
+	bottom: 48%;
+	cursor: w-resize;
+	left: -6px;
+}
+
+.lexical-image .image-resizer.image-resizer-nw {
+	cursor: nw-resize;
+	left: -6px;
+	top: -6px;
+}
+
+.image-control-wrapper--resizing {
+	touch-action: none;
 }
 
 /* Google Drive / Docs links (editor presentation only; markdown stays plain links) */
 .lexical-drive-link {
-    border-radius: 3px;
-    box-shadow:
-        0 2px 1px -1px rgba(0, 0, 0, 0.2),
-        0 1px 1px 0 rgba(0, 0, 0, 0.14),
-        0 1px 3px 0 rgba(0, 0, 0, 0.12);
-    display: inline;
-    padding: 0 0.25rem 2px;
-    text-decoration: none;
-    white-space: nowrap;
+	border-radius: 3px;
+	box-shadow:
+		0 2px 1px -1px rgba(0, 0, 0, 0.2),
+		0 1px 1px 0 rgba(0, 0, 0, 0.14),
+		0 1px 3px 0 rgba(0, 0, 0, 0.12);
+	display: inline;
+	padding: 0 0.25rem 2px;
+	text-decoration: none;
+	white-space: nowrap;
 }
 
 .lexical-drive-link::before {
-    background: var(--drive-link-icon) center / contain no-repeat;
-    content: '';
-    display: inline-block;
-    height: 16px;
-    margin-bottom: -3px;
-    margin-right: 0.25rem;
-    vertical-align: baseline;
-    width: 16px;
+	background: var(--drive-link-icon) center / contain no-repeat;
+	content: "";
+	display: inline-block;
+	height: 16px;
+	margin-bottom: -3px;
+	margin-right: 0.25rem;
+	vertical-align: baseline;
+	width: 16px;
 }
 
 .lexical-drive-link--document {
-    --drive-link-icon: url('https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.document');
+	--drive-link-icon: url("https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.document");
 }
 
 .lexical-drive-link--spreadsheet {
-    --drive-link-icon: url('https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.spreadsheet');
+	--drive-link-icon: url("https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.spreadsheet");
 }
 
 .lexical-drive-link--presentation {
-    --drive-link-icon: url('https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.presentation');
+	--drive-link-icon: url("https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.presentation");
 }
 
 .lexical-drive-link--form {
-    --drive-link-icon: url('https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.form');
+	--drive-link-icon: url("https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.form");
 }
 
 .lexical-drive-link--folder {
-    --drive-link-icon: url('https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.folder');
+	--drive-link-icon: url("https://drive-thirdparty.googleusercontent.com/16/type/application%2Fvnd.google-apps.folder");
 }
 
 .lexical-drive-link--drive-file {
-    --drive-link-icon: url('https://drive-thirdparty.googleusercontent.com/16/type/application%2Foctet-stream');
+	--drive-link-icon: url("https://drive-thirdparty.googleusercontent.com/16/type/application%2Foctet-stream");
 }
 
 .lexical-drive-link--wiki {
-    --drive-link-icon: url('../../../static/logo_48.svg');
+	--drive-link-icon: url("../../../static/logo_48.svg");
 }
 
 .lexical-text-underline {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 .lexical-text-strikethrough {
-    text-decoration: line-through;
+	text-decoration: line-through;
 }
 
 .lexical-text-underline-strikethrough {
-    text-decoration: underline line-through;
+	text-decoration: underline line-through;
 }
 
 .lexical-text-code {
-    background-color: #f1f3f4;
-    padding: 3px;
-    font-family: Menlo, Consolas, Monaco, monospace;
-    font-size: 94%;
+	background-color: #f1f3f4;
+	padding: 3px;
+	font-family: Menlo, Consolas, Monaco, monospace;
+	font-size: 94%;
 }
 
 /* code block */
 .lexical-code {
-    background-color: #f1f3f4;
-    display: block;
-    padding: 1rem;
-    font-family: Menlo, Consolas, Monaco, monospace;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin: 0.5rem 0;
-    overflow-x: auto;
-    position: relative;
-    tab-size: 4;
-    white-space: pre;
+	background-color: #f1f3f4;
+	display: block;
+	padding: 1rem;
+	font-family: Menlo, Consolas, Monaco, monospace;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	margin: 0.5rem 0;
+	overflow-x: auto;
+	position: relative;
+	tab-size: 4;
+	white-space: pre;
 }
 
 .lexical-token-comment {
-    color: slategray;
+	color: slategray;
 }
 
 .lexical-token-punctuation {
-    color: #999;
+	color: #999;
 }
 
 .lexical-token-property {
-    color: #905;
+	color: #905;
 }
 
 .lexical-token-selector {
-    color: #690;
+	color: #690;
 }
 
 .lexical-token-operator {
-    color: #9a6e3a;
+	color: #9a6e3a;
 }
 
 .lexical-token-attr {
-    color: #07a;
+	color: #07a;
 }
 
 .lexical-token-variable {
-    color: #e90;
+	color: #e90;
 }
 
 .lexical-token-function {
-    color: #dd4a68;
+	color: #dd4a68;
 }
 
 /* lists */
 .lexical-list-ol,
 .lexical-list-ul {
-    padding: 0;
-    margin: 0 0 0 16px;
+	padding: 0;
+	margin: 0 0 0 16px;
 }
 
 .lexical-nested-listitem {
-    list-style-type: none;
+	list-style-type: none;
 }
 
 .lexical-listitem-checked,
 .lexical-listitem-unchecked {
-    position: relative;
-    margin-left: 0;
-    padding-left: 26px;
-    list-style-type: none;
-    outline: none;
+	position: relative;
+	margin-left: 0;
+	padding-left: 26px;
+	list-style-type: none;
+	outline: none;
 }
 
 .lexical-listitem-checked {
-    text-decoration: line-through;
-    opacity: 0.666;
+	text-decoration: line-through;
+	opacity: 0.666;
 }
 
 .lexical-listitem-checked::before,
 .lexical-listitem-unchecked::before {
-    content: '';
-    width: 16px;
-    height: 16px;
-    top: 3px;
-    left: 0;
-    cursor: pointer;
-    display: block;
-    background-size: cover;
-    position: absolute;
-    border: 1px solid #999;
-    border-radius: 2px;
+	content: "";
+	width: 16px;
+	height: 16px;
+	top: 3px;
+	left: 0;
+	cursor: pointer;
+	display: block;
+	background-size: cover;
+	position: absolute;
+	border: 1px solid #999;
+	border-radius: 2px;
 }
 
 .lexical-listitem-checked::before {
-    border: 1px solid #4285f4;
-    background-color: #4285f4;
-    background-repeat: no-repeat;
+	border: 1px solid #4285f4;
+	background-color: #4285f4;
+	background-repeat: no-repeat;
 }
 
 .lexical-listitem-checked::after {
-    content: '';
-    cursor: pointer;
-    border-color: #fff;
-    border-style: solid;
-    position: absolute;
-    display: block;
-    top: 6px;
-    width: 3px;
-    left: 6px;
-    height: 6px;
-    transform: rotate(45deg);
-    border-width: 0 2px 2px 0;
+	content: "";
+	cursor: pointer;
+	border-color: #fff;
+	border-style: solid;
+	position: absolute;
+	display: block;
+	top: 6px;
+	width: 3px;
+	left: 6px;
+	height: 6px;
+	transform: rotate(45deg);
+	border-width: 0 2px 2px 0;
 }
 
 /* tables (ported from material-editor/Editor.css) */
 .lexical-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-top: 1px solid black;
-    margin: 0.5rem 0;
+	width: 100%;
+	border-collapse: collapse;
+	border-top: 1px solid black;
+	margin: 0.5rem 0;
 }
 
 .lexical-table-row {
-    border: none;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+	border: none;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
 }
 
 .lexical-table-cell,
 .lexical-table-cell-header {
-    border: 1px solid black;
-    border-top: none;
-    border-bottom: none;
-    border-right: none;
-    padding: 0.5em;
-    position: relative;
-    text-align: left;
-    vertical-align: top;
+	border: 1px solid black;
+	border-top: none;
+	border-bottom: none;
+	border-right: none;
+	padding: 0.5em;
+	position: relative;
+	text-align: left;
+	vertical-align: top;
 }
 
 .lexical-table-cell-header {
-    background: #f5f5f5;
-    font-weight: bold;
+	background: #f5f5f5;
+	font-weight: bold;
 }
 
 .lexical-table-cell > p:first-child,
 .lexical-table-cell-header > p:first-child {
-    margin-top: 0;
+	margin-top: 0;
 }
 
 .lexical-table-cell > p:last-child,
 .lexical-table-cell-header > p:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .lexical-layout-container {
-    display: grid;
-    gap: 10px;
-    margin: 0.5rem 0;
+	display: grid;
+	gap: 10px;
+	margin: 0.5rem 0;
 }
 
 .lexical-layout-item {
-    border: 1px dashed #ddd;
-    min-width: 0;
-    padding: 8px 16px;
+	border: 1px dashed #ddd;
+	min-width: 0;
+	padding: 8px 16px;
 }
 
 .lexical-layout-item > p:first-child {
-    margin-top: 0;
+	margin-top: 0;
 }
 
 .lexical-layout-item > p:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }

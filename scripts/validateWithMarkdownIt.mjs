@@ -1,5 +1,6 @@
 import MarkdownIt from "markdown-it"
 import mdAnchor from "markdown-it-anchor"
+import mdImsize from "markdown-it-imsize"
 import multimd from "markdown-it-multimd-table"
 import { markdownItLayout } from "./lib/markdown-it-layout.mjs"
 
@@ -18,6 +19,7 @@ export function validateWithMarkdownIt(src) {
 		.use(mdAnchor, { permalink: false })
 		.use(multimd, { multiline: true, rowspan: true, headerless: true })
 		.use(markdownItLayout)
+		.use(mdImsize)
 	try {
 		const html = md.render(src)
 		return { ok: true, html }

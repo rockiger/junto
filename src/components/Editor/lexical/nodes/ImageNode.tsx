@@ -1,5 +1,3 @@
-import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection'
-import clsx from 'clsx'
 import {
 	$applyNodeReplacement,
 	DecoratorNode,
@@ -12,98 +10,23 @@ import {
 	type SerializedLexicalNode,
 	type Spread,
 } from 'lexical'
-import { downloadFileBlob, parseDriveImageFileId } from 'lib/gdrive'
-import { useEffect, useState, type JSX } from 'react'
+import { lazy, Suspense, type JSX } from 'react'
 
-interface ImageComponentProps {
-	altText: string
-	nodeKey: NodeKey
-	src: string
-}
+const ImageComponent = lazy(() => import('./ImageComponent'))
 
-function ImageComponent({ src, altText, nodeKey }: ImageComponentProps) {
-	const [isSelected, setSelected, clearSelection] =
-		useLexicalNodeSelection(nodeKey)
-	const driveFileId = parseDriveImageFileId(src)
-	const [displaySrc, setDisplaySrc] = useState<string | null>(
-		driveFileId ? null : src,
-	)
-	const [loading, setLoading] = useState(true)
-	const [failed, setFailed] = useState(false)
-
-	useEffect(() => {
-		if (!driveFileId) {
-			setDisplaySrc(src)
-			setFailed(false)
-			setLoading(true)
-			return
-		}
-
-		let objectUrl: string | null = null
-		let cancelled = false
-		setDisplaySrc(null)
-		setFailed(false)
-		setLoading(true)
-
-		downloadFileBlob(driveFileId)
-			.then((blob) => {
-				if (cancelled) return
-				objectUrl = URL.createObjectURL(blob)
-				setDisplaySrc(objectUrl)
-			})
-			.catch(() => {
-				if (!cancelled) setFailed(true)
-			})
-
-		return () => {
-			cancelled = true
-			if (objectUrl) URL.revokeObjectURL(objectUrl)
-		}
-	}, [src, driveFileId])
-
-	if (failed) {
-		return (
-			<span className="text-fg-muted italic">
-				{altText || 'Image failed to load'}
-			</span>
-		)
-	}
-
-	return (
-		<>
-			{loading && (
-				<div
-					aria-hidden
-					className="h-40 w-[20em] max-w-full animate-pulse rounded-sm bg-surface-selected"
-				/>
-			)}
-			{displaySrc && (
-				// biome-ignore lint/a11y/useKeyWithClickEvents: Lexical node selection via click
-				<img
-					src={displaySrc}
-					alt={altText}
-					draggable={false}
-					onClick={(event) => {
-						if (!event.shiftKey) clearSelection()
-						setSelected(!isSelected)
-					}}
-					onError={() => setFailed(true)}
-					onLoad={() => setLoading(false)}
-					className={clsx(
-						'max-h-[20em] max-w-full',
-						loading ? 'hidden' : 'block',
-						isSelected && 'ring-1 ring-accent',
-					)}
-				/>
-			)}
-		</>
-	)
-}
+export const DEFAULT_IMAGE_MAX_WIDTH = 800
 
 function $convertImageElement(domNode: Node): DOMConversionOutput | null {
 	if (domNode instanceof HTMLImageElement) {
-		const { src, alt } = domNode
-		return { node: $createImageNode({ altText: alt, src }) }
+		const { src, alt, width, height } = domNode
+		return {
+			node: $createImageNode({
+				altText: alt,
+				height: height > 0 ? height : 'inherit',
+				src,
+				width: width > 0 ? width : 'inherit',
+			}),
+		}
 	}
 	return null
 }
@@ -111,23 +34,45 @@ function $convertImageElement(domNode: Node): DOMConversionOutput | null {
 export type SerializedImageNode = Spread<
 	{
 		altText: string
+		height?: number
+		maxWidth: number
 		src: string
+		width?: number
 	},
 	SerializedLexicalNode
 >
 
 export class ImageNode extends DecoratorNode<JSX.Element> {
+	__src: string
+	__altText: string
+	__width: 'inherit' | number
+	__height: 'inherit' | number
+	__maxWidth: number
+
 	static getType(): string {
 		return 'image'
 	}
 
 	static clone(node: ImageNode): ImageNode {
-		return new ImageNode(node.__src, node.__altText, node.__key)
+		return new ImageNode(
+			node.__src,
+			node.__altText,
+			node.__width,
+			node.__height,
+			node.__maxWidth,
+			node.__key,
+		)
 	}
 
 	static importJSON(serializedNode: SerializedImageNode): ImageNode {
-		const { src, altText } = serializedNode
-		return $createImageNode({ altText, src }).updateFromJSON(serializedNode)
+		const { altText, height, maxWidth, src, width } = serializedNode
+		return $createImageNode({
+			altText,
+			height: height ?? 'inherit',
+			maxWidth,
+			src,
+			width: width ?? 'inherit',
+		}).updateFromJSON(serializedNode)
 	}
 
 	static importDOM(): DOMConversionMap | null {
@@ -139,27 +84,48 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 		}
 	}
 
-	__src: string
-	__altText: string
-
-	constructor(src: string, altText = '', key?: NodeKey) {
+	constructor(
+		src: string,
+		altText = '',
+		width: 'inherit' | number = 'inherit',
+		height: 'inherit' | number = 'inherit',
+		maxWidth = DEFAULT_IMAGE_MAX_WIDTH,
+		key?: NodeKey,
+	) {
 		super(key)
 		this.__src = src
 		this.__altText = altText
+		this.__width = width
+		this.__height = height
+		this.__maxWidth = maxWidth
 	}
 
 	exportJSON(): SerializedImageNode {
-		return {
+		const serialized: SerializedImageNode = {
 			...super.exportJSON(),
 			altText: this.__altText,
+			maxWidth: this.__maxWidth,
 			src: this.__src,
 		}
+		if (this.__width !== 'inherit') {
+			serialized.width = this.__width
+		}
+		if (this.__height !== 'inherit') {
+			serialized.height = this.__height
+		}
+		return serialized
 	}
 
 	exportDOM(): DOMExportOutput {
 		const element = document.createElement('img')
 		element.setAttribute('src', this.__src)
 		element.setAttribute('alt', this.__altText)
+		if (this.__width !== 'inherit') {
+			element.setAttribute('width', String(this.__width))
+		}
+		if (this.__height !== 'inherit') {
+			element.setAttribute('height', String(this.__height))
+		}
 		return { element }
 	}
 
@@ -184,29 +150,65 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 		return this.__altText
 	}
 
+	getWidth(): 'inherit' | number {
+		return this.__width
+	}
+
+	getHeight(): 'inherit' | number {
+		return this.__height
+	}
+
+	getMaxWidth(): number {
+		return this.__maxWidth
+	}
+
+	setWidthAndHeight(
+		width: 'inherit' | number,
+		height: 'inherit' | number,
+	): void {
+		const writable = this.getWritable()
+		writable.__width = width
+		writable.__height = height
+	}
+
 	decorate(): JSX.Element {
 		return (
-			<ImageComponent
-				src={this.__src}
-				altText={this.__altText}
-				nodeKey={this.getKey()}
-			/>
+			<Suspense fallback={null}>
+				<ImageComponent
+					src={this.__src}
+					altText={this.__altText}
+					nodeKey={this.getKey()}
+					width={this.__width}
+					height={this.__height}
+					maxWidth={this.__maxWidth}
+				/>
+			</Suspense>
 		)
 	}
 }
 
 export function $createImageNode({
-	src = '',
 	altText = '',
+	height = 'inherit',
 	key,
+	maxWidth = DEFAULT_IMAGE_MAX_WIDTH,
+	src = '',
+	width = 'inherit',
 }: {
 	altText?: string
+	height?: 'inherit' | number
 	key?: NodeKey
+	maxWidth?: number
 	src?: string
+	width?: 'inherit' | number
 } = {}): ImageNode {
-	return $applyNodeReplacement(new ImageNode(src, altText, key))
+	return $applyNodeReplacement(
+		new ImageNode(src, altText, width, height, maxWidth, key),
+	)
 }
 
-export function $isImageNode(node: LexicalNode | null | undefined): node is ImageNode {
+export function $isImageNode(
+	node: LexicalNode | null | undefined,
+): node is ImageNode {
 	return node instanceof ImageNode
 }

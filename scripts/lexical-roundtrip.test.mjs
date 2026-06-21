@@ -60,6 +60,8 @@ describe("Markdown -> Lexical -> Markdown round trip", () => {
 			"",
 			"![](https://example.com/img.png)",
 			"",
+			"![alt](https://example.com/sized.png =300x200)",
+			"",
 			"[Link](https://example.com/)",
 			"",
 			"| H1 | H2 |",

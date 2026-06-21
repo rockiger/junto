@@ -41,17 +41,41 @@ import {
     LAYOUT_COLUMN_SEPARATOR,
 } from './layoutPresets'
 
+// markdown-it-imsize: ![alt](url =100x200)
+const IMAGE_IMSIZE_SUFFIX_REG_EXP = /\s+=(\d*)x(\d*)$/
+
+function parseImageMarkdownTarget(rawTarget) {
+    const sizeMatch = rawTarget.match(IMAGE_IMSIZE_SUFFIX_REG_EXP)
+    if (!sizeMatch) {
+        return { src: rawTarget, width: 'inherit', height: 'inherit' }
+    }
+    const [, widthStr, heightStr] = sizeMatch
+    const src = rawTarget.slice(0, sizeMatch.index).trimEnd()
+    const width = widthStr ? Number.parseInt(widthStr, 10) : 'inherit'
+    const height = heightStr ? Number.parseInt(heightStr, 10) : 'inherit'
+    return { src, width, height }
+}
+
+function formatImageMarkdownSize(width, height) {
+    if (width === 'inherit' && height === 'inherit') return ''
+    const w = width === 'inherit' ? '' : String(width)
+    const h = height === 'inherit' ? '' : String(height)
+    return ` =${w}x${h}`
+}
+
 export const IMAGE = {
     dependencies: [ImageNode],
     export: node => {
         if (!$isImageNode(node)) return null
-        return `![${node.getAltText()}](${node.getSrc()})`
+        const size = formatImageMarkdownSize(node.getWidth(), node.getHeight())
+        return `![${node.getAltText()}](${node.getSrc()}${size})`
     },
     importRegExp: /!(?:\[([^[]*)\])(?:\(([^(]+)\))/,
     regExp: /!(?:\[([^[]*)\])(?:\(([^(]+)\))$/,
     replace: (textNode, match) => {
-        const [, altText, src] = match
-        const imageNode = $createImageNode({ altText, src })
+        const [, altText, rawTarget] = match
+        const { src, width, height } = parseImageMarkdownTarget(rawTarget)
+        const imageNode = $createImageNode({ altText, height, src, width })
         textNode.replace(imageNode)
     },
     trigger: ')',
