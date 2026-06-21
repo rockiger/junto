@@ -28,6 +28,7 @@ import {
 } from "./markdown";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
+import WikiSlashCommandPlugin from "./plugins/WikiSlashCommandPlugin";
 import GoogleDriveLinkPlugin from "./plugins/GoogleDriveLinkPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
 import InternalWikiLinkPlugin from "./plugins/InternalWikiLinkPlugin";
@@ -141,6 +142,7 @@ const LexicalWikiEditor = forwardRef(
 				{!readOnly && floatingAnchorElem && (
 					<DraggableBlockPlugin anchorElem={floatingAnchorElem} />
 				)}
+				{!readOnly && <WikiSlashCommandPlugin />}
 				<HistoryPlugin />
 				<ListPlugin />
 				{readOnly && canEdit ? (
