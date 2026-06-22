@@ -2,6 +2,24 @@
 	outline: none;
 }
 
+/* Reduced page width: text blocks only; tables, images, layouts stay full width */
+.lexical-content.lexical-content--reduced-width > .lexical-paragraph,
+.lexical-content.lexical-content--reduced-width > .lexical-h1,
+.lexical-content.lexical-content--reduced-width > .lexical-h2,
+.lexical-content.lexical-content--reduced-width > .lexical-h3,
+.lexical-content.lexical-content--reduced-width > .lexical-h4,
+.lexical-content.lexical-content--reduced-width > .lexical-h5,
+.lexical-content.lexical-content--reduced-width > .lexical-h6,
+.lexical-content.lexical-content--reduced-width > .lexical-quote,
+.lexical-content.lexical-content--reduced-width > .lexical-list-ol,
+.lexical-content.lexical-content--reduced-width > .lexical-list-ul,
+.lexical-content.lexical-content--reduced-width > .lexical-code {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 640px;
+	width: 100%;
+}
+
 .lexical-editor-scroller {
 	display: flex;
 	position: relative;

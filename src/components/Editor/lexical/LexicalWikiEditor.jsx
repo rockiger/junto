@@ -35,6 +35,7 @@ import InternalWikiLinkPlugin from "./plugins/InternalWikiLinkPlugin";
 import LayoutPlugin from "./plugins/LayoutPlugin";
 import ReadOnlyCheckListPlugin from "./plugins/ReadOnlyCheckListPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import { PAGE_WIDTH_REDUCED } from "lib/pageWidth";
 import { wikiTheme } from "./theme";
 import { WIKI_TRANSFORMERS } from "./transformers";
 
@@ -62,6 +63,7 @@ const LexicalWikiEditor = forwardRef(
 			initialValue,
 			items,
 			onChangeMarkdown,
+			pageWidth,
 			readOnly,
 			style,
 		},
@@ -116,7 +118,11 @@ const LexicalWikiEditor = forwardRef(
 							contentEditable={
 								<ContentEditable
 									aria-placeholder={PLACEHOLDER_TEXT}
-									className="lexical-content"
+									className={
+										pageWidth === PAGE_WIDTH_REDUCED
+											? "lexical-content lexical-content--reduced-width"
+											: "lexical-content"
+									}
 									placeholder={
 										<div
 											style={{

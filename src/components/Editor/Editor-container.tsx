@@ -4,12 +4,20 @@ import { useLocation } from '@tanstack/react-router'
 import { Hint } from 'components/gsuite-components/hint'
 import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
 import { PageMenu } from 'components/pageButtons/PageMenu'
+import { TogglePageWidthButton } from 'components/pageButtons/TogglePageWidthButton'
 import { ToggleStarredButton } from 'components/pageButtons/ToggleStarredButton'
 import { Event } from 'components/Tracking'
 import { isHotkey } from 'is-hotkey'
 import { API_KEY } from 'lib/constants'
 import { updateMetadata } from 'lib/gdrive'
 import { filesUpdater, getMetaById } from 'lib/helper'
+import {
+    PAGE_WIDTH_FULL,
+    PAGE_WIDTH_REDUCED,
+    parsePageContent,
+    serializePageContent,
+    type PageWidth,
+} from 'lib/pageWidth'
 import { debounce } from 'lodash'
 import { Beforeunload } from 'react-beforeunload'
 import React, {
@@ -17,6 +25,7 @@ import React, {
     useEffect,
     useGlobal,
     useMemo,
+    useRef,
     useState,
 } from 'reactn'
 import {
@@ -52,7 +61,21 @@ const EditorLogic = React.forwardRef(
                 new URLSearchParams(searchStr.slice(1)).has('edit'))
         const [readOnly, setReadOnly] = useState(!hasEdit)
         const [_height, setHeight] = useState('calc(100vh - 65px - 57px)')
+        const [{ body: initialBody, pageWidth: initialPageWidth }] = useState(
+            () => parsePageContent(initialValue)
+        )
+        const [pageWidth, setPageWidth] = useState<PageWidth>(initialPageWidth)
+        const pageWidthRef = useRef(pageWidth)
         //const editorRef = useRef(null)
+
+        useEffect(() => {
+            pageWidthRef.current = pageWidth
+        }, [pageWidth])
+
+        useEffect(() => {
+            const parsed = parsePageContent(initialValue)
+            setPageWidth(parsed.pageWidth)
+        }, [fileId, initialValue])
 
         useEffect(() => {
             async function onKeyDown(ev) {
@@ -154,13 +177,42 @@ const EditorLogic = React.forwardRef(
 
         const handleMarkdownChange = useCallback(
             markdown => {
-                onChangeMarkdown(markdown)
+                const full = serializePageContent(markdown, pageWidthRef.current)
+                onChangeMarkdown(full)
                 if (readOnly && canEdit) {
                     saveChecklistChanges()
                 }
             },
             [canEdit, onChangeMarkdown, readOnly, saveChecklistChanges]
         )
+
+        const handlePageWidthChange = useCallback(
+            (nextPageWidth: PageWidth) => {
+                setPageWidth(nextPageWidth)
+                pageWidthRef.current = nextPageWidth
+                onChangeMarkdown.flush()
+                const stored = localStorage.getItem(fileId) || ''
+                const { body } = parsePageContent(stored)
+                const full = serializePageContent(body, nextPageWidth)
+                localStorage.setItem(fileId, full)
+                saveToDriveAndLocalDB(fileId, initialValue)
+            },
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            [fileId, initialValue, onChangeMarkdown]
+        )
+
+        const handlePageWidthToggle = useCallback(() => {
+            const nextPageWidth =
+                pageWidth === PAGE_WIDTH_FULL
+                    ? PAGE_WIDTH_REDUCED
+                    : PAGE_WIDTH_FULL
+            if (canEdit) {
+                handlePageWidthChange(nextPageWidth)
+            } else {
+                setPageWidth(nextPageWidth)
+                pageWidthRef.current = nextPageWidth
+            }
+        }, [canEdit, handlePageWidthChange, pageWidth])
 
         const onKeyDown = ev => {
             if (!readOnly) {
@@ -198,44 +250,54 @@ const EditorLogic = React.forwardRef(
         // TODO: Move to editor-component
         return (
             <div onKeyDown={onKeyDown}>
-                {canEdit && (
-                    <PageButtons>
-                        <Hint id="edit_page" scope="wiki_page">
-                            <ToggleReadOnlyButton
-                                readOnly={readOnly}
-                                onClick={onClickToggleButton}
-                            />
-                        </Hint>
-                        <Hint id="star_page" scope="wiki_page">
-                            <ToggleStarredButton
-                                isStarred={_.thread(
-                                    fileId,
-                                    [getMetaById, initialFiles],
-                                    [_.get, ['starred'], false]
-                                )}
-                                onClick={() => {
-                                    if (
-                                        getMetaById(fileId, initialFiles).starred
-                                    ) {
-                                        unstar(fileId)
-                                    } else {
-                                        star(fileId)
-                                    }
-                                }}
-                            />
-                        </Hint>
+                <PageButtons>
+                    {canEdit && (
+                        <>
+                            <Hint id="edit_page" scope="wiki_page">
+                                <ToggleReadOnlyButton
+                                    readOnly={readOnly}
+                                    onClick={onClickToggleButton}
+                                />
+                            </Hint>
+                            <Hint id="star_page" scope="wiki_page">
+                                <ToggleStarredButton
+                                    isStarred={_.thread(
+                                        fileId,
+                                        [getMetaById, initialFiles],
+                                        [_.get, ['starred'], false]
+                                    )}
+                                    onClick={() => {
+                                        if (
+                                            getMetaById(fileId, initialFiles)
+                                                .starred
+                                        ) {
+                                            unstar(fileId)
+                                        } else {
+                                            star(fileId)
+                                        }
+                                    }}
+                                />
+                            </Hint>
+                        </>
+                    )}
+                    <TogglePageWidthButton
+                        pageWidth={pageWidth}
+                        onClick={handlePageWidthToggle}
+                    />
+                    {canEdit && (
                         <Hint id="page_menu" scope="wiki_page">
                             <PageMenu fileId={fileId} />
                         </Hint>
-                    </PageButtons>
-                )}
+                    )}
+                </PageButtons>
                 <LexicalWikiEditor
                     apiKey={API_KEY}
                     canEdit={canEdit}
                     fileId={fileId}
-                    initialValue={initialValue}
+                    initialValue={initialBody}
                     items={convertFilesToAutocompletItems(initialFiles)}
                     onChangeMarkdown={handleMarkdownChange}
+                    pageWidth={pageWidth}
                     ref={editorRef}
                     readOnly={readOnly}
                     style={{
