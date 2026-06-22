@@ -295,6 +295,7 @@ const EditorLogic = React.forwardRef(
                     initialValue={initialBody}
                     items={convertFilesToAutocompletItems(initialFiles)}
                     onChangeMarkdown={handleMarkdownChange}
+                    pageFileName={fileName}
                     pageWidth={pageWidth}
                     ref={editorRef}
                     readOnly={readOnly}

@@ -27,6 +27,11 @@ import {
 import { $createParagraphNode, $isParagraphNode, $isTextNode } from 'lexical'
 import { $createImageNode, $isImageNode, ImageNode } from './nodes/ImageNode'
 import {
+    $createExcalidrawNode,
+    $isExcalidrawNode,
+    ExcalidrawNode,
+} from './nodes/ExcalidrawNode'
+import {
     $createLayoutContainerNode,
     $isLayoutContainerNode,
     LayoutContainerNode,
@@ -309,9 +314,30 @@ export const LAYOUT = {
     type: 'multiline-element',
 }
 
+/* -------- Excalidraw (::: excalidraw filename.excalidraw.json :::) -------- */
+
+const EXCALIDRAW_START_REG_EXP = /^::: excalidraw (.+?)\s*$/
+const EXCALIDRAW_END_REG_EXP = /^:::\s*$/
+
+export const EXCALIDRAW = {
+    dependencies: [ExcalidrawNode],
+    export: node => {
+        if (!$isExcalidrawNode(node)) return null
+        return `::: excalidraw ${node.getFileName()}\n:::`
+    },
+    regExpEnd: EXCALIDRAW_END_REG_EXP,
+    regExpStart: EXCALIDRAW_START_REG_EXP,
+    replace: (rootNode, _children, startMatch) => {
+        const fileName = startMatch[1].trim()
+        rootNode.append($createExcalidrawNode({ fileName }))
+    },
+    type: 'multiline-element',
+}
+
 export const WIKI_TRANSFORMERS = [
     TABLE,
     LAYOUT,
+    EXCALIDRAW,
     IMAGE,
     UNDERLINE,
     CHECK_LIST,

@@ -17,6 +17,7 @@ import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
 import {
     downloadFile,
     getFileDescription,
+    refreshSession,
     renameFile as renameFileInGdrive,
     updateMetadata,
 } from 'lib/gdrive'

@@ -73,7 +73,8 @@
 	cursor: grabbing;
 }
 
-.lexical-image .image-resizer {
+.lexical-image .image-resizer,
+.lexical-excalidraw .image-resizer {
 	background-color: rgb(60, 132, 244);
 	border: 1px solid #fff;
 	display: block;
@@ -82,49 +83,57 @@
 	width: 7px;
 }
 
-.lexical-image .image-resizer.image-resizer-n {
+.lexical-image .image-resizer.image-resizer-n,
+.lexical-excalidraw .image-resizer.image-resizer-n {
 	cursor: n-resize;
 	left: 48%;
 	top: -6px;
 }
 
-.lexical-image .image-resizer.image-resizer-ne {
+.lexical-image .image-resizer.image-resizer-ne,
+.lexical-excalidraw .image-resizer.image-resizer-ne {
 	cursor: ne-resize;
 	right: -6px;
 	top: -6px;
 }
 
-.lexical-image .image-resizer.image-resizer-e {
+.lexical-image .image-resizer.image-resizer-e,
+.lexical-excalidraw .image-resizer.image-resizer-e {
 	bottom: 48%;
 	cursor: e-resize;
 	right: -6px;
 }
 
-.lexical-image .image-resizer.image-resizer-se {
+.lexical-image .image-resizer.image-resizer-se,
+.lexical-excalidraw .image-resizer.image-resizer-se {
 	bottom: -2px;
 	cursor: nwse-resize;
 	right: -6px;
 }
 
-.lexical-image .image-resizer.image-resizer-s {
+.lexical-image .image-resizer.image-resizer-s,
+.lexical-excalidraw .image-resizer.image-resizer-s {
 	bottom: -2px;
 	cursor: s-resize;
 	left: 48%;
 }
 
-.lexical-image .image-resizer.image-resizer-sw {
+.lexical-image .image-resizer.image-resizer-sw,
+.lexical-excalidraw .image-resizer.image-resizer-sw {
 	bottom: -2px;
 	cursor: sw-resize;
 	left: -6px;
 }
 
-.lexical-image .image-resizer.image-resizer-w {
+.lexical-image .image-resizer.image-resizer-w,
+.lexical-excalidraw .image-resizer.image-resizer-w {
 	bottom: 48%;
 	cursor: w-resize;
 	left: -6px;
 }
 
-.lexical-image .image-resizer.image-resizer-nw {
+.lexical-image .image-resizer.image-resizer-nw,
+.lexical-excalidraw .image-resizer.image-resizer-nw {
 	cursor: nw-resize;
 	left: -6px;
 	top: -6px;
@@ -372,4 +381,131 @@
 
 .lexical-layout-item > p:last-child {
 	margin-bottom: 0;
+}
+
+.lexical-excalidraw {
+	display: inline-block;
+	position: relative;
+}
+
+.lexical-excalidraw-preview-wrap {
+	display: inline-block;
+	max-width: 100%;
+	position: relative;
+}
+
+.lexical-excalidraw-placeholder {
+	color: #888;
+	font-style: italic;
+	padding: 0.5rem 0;
+	text-align: center;
+}
+
+.lexical-excalidraw-preview-img {
+	cursor: default;
+	display: block;
+	height: auto;
+	margin: 0;
+	max-width: 100%;
+	object-fit: contain;
+	width: auto;
+}
+
+.lexical-excalidraw-preview-img--auto {
+	max-height: 20em;
+}
+
+.lexical-excalidraw-focused {
+	outline: 2px solid rgb(60, 132, 244);
+	user-select: none;
+}
+
+.lexical-excalidraw-draggable {
+	cursor: grab;
+}
+
+.lexical-excalidraw-draggable:active {
+	cursor: grabbing;
+}
+
+.lexical-excalidraw-hint {
+	background: rgba(255, 255, 255, 0.85);
+	border-radius: 4px;
+	bottom: 8px;
+	color: #666;
+	font-size: 12px;
+	padding: 2px 8px;
+	pointer-events: none;
+	position: absolute;
+	right: 8px;
+	z-index: 1;
+}
+
+.lexical-excalidraw-modal-overlay {
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	inset: 0;
+	position: fixed;
+	z-index: 1100;
+}
+
+.lexical-excalidraw-modal {
+	background: #fff;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+}
+
+.lexical-excalidraw-modal-toolbar {
+	align-items: center;
+	border-bottom: 1px solid #e0e0e0;
+	display: flex;
+	flex-shrink: 0;
+	justify-content: space-between;
+	padding: 0.5rem 1rem;
+}
+
+.lexical-excalidraw-modal-title {
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.lexical-excalidraw-modal-actions {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.lexical-excalidraw-modal-btn {
+	border-radius: 9999px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	padding: 0.5rem 1.25rem;
+}
+
+.lexical-excalidraw-modal-btn--secondary {
+	background: transparent;
+	color: #1a73e8;
+}
+
+.lexical-excalidraw-modal-btn--primary {
+	background: #1a73e8;
+	color: #fff;
+}
+
+.lexical-excalidraw-modal-body {
+	flex: 1;
+	min-height: 0;
+	position: relative;
+}
+
+.lexical-excalidraw-modal-body .excalidraw {
+	height: 100% !important;
+}
+
+.lexical-excalidraw-modal-loading {
+	align-items: center;
+	display: flex;
+	height: 100%;
+	justify-content: center;
 }

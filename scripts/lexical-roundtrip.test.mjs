@@ -120,6 +120,51 @@ describe("Markdown -> Lexical -> Markdown round trip", () => {
 		expect(roundTrip(md)).toBe(md)
 	})
 
+	it("excalidraw blocks are byte-idempotent", () => {
+		const md = [
+			"::: excalidraw meeting-notes-a1b2c3d4.excalidraw.json",
+			":::",
+			"",
+			"Before",
+			"",
+			"::: excalidraw my-page-deadbeef.excalidraw.json",
+			":::",
+			"",
+		].join("\n")
+		expect(roundTrip(md)).toBe(md)
+	})
+
+	it("inserted excalidraw node serializes to markdown block", async () => {
+		const { $createExcalidrawNode } = await import(
+			"../src/components/Editor/lexical/nodes/ExcalidrawNode.tsx"
+		)
+		const { $insertNodeToNearestRoot } = await import("@lexical/utils")
+		const { HISTORY_MERGE_TAG } = await import("lexical")
+		const editor = createHeadlessEditor({
+			nodes: WIKI_NODES,
+			onError: (err) => {
+				throw err
+			},
+		})
+		editor.update(
+			() => {
+				$insertNodeToNearestRoot(
+					$createExcalidrawNode({
+						fileName: "meeting-notes-a1b2c3d4.excalidraw.json",
+					}),
+				)
+			},
+			{ discrete: true, tag: HISTORY_MERGE_TAG },
+		)
+		let out = ""
+		editor.read(() => {
+			out = $exportWikiMarkdown()
+		})
+		expect(out).toBe(
+			"::: excalidraw meeting-notes-a1b2c3d4.excalidraw.json\n:::\n\n",
+		)
+	})
+
 	it("all converted slate_samples are byte-idempotent", async () => {
 		const files = (await readdir(root)).filter((f) =>
 			f.toLowerCase().endsWith(".gwiki"),

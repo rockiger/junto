@@ -28,6 +28,7 @@ import {
 } from "./markdown";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
+import ExcalidrawPlugin from "./plugins/ExcalidrawPlugin";
 import WikiSlashCommandPlugin from "./plugins/WikiSlashCommandPlugin";
 import GoogleDriveLinkPlugin from "./plugins/GoogleDriveLinkPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
@@ -50,6 +51,117 @@ function EditablePlugin({ readOnly }) {
 	return null;
 }
 
+function WikiEditorInner({
+	apiKey,
+	canEdit,
+	fileId,
+	floatingAnchorElem,
+	onAnchorRef,
+	onChangeMarkdown,
+	pageFileName,
+	pageWidth,
+	readOnly,
+	style,
+	items,
+	editorRef,
+}) {
+	const [editor] = useLexicalComposerContext();
+
+	const syncWikiMarkdown = useCallback(() => {
+		if (!onChangeMarkdown) return;
+		editor.read(() => {
+			onChangeMarkdown($exportWikiMarkdown());
+		});
+	}, [editor, onChangeMarkdown]);
+
+	return (
+		<ExcalidrawPlugin
+			fileId={fileId}
+			pageFileName={pageFileName}
+			syncWikiMarkdown={syncWikiMarkdown}
+		>
+			<ToolbarPlugin
+				apiKey={apiKey}
+				fileId={fileId}
+				items={items}
+				readOnly={readOnly}
+			/>
+			<div className="lexical-editor-scroller">
+				<div
+					className={
+						canEdit
+							? "lexical-editor-anchor lexical-editor-anchor--gutter"
+							: "lexical-editor-anchor"
+					}
+					ref={onAnchorRef}
+				>
+					<RichTextPlugin
+						contentEditable={
+							<ContentEditable
+								aria-placeholder={PLACEHOLDER_TEXT}
+								className={
+									pageWidth === PAGE_WIDTH_REDUCED
+										? "lexical-content lexical-content--reduced-width"
+										: "lexical-content"
+								}
+								placeholder={
+									<div
+										style={{
+											color: "#999",
+											left: 0,
+											padding: style?.padding,
+											pointerEvents: "none",
+											position: "absolute",
+											top: 0,
+											userSelect: "none",
+										}}
+									>
+										{PLACEHOLDER_TEXT}
+									</div>
+								}
+								style={style}
+							/>
+						}
+						ErrorBoundary={LexicalErrorBoundary}
+					/>
+				</div>
+			</div>
+			{!readOnly && floatingAnchorElem && (
+				<DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+			)}
+			{!readOnly && <WikiSlashCommandPlugin />}
+			<HistoryPlugin />
+			<ListPlugin />
+			{readOnly && canEdit ? (
+				<ReadOnlyCheckListPlugin />
+			) : (
+				<CheckListPlugin disableTakeFocusOnClick={readOnly} />
+			)}
+			<LinkPlugin />
+			<GoogleDriveLinkPlugin />
+			<InternalWikiLinkPlugin readOnly={readOnly} />
+			<ClickableLinkPlugin />
+			<TablePlugin />
+			<TabIndentationPlugin />
+			<MarkdownShortcutPlugin transformers={WIKI_TRANSFORMERS} />
+			<CodeHighlightPlugin />
+			<ImagesPlugin />
+			<LayoutPlugin />
+			<EditablePlugin readOnly={readOnly} />
+			<EditorRefPlugin editorRef={editorRef} />
+			<OnChangePlugin
+				ignoreHistoryMergeTagChange
+				ignoreSelectionChange
+				onChange={(editorState) => {
+					if (!onChangeMarkdown) return;
+					const markdown = editorState.read($exportWikiMarkdown);
+					onChangeMarkdown(markdown);
+				}}
+			/>
+		</ExcalidrawPlugin>
+	);
+}
+
 /**
  * Wiki editor on Lexical. `initialValue` is a raw Markdown string;
  * `onChangeMarkdown` receives the serialized Markdown on every change.
@@ -63,6 +175,7 @@ const LexicalWikiEditor = forwardRef(
 			initialValue,
 			items,
 			onChangeMarkdown,
+			pageFileName,
 			pageWidth,
 			readOnly,
 			style,
@@ -99,83 +212,19 @@ const LexicalWikiEditor = forwardRef(
 
 		return (
 			<LexicalComposer initialConfig={initialConfig}>
-				<ToolbarPlugin
+				<WikiEditorInner
 					apiKey={apiKey}
+					canEdit={canEdit}
+					editorRef={editorRef}
 					fileId={fileId}
+					floatingAnchorElem={floatingAnchorElem}
 					items={items}
+					onAnchorRef={onAnchorRef}
+					onChangeMarkdown={onChangeMarkdown}
+					pageFileName={pageFileName}
+					pageWidth={pageWidth}
 					readOnly={readOnly}
-				/>
-				<div className="lexical-editor-scroller">
-					<div
-						className={
-							canEdit
-								? "lexical-editor-anchor lexical-editor-anchor--gutter"
-								: "lexical-editor-anchor"
-						}
-						ref={onAnchorRef}
-					>
-						<RichTextPlugin
-							contentEditable={
-								<ContentEditable
-									aria-placeholder={PLACEHOLDER_TEXT}
-									className={
-										pageWidth === PAGE_WIDTH_REDUCED
-											? "lexical-content lexical-content--reduced-width"
-											: "lexical-content"
-									}
-									placeholder={
-										<div
-											style={{
-												color: "#999",
-												left: 0,
-												padding: style?.padding,
-												pointerEvents: "none",
-												position: "absolute",
-												top: 0,
-												userSelect: "none",
-											}}
-										>
-											{PLACEHOLDER_TEXT}
-										</div>
-									}
-									style={style}
-								/>
-							}
-							ErrorBoundary={LexicalErrorBoundary}
-						/>
-					</div>
-				</div>
-				{!readOnly && floatingAnchorElem && (
-					<DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-				)}
-				{!readOnly && <WikiSlashCommandPlugin />}
-				<HistoryPlugin />
-				<ListPlugin />
-				{readOnly && canEdit ? (
-					<ReadOnlyCheckListPlugin />
-				) : (
-					<CheckListPlugin disableTakeFocusOnClick={readOnly} />
-				)}
-				<LinkPlugin />
-				<GoogleDriveLinkPlugin />
-				<InternalWikiLinkPlugin readOnly={readOnly} />
-				<ClickableLinkPlugin />
-				<TablePlugin />
-				<TabIndentationPlugin />
-				<MarkdownShortcutPlugin transformers={WIKI_TRANSFORMERS} />
-				<CodeHighlightPlugin />
-				<ImagesPlugin />
-				<LayoutPlugin />
-				<EditablePlugin readOnly={readOnly} />
-				<EditorRefPlugin editorRef={editorRef} />
-				<OnChangePlugin
-					ignoreHistoryMergeTagChange
-					ignoreSelectionChange
-					onChange={(editorState) => {
-						if (!onChangeMarkdown) return;
-						const markdown = editorState.read($exportWikiMarkdown);
-						onChangeMarkdown(markdown);
-					}}
+					style={style}
 				/>
 			</LexicalComposer>
 		);

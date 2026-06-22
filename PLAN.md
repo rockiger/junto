@@ -57,14 +57,21 @@
 -- [x] Vorschlagsliste funktioniert die Verlinkung nicht
 - [] Update token for saving
 - [] Add editor features
--- [] Block Drag & Drop
--- [] Block Menü/Slash menüs
--- [] Drag & Drop for Checklist items
--- [] Farben
+-- [x] Multi column layout
+-- [x] Block Drag & Drop
+-- [x] Block Menü/Slash menüs
+-- [x] Drag & Drop for Checklist items
+-- [x] Cursor bei Image nodes
+-- [] Layout-Weite
 -- [] Excalidraw
+-- [] Farben
 -- [] Collapsible container
 -- [] Tweet, Youtube, Figma embeds
 -- [] Highlight text
+- [] Gesamtbreiter einer Seite anpassen
+-- [] Wie verhalten sich Blöcke, die nicht aus Fliestext bestehen?
+-- [] Verhalten von Notion recherchieren
+-- [] Umsetzen
 - [] Repair Hints
 - [] Repair Tests
 ----------------------------------------------------------

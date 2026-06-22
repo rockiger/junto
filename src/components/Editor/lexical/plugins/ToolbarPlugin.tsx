@@ -49,7 +49,7 @@ import {
 	type TextFormatType,
 } from 'lexical'
 import { driveImageSrc, uploadBinaryFile } from 'lib/gdrive'
-import CodeBracesIcon from 'mdi-react/CodeBracesIcon'
+import DrawIcon from 'mdi-react/DrawIcon'
 import CodeTagsIcon from 'mdi-react/CodeTagsIcon'
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon'
 import FormatHeader2Icon from 'mdi-react/FormatHeader2Icon'
@@ -102,6 +102,7 @@ import type { LinkItem, LinkModalHandle } from '../link-modal'
 import { LinkModal } from '../link-modal'
 import { $createWikiLinkNode } from '../nodes/WikiLinkNode'
 import { INSERT_IMAGE_COMMAND } from './ImagesPlugin'
+import { INSERT_EXCALIDRAW_COMMAND } from './ExcalidrawPlugin'
 import { INSERT_LAYOUT_COMMAND } from './LayoutPlugin'
 import { LAYOUT_PRESETS } from '../layoutPresets'
 
@@ -470,6 +471,12 @@ export default function ToolbarPlugin({
 		event.preventDefault()
 	}
 
+	const onInsertExcalidraw = (event: MouseEvent) => {
+		event.preventDefault()
+		editor.dispatchCommand(INSERT_EXCALIDRAW_COMMAND, undefined)
+		editor.focus()
+	}
+
 	return (
 		<>
 			<input
@@ -597,6 +604,12 @@ export default function ToolbarPlugin({
 						</Popover>
 					</MenuTrigger>
 					<ToolbarButton
+						onMouseDown={onInsertExcalidraw}
+						title="Excalidraw drawing"
+					>
+						<DrawIcon className={ICON_CLASS} />
+					</ToolbarButton>
+					<ToolbarButton
 						onMouseDown={onClickDrive}
 						title="Google Drive file"
 					>
@@ -631,7 +644,7 @@ export default function ToolbarPlugin({
 						onMouseDown={toggleBlock('code', () => $createCodeNode())}
 						title="Code block"
 					>
-						<CodeBracesIcon className={ICON_CLASS} />
+						<CodeTagsIcon className={ICON_CLASS} />
 					</ToolbarButton>
 				</ToolbarGroup>
 

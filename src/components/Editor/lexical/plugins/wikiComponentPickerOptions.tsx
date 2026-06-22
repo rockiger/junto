@@ -30,6 +30,8 @@ import ImageIcon from 'mdi-react/ImageIcon'
 import TableLargeIcon from 'mdi-react/TableLargeIcon'
 import ViewColumnIcon from 'mdi-react/ViewColumnIcon'
 import { LAYOUT_PRESETS } from '../layoutPresets'
+import DrawIcon from 'mdi-react/DrawIcon'
+import { INSERT_EXCALIDRAW_COMMAND } from './ExcalidrawPlugin'
 import { INSERT_IMAGE_COMMAND } from './ImagesPlugin'
 import { INSERT_LAYOUT_COMMAND } from './LayoutPlugin'
 
@@ -176,6 +178,15 @@ export function getWikiBaseOptions(
 						selection.insertRawText(textContent)
 					}
 				})
+			},
+		},
+		{
+			key: 'excalidraw',
+			title: 'Excalidraw Drawing',
+			keywords: ['excalidraw', 'drawing', 'diagram', 'sketch', 'whiteboard'],
+			icon: <DrawIcon className={ICON_CLASS} />,
+			onSelect: () => {
+				editor.dispatchCommand(INSERT_EXCALIDRAW_COMMAND, undefined)
 			},
 		},
 		{

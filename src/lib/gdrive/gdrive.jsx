@@ -770,6 +770,7 @@ export function updateFileMultipart(
 	const close_delim = `\r\n--${boundary}--`;
 
 	const contentType = metadata.mimeType || "text/markdown";
+	const useContentAsIndexableText = contentType.startsWith("text/");
 	const multipartRequestBody =
 		delimiter +
 		"Content-Type: application/json; charset=UTF-8\r\n\r\n" +
@@ -787,7 +788,7 @@ export function updateFileMultipart(
 				params: {
 					uploadType: "multipart",
 					fields: fileFields,
-					useContentAsIndexableText: true,
+					useContentAsIndexableText,
 					supportsAllDrives,
 				},
 				headers: {

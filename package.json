@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@excalidraw/excalidraw": "^0.18.1",
         "@lexical/code": "^0.45.0",
         "@lexical/link": "^0.45.0",
         "@lexical/list": "^0.45.0",

@@ -70,4 +70,5 @@ export const wikiTheme = {
     tableRow: 'lexical-table-row',
     layoutContainer: 'lexical-layout-container',
     layoutItem: 'lexical-layout-item',
+    excalidraw: 'lexical-excalidraw',
 }

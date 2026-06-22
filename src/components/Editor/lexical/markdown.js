@@ -9,6 +9,7 @@ import {
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import { ImageNode } from './nodes/ImageNode'
+import { ExcalidrawNode } from './nodes/ExcalidrawNode'
 import { LayoutContainerNode } from './nodes/LayoutContainerNode'
 import { LayoutItemNode } from './nodes/LayoutItemNode'
 import { WIKI_TRANSFORMERS } from './transformers'
@@ -37,6 +38,7 @@ export const WIKI_NODES = [
     TableRowNode,
     TableCellNode,
     ImageNode,
+    ExcalidrawNode,
     LayoutContainerNode,
     LayoutItemNode,
 ]
