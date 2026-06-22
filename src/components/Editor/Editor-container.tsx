@@ -4,7 +4,6 @@ import { useLocation } from '@tanstack/react-router'
 import { Hint } from 'components/gsuite-components/hint'
 import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
 import { PageMenu } from 'components/pageButtons/PageMenu'
-import { TogglePageWidthButton } from 'components/pageButtons/TogglePageWidthButton'
 import { ToggleStarredButton } from 'components/pageButtons/ToggleStarredButton'
 import { Event } from 'components/Tracking'
 import { isHotkey } from 'is-hotkey'
@@ -280,15 +279,14 @@ const EditorLogic = React.forwardRef(
                             </Hint>
                         </>
                     )}
-                    <TogglePageWidthButton
-                        pageWidth={pageWidth}
-                        onClick={handlePageWidthToggle}
-                    />
-                    {canEdit && (
-                        <Hint id="page_menu" scope="wiki_page">
-                            <PageMenu fileId={fileId} />
-                        </Hint>
-                    )}
+                    <Hint id="page_menu" scope="wiki_page">
+                        <PageMenu
+                            canEdit={canEdit}
+                            fileId={fileId}
+                            onPageWidthToggle={handlePageWidthToggle}
+                            pageWidth={pageWidth}
+                        />
+                    </Hint>
                 </PageButtons>
                 <LexicalWikiEditor
                     apiKey={API_KEY}
