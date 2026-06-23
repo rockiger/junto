@@ -14,12 +14,12 @@ import {
 } from 'lexical'
 import { downloadFileBlob, parseDriveImageFileId } from 'lib/gdrive'
 import {
+	type JSX,
 	useCallback,
 	useEffect,
 	useMemo,
 	useRef,
 	useState,
-	type JSX,
 } from 'react'
 import ImageResizer from '../ui/ImageResizer'
 import { $isImageNode } from './ImageNode'
@@ -27,7 +27,6 @@ import { $isImageNode } from './ImageNode'
 interface ImageComponentProps {
 	altText: string
 	height: 'inherit' | number
-	maxWidth: number
 	nodeKey: NodeKey
 	src: string
 	width: 'inherit' | number
@@ -39,7 +38,6 @@ export default function ImageComponent({
 	nodeKey,
 	width,
 	height,
-	maxWidth,
 }: ImageComponentProps): JSX.Element {
 	const imageRef = useRef<HTMLImageElement>(null)
 	const [isSelected, setSelected, clearSelection] =
@@ -187,13 +185,12 @@ export default function ImageComponent({
 							!hasExplicitSize && 'max-h-[20em]',
 							loading ? 'hidden' : 'block',
 							isFocused &&
-								isInNodeSelection &&
-								'lexical-image-focused',
+							isInNodeSelection &&
+							'lexical-image-focused',
 							isFocused && isInNodeSelection && 'lexical-image-draggable',
 						)}
 						style={{
 							height: height === 'inherit' ? undefined : height,
-							maxWidth,
 							width: width === 'inherit' ? undefined : width,
 						}}
 					/>
@@ -203,7 +200,6 @@ export default function ImageComponent({
 				<ImageResizer
 					editor={editor}
 					imageRef={imageRef}
-					maxWidth={maxWidth}
 					onResizeStart={onResizeStart}
 					onResizeEnd={onResizeEnd}
 				/>

@@ -8,20 +8,18 @@ import {
 	type SerializedLexicalNode,
 	type Spread,
 } from 'lexical'
-import { lazy, Suspense, type JSX } from 'react'
+import { lazy, Suspense, type CSSProperties, type JSX } from 'react'
 
 const ExcalidrawComponent = lazy(() => import('./ExcalidrawComponent'))
 
 export const DEFAULT_EXCALIDRAW_WIDTH = 500
 export const DEFAULT_EXCALIDRAW_HEIGHT = 400
-export const DEFAULT_EXCALIDRAW_MAX_WIDTH = 800
 
 export type SerializedExcalidrawNode = Spread<
 	{
 		driveFileId?: string
 		fileName: string
 		height?: number
-		maxWidth: number
 		sceneJson?: string
 		width?: number
 	},
@@ -34,7 +32,6 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
 	__sceneJson: string | null
 	__width: 'inherit' | number
 	__height: 'inherit' | number
-	__maxWidth: number
 
 	static getType(): string {
 		return 'excalidraw'
@@ -47,7 +44,6 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
 			node.__sceneJson,
 			node.__width,
 			node.__height,
-			node.__maxWidth,
 			node.__key,
 		)
 	}
@@ -55,13 +51,12 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
 	static importJSON(
 		serializedNode: SerializedExcalidrawNode,
 	): ExcalidrawNode {
-		const { driveFileId, fileName, height, maxWidth, sceneJson, width } =
+		const { driveFileId, fileName, height, sceneJson, width } =
 			serializedNode
 		return $createExcalidrawNode({
 			driveFileId: driveFileId ?? null,
 			fileName,
 			height: height ?? DEFAULT_EXCALIDRAW_HEIGHT,
-			maxWidth: maxWidth ?? DEFAULT_EXCALIDRAW_MAX_WIDTH,
 			sceneJson: sceneJson ?? null,
 			width: width ?? DEFAULT_EXCALIDRAW_WIDTH,
 		}).updateFromJSON(serializedNode)
@@ -73,7 +68,6 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
 		sceneJson: string | null = null,
 		width: 'inherit' | number = DEFAULT_EXCALIDRAW_WIDTH,
 		height: 'inherit' | number = DEFAULT_EXCALIDRAW_HEIGHT,
-		maxWidth = DEFAULT_EXCALIDRAW_MAX_WIDTH,
 		key?: NodeKey,
 	) {
 		super(key)
@@ -82,14 +76,12 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
 		this.__sceneJson = sceneJson
 		this.__width = width
 		this.__height = height
-		this.__maxWidth = maxWidth
 	}
 
 	exportJSON(): SerializedExcalidrawNode {
 		const serialized: SerializedExcalidrawNode = {
 			...super.exportJSON(),
 			fileName: this.__fileName,
-			maxWidth: this.__maxWidth,
 			type: 'excalidraw',
 			version: 1,
 		}
@@ -144,10 +136,6 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
 		return this.__height
 	}
 
-	getMaxWidth(): number {
-		return this.__maxWidth
-	}
-
 	setDriveFileId(driveFileId: string): void {
 		const writable = this.getWritable()
 		writable.__driveFileId = driveFileId
@@ -169,12 +157,23 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
 
 	decorate(): JSX.Element {
 		return (
-			<Suspense fallback={<div className="lexical-excalidraw-loading" />}>
+			<Suspense
+				fallback={
+					<div
+						className="lexical-excalidraw-placeholder lexical-excalidraw-placeholder--loading"
+						style={getExcalidrawLoadingPlaceholderStyle(
+							this.__width,
+							this.__height,
+						)}
+					>
+						Loading drawing…
+					</div>
+				}
+			>
 				<ExcalidrawComponent
 					driveFileId={this.__driveFileId}
 					fileName={this.__fileName}
 					height={this.__height}
-					maxWidth={this.__maxWidth}
 					nodeKey={this.getKey()}
 					sceneJson={this.__sceneJson}
 					width={this.__width}
@@ -189,7 +188,6 @@ export function $createExcalidrawNode({
 	fileName,
 	height = DEFAULT_EXCALIDRAW_HEIGHT,
 	key,
-	maxWidth = DEFAULT_EXCALIDRAW_MAX_WIDTH,
 	sceneJson = null,
 	width = DEFAULT_EXCALIDRAW_WIDTH,
 }: {
@@ -197,7 +195,6 @@ export function $createExcalidrawNode({
 	fileName: string
 	height?: 'inherit' | number
 	key?: NodeKey
-	maxWidth?: number
 	sceneJson?: string | null
 	width?: 'inherit' | number
 }): ExcalidrawNode {
@@ -208,7 +205,6 @@ export function $createExcalidrawNode({
 			sceneJson,
 			width,
 			height,
-			maxWidth,
 			key,
 		),
 	)
@@ -218,4 +214,15 @@ export function $isExcalidrawNode(
 	node: LexicalNode | null | undefined,
 ): node is ExcalidrawNode {
 	return node instanceof ExcalidrawNode
+}
+
+export function getExcalidrawLoadingPlaceholderStyle(
+	width: 'inherit' | number,
+	height: 'inherit' | number,
+): CSSProperties {
+	return {
+		minHeight:
+			height === 'inherit' ? DEFAULT_EXCALIDRAW_HEIGHT : height,
+		...(width !== 'inherit' ? { width } : {}),
+	}
 }

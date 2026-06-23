@@ -41,7 +41,6 @@ interface ExcalidrawComponentProps {
 	driveFileId: string | null
 	fileName: string
 	height: 'inherit' | number
-	maxWidth: number
 	nodeKey: NodeKey
 	sceneJson: string | null
 	width: 'inherit' | number
@@ -51,7 +50,6 @@ export default function ExcalidrawComponent({
 	driveFileId,
 	fileName,
 	height,
-	maxWidth,
 	nodeKey,
 	sceneJson,
 	width,
@@ -394,7 +392,6 @@ export default function ExcalidrawComponent({
 						)}
 						style={{
 							height: height === 'inherit' ? undefined : height,
-							maxWidth,
 							width: width === 'inherit' ? undefined : width,
 						}}
 					/>
@@ -414,7 +411,6 @@ export default function ExcalidrawComponent({
 				<ImageResizer
 					editor={editor}
 					imageRef={previewRef}
-					maxWidth={maxWidth}
 					onResizeStart={onResizeStart}
 					onResizeEnd={onResizeEnd}
 				/>

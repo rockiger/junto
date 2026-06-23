@@ -12,7 +12,7 @@
 -- [x] Page-View
 -- [x] Page-Edit
 ----------------------------------------------------------
-- [] Make desktop views working again
+- [x] Make desktop views working again
 -- [x] Layout to show Sidebar and Main content
 -- [x] Sidebar breakpoints
 -- [x] Home (Add Menu button)
@@ -55,22 +55,24 @@
 -- [x] Update React itself to 19 
 -- [x] Replace react-use-dimensions
 -- [x] Vorschlagsliste funktioniert die Verlinkung nicht
-- [] Update token for saving
-- [] Add editor features
+- [x] Update token for saving
+- [x] Add editor features
 -- [x] Multi column layout
 -- [x] Block Drag & Drop
 -- [x] Block Menü/Slash menüs
 -- [x] Drag & Drop for Checklist items
 -- [x] Cursor bei Image nodes
--- [] Layout-Weite
--- [] Excalidraw
+-- [x] Layout-Weite
+-- [x] Excalidraw
+----------------------------------------------------------
+- [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
+
+----------------------------------------------------------
+- [] Add more editor features
 -- [] Farben
 -- [] Collapsible container
 -- [] Tweet, Youtube, Figma embeds
 -- [] Highlight text
-- [] Gesamtbreiter einer Seite anpassen
--- [] Wie verhalten sich Blöcke, die nicht aus Fliestext bestehen?
--- [] Verhalten von Notion recherchieren
 -- [] Umsetzen
 - [] Repair Hints
 - [] Repair Tests
