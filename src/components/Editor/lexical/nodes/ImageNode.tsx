@@ -14,8 +14,6 @@ import { lazy, Suspense, type JSX } from 'react'
 
 const ImageComponent = lazy(() => import('./ImageComponent'))
 
-export const DEFAULT_IMAGE_MAX_WIDTH = 800
-
 function $convertImageElement(domNode: Node): DOMConversionOutput | null {
 	if (domNode instanceof HTMLImageElement) {
 		const { src, alt, width, height } = domNode
@@ -35,7 +33,6 @@ export type SerializedImageNode = Spread<
 	{
 		altText: string
 		height?: number
-		maxWidth: number
 		src: string
 		width?: number
 	},
@@ -47,7 +44,6 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 	__altText: string
 	__width: 'inherit' | number
 	__height: 'inherit' | number
-	__maxWidth: number
 
 	static getType(): string {
 		return 'image'
@@ -59,17 +55,15 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 			node.__altText,
 			node.__width,
 			node.__height,
-			node.__maxWidth,
 			node.__key,
 		)
 	}
 
 	static importJSON(serializedNode: SerializedImageNode): ImageNode {
-		const { altText, height, maxWidth, src, width } = serializedNode
+		const { altText, height, src, width } = serializedNode
 		return $createImageNode({
 			altText,
 			height: height ?? 'inherit',
-			maxWidth,
 			src,
 			width: width ?? 'inherit',
 		}).updateFromJSON(serializedNode)
@@ -89,7 +83,6 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 		altText = '',
 		width: 'inherit' | number = 'inherit',
 		height: 'inherit' | number = 'inherit',
-		maxWidth = DEFAULT_IMAGE_MAX_WIDTH,
 		key?: NodeKey,
 	) {
 		super(key)
@@ -97,14 +90,12 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 		this.__altText = altText
 		this.__width = width
 		this.__height = height
-		this.__maxWidth = maxWidth
 	}
 
 	exportJSON(): SerializedImageNode {
 		const serialized: SerializedImageNode = {
 			...super.exportJSON(),
 			altText: this.__altText,
-			maxWidth: this.__maxWidth,
 			src: this.__src,
 		}
 		if (this.__width !== 'inherit') {
@@ -158,10 +149,6 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 		return this.__height
 	}
 
-	getMaxWidth(): number {
-		return this.__maxWidth
-	}
-
 	setWidthAndHeight(
 		width: 'inherit' | number,
 		height: 'inherit' | number,
@@ -180,7 +167,6 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 					nodeKey={this.getKey()}
 					width={this.__width}
 					height={this.__height}
-					maxWidth={this.__maxWidth}
 				/>
 			</Suspense>
 		)
@@ -191,19 +177,17 @@ export function $createImageNode({
 	altText = '',
 	height = 'inherit',
 	key,
-	maxWidth = DEFAULT_IMAGE_MAX_WIDTH,
 	src = '',
 	width = 'inherit',
 }: {
 	altText?: string
 	height?: 'inherit' | number
 	key?: NodeKey
-	maxWidth?: number
 	src?: string
 	width?: 'inherit' | number
 } = {}): ImageNode {
 	return $applyNodeReplacement(
-		new ImageNode(src, altText, width, height, maxWidth, key),
+		new ImageNode(src, altText, width, height, key),
 	)
 }
 
