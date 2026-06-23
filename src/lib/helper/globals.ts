@@ -17,20 +17,25 @@ import lodash from 'lodash'
  * @param  {...any} forms
  * @returns any
  */
-const threadBase = (threadType, initialValue, ...forms) => {
+const threadBase = (
+    threadType: '->' | '-->',
+    initialValue: unknown,
+    ...forms: unknown[]
+) => {
     return forms.reduce((acc, curVal) => {
         if (Array.isArray(curVal)) {
             const [head, ...rest] = curVal
             return threadType === '->'
                 ? head.apply(this, [acc, ...rest])
                 : head.apply(this, [...rest, acc])
-        } else {
-            return curVal(acc)
+        } else if (typeof curVal === 'function') {
+            return (curVal as (value: unknown) => unknown)(acc)
         }
+        return acc
     }, initialValue)
 }
 
-export const thread = (initialValue, ...forms) =>
+export const thread = (initialValue: unknown, ...forms: unknown[]) =>
     threadBase('->', initialValue, ...forms)
 
 /**
@@ -38,7 +43,7 @@ export const thread = (initialValue, ...forms) =>
  * @param {any} x the value to log
  * @return {any} the given value x
  */
-export const trace = x => {
+export const trace = <T,>(x: T): T => {
     console.log(x)
     return x
 }
@@ -48,13 +53,9 @@ export const trace = x => {
  * @param {any} col
  * @returns {boolean}
  */
-export const isNotEmpty = col => !_.isEmpty(col)
+export const isNotEmpty = (col: unknown) => !lodash.isEmpty(col)
 
 lodash.mixin({ isNotEmpty, thread, trace })
 
-declare global {
-    var _: typeof lodash
-}
-
-const _ = { ...lodash, thread, trace }
-export default _
+;(globalThis as typeof globalThis & { _: typeof lodash })._ = lodash
+export default lodash

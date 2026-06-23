@@ -1,12 +1,6 @@
-import React, { useGlobal } from 'reactn'
-import TooltipBase from 'react-tooltip-lite'
 import _ from 'lib/helper/globals'
-import CloseIcon from 'mdi-react/CloseIcon'
-import IconButton from '../icon-button'
-import { HStack } from '..'
-import logo from 'static/logo_48.svg'
+import React from 'react'
 import s from './hint.module.scss'
-import { updateFile } from 'lib/gdrive'
 
 export interface HintData {
     unread: boolean
@@ -55,34 +49,12 @@ interface Props {
     scope: string
 }
 
-export const Hint = ({ children, id, scope }: Props) => {
-    const [hints, setHints] = useGlobal('hints')
-    const [hintCounter, setHintCounter] = useGlobal('hintCounter')
-    const [hintsFileId] = useGlobal('hintsFileId')
-    const [isOpen, setIsOpen] = React.useState(false)
-    const show = showHint(id, hints[scope], hintCounter)
-    let hint
-    try {
-        hint = hints[scope][id]
-        if (!hint) throw new Error('Hint is undefined')
-    } catch (e) {
-        hint = emptyHint()
-    }
-    const { message, title } = hint
-
-    const onClickIconButton = () => {
-        setIsOpen(false)
-        // a bit complicated. It needs to change the nested hint in scope
-        const newHints = makeHintRead(hints, id, scope)
-        setHints(newHints)
-        setHintCounter(hintCounter + 1)
-        // write changes to config in gdrive
-        updateFile(hintsFileId, hintMap2HintMapAppConfig(newHints), false)
-    }
+export const Hint = ({ children }: Props) => {
     return (
         <div className={s.hint__wrapper_outer}>
             {children}
-            {show && (
+            {/* {show && (
+                <div className={s.hint__wrapper_in{show && (
                 <div className={s.hint__wrapper_inner}>
                     <TooltipBase
                         arrow={false}
@@ -127,14 +99,60 @@ export const Hint = ({ children, id, scope }: Props) => {
                         tipContentClassName={s.hint__Tooltip}
                     >
                         <div className={s.hint} />
-                    </TooltipBase>
-                </div>
-            )}
+                    </TooltipBase>ner}>
+                    <TooltipBase
+                        arrow={false}
+                        content={
+                            <div>
+                                <IconButton
+                                    className={
+                                        s.hint__Tooltip__iconbar__IconButton
+                                    }
+                                    onClick={onClickIconButton}
+                                >
+                                    <CloseIcon size="1rem" />
+                                </IconButton>
+                                <div className={s.hint__Tooltip__main}>
+                                    <HStack>
+                                        <img
+                                            className={s.hint__Tooltip__logo}
+                                            src={logo}
+                                            alt="App logo"
+                                        />
+
+                                        <div
+                                            className={s.hint__Tooltip__content}
+                                        >
+                                            <div
+                                                className={
+                                                    s.hint__Tooltip__content__headline
+                                                }
+                                            >
+                                                {title}
+                                            </div>
+                                            {message}
+                                        </div>
+                                    </HStack>
+                                </div>
+                            </div>
+                        }
+                        direction="down"
+                        eventToggle="onClick"
+                        isOpen={isOpen}
+                        onToggle={ev => setIsOpen(ev)}
+                        tipContentClassName={s.hint__Tooltip}
+                    >
+                        <div className={s.hint} />
+                    </TooltipBase> 
         </div>
     )
 }
+                    */}
+        </div >
+    )
+}
 
-const emptyHint = (): HintData => ({
+export const emptyHint = (): HintData => ({
     message: '',
     rank: -1,
     title: '',
@@ -159,11 +177,11 @@ export const showHint = (
     return _.thread(
         scopedHints,
         _.keys,
-        [_.map, el => ({ ...scopedHints[el], id: el })],
+        [_.map, (el: string) => ({ ...scopedHints[el], id: el })],
         [_.filter, ['unread', true]],
         [_.sortBy, ['rank', 'title', 'message']],
         [_.findIndex, ['id', currentId]],
-        [pos => pos === 0]
+        [(pos: number) => pos === 0]
     )
 }
 

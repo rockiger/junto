@@ -1,34 +1,38 @@
-import React, { addReducers, setGlobal } from 'reactn'
-import { hydrate, render } from 'react-dom'
+import { createRoot, hydrateRoot } from 'react-dom/client'
+import { addReducers, setGlobal } from 'reactn'
 import initReactnPersist from 'reactn-persist'
 import './lib/helper/globals'
-import { State } from 'reactn/default'
-import './index.scss'
-import App from 'components/app'
+import type { State } from 'reactn/default'
+import './tailwind.css'
+import App from './components/app'
+import { initGA, setGA } from './components/Tracking'
 import * as serviceWorker from './serviceWorker'
-import addReactNDevTools from 'reactn-devtools'
 
-addReactNDevTools()
+initGA('UA-151325933-1')
+setGA({ anonymizeIp: true })
 
-// Remove console from production builds
-if (process.env.NODE_ENV !== 'development') {
-    function noop() {}
+// addReactNDevTools()
+
+// Remove console from production builds (import.meta.env.DEV is reliable under Vite)
+if (!import.meta.env.DEV) {
+    function noop() { }
     console.log = noop
     console.warn = noop
     console.error = noop
 }
 
 addReducers({
-    clearSearch: async (global, dispatch) => {
-        await dispatch.clearSearchMeta()
-        await dispatch.clearSearchFiles()
-    },
-    clearSearchFiles: (global, dispatch) => ({
-        files: [...global.initialFiles],
-    }),
-    clearSearchMeta: (global, dispatch) => ({
+    clearSearchComplete: (_global, _dispatch) => ({
+        files: [],
         isSearchFieldActive: false,
-        oldSearchTerm: '',
+        searchTerm: '',
+        searchValue: '',
+    }),
+    clearSearchFiles: (_global, _dispatch) => ({
+        files: [],
+    }),
+    clearSearchMeta: (_global, _dispatch) => ({
+        isSearchFieldActive: false,
         searchTerm: '',
         searchValue: '',
     }),
@@ -48,7 +52,7 @@ const initialState: State = {
     isSearchFieldActive: false,
     isSignedIn: false,
     isSigningIn: true,
-    oldSearchTerm: '',
+    migration: null,
     redirect: false,
     rootFolderId: null,
     searchTerm: '',
@@ -62,17 +66,20 @@ initReactnPersist({
     // REQUIRED.
     storage: localStorage, // localStorage, sessionStorage or any instance with Storage API interface support.
     // Optional.
-    whitelist: ['files', 'hints', 'initialFiles', 'rootFolderId'], // List of top-level keys in global, like ['users', 'token']. Default [].
-    debug: true,
+    whitelist: ['hints', 'initialFiles', 'rootFolderId'], // List of top-level keys in global, like ['users', 'token']. Default [].
+    //debug: true,
     key: '@reactn', // Key in storage. Default '@reactn'.
     initialValue: initialState,
 })
 
 const rootElement = document.getElementById('root')
-if (rootElement!.hasChildNodes()) {
-    hydrate(<App />, rootElement)
+if (!rootElement) {
+    throw new Error('Root element "#root" not found')
+}
+if (rootElement.hasChildNodes()) {
+    hydrateRoot(rootElement, <App />)
 } else {
-    render(<App />, rootElement)
+    createRoot(rootElement).render(<App />)
 }
 
 // If you want your app to work offline and load faster, you can change

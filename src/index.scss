@@ -14,14 +14,13 @@ body {
     background-color: $background-default;
     color: $text-primary;
     margin: 0;
-    font-family: Roboto, 'Open Sans', -apple-system, BlinkMacSystemFont,
+    font-family: Metropolis, Roboto, 'Open Sans', -apple-system, BlinkMacSystemFont,
         Avenir Next, Avenir, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
     line-height: 1.43;
     letter-spacing: 0.2px;
-    overflow: hidden;
 }
 
 :-moz-focusring {

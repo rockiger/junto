@@ -1,10 +1,10 @@
-import React from 'reactn'
+import type { ReactNode } from 'react'
 
 import IconButton from 'components/gsuite-components/icon-button'
 
 import styles from './button-menu.module.scss'
 
-export default function ButtonMenu({ children }) {
+export default function ButtonMenu({ children }: { children?: ReactNode }) {
     return (
         <div>
             <IconButton ariaLabel="Sort">{children}</IconButton>

@@ -1,0 +1,93 @@
+- [x] Move to tanstack start
+- [x] Update React to 19
+- [x] Make mobile views working again
+-- [x] Home
+-- [x] Starred
+--- [x] Filter Starred files
+-- [x] Shared
+--- [x] Repair placeholder of SharedWithMe
+--- [x] Filter SharedWithMe files
+-- [x] Archive
+-- [x] Search
+-- [x] Page-View
+-- [x] Page-Edit
+----------------------------------------------------------
+- [x] Make desktop views working again
+-- [x] Layout to show Sidebar and Main content
+-- [x] Sidebar breakpoints
+-- [x] Home (Add Menu button)
+-- [x] Search
+--- [x] Search Autocomplete
+--- [x] Results for search (Check if results are correct)
+-- [x] Starred
+-- [x] Shared
+-- [x] Archive
+-- [x] Page-View
+--- [x] Releod-Site warning
+-- [x] Page-Edit
+-- [x] FAQ repaired
+-- [x] Static pages
+-- [x] Front page
+----------------------------------------------------------
+- [x] Add react-compiler
+- [x] Deploy to Hostinger
+----------------------------------------------------------
+----------------------------------------------------------
+- [x] Make webfonts for Metropolis
+- [x] Optimize sidebar-wikitree behavior
+-- [x] Migrate to TypeScript
+-- [x] Migrate to TailwindCSS
+-- [x] Open leaf when page is opened
+-- [x] Fix sidebar overflow
+-- [x] Convert to react-aria components
+- [x] Fix gapi errors 
+- [x] Migrate to Lexical
+-- [x] Store wiki pages as Markdown (.md, text/markdown)
+-- [x] Replace Slate editor with React-Lexical (toolbar, tables, images, checklists, code highlighting)
+-- [x] List .md wiki files from Google Drive (tree, search, breadcrumbs)
+-- [x] Create new pages as .md in Google Drive
+-- [x] Round-trip safety: md -> Lexical -> md is byte-idempotent (bun test scripts/)
+- [x] Convert .gwiki files to .md to use legacy files (automatic in-app batch migration after sign-in)
+- [x] Optimize login time (reverse changes or improve new solution)
+- [x] Reload-Site warning
+- [x] Remove MUI and use React-Aria components
+- [x] Update React to 19
+-- [x] Update React itself to 19 
+-- [x] Replace react-use-dimensions
+-- [x] Vorschlagsliste funktioniert die Verlinkung nicht
+- [x] Update token for saving
+- [x] Add editor features
+-- [x] Multi column layout
+-- [x] Block Drag & Drop
+-- [x] Block Menü/Slash menüs
+-- [x] Drag & Drop for Checklist items
+-- [x] Cursor bei Image nodes
+-- [x] Layout-Weite
+-- [x] Excalidraw
+----------------------------------------------------------
+- [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
+
+----------------------------------------------------------
+- [] Add more editor features
+-- [] Farben
+-- [] Collapsible container
+-- [] Tweet, Youtube, Figma embeds
+-- [] Highlight text
+-- [] Umsetzen
+- [] Repair Hints
+- [] Repair Tests
+----------------------------------------------------------
+- [] Remove Reactn
+- [] Deploy to Hostinger
+- [] Read Hints to guide users
+- [] Background color of Front-page
+- [] Star a file in the file list
+- [] Performance
+-- [] Remove json->md Migrator
+-- [] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
+-- [] Remove sass
+-- [] Use route loaders to prefetch data
+-- [] Prerender static pages 
+- [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
+- Repair Tests
+- Repair Storybook
