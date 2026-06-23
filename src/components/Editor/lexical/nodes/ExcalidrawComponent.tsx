@@ -62,7 +62,8 @@ export default function ExcalidrawComponent({
 	const [isSelected, setSelected, clearSelection] =
 		useLexicalNodeSelection(nodeKey)
 	const [isResizing, setIsResizing] = useState(false)
-	const { fileId } = useExcalidrawEditor()
+	const { fileId, previewVersions } = useExcalidrawEditor()
+	const previewVersion = previewVersions[nodeKey] ?? 0
 	const openModal = useOpenExcalidrawModal()
 	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
 	const [files, setFiles] = useGlobal('files')
@@ -93,6 +94,12 @@ export default function ExcalidrawComponent({
 		],
 		[files, initialFiles],
 	)
+	const allFilesRef = useRef(allFiles)
+	allFilesRef.current = allFiles
+	const filesRef = useRef(files)
+	filesRef.current = files
+	const initialFilesRef = useRef(initialFiles)
+	initialFilesRef.current = initialFiles
 
 	const cacheSceneOnNode = useCallback(
 		(jsonDriveId: string, json: string) => {
@@ -140,6 +147,7 @@ export default function ExcalidrawComponent({
 
 		let objectUrl: string | null = null
 		let cancelled = false
+		const currentFiles = allFilesRef.current
 
 		async function loadPreview() {
 			const pageId = fileId
@@ -156,7 +164,7 @@ export default function ExcalidrawComponent({
 						: await resolveAndDownloadExcalidrawScene({
 								driveFileId,
 								fileName,
-								files: allFiles,
+								files: currentFiles,
 								pageFileId: pageId,
 							})
 				if (cancelled) return
@@ -180,7 +188,7 @@ export default function ExcalidrawComponent({
 				let svgDriveId = await resolveExcalidrawDriveFileId(
 					svgFileName,
 					pageId,
-					allFiles,
+					allFilesRef.current,
 				)
 
 				if (!svgDriveId) {
@@ -193,7 +201,7 @@ export default function ExcalidrawComponent({
 						await uploadExcalidrawSvgOnly({
 							jsonFileName: fileName,
 							pageFileId: pageId,
-							files: allFiles,
+							files: allFilesRef.current,
 							svg: svgString,
 						})
 					svgDriveId = svgDriveFileId
@@ -207,8 +215,10 @@ export default function ExcalidrawComponent({
 						}
 						return [...list, svgFile]
 					}
-					setFiles(upsert((files ?? []) as IFile[]))
-					setInitialFiles(upsert((initialFiles ?? []) as IFile[]))
+					setFiles(upsert((filesRef.current ?? []) as IFile[]))
+					setInitialFiles(
+						upsert((initialFilesRef.current ?? []) as IFile[]),
+					)
 				}
 
 				if (!svgDriveId) {
@@ -237,18 +247,7 @@ export default function ExcalidrawComponent({
 			cancelled = true
 			if (objectUrl) URL.revokeObjectURL(objectUrl)
 		}
-	}, [
-		allFiles,
-		cacheSceneOnNode,
-		driveFileId,
-		fileId,
-		fileName,
-		files,
-		initialFiles,
-		sceneJson,
-		setFiles,
-		setInitialFiles,
-	])
+	}, [cacheSceneOnNode, fileId, fileName, previewVersion, setFiles, setInitialFiles])
 
 	useEffect(() => {
 		if (sceneJson) {

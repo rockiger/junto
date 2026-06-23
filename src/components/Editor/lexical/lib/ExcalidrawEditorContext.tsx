@@ -21,6 +21,8 @@ export type ExcalidrawEditorContextValue = {
 	pageFileName?: string
 	openExcalidrawModal: (options: ExcalidrawModalOpenOptions) => void
 	syncWikiMarkdown?: () => void
+	previewVersions: Record<string, number>
+	bumpPreviewRefresh: (nodeKey: string) => void
 }
 
 const ExcalidrawEditorContext =
@@ -32,12 +34,16 @@ export function ExcalidrawEditorProvider({
 	onOpenModal,
 	pageFileName,
 	syncWikiMarkdown,
+	previewVersions,
+	bumpPreviewRefresh,
 }: {
 	children: ReactNode
 	fileId?: string
 	onOpenModal: (options: ExcalidrawModalOpenOptions) => void
 	pageFileName?: string
 	syncWikiMarkdown?: () => void
+	previewVersions: Record<string, number>
+	bumpPreviewRefresh: (nodeKey: string) => void
 }) {
 	const value = useMemo(
 		() => ({
@@ -45,8 +51,17 @@ export function ExcalidrawEditorProvider({
 			openExcalidrawModal: onOpenModal,
 			pageFileName,
 			syncWikiMarkdown,
+			previewVersions,
+			bumpPreviewRefresh,
 		}),
-		[fileId, onOpenModal, pageFileName, syncWikiMarkdown],
+		[
+			bumpPreviewRefresh,
+			fileId,
+			onOpenModal,
+			pageFileName,
+			previewVersions,
+			syncWikiMarkdown,
+		],
 	)
 
 	return (
@@ -64,6 +79,8 @@ export function useExcalidrawEditor(): ExcalidrawEditorContextValue {
 			openExcalidrawModal: () => {},
 			pageFileName: undefined,
 			syncWikiMarkdown: undefined,
+			previewVersions: {},
+			bumpPreviewRefresh: () => {},
 		}
 	}
 	return context

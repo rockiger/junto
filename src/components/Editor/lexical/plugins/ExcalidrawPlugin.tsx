@@ -7,7 +7,13 @@ import {
 	HISTORY_MERGE_TAG,
 	type LexicalCommand,
 } from 'lexical'
-import { useCallback, useEffect, useRef, type ReactNode } from 'react'
+import {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	type ReactNode,
+} from 'react'
 import { useGlobal } from 'reactn'
 import type { IFile } from 'reactn/default'
 import ExcalidrawModal, {
@@ -52,6 +58,15 @@ export default function ExcalidrawPlugin({
 	const [files, setFiles] = useGlobal('files')
 	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
 	const modalRef = useRef<ExcalidrawModalHandle>(null)
+	const [previewVersions, setPreviewVersions] = useState<
+		Record<string, number>
+	>({})
+	const bumpPreviewRefresh = useCallback((nodeKey: string) => {
+		setPreviewVersions((prev) => ({
+			...prev,
+			[nodeKey]: (prev[nodeKey] ?? 0) + 1,
+		}))
+	}, [])
 
 	const openModal = useCallback((options: ExcalidrawModalOpenOptions) => {
 		modalRef.current?.open(options)
@@ -135,6 +150,9 @@ export default function ExcalidrawPlugin({
 					},
 					{ tag: HISTORY_MERGE_TAG },
 				)
+				if (state.mode === 'edit' && state.nodeKey) {
+					bumpPreviewRefresh(state.nodeKey)
+				}
 				// OnChangePlugin ignores history-merge updates; persist markdown now.
 				syncWikiMarkdown?.()
 			} catch (err) {
@@ -142,7 +160,17 @@ export default function ExcalidrawPlugin({
 				alert('Could not save drawing. Please try again.')
 			}
 		},
-		[editor, fileId, files, initialFiles, pageFileName, setFiles, setInitialFiles, syncWikiMarkdown],
+		[
+			bumpPreviewRefresh,
+			editor,
+			fileId,
+			files,
+			initialFiles,
+			pageFileName,
+			setFiles,
+			setInitialFiles,
+			syncWikiMarkdown,
+		],
 	)
 
 	const handleDiscard = useCallback(
@@ -175,6 +203,8 @@ export default function ExcalidrawPlugin({
 			onOpenModal={openModal}
 			pageFileName={pageFileName}
 			syncWikiMarkdown={syncWikiMarkdown}
+			previewVersions={previewVersions}
+			bumpPreviewRefresh={bumpPreviewRefresh}
 		>
 			{children}
 			<ExcalidrawModal
