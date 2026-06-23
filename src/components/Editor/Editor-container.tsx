@@ -13,9 +13,9 @@ import { filesUpdater, getMetaById } from 'lib/helper'
 import {
     PAGE_WIDTH_FULL,
     PAGE_WIDTH_REDUCED,
+    type PageWidth,
     parsePageContent,
     serializePageContent,
-    type PageWidth,
 } from 'lib/pageWidth'
 import { debounce } from 'lodash'
 import { Beforeunload } from 'react-beforeunload'
@@ -289,6 +289,7 @@ const EditorLogic = React.forwardRef(
                     </Hint>
                 </PageButtons>
                 <LexicalWikiEditor
+                    key={fileId}
                     apiKey={API_KEY}
                     canEdit={canEdit}
                     fileId={fileId}

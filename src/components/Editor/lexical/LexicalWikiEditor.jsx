@@ -1,3 +1,4 @@
+import { $getRoot } from "lexical";
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { ClickableLinkPlugin } from "@lexical/react/LexicalClickableLinkPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -13,6 +14,7 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
+import { PAGE_WIDTH_REDUCED } from "lib/pageWidth";
 import {
 	forwardRef,
 	useCallback,
@@ -29,25 +31,63 @@ import {
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
 import ExcalidrawPlugin from "./plugins/ExcalidrawPlugin";
-import WikiSlashCommandPlugin from "./plugins/WikiSlashCommandPlugin";
 import GoogleDriveLinkPlugin from "./plugins/GoogleDriveLinkPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
 import InternalWikiLinkPlugin from "./plugins/InternalWikiLinkPlugin";
 import LayoutPlugin from "./plugins/LayoutPlugin";
 import ReadOnlyCheckListPlugin from "./plugins/ReadOnlyCheckListPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
-import { PAGE_WIDTH_REDUCED } from "lib/pageWidth";
+import WikiSlashCommandPlugin from "./plugins/WikiSlashCommandPlugin";
 import { wikiTheme } from "./theme";
 import { WIKI_TRANSFORMERS } from "./transformers";
 
 const PLACEHOLDER_TEXT =
 	"Bring your content to life with text, images, files, code blocks and pictures from Google Drive. Did you know you can write even faster with Markdown?";
 
+function scrollToDocumentStart(editor) {
+	editor.update(
+		() => {
+			$getRoot().selectStart();
+		},
+		{ discrete: true },
+	);
+
+	requestAnimationFrame(() => {
+		editor.getRootElement()?.scrollTo({ top: 0 });
+		document.getElementById("main-content")?.scrollTo({ top: 0 });
+		window.scrollTo({ top: 0 });
+	});
+}
+
 function EditablePlugin({ readOnly }) {
 	const [editor] = useLexicalComposerContext();
 	useEffect(() => {
 		editor.setEditable(!readOnly);
 	}, [editor, readOnly]);
+	return null;
+}
+
+function DocumentStartPlugin({ fileId }) {
+	const [editor] = useLexicalComposerContext();
+
+	useEffect(() => {
+		scrollToDocumentStart(editor);
+	}, [editor, fileId]);
+
+	return null;
+}
+
+function EditModeScrollPlugin({ readOnly }) {
+	const [editor] = useLexicalComposerContext();
+	const prevReadOnlyRef = useRef(readOnly);
+
+	useEffect(() => {
+		if (prevReadOnlyRef.current && !readOnly) {
+			scrollToDocumentStart(editor);
+		}
+		prevReadOnlyRef.current = readOnly;
+	}, [editor, readOnly]);
+
 	return null;
 }
 
@@ -148,6 +188,7 @@ function WikiEditorInner({
 			<ImagesPlugin />
 			<LayoutPlugin />
 			<EditablePlugin readOnly={readOnly} />
+			<EditModeScrollPlugin readOnly={readOnly} />
 			<EditorRefPlugin editorRef={editorRef} />
 			<OnChangePlugin
 				ignoreHistoryMergeTagChange
@@ -211,7 +252,8 @@ const LexicalWikiEditor = forwardRef(
 		}));
 
 		return (
-			<LexicalComposer initialConfig={initialConfig}>
+			<LexicalComposer initialConfig={initialConfig} key={fileId}>
+				<DocumentStartPlugin fileId={fileId} />
 				<WikiEditorInner
 					apiKey={apiKey}
 					canEdit={canEdit}

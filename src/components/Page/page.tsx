@@ -210,6 +210,8 @@ export default function Page({
         setGlobal({ goToNewFile: false })
         setFileId(params.id)
         setFileLoaded(false)
+        document.getElementById('main-content')?.scrollTo({ top: 0 })
+        window.scrollTo({ top: 0 })
         void loadEditorContent(params.id)
     }, [params.id, initialFiles.length, loadEditorContent])
 
