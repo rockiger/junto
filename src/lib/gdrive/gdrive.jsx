@@ -1,5 +1,13 @@
-const driveUploadPath = 'https://www.googleapis.com/upload/drive/v3/files'
-const gapi = window.gapi
+import { ensureGapi, getGapi } from "./ensureGapi";
+import { getUserEmail } from "../googleAuth/userInfo";
+import {
+	forceRefreshAuth,
+	getAccessToken,
+	isTokenValid,
+} from "../googleAuth/tokenStore";
+import { withAuthRetry } from "../googleAuth/withAuthRetry";
+
+const driveUploadPath = "https://www.googleapis.com/upload/drive/v3/files";
 
 // 'id' is driveId - unique file id on google drive
 // 'version' is driveVersion - version of file on google drive
@@ -7,24 +15,24 @@ const gapi = window.gapi
 // 'appProperties' keep the custom `ifid` field
 
 const fileFields =
-    'capabilities,description,id,name,mimeType,modifiedByMeTime,modifiedTime,shared,ownedByMe,parents,properties,trashed,viewedByMeTime'
+	"capabilities,description,iconLink,id,name,mimeType,modifiedByMeTime,modifiedTime,shared,ownedByMe,parents,properties,trashed,viewedByMeTime,starred";
 /* const fileFields = '*' */
 
 function formatFileDescription(response) {
-    response = response || null
-    if (response && !response.error) {
-        return response
-    } else {
-        return {
-            driveId: '',
-            driveVersion: -1,
-            name: '',
-            ifid: '',
-        }
-    }
+	response = response || null;
+	if (response && !response.error) {
+		return response;
+	} else {
+		return {
+			driveId: "",
+			driveVersion: -1,
+			name: "",
+			ifid: "",
+		};
+	}
 }
 
-let clientLoaded = false
+let clientLoaded = false;
 
 /**
  * Loads the client. When ready isLoaded() will return true.
@@ -34,7 +42,7 @@ let clientLoaded = false
  * @return {boolean}
  */
 export function isLoaded() {
-    return clientLoaded
+	return clientLoaded;
 }
 
 /**
@@ -45,14 +53,21 @@ export function isLoaded() {
  * @return {Promise}
  */
 export function init() {
-    return new Promise(resolve => {
-        gapi.load('client', () =>
-            gapi.client.load('drive', 'v3', () => {
-                clientLoaded = true
-                resolve()
-            })
-        )
-    })
+	return ensureGapi()
+		.then(
+			() =>
+				new Promise((resolve) => {
+					getGapi().load("client", () =>
+						getGapi().client.load("drive", "v3", () => {
+							clientLoaded = true;
+							resolve();
+						}),
+					);
+				}),
+		)
+		.catch((err) => {
+			console.error("Failed to load gapi", err);
+		});
 }
 
 /**
@@ -64,15 +79,15 @@ export function init() {
  * [{driveId, driveVersion, name, ifid}]
  */
 export function listAppDataFiles() {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .list({
-                spaces: 'appDataFolder',
-                fields: 'nextPageToken, files(id, name)',
-                pageSize: 100,
-            })
-            .execute(response => resolve(formatResult(response)))
-    })
+	return new Promise((resolve, _reject) => {
+		getGapi().client.drive.files
+			.list({
+				spaces: "appDataFolder",
+				fields: "nextPageToken, files(id, name)",
+				pageSize: 100,
+			})
+			.execute((response) => resolve(formatResult(response)));
+	});
 }
 
 /**
@@ -83,26 +98,26 @@ export function listAppDataFiles() {
  * returns an array of file descriptions:
  * [{driveId, driveVersion, name, ifid}]
  */
-export function listFiles(searchTerm = '', orderBy = '') {
-    let order = ''
-    let q = `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`
-    if (!searchTerm && orderBy) {
-        q = 'trashed=false'
-        order = orderBy
-    }
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .list({
-                corpora: 'allDrives',
-                pageSize: 100,
-                fields: 'files(' + fileFields + '), nextPageToken',
-                includeItemsFromAllDrives: true,
-                orderBy: order,
-                q,
-                supportsAllDrives: true,
-            })
-            .execute(response => resolve(formatResult(response)))
-    })
+export function listFiles(searchTerm = "", orderBy = "") {
+	let order = "";
+	let q = `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`;
+	if (!searchTerm && orderBy) {
+		q = "trashed=false";
+		order = orderBy;
+	}
+	return new Promise((resolve, _reject) => {
+		getGapi().client.drive.files
+			.list({
+				corpora: "allDrives",
+				pageSize: 100,
+				fields: `files(${fileFields}), nextPageToken`,
+				includeItemsFromAllDrives: true,
+				orderBy: order,
+				q,
+				supportsAllDrives: true,
+			})
+			.execute((response) => resolve(formatResult(response)));
+	});
 }
 
 /**
@@ -113,30 +128,65 @@ export function listFiles(searchTerm = '', orderBy = '') {
  * returns an array of file descriptions:
  * [{driveId, driveVersion, name, ifid}]
  */
-export async function listFilesChunked(searchTerm = '', orderBy = '') {
-    let files = []
-    let order = ''
-    let pageToken = ''
-    let q = `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`
-    if (!searchTerm && orderBy) {
-        q = 'trashed=false'
-        order = orderBy
-    }
-    while (typeof pageToken !== 'undefined') {
-        const response = await gapi.client.drive.files.list({
-            corpora: 'allDrives',
-            pageToken: pageToken,
-            fields: 'files(' + fileFields + '), nextPageToken',
-            includeItemsFromAllDrives: true,
-            orderBy: order,
-            q,
-            supportsAllDrives: true,
-        })
-        pageToken = response.result.nextPageToken
-        files = files.concat(response.result.files)
-        //pageToken = undefined
-    }
-    return files
+export async function listFilesChunked(searchTerm = "", orderBy = "") {
+	return withAuthRetry(() => listFilesChunkedRequest(searchTerm, orderBy));
+}
+
+async function listFilesChunkedRequest(searchTerm = "", orderBy = "") {
+	let files = [];
+	let order = "";
+	let pageToken = "";
+	let q = `fullText contains '${searchTerm}' or name contains '${searchTerm}' and trashed=false`;
+	if (!searchTerm && orderBy) {
+		q = "trashed=false";
+		order = orderBy;
+	}
+	while (typeof pageToken !== "undefined") {
+		const response = await getGapi().client.drive.files.list({
+			corpora: "allDrives",
+			pageToken: pageToken,
+			fields: `files(${fileFields}), nextPageToken`,
+			includeItemsFromAllDrives: true,
+			orderBy: order,
+			q,
+			supportsAllDrives: true,
+		});
+		pageToken = response.result.nextPageToken;
+		files = files.concat(response.result.files);
+		//pageToken = undefined
+	}
+	return files;
+}
+
+const imageListFields = "id,name,mimeType,thumbnailLink,hasThumbnail";
+
+/**
+ * Lists all image files accessible to the app on Google Drive.
+ *
+ * @return {Promise<Array<{ id: string, name: string, mimeType: string, thumbnailLink?: string, iconLink?: string }>>}
+ */
+export async function listImageFiles() {
+	await refreshSession();
+	let files = [];
+	let pageToken;
+	const q = "trashed=false and mimeType contains 'image/'";
+
+	do {
+		const response = await getGapi().client.drive.files.list({
+			corpora: "allDrives",
+			pageSize: 100,
+			pageToken,
+			fields: `files(${imageListFields}), nextPageToken`,
+			includeItemsFromAllDrives: true,
+			orderBy: "modifiedTime desc",
+			q,
+			supportsAllDrives: true,
+		});
+		files = files.concat(response.result.files || []);
+		pageToken = response.result.nextPageToken;
+	} while (pageToken);
+
+	return files;
 }
 
 /**
@@ -147,69 +197,65 @@ export async function listFilesChunked(searchTerm = '', orderBy = '') {
  * returns an array of revision descriptions.
  */
 export function listRevisions(fileId) {
-    return gapi.client.drive.revisions.list({
-        fileId,
-        fields: '*',
-    })
+	return getGapi().client.drive.revisions.list({
+		fileId,
+		fields: "*",
+	});
 }
 
 /**
  * Creates file with name and a parentId.
  *
  * @method createFile
- * @param {String} name Name of the new file on Google Drive
- * @param {String} parentId Id of the parent where the file should be
- * 							created, needs to be a folder
- * @return {String} An id of the created file
+ * @param {{ name: string, parentId: string, supportsAllDrives?: boolean, pageName?: string }} params
+ * @return {Promise<string>} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export async function createFile({
-    name,
-    parentId,
-    supportsAllDrives = true,
-    pageName = '',
+	name,
+	parentId,
+	supportsAllDrives = true,
+	pageName = "",
 }) {
-    const fileMetadata = {
-        name: name,
-        mimeType: 'text/json',
-        parents: [parentId],
-        useContentAsIndexableText: true,
-    }
-    if (pageName) fileMetadata.properties = { pageName }
+	const fileMetadata = {
+		name: name,
+		mimeType: "text/markdown",
+		parents: [parentId],
+		useContentAsIndexableText: true,
+	};
+	if (pageName) fileMetadata.properties = { pageName };
 
-    try {
-        const response = await window.gapi.client.drive.files.create({
-            fields: fileFields,
-            resource: fileMetadata,
-            supportsAllDrives,
-        })
-        console.log(response)
+	try {
+		const response = await getGapi().client.drive.files.create({
+			fields: fileFields,
+			resource: fileMetadata,
+			supportsAllDrives,
+		});
+		console.log(response);
 
-        const file = JSON.parse(response.body)
-        if (file.teamDriveId && supportsAllDrives) {
-            // create permission
-            const domain = getDomainOfCurrentUser()
-            // eslint-disable-next-line
-            const permissionResult = await gapi.client.drive.permissions.create(
-                {
-                    fields: '*',
-                    fileId: file.id,
-                    resource: {
-                        allowFileDiscovery: true,
-                        domain,
-                        role: 'fileOrganizer',
-                        type: 'domain',
-                    },
-                    supportsAllDrives,
-                }
-            )
-        }
+		const file = JSON.parse(response.body);
+		if (file.teamDriveId && supportsAllDrives) {
+			// create permission
+			const domain = getDomainOfCurrentUser();
+			// eslint-disable-next-line
+			const _permissionResult = await getGapi().client.drive.permissions.create({
+				fields: "*",
+				fileId: file.id,
+				resource: {
+					allowFileDiscovery: true,
+					domain,
+					role: "fileOrganizer",
+					type: "domain",
+				},
+				supportsAllDrives,
+			});
+		}
 
-        return response.result.id
-    } catch (err) {
-        alert(`Couldn't create new file. Please reload the page and try again.`)
-        console.log(err)
-    }
+		return response.result.id;
+	} catch (err) {
+		alert(`Couldn't create new file. Please reload the page and try again.`);
+		console.log(err);
+	}
 }
 
 /**
@@ -229,52 +275,50 @@ export async function createFile({
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export async function createNewWiki({
-    description = '',
-    isWikiRoot = true,
-    name = 'Fulcrum Documents',
-    parentId = null,
-    supportsAllDrives = true,
+	description = "",
+	isWikiRoot = true,
+	name = "Fulcrum Documents",
+	parentId = null,
+	supportsAllDrives = true,
 } = {}) {
-    const fileMetadata = {
-        name: name,
-        mimeType: 'application/vnd.google-apps.folder',
-    }
-    if (parentId) fileMetadata.parents = [parentId]
-    if (description) fileMetadata.description = description
-    if (isWikiRoot) fileMetadata.properties = { wikiRoot: true }
+	const fileMetadata = {
+		name: name,
+		mimeType: "application/vnd.google-apps.folder",
+	};
+	if (parentId) fileMetadata.parents = [parentId];
+	if (description) fileMetadata.description = description;
+	if (isWikiRoot) fileMetadata.properties = { wikiRoot: true };
 
-    try {
-        const result = await gapi.client.drive.files.create({
-            fields: fileFields,
-            resource: fileMetadata,
-            supportsAllDrives,
-        })
+	try {
+		const result = await getGapi().client.drive.files.create({
+			fields: fileFields,
+			resource: fileMetadata,
+			supportsAllDrives,
+		});
 
-        const folder = JSON.parse(result.body)
-        console.log(folder)
-        if (folder.teamDriveId && supportsAllDrives) {
-            // create permission
-            const domain = getDomainOfCurrentUser()
-            // eslint-disable-next-line
-            const permissionResult = await gapi.client.drive.permissions.create(
-                {
-                    fields: '*',
-                    fileId: folder.id,
-                    resource: {
-                        allowFileDiscovery: true,
-                        domain,
-                        role: 'fileOrganizer',
-                        type: 'domain',
-                    },
-                    supportsAllDrives,
-                }
-            )
-        }
-        return folder
-    } catch (err) {
-        alert(`We couldn't create your base on your Google Drive.`)
-        console.error(err.body)
-    }
+		const folder = JSON.parse(result.body);
+		console.log(folder);
+		if (folder.teamDriveId && supportsAllDrives) {
+			// create permission
+			const domain = getDomainOfCurrentUser();
+			// eslint-disable-next-line
+			const _permissionResult = await getGapi().client.drive.permissions.create({
+				fields: "*",
+				fileId: folder.id,
+				resource: {
+					allowFileDiscovery: true,
+					domain,
+					role: "fileOrganizer",
+					type: "domain",
+				},
+				supportsAllDrives,
+			});
+		}
+		return folder;
+	} catch (err) {
+		alert(`We couldn't create your base on your Google Drive.`);
+		console.error(err.body);
+	}
 }
 
 /**
@@ -288,52 +332,199 @@ export async function createNewWiki({
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export function createFileWithContent(name, ifid, data) {
-    // TODO get rid of ifid
-    // Current version of gapi.client.drive is not capable of
-    // uploading the file so we'll do it with more generic
-    // interface. This will create file with given name and
-    // properties in one request with multipart request.
+	// TODO get rid of ifid
+	// Current version of gapi.client.drive is not capable of
+	// uploading the file so we'll do it with more generic
+	// interface. This will create file with given name and
+	// properties in one request with multipart request.
 
-    // Some random string that is unlikely to be in transmitted data:
-    const boundary = '-batch-31415926579323846boundatydnfj111'
-    const delimiter = '\r\n--' + boundary + '\r\n'
-    const close_delim = '\r\n--' + boundary + '--'
+	// Some random string that is unlikely to be in transmitted data:
+	const boundary = "-batch-31415926579323846boundatydnfj111";
+	const delimiter = `\r\n--${boundary}\r\n`;
+	const close_delim = `\r\n--${boundary}--`;
 
-    const metadata = {
-        mimeType: 'Content-Type: text/json',
-        name: name,
-        appProperties: { ifid: ifid },
-    }
+	const metadata = {
+		mimeType: "Content-Type: text/json",
+		name: name,
+		appProperties: { ifid: ifid },
+	};
 
-    const multipartRequestBody =
-        delimiter +
-        'Content-Type: application/json\r\n\r\n' +
-        JSON.stringify(metadata) +
-        delimiter +
-        'Content-Type: text/xml\r\n\r\n' +
-        data +
-        close_delim
+	const multipartRequestBody =
+		delimiter +
+		"Content-Type: application/json\r\n\r\n" +
+		JSON.stringify(metadata) +
+		delimiter +
+		"Content-Type: text/xml\r\n\r\n" +
+		data +
+		close_delim;
 
-    return new Promise((resolve, reject) => {
-        gapi.client
-            .request({
-                path: driveUploadPath,
-                method: 'POST',
-                params: {
-                    uploadType: 'multipart',
-                    fields: fileFields,
-                },
-                headers: {
-                    'Content-Type':
-                        'multipart/related; boundary="' + boundary + '"',
-                },
-                body: multipartRequestBody,
-            })
-            .then(
-                response => resolve(formatFileDescription(response.result)),
-                error => resolve(formatFileDescription())
-            )
-    })
+	return new Promise((resolve, _reject) => {
+		getGapi().client
+			.request({
+				path: driveUploadPath,
+				method: "POST",
+				params: {
+					uploadType: "multipart",
+					fields: fileFields,
+				},
+				headers: {
+					"Content-Type": `multipart/related; boundary="${boundary}"`,
+				},
+				body: multipartRequestBody,
+			})
+			.then(
+				(response) => resolve(formatFileDescription(response.result)),
+				(_error) => resolve(formatFileDescription()),
+			);
+	});
+}
+
+/**
+ * @param {string} fileId Google Drive file id
+ * @returns {string} Image src URL for markdown / img tags
+ */
+export function driveImageSrc(fileId) {
+	return `https://drive.google.com/uc?id=${fileId}&export=download`;
+}
+
+/**
+ * @param {string} src Image src from markdown or editor
+ * @returns {string|null} Google Drive file id if src is a Drive image URL
+ */
+export function parseDriveImageFileId(src) {
+	if (!src || typeof src !== "string") return null;
+	const normalized = src.replace(/&amp;/g, "&");
+	const uc = normalized.match(/drive\.google\.com\/uc\?[^#]*\bid=([^&#]+)/);
+	if (uc) return uc[1];
+	const file = normalized.match(/drive\.google\.com\/file\/d\/([^/?#]+)/);
+	if (file) return file[1];
+	return null;
+}
+
+/**
+ * Downloads a Drive file as a Blob (for images and other binary content).
+ *
+ * @param {string} driveId Google Drive file identifier
+ * @param {boolean} [supportsAllDrives=true]
+ * @return {Promise<Blob>}
+ */
+export async function downloadFileBlob(driveId, supportsAllDrives = true) {
+	await refreshSession();
+	const accessToken = getAccessToken();
+	if (!accessToken) {
+		throw new Error("No access token available");
+	}
+
+	const params = new URLSearchParams({
+		alt: "media",
+		supportsAllDrives: String(supportsAllDrives),
+	});
+
+	const response = await fetch(
+		`https://www.googleapis.com/drive/v3/files/${driveId}?${params}`,
+		{
+			headers: { Authorization: `Bearer ${accessToken}` },
+		},
+	);
+
+	if (!response.ok) {
+		throw new Error(`Drive download failed: ${response.status}`);
+	}
+
+	return response.blob();
+}
+
+/**
+ * Fetches a thumbnail blob for a Drive image file.
+ *
+ * @param {string} fileId
+ * @param {string} [thumbnailLink]
+ * @return {Promise<Blob>}
+ */
+export async function fetchDriveImageThumbnailBlob(fileId, thumbnailLink) {
+	await refreshSession();
+	const accessToken = getAccessToken();
+	if (!accessToken) {
+		throw new Error("No access token available");
+	}
+
+	const authHeaders = { Authorization: `Bearer ${accessToken}` };
+	const candidates = [
+		thumbnailLink,
+		`https://drive.google.com/thumbnail?id=${fileId}&sz=w220`,
+	].filter(Boolean);
+
+	for (const url of candidates) {
+		try {
+			const response = await fetch(url, { headers: authHeaders });
+			if (!response.ok) continue;
+			const blob = await response.blob();
+			if (blob.size > 0) return blob;
+		} catch {
+			// try next source
+		}
+	}
+
+	return downloadFileBlob(fileId);
+}
+
+/**
+ * Uploads a binary file to Google Drive in the given parent folder.
+ *
+ * @param {{ file: File, parentId: string, name?: string, supportsAllDrives?: boolean }} params
+ * @return {Promise<object>} Drive file metadata
+ */
+export async function uploadBinaryFile({
+	file,
+	parentId,
+	name,
+	supportsAllDrives = true,
+}) {
+	await refreshSession();
+	const accessToken = getAccessToken();
+	if (!accessToken) {
+		throw new Error("No access token available");
+	}
+
+	const boundary = "-batch-31415926579323846boundatydnfj111";
+	const delimiter = `\r\n--${boundary}\r\n`;
+	const close_delim = `\r\n--${boundary}--`;
+	const mimeType = file.type || "application/octet-stream";
+
+	const metadata = {
+		name: name || file.name,
+		mimeType,
+		parents: [parentId],
+	};
+
+	const metadataPart =
+		delimiter +
+		"Content-Type: application/json; charset=UTF-8\r\n\r\n" +
+		JSON.stringify(metadata);
+	const mediaHeader = delimiter + `Content-Type: ${mimeType}\r\n\r\n`;
+	const body = new Blob([metadataPart, mediaHeader, file, close_delim]);
+
+	const params = new URLSearchParams({
+		uploadType: "multipart",
+		fields: fileFields,
+		supportsAllDrives: String(supportsAllDrives),
+	});
+
+	const response = await fetch(`${driveUploadPath}?${params}`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			"Content-Type": `multipart/related; boundary="${boundary}"`,
+		},
+		body,
+	});
+
+	if (!response.ok) {
+		const errBody = await response.text();
+		throw new Error(`Drive upload failed: ${response.status} ${errBody}`);
+	}
+
+	return response.json();
 }
 
 /**
@@ -345,16 +536,16 @@ export function createFileWithContent(name, ifid, data) {
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export function getFileDescription(driveId) {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .get({
-                fileId: driveId,
-                fields: fileFields,
-                includeItemsFromAllDrives: true,
-                supportsAllDrives: true,
-            })
-            .execute(response => resolve(formatFileDescription(response)))
-    })
+	return new Promise((resolve, _reject) => {
+		getGapi().client.drive.files
+			.get({
+				fileId: driveId,
+				fields: fileFields,
+				includeItemsFromAllDrives: true,
+				supportsAllDrives: true,
+			})
+			.execute((response) => resolve(formatFileDescription(response)));
+	});
 }
 
 /**
@@ -365,26 +556,26 @@ export function getFileDescription(driveId) {
  * @return {String} The driveId of the A promise of the result that returns
  * a file'sid: {driveId, driveVersion, name, ifid}
  */
-export async function getFolderId(name = 'Fulcrum Documents') {
-    try {
-        const result = await gapi.client.drive.files.list({
-            q: `name="${name}"`,
-            pageSize: 100,
-            fields: 'nextPageToken, files(id, name, createdTime)',
-        })
-        const resultBody = JSON.parse(result.body)
+export async function getFolderId(name = "Fulcrum Documents") {
+	try {
+		const result = await getGapi().client.drive.files.list({
+			q: `name="${name}"`,
+			pageSize: 100,
+			fields: "nextPageToken, files(id, name, createdTime)",
+		});
+		const resultBody = JSON.parse(result.body);
 
-        if (resultBody.files.length > 0)
-            return _.thread(
-                resultBody,
-                [_.get, 'files'],
-                [_.orderBy, 'createdTime'],
-                _.head,
-                [_.get, 'id']
-            )
-    } catch (err) {
-        console.log(err)
-    }
+		if (resultBody.files.length > 0)
+			return _.thread(
+				resultBody,
+				[_.get, "files"],
+				[_.orderBy, "createdTime"],
+				_.head,
+				[_.get, "id"],
+			);
+	} catch (err) {
+		console.log(err);
+	}
 }
 
 /**
@@ -396,14 +587,17 @@ export async function getFolderId(name = 'Fulcrum Documents') {
  * a file data string
  */
 export function downloadFile(driveId) {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .get({
-                fileId: driveId,
-                alt: 'media',
-            })
-            .then(data => resolve(data.body), reject)
-    })
+	return withAuthRetry(
+		() =>
+			new Promise((resolve, reject) => {
+				getGapi().client.drive.files
+					.get({
+						fileId: driveId,
+						alt: "media",
+					})
+					.then((data) => resolve(data.body), reject);
+			}),
+	);
 }
 
 /**
@@ -416,19 +610,19 @@ export function downloadFile(driveId) {
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export function renameFile(driveId, newName, supportsAllDrives = true) {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .update({
-                fileId: driveId,
-                name: newName,
-                fields: fileFields,
-                supportsAllDrives,
-            })
-            .then(
-                response => resolve(formatFileDescription(response.result)),
-                reject
-            )
-    })
+	return new Promise((resolve, reject) => {
+		getGapi().client.drive.files
+			.update({
+				fileId: driveId,
+				name: newName,
+				fields: fileFields,
+				supportsAllDrives,
+			})
+			.then(
+				(response) => resolve(formatFileDescription(response.result)),
+				reject,
+			);
+	});
 }
 
 /**
@@ -441,19 +635,19 @@ export function renameFile(driveId, newName, supportsAllDrives = true) {
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export function updateMetadata(driveId, metadata) {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .update({
-                fileId: driveId,
-                ...metadata,
-                fields: fileFields,
-                supportsAllDrives: true,
-            })
-            .then(
-                response => resolve(formatFileDescription(response.result)),
-                reject
-            )
-    })
+	return new Promise((resolve, reject) => {
+		getGapi().client.drive.files
+			.update({
+				fileId: driveId,
+				...metadata,
+				fields: fileFields,
+				supportsAllDrives: true,
+			})
+			.then(
+				(response) => resolve(formatFileDescription(response.result)),
+				reject,
+			);
+	});
 }
 
 /**
@@ -462,26 +656,26 @@ export function updateMetadata(driveId, metadata) {
  * @method moveFile
  * @param {String} driveId id of the file to move
  * @param {String} sourceId id of the current parent folder
- * @param {object} targetId id of the new parent folder
+ * @param {String} targetId id of the new parent folder
  * @return {Promise|Object} A promise of the result that returns
  * a file description: {driveId, driveVersion, name, ifid}
  */
 export function moveFile(driveId, sourceId, targetId) {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .update({
-                fileId: driveId,
-                removeParents: sourceId,
-                addParents: targetId,
-                enforceSingleParent: true,
-                fields: fileFields,
-                supportsAllDrives: true,
-            })
-            .then(
-                response => resolve(formatFileDescription(response.result)),
-                reject
-            )
-    })
+	return new Promise((resolve, reject) => {
+		getGapi().client.drive.files
+			.update({
+				fileId: driveId,
+				removeParents: sourceId,
+				addParents: targetId,
+				enforceSingleParent: true,
+				fields: fileFields,
+				supportsAllDrives: true,
+			})
+			.then(
+				(response) => resolve(formatFileDescription(response.result)),
+				reject,
+			);
+	});
 }
 
 /**
@@ -492,13 +686,13 @@ export function moveFile(driveId, sourceId, targetId) {
  * @return {Promise} A promise of the result
  */
 export function deleteFile(driveId) {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.files
-            .delete({
-                fileId: driveId,
-            })
-            .then(resolve, reject)
-    })
+	return new Promise((resolve, reject) => {
+		getGapi().client.drive.files
+			.delete({
+				fileId: driveId,
+			})
+			.then(resolve, reject);
+	});
 }
 
 /**
@@ -510,14 +704,14 @@ export function deleteFile(driveId) {
  * @return {Promise} A promise of the result
  */
 export function deleteRevision(fileId, revisionId) {
-    return new Promise((resolve, reject) => {
-        gapi.client.drive.revisions
-            .delete({
-                fileId,
-                revisionId,
-            })
-            .then(resolve, reject)
-    })
+	return new Promise((resolve, reject) => {
+		getGapi().client.drive.revisions
+			.delete({
+				fileId,
+				revisionId,
+			})
+			.then(resolve, reject);
+	});
 }
 
 /**
@@ -530,24 +724,83 @@ export function deleteRevision(fileId, revisionId) {
  * a story description: {driveId, driveVersion, name, ifid}
  */
 export function updateFile(driveId, newData, supportsAllDrives = true) {
-    return new Promise((resolve, reject) => {
-        gapi.client
-            .request({
-                path: driveUploadPath + '/' + driveId,
-                method: 'PATCH',
-                params: {
-                    uploadType: 'media',
-                    fields: fileFields,
-                    useContentAsIndexableText: true,
-                    supportsAllDrives,
-                },
-                body: newData,
-            })
-            .then(
-                response => resolve(formatFileDescription(response.result)),
-                reject
-            )
-    })
+	return withAuthRetry(
+		() =>
+			new Promise((resolve, reject) => {
+				getGapi().client
+					.request({
+						path: `${driveUploadPath}/${driveId}`,
+						method: "PATCH",
+						params: {
+							uploadType: "media",
+							fields: fileFields,
+							useContentAsIndexableText: true,
+							supportsAllDrives,
+						},
+						body: newData,
+					})
+					.then(
+						(response) => resolve(formatFileDescription(response.result)),
+						reject,
+					);
+			}),
+	);
+}
+
+/**
+ * Replaces file content and metadata (e.g. name, mimeType) in a single
+ * multipart request. The Drive file id stays the same, the previous content
+ * remains available as a revision. Can reject
+ *
+ * @method updateFileMultipart
+ * @param {String} driveId Google Drive file identifier
+ * @param {String} newData New file content
+ * @param {{ name?: string, mimeType?: string }} metadata Metadata to patch
+ * @return {Promise|Object} A promise of the result that returns
+ * a file description: {driveId, driveVersion, name, ifid}
+ */
+export function updateFileMultipart(
+	driveId,
+	newData,
+	metadata = {},
+	supportsAllDrives = true,
+) {
+	const boundary = "-batch-31415926579323846boundatydnfj111";
+	const delimiter = `\r\n--${boundary}\r\n`;
+	const close_delim = `\r\n--${boundary}--`;
+
+	const contentType = metadata.mimeType || "text/markdown";
+	const useContentAsIndexableText = contentType.startsWith("text/");
+	const multipartRequestBody =
+		delimiter +
+		"Content-Type: application/json; charset=UTF-8\r\n\r\n" +
+		JSON.stringify(metadata) +
+		delimiter +
+		`Content-Type: ${contentType}; charset=UTF-8\r\n\r\n` +
+		newData +
+		close_delim;
+
+	return new Promise((resolve, reject) => {
+		getGapi().client
+			.request({
+				path: `${driveUploadPath}/${driveId}`,
+				method: "PATCH",
+				params: {
+					uploadType: "multipart",
+					fields: fileFields,
+					useContentAsIndexableText,
+					supportsAllDrives,
+				},
+				headers: {
+					"Content-Type": `multipart/related; boundary="${boundary}"`,
+				},
+				body: multipartRequestBody,
+			})
+			.then(
+				(response) => resolve(formatFileDescription(response.result)),
+				reject,
+			);
+	});
 }
 
 /**
@@ -557,13 +810,11 @@ export function updateFile(driveId, newData, supportsAllDrives = true) {
  * @return {Promise|Object} A promise of the result that returns
  * a story description: {driveId, driveVersion, name, ifid}
  */
-export function refreshSession() {
-    const isTokenValid = function () {
-        var token = gapi.auth.getToken()
-        return token && Date.now() < token.expires_at
-    }
-    console.log(isTokenValid())
-    return reloadAuthResponse()
+export function refreshSession(force = false) {
+	if (!force && isTokenValid()) {
+		return Promise.resolve();
+	}
+	return forceRefreshAuth();
 }
 
 /**
@@ -572,20 +823,20 @@ export function refreshSession() {
  * @returns {Promise|Object}
  */
 export function reloadAuthResponse() {
-    return gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse()
+	return forceRefreshAuth();
 }
 
 // helpers
 
 function formatResult(response) {
-    console.log(response)
-    var stories = []
-    for (var i = 0; i < response.files.length; i++) {
-        const file = response.files[i]
-        //stories.push(formatFileDescription(file));
-        stories.push(file)
-    }
-    return stories
+	console.log(response);
+	var stories = [];
+	for (let i = 0; i < response.files.length; i++) {
+		const file = response.files[i];
+		//stories.push(formatFileDescription(file));
+		stories.push(file);
+	}
+	return stories;
 }
 
 /**
@@ -593,15 +844,11 @@ function formatResult(response) {
  * @returns email string
  */
 function getDomainOfCurrentUser() {
-    const email = gapi.auth2
-        .getAuthInstance()
-        .currentUser.get()
-        .getBasicProfile()
-        .getEmail()
-    const domain = email.split('@')[1]
-    if (domain) {
-        return domain
-    } else {
-        throw new Error('No domain found')
-    }
+	const email = getUserEmail();
+	const domain = email.split("@")[1];
+	if (domain) {
+		return domain;
+	} else {
+		throw new Error("No domain found");
+	}
 }

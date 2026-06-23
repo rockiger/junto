@@ -1,7 +1,7 @@
 //@ts-check
 
 import FulcrumLogo from 'components/FulcrumLogo'
-import { reloadAuthResponse, updateFile } from 'lib/gdrive'
+import { updateFile } from 'lib/gdrive'
 import { getExtFromFileName, getTitleFromFile } from 'lib/helper'
 
 import { EXT } from 'lib/constants'
@@ -13,11 +13,12 @@ import { putPage } from 'lib/localDB'
  * @return {any[]}
  */
 export function convertFilesToAutocompletItems(files) {
-    if (files && files.map) {
+    if (Array.isArray(files)) {
+        const seen = new Set()
         const items = files
             .filter(file => {
                 const ext = getExtFromFileName(file.name)
-                return ext === EXT
+                return ext === EXT && !seen.has(file.id) && seen.add(file.id)
             })
             .map(file => {
                 return {
@@ -34,8 +35,8 @@ export function convertFilesToAutocompletItems(files) {
 
 /**
  *
- * @param {object} initialValue
- * @param {object} localStorageId
+ * @param {string} initialValue
+ * @param {string} localStorageId
  * @returns {void}
  */
 export function initStorage(initialValue, localStorageId) {
@@ -47,7 +48,7 @@ export function initStorage(initialValue, localStorageId) {
  * Saves the content of the file if neccessary
  *
  * @param {string} fileId
- * @param {object} initialValue
+ * @param {string} initialValue
  *
  * @return a filedescription with the minium of id and modifiedTime
  */
@@ -56,9 +57,7 @@ export async function save(fileId, initialValue) {
     const newValue = localStorage.getItem(fileId) || ''
     if (initialValue === newValue) {
         console.log('SAME SAME')
-        return new Promise((resolve, reject) =>
-            resolve({ modifiedTime: undefined })
-        )
+        return Promise.resolve({ modifiedTime: undefined })
     }
 
     try {
@@ -72,37 +71,6 @@ export async function save(fileId, initialValue) {
         console.log('save:', fileId)
         return fileDescription
     } catch (err) {
-        if (
-            err.status === 401 &&
-            err.result?.error?.message === 'Invalid Credentials'
-        ) {
-            try {
-                await reloadAuthResponse()
-                const fileDescription = await updateFile(fileId, newValue)
-                await putPage({
-                    id: fileId,
-                    content: newValue,
-                    editedTime: String(fileDescription.modifiedTime),
-                    modifiedTime: String(fileDescription.modifiedTime),
-                })
-                console.log('save after reload auth instance:', fileId)
-                return fileDescription
-            } catch (err) {
-                const date = new Date().toISOString()
-                await putPage({
-                    id: fileId,
-                    content: newValue,
-                    editedTime: date,
-                    modifiedTime: date,
-                })
-                alert(
-                    `Couldn't save file with id: ${fileId}. to Google Drive.\nWe created a local copy.\nPlease copy the content to be save and reload the page.`
-                )
-                console.log("save: Couldn't save file with id:", fileId)
-                console.log('Error:', err)
-                return { id: fileId, modifiedTime: date }
-            }
-        }
         const date = new Date().toISOString()
         await putPage({
             id: fileId,
@@ -111,7 +79,7 @@ export async function save(fileId, initialValue) {
             modifiedTime: date,
         })
         alert(
-            `Couldn't save file with id: ${fileId}. to Google Drive.\nWe created a local copy.\nPlease copy the content to be save and reload the page.`
+            `Couldn't save to Google Drive after refreshing your session.\nYour changes are stored locally in this browser. Try saving again in a moment, or reload the page if the problem continues.`
         )
         console.log("save: Couldn't save file with id:", fileId)
         console.log('Error:', err)
@@ -119,6 +87,24 @@ export async function save(fileId, initialValue) {
     }
 }
 
+/** @param {import('reactn/default').IFile[]} items @param {string} id @param {Record<string, unknown>} change */
+const updateModifiedTimeItem = (items, id, change) =>
+    items.map(item => {
+        if (item.id === id) {
+            return { ...item, ...change }
+        } else {
+            return item
+        }
+    })
+
+/**
+ * @param {string} id
+ * @param {string} modifiedByMeTime
+ * @param {import('reactn/default').IFile[]} files
+ * @param {function} setFiles
+ * @param {import('reactn/default').IFile[]} initialFiles
+ * @param {function} setInitialFiles
+ */
 export const updateModifiedTimeInGlobalState = (
     id,
     modifiedByMeTime,
@@ -136,12 +122,3 @@ export const updateModifiedTimeInGlobalState = (
     setFiles(newFiles)
     setInitialFiles(newInitialFiles)
 }
-
-const updateModifiedTimeItem = (items, id, change) =>
-    items.map(item => {
-        if (item.id === id) {
-            return { ...item, ...change }
-        } else {
-            return item
-        }
-    })

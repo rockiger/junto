@@ -1,6 +1,4 @@
 //@ts-check
-import React from 'react'
-
 import { Modal } from '../modal'
 
 import Button from '../button'
@@ -10,8 +8,8 @@ export { Alert }
 /**
  * @typedef AlertExtraProps
  * @property {string} [cancelLabel]
- * @property {(ev) => void} onClose
- * @property {(ev) => void} [onOk]
+ * @property {(ev: any) => void} onClose
+ * @property {(ev: any) => void} [onOk]
  * @property {string} [okLabel]
  */
 

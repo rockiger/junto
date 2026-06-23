@@ -1,6 +1,0 @@
-- [] Migrate to markdown-it backend
-- [] Migrate to React-Lexical
-- [] Migrate UI to DaisyUI
-- [] Update React to 19
-- [] Move to tanstack start
-- [] Deploy to Hostinger

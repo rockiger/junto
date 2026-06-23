@@ -1,6 +1,4 @@
 //@ts-check
-import React from 'react'
-
 import s from './card.module.scss'
 
 export default Card
@@ -18,6 +16,7 @@ function Card({ children }) {
     return <div className={s.Card}>{children}</div>
 }
 
+/** @param {CardProps} props */
 function CardHeader({ avatar, subtitle, title }) {
     return (
         <div className={s.CardHeader}>
@@ -31,10 +30,12 @@ function CardHeader({ avatar, subtitle, title }) {
     )
 }
 
+/** @param {CardProps} props */
 function CardBody({ children }) {
     return <div className={s.CardBody}>{children}</div>
 }
 
+/** @param {CardProps} props */
 function CardFooter({ children }) {
     return <div className={s.CardFooter}>{children}</div>
 }

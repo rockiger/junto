@@ -1,11 +1,7 @@
-import React from 'react'
-import { Box } from '@material-ui/core'
-import { styled } from '@material-ui/core/styles'
-import { MdiReactIconComponentType } from 'mdi-react'
 
 import { H2 } from 'components/gsuite-components/h2'
-
-export { EmptyPlaceholder }
+import type { MdiReactIconComponentType } from 'mdi-react'
+import { createElement } from 'react'
 
 interface Props {
     icon?: MdiReactIconComponentType
@@ -13,30 +9,16 @@ interface Props {
     title?: string
 }
 
-const EmptyPlaceholder = ({ icon, subline, title }: Props) => {
-    const Icon = icon
+export const EmptyPlaceholder = ({ icon, subline, title }: Props) => {
     return (
-        <Container>
-            {icon && (
-                <Icon
-                    style={{
-                        color: 'rgb(232, 240, 254)',
-                        height: '10rem',
-                        width: '10rem',
-                    }}
-                />
-            )}
+        <div className="flex flex-col justify-center items-center mt-24"
+        >
+            {icon &&
+                createElement(icon, {
+                    className: 'text-icon-blue-light size-40',
+                })}
             <H2>{title}</H2>
-            <div>{subline && subline}</div>
-        </Container>
+            <div className="text-center">{subline && subline}</div>
+        </div>
     )
 }
-
-const Container = styled(Box)({
-    alignContent: 'center',
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    marginTop: 100,
-})

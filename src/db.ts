@@ -1,12 +1,11 @@
 import { getGlobal, setGlobal } from 'reactn'
-import { SimpleMap } from 'reactn/default'
+import { IFile, SimpleMap } from 'reactn/default'
 
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import {
     createFile as createFileBase,
     createNewWiki as createNewWikiBase,
     listFilesChunked,
-    refreshSession,
     updateFile as updateFileBase,
     updateMetadata as updateMetadataBase,
 } from 'lib/gdrive'
@@ -17,32 +16,18 @@ import { filesUpdater } from 'lib/helper'
  * @return {Promise|void}
  */
 export const backgroundUpdateFiles = async () => {
-    const { searchTerm } = getGlobal()
     setGlobal({ backgroundUpdate: true })
     try {
-        const files = await listFilesChunked(searchTerm)
+        const initialFiles = await listFilesChunked('')
         setGlobal({
             backgroundUpdate: false,
-            files,
-            initialFiles: files,
-            isFileListLoading: false,
-            oldSearchTerm: searchTerm,
+            initialFiles,
         })
-    } catch (err) {
-        const body = JSON.parse(err.body)
-        const { error } = body
-        if (error.message === 'Invalid Credentials') {
-            try {
-                await refreshSession()
-                backgroundUpdateFiles()
-            } catch (err) {
-                alert(`Couldn't refresh session: ${err.message}`)
-                console.log({ err })
-            }
-        } else {
-            alert(`Couldn't update files ${err}`)
-            console.log({ error })
-        }
+    } catch (err: unknown) {
+        setGlobal({ backgroundUpdate: false })
+        const message = err instanceof Error ? err.message : String(err)
+        alert(`Couldn't update files: ${message}`)
+        console.log({ err })
     }
 }
 
@@ -69,10 +54,9 @@ export const createFile = async (
         })
         const result = await updateFileBase(newFileId, fileContent)
         console.log({ result })
-        const { files, initialFiles } = getGlobal()
+        const { initialFiles } = getGlobal()
         setGlobal({
             backgroundUpdate: true,
-            files: [...files, result],
             initialFiles: [...initialFiles, result],
             isCreatingNewFile: false,
         })
@@ -100,18 +84,24 @@ export const createFile = async (
  * @return {string} An id of the created file
  * a file description: {driveId, driveVersion, name, ifid}
  */
-export const createNewWiki = async opts => {
+export const createNewWiki = async (opts: {
+    name?: string
+    parentId?: string | null
+    supportsAllDrives?: boolean
+    description?: string
+    isWikiRoot?: boolean
+}) => {
     try {
         const result = await createNewWikiBase(opts)
         console.log({ newWikiResult: result })
-        const { files, initialFiles } = getGlobal()
+        const { initialFiles } = getGlobal()
         // Unlike create new file we don't need to reset the isCreatingNewFile
         // propery, because there should always be a new file created.
+        const file = result as IFile
         setGlobal({
-            files: [...files, result],
-            initialFiles: [...initialFiles, result],
+            initialFiles: [...initialFiles, file],
         })
-        return result.id
+        return file.id
     } catch (err) {
         setGlobal({ isCreatingNewFile: false })
         console.log(err)

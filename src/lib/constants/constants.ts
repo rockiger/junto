@@ -1,0 +1,39 @@
+const isPro =
+	window.location.host === "localhost:5763" ||
+	window.location.host === "pro.fulcrum.wiki";
+
+// Client ID and API key from the Developer Console
+export const CLIENT_ID = isPro
+	? import.meta.env.VITE_GOOGLE_CLIENT_ID
+	: import.meta.env.VITE_GOOGLE_CLIENT_ID;
+export const API_KEY = isPro
+	? import.meta.env.VITE_API_KEY_PRO
+	: import.meta.env.VITE_API_KEY;
+
+export const APP_ID = import.meta.env.VITE_GOOGLE_APP_ID;
+
+// Array of API discovery doc URLs for APIs used by the quickstart
+export const DISCOVERY_DOCS = [
+	"https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
+];
+
+// Authorization scopes required by the API; multiple scopes can be
+// included, separated by spaces.
+export const SCOPES = isPro
+	? "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.install https://www.googleapis.com/auth/drive.appdata"
+	: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.install https://www.googleapis.com/auth/drive.appdata";
+
+export const EXT = ".md";
+export const EXTLENGTH = EXT.length;
+export const FOLDER_NAME = "Fulcrum Documents";
+export const LOCALSTORAGE_NAME = "junto-content-xlc";
+export const MYHOME = "My Wiki";
+export const OVERVIEW_NAME = `_myDrive_overview_please_do_not_touch${EXT}`;
+export const OVERVIEW_NAME_MD = `_myDrive_overview_please_do_not_touch.md`;
+export const UNTITLEDNAME = "Untitled page";
+export const UNTITLEDFILE = UNTITLEDNAME + EXT;
+
+export const DEFAULTVALUE = {};
+
+// Pages are stored as Markdown; a new page starts empty.
+export const EMPTYVALUE = "";

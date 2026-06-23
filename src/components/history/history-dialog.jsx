@@ -120,11 +120,11 @@ export default function HistoryDialogContent({ fileId }) {
             {!loaded ? (
                 <Spinner />
             ) : (
-                <List divided>
+                <List aria-label="File revision history" divided>
                     {revisions.map((rev, index, array) => (
                         <ListItem
                             active={index === 0}
-                            key={index}
+                            key={rev.id}
                             menu={() => (
                                 <Menu
                                     alertDispatch={alertDispatch}

@@ -1,8 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
 
-import { ButtonMenu } from 'components/ButtonMenu'
-
 import s from './list.module.scss'
 
 export interface ListProps {
@@ -20,7 +18,7 @@ export function List({ children, divided = false }: ListProps) {
 export interface ListItemProps {
     active?: boolean
     children?: React.ReactNode
-    menu?: typeof ButtonMenu
+    menu?: React.ComponentType
     title?: string
 }
 export function ListItem({

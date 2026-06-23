@@ -4,7 +4,7 @@ describe('Editor Helpers', () => {
     test('convertFilesToAutocompleItems', () => {
         expect(convertFilesToAutocompletItems([])).toEqual([])
         const result = convertFilesToAutocompletItems([
-            { id: 'id', name: 'name.gwiki' },
+            { id: 'id', name: 'name.md' },
         ])[0]
         expect(result.href).toBe('/page/id')
         expect(result.id).toBe('id')

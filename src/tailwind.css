@@ -1,0 +1,199 @@
+@import "./static/fonts/metropolis/metropolis.css";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+ * Design tokens: values from src/static/styles/_palette.scss + Drive-like UI.
+ * Naming avoids Tailwind duplicates (e.g. --color-fg-default -> text-fg-default, not text-text-primary).
+ */
+@theme {
+	/* Typography (matches index.scss body stack) */
+	--font-sans:
+		Metropolis, Roboto, "Open Sans", ui-sans-serif, system-ui, sans-serif;
+
+	/* Mobile surface container (tabs, header, dock) */
+	--color-surface-container: hsl(249.99998, 33%, 96%);
+	--color-search-bg: hsl(247.5, 20%, 92%);
+	--color-search-placeholder: hsl(223.84615, 13%, 39%);
+	--color-tab-selected: hsl(222.97298, 34%, 42%);
+	--color-icon-blue: hsl(214.2029, 82%, 51%);
+	--color-icon-blue-light: hsl(214.2029, 82%, 90%);
+	--color-icon-blue-lighter: hsl(214.2029, 82%, 95%);
+	--color-icon-surface: hsl(251.99998, 16%, 94%);
+	--color-text-default: hsl(230.00002, 10%, 11%);
+	--color-text-muted: hsl(240, 7%, 29%);
+
+
+	/* Accent / brand (primary-* from palette) */
+	--color-accent: #4285f4;
+	--color-accent-light: rgb(103 157 246);
+	--color-accent-dark: rgb(46 93 170);
+	--color-on-accent: #fff;
+
+	/* Foreground / text (text-* from palette) */
+	--color-fg-default: #3c4043;
+	--color-fg-muted: rgb(0 0 0 / 0.54);
+	--color-fg-disabled: rgb(0 0 0 / 0.38);
+	--color-fg-hint: rgb(0 0 0 / 0.38);
+	--color-heading: #202124;
+
+	/* Surfaces (background / paper) */
+	--color-surface: hsl(249.99998, 33%, 96%);
+	--color-surface-alt: #f1f3f4;
+	--color-surface-paper: #fff;
+
+	/* Interactive overlays (action-* from palette) */
+	--color-surface-hover: rgb(0 0 0 / 0.08);
+	--color-surface-selected: rgb(0 0 0 / 0.14);
+	--color-surface-active: rgb(0 0 0 / 0.54);
+
+	/* Borders & dividers */
+	--color-edge: rgb(0 0 0 / 0.12);
+	--color-edge-strong: #d5d5d5;
+	--color-divider: rgb(0 0 0 / 0.12);
+
+	/* Semantic */
+	--color-danger: #f44336;
+	--color-danger-light: #e57373;
+	--color-danger-dark: #d32f2f;
+	--color-on-danger: #fff;
+
+	/* Grey scale (subset for chips / chrome) */
+	--color-grey-50: #fafafa;
+	--color-grey-100: #f5f5f5;
+	--color-grey-200: #eeeeee;
+	--color-grey-300: #e0e0e0;
+	--color-grey-600: #757575;
+	--color-grey-700: #616161;
+	--color-grey-800: #424242;
+
+	/* Layout: sidebar 256px, header 64px, list row ~40px */
+	--spacing-sidebar: 16rem;
+	--spacing-header: 4rem;
+	--spacing-row: 2.5rem;
+
+	--radius-control: 0.25rem;
+	--radius-panel: 0.5rem;
+
+	--shadow-focus: 0 0 0 2px rgb(66 133 244 / 0.35);
+
+    /* Stacking (fixed chrome above content) */
+    --z-1000: 1000;
+}
+
+/* Desktop search bar swap: toggled synchronously via #dashboard-layout[data-main-scrolled] */
+@media (min-width: 1024px) {
+    #dashboard-layout {
+        --dashboard-scroll-fade-duration: 200ms;
+    }
+
+    .dashboard-inline-search,
+    .dashboard-header-search--swappable {
+        transition:
+            opacity var(--dashboard-scroll-fade-duration) ease,
+            visibility var(--dashboard-scroll-fade-duration) ease;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #dashboard-layout[data-main-scrolled="true"] .dashboard-inline-search {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    #dashboard-layout:not([data-main-scrolled="true"]) .dashboard-header-search--swappable {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .dashboard-headline {
+        position: relative;
+    }
+
+    .dashboard-headline__center,
+    .dashboard-headline__left {
+        transition: opacity var(--dashboard-scroll-fade-duration) ease;
+    }
+
+    .dashboard-headline__center {
+        display: block;
+        text-align: center;
+        opacity: 1;
+    }
+
+    .dashboard-headline__left {
+        position: absolute;
+        inset: 0;
+        text-align: left;
+        opacity: 0;
+    }
+
+    #dashboard-layout[data-main-scrolled="true"] .dashboard-headline__center {
+        opacity: 0;
+    }
+
+    #dashboard-layout[data-main-scrolled="true"] .dashboard-headline__left {
+        opacity: 1;
+    }
+}
+
+/* Changed colors for screen size >= lg */
+	@media (min-width: 1024px) {
+		@theme {
+		--color-surface-container: hsl(216, 56%, 98%);
+		--color-search-bg: hsl(216.92308, 42%, 94%);
+	}}
+
+@layer base {
+	body {
+		@apply font-sans antialiased;
+	}
+
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: rgb(0 0 0 / 0.25) transparent;
+	}
+
+	*::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: rgb(0 0 0 / 0.25);
+		border-radius: 9999px;
+	}
+
+	*::-webkit-scrollbar-button,
+	*::-webkit-scrollbar-button:single-button,
+	*::-webkit-scrollbar-button:vertical:start:decrement,
+	*::-webkit-scrollbar-button:vertical:end:increment,
+	*::-webkit-scrollbar-button:horizontal:start:decrement,
+	*::-webkit-scrollbar-button:horizontal:end:increment,
+	*::-webkit-scrollbar-button:vertical:start:increment,
+	*::-webkit-scrollbar-button:vertical:end:decrement,
+	*::-webkit-scrollbar-button:horizontal:start:increment,
+	*::-webkit-scrollbar-button:horizontal:end:decrement {
+		display: none;
+		width: 0;
+		height: 0;
+		-webkit-appearance: none;
+		appearance: none;
+		background: transparent;
+		border: none;
+	}
+
+	*::-webkit-scrollbar-corner {
+		background: transparent;
+	}
+}
+
+html {
+	@apply text-text-default;
+}

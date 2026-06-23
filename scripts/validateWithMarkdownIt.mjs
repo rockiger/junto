@@ -1,6 +1,9 @@
 import MarkdownIt from "markdown-it"
 import mdAnchor from "markdown-it-anchor"
+import mdImsize from "markdown-it-imsize"
 import multimd from "markdown-it-multimd-table"
+import { markdownItLayout } from "./lib/markdown-it-layout.mjs"
+import { markdownItExcalidraw } from "./lib/markdown-it-excalidraw.mjs"
 
 /**
  * Same options as a typical "rich" static pipeline; use for --validate.
@@ -16,6 +19,9 @@ export function validateWithMarkdownIt(src) {
 	})
 		.use(mdAnchor, { permalink: false })
 		.use(multimd, { multiline: true, rowspan: true, headerless: true })
+		.use(markdownItLayout)
+		.use(markdownItExcalidraw)
+		.use(mdImsize)
 	try {
 		const html = md.render(src)
 		return { ok: true, html }

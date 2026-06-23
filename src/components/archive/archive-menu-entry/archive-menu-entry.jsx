@@ -1,5 +1,5 @@
 //@ts-check
-import React, { useGlobal, useState } from 'reactn'
+import { useGlobal, useState } from 'reactn'
 
 import ArchiveIconDown from 'mdi-react/ArchiveArrowDownOutlineIcon'
 import ArchiveIconUp from 'mdi-react/ArchiveArrowUpIcon'
@@ -28,10 +28,9 @@ export { ArchiveMenuEntry }
  */
 
 /**
- * A archive-button component.
  * @param {ArchiveButtonProps} props
  */
-function ArchiveMenuEntry({ fileId }) {
+export function useArchiveMenuEntry({ fileId }) {
     const [global] = useGlobal()
     const [, setFiles] = useGlobal('files')
     const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
@@ -40,7 +39,7 @@ function ArchiveMenuEntry({ fileId }) {
     const file = getMetaById(fileId, initialFiles)
 
     const ArchiveAlert = alert
-        ? props => (
+        ? () => (
               <Alert
                   isOpen={alert.isOpen}
                   okLabel={alert.buttonText}
@@ -140,6 +139,7 @@ function ArchiveMenuEntry({ fileId }) {
         }
     }
 
+    /** @param {import('reactn/default').IFile} file */
     async function archiveSinglePageWithChildren(file) {
         // Change parent of children
         const newParentFolderId = file.parents ? file.parents[0] : null
@@ -186,6 +186,7 @@ function ArchiveMenuEntry({ fileId }) {
         }
     }
 
+    /** @param {import('reactn/default').IFile} file */
     async function archiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
@@ -203,6 +204,7 @@ function ArchiveMenuEntry({ fileId }) {
         })
     }
 
+    /** @param {import('reactn/default').IFile} file */
     async function unArchiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
@@ -223,6 +225,14 @@ function ArchiveMenuEntry({ fileId }) {
     function onClose() {
         setAlert(initialAlert)
     }
+}
+
+/**
+ * A archive-button component.
+ * @param {ArchiveButtonProps} props
+ */
+function ArchiveMenuEntry(props) {
+    return useArchiveMenuEntry(props)
 }
 
 // Warning if has child pages

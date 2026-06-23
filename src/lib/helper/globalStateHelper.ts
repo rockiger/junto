@@ -30,6 +30,8 @@ type IChange = {
     parents?: Array<string> // the id of the parrent of a file
     properties?: { [key: string]: any }
     shared?: boolean
+    viewedByMe?: boolean
+    viewedByMeTime?: string
 }
 
 /**
@@ -40,8 +42,11 @@ type IChange = {
  * @param id - the file to update
  */
 const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
-    const files = filesUpdaterHelper(change, global.files, id)
     const initialFiles = filesUpdaterHelper(change, global.initialFiles, id)
+    const hasFileInSearchResults = global.files.some(item => item.id === id)
+    const files = hasFileInSearchResults
+        ? filesUpdaterHelper(change, global.files, id)
+        : global.files
     return {
         files,
         initialFiles,
@@ -71,8 +76,8 @@ const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
     })
 }
 
-function filterIsNotArchived(files) {
-    const filtered = files.filter(file => {
+function filterIsNotArchived(files: IFile[]) {
+    const filtered = files.filter((file: IFile) => {
         return !isArchived(file)
     })
     return filtered

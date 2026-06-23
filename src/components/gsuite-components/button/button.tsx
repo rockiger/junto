@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import type { ReactElement, MouseEvent } from 'react'
 import clsx from 'clsx'
 
 import s from './button.module.scss'
@@ -8,7 +8,7 @@ export default Button
 
 interface Props {
     children: ReactElement | string
-    onClick?: (ev) => void
+    onClick?: (ev: MouseEvent<HTMLDivElement>) => void
     primary?: boolean
 }
 

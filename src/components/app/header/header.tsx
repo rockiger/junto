@@ -1,36 +1,24 @@
-import React, { useGlobal } from 'reactn'
-import SyncIcon from 'mdi-react/SyncIcon'
-
-import Navbar from 'components/Navbar'
-import GoogleLogin from 'components/googleLogin'
+import GoogleLogin from 'components/googleLogin.tsx'
 import { Help } from 'components/help'
 import { FooterLink } from 'components/staticPages/Footer'
+import { isEmpty } from 'lodash'
+import SyncIcon from 'mdi-react/SyncIcon'
+import { useGlobal } from 'reactn'
+import Navbar from './navbar'
 
-import styles from './header.module.scss'
-
-import { API_KEY, CLIENT_ID, DISCOVERY_DOCS, SCOPES } from 'lib/constants'
-
-export default function Header(props: any) {
+export default function Header() {
     const [isSignedIn] = useGlobal('isSignedIn')
     const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
     const [initialFiles] = useGlobal('initialFiles')
 
     return (
-        <div className={styles.Header}>
+        <div className="bg-surface-container px-2 lg:pl-0" style={{ gridArea: 'navigation' }}>
             <Navbar isSignedIn={isSignedIn}>
                 {isSignedIn &&
                     isInitialFileListLoading &&
-                    _.isNotEmpty(initialFiles) && (
-                        <div
-                            style={{
-                                alignContent: 'center',
-                                color: 'rgba(0, 0, 0, 0.54)',
-                                display: 'flex',
-                                fontSize: '0.75rem',
-                                fontWeight: 500,
-                            }}
-                        >
-                            <SyncIcon style={{ height: '1rem' }} />
+                    !isEmpty(initialFiles) && (
+                        <div className="hidden md:flex items-center gap-1 text-xs font-medium text-fg-muted">
+                            <SyncIcon className="h-4 shrink-0" />
                             Syncing...
                         </div>
                     )}
@@ -40,15 +28,7 @@ export default function Header(props: any) {
                         FAQ
                     </FooterLink>
                 )}
-                {/*
-                //@ts-ignore */}
-                <GoogleLogin
-                    clientId={CLIENT_ID}
-                    apiKey={API_KEY}
-                    discoveryDocs={DISCOVERY_DOCS}
-                    scope={SCOPES}
-                    buttonText="Sign in"
-                />
+                <GoogleLogin buttonText="Sign in" />
             </Navbar>
         </div>
     )

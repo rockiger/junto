@@ -1,4 +1,5 @@
 // @ts-check
+import _ from "lib/helper/globals";
 import { useGlobal } from "reactn";
 
 import FileListComponent from "./fileList-component";
@@ -7,6 +8,8 @@ export { FileList };
 export default FileList;
 
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
+
+/** @typedef {import('mdi-react').MdiReactIconComponentType} MdiReactIconComponentType */
 
 /**
  * @typedef FileListProps
@@ -17,9 +20,11 @@ export default FileList;
  * @property {boolean} [isLoading]
  * @property {boolean} [isScrollable]
  * @property {import('reactn/default').IFile[]} files
- * @property {SortBy} [sortBy]
- * @property {()=>{}} [setSortBy]
+ * @property {SortBy | undefined} [sortBy]
+ * @property {(sortBy: SortBy) => void} [setSortBy]
  * @property {string} [title]
+ * @property {'reason-suggested' | 'date'} [tableMiddleColumn]
+ * @property {import('reactn/default').IFile[]} [locationLookupFiles]
  */
 
 /**
@@ -34,9 +39,15 @@ function FileList({
 	sortBy,
 	setSortBy,
 	title,
+	tableMiddleColumn = "reason-suggested",
+	locationLookupFiles,
 }) {
 	const [isFileListLoading] = useGlobal("isFileListLoading");
+	const [isInitialFileListLoading] = useGlobal("isInitialFileListLoading");
 	const [searchTerm] = useGlobal("searchTerm");
+	const isLoading =
+		_.isEmpty(files) &&
+		(searchTerm ? isFileListLoading : isInitialFileListLoading);
 
 	return (
 		<FileListComponent
@@ -47,11 +58,13 @@ function FileList({
 			emptySubline={emptySubline}
 			files={files}
 			header={header}
-			isLoading={_.isEmpty(files) && isFileListLoading}
+			isLoading={isLoading}
 			searchTerm={searchTerm}
 			setSortBy={setSortBy}
-			sortBy={sortBy}
+			sortBy={sortBy ?? 'modifiedByMeTime'}
+			tableMiddleColumn={tableMiddleColumn}
 			title={title}
+			locationLookupFiles={locationLookupFiles}
 		/>
 	);
 }

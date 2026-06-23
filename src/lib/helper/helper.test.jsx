@@ -75,6 +75,18 @@ describe('globalStateHelper', () => {
         }
         expect(filesUpdater(change1, global1, id1)).toEqual(expected1)
     })
+    test('filesUpdater leaves search results unchanged when id not in files', () => {
+        const change1 = { name: 'Marco' }
+        const id1 = 1
+        const searchResults = [{ id: 99, name: 'Other' }]
+        const initialFiles = [{ id: 1, name: 'Marko' }]
+        const global1 = { files: searchResults, initialFiles }
+        const expected1 = {
+            files: searchResults,
+            initialFiles: [{ id: 1, name: 'Marco' }],
+        }
+        expect(filesUpdater(change1, global1, id1)).toEqual(expected1)
+    })
     test('hasChildren', () => {
         const files = [
             { id: '1', name: 'parent' },

@@ -1,5 +1,4 @@
 import React, { setGlobal } from 'reactn'
-import ReactDOM from 'react-dom'
 import { IFile, IFileOrNull } from 'reactn/default'
 
 import { BreadcrumbsBar } from './Breadcrumbs'
@@ -10,6 +9,7 @@ import {
     getBreadcrumbName,
 } from './Breadcrumbs-helper'
 import { OVERVIEW_NAME, FOLDER_NAME } from 'lib/constants'
+import { renderToDiv } from '../../../test-utils/renderToDiv'
 
 const ifolder1: IFileOrNull = null
 const ifolder2: IFileOrNull = {
@@ -95,9 +95,8 @@ const props: IProps = { fileId: 'ifile4', files }
 describe('Breadcrumbs', () => {
     it('renders without crashing', () => {
         setGlobal({ initialFiles: files }, () => {
-            const div = document.createElement('div')
-            ReactDOM.render(<BreadcrumbsBar {...props} />, div)
-            ReactDOM.unmountComponentAtNode(div)
+            const { unmount } = renderToDiv(<BreadcrumbsBar {...props} />)
+            unmount()
         })
     })
 

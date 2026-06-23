@@ -1,5 +1,6 @@
 export { default } from './modal'
 export * from './modal'
+export * from './dialog-modal'
 
 /**
  * Packages:
