@@ -1,19 +1,18 @@
 import { useCallback } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 import { createFile, createNewWiki } from 'db'
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import { getParentFolderId } from '../Sidebar-helper'
 
 export function useWikiTreeAddChild() {
-    const [initialFiles] = useGlobal('initialFiles')
-    const [, setIsCreatingNewFile] = useGlobal('isCreatingNewFile')
+    const initialFiles = useAppStore((s) => s.initialFiles)
     const navigate = useNavigate()
 
     return useCallback(
         async (pageId: string, parentFolderId: string | null) => {
-            setIsCreatingNewFile(true)
+            useAppStore.setState({ isCreatingNewFile: true })
             let parentFolderIdOfNewFile: string | undefined =
                 parentFolderId ?? undefined
             try {
@@ -36,10 +35,10 @@ export function useWikiTreeAddChild() {
                 )
                 navigate({ href: `/page/${newFileId}?edit` })
             } catch (err) {
-                setIsCreatingNewFile(false)
+                useAppStore.setState({ isCreatingNewFile: false })
                 console.log(err)
             }
         },
-        [initialFiles, navigate, setIsCreatingNewFile],
+        [initialFiles, navigate],
     )
 }

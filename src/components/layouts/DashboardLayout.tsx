@@ -6,7 +6,7 @@ import { Hint } from 'components/gsuite-components/hint'
 import { DashboardMobileDock } from 'components/Home/dashboard-mobile'
 import PlusIcon from 'mdi-react/PlusIcon'
 import { useEffect, useRef } from 'react'
-import { getGlobal, useDispatch, useGlobal } from 'reactn'
+import { getAppState, useAppStore } from 'store/app-store'
 import logo from "../../static/logo_48.svg"
 
 /**
@@ -26,9 +26,10 @@ export default function DashboardLayout() {
     const pathname = useRouterState({ select: (s) => s.location.pathname })
     const isSearchPage = pathname === '/search'
     const sectionHeadline = SECTION_HEADLINES[pathname]
-    const [isSignedIn] = useGlobal('isSignedIn')
-    const clearSearch = useDispatch('clearSearchComplete')
-    const [, setIsSearchFieldActive] = useGlobal('isSearchFieldActive')
+    const isSignedIn = useAppStore((s) => s.isSignedIn)
+    const clearSearch = useAppStore((s) => s.clearSearchComplete)
+    const setIsSearchFieldActive = (value: boolean) =>
+        useAppStore.setState({ isSearchFieldActive: value })
     const layoutRef = useRef<HTMLDivElement>(null)
     const mainContentRef = useRef<HTMLElement>(null)
 
@@ -49,7 +50,7 @@ export default function DashboardLayout() {
             headlineCenter?.setAttribute('aria-hidden', scrolled ? 'true' : 'false')
             headlineLeft?.setAttribute('aria-hidden', scrolled ? 'false' : 'true')
 
-            if (scrolled && getGlobal().isSearchFieldActive) {
+            if (scrolled && getAppState().isSearchFieldActive) {
                 setIsSearchFieldActive(false)
             }
         }

@@ -1,4 +1,4 @@
-import type { IFile } from 'reactn/default'
+import type { IFile } from 'types/app-state'
 
 type StoryTestState = {
     rootFolderId: string

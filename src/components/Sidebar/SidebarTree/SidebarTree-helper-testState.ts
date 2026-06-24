@@ -1,4 +1,4 @@
-import type { IFile } from 'reactn/default'
+import type { IFile } from 'types/app-state'
 export {
     subTest2Page,
     subTest2Folder,

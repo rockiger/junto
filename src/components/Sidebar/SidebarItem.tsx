@@ -1,6 +1,6 @@
 // @ts-nocheck
 //@ts-check
-import { useDispatch } from 'reactn'
+import { useAppStore } from 'store/app-store'
 import { Link, useLocation } from '@tanstack/react-router'
 import { Tooltip } from 'components/gsuite-components'
 import clsx from 'clsx'
@@ -21,7 +21,7 @@ export const SidebarItem = ({
     tooltip,
     className,
 }: SidebarItemProps) => {
-    const clearSearch = useDispatch('clearSearchComplete')
+    const clearSearch = useAppStore((s) => s.clearSearchComplete)
     const location = useLocation()
 
     const { pathname } = location

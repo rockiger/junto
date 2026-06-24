@@ -7,8 +7,9 @@ import type { SortBy } from 'components/Home/FileList/fileList-component'
 import { PageView } from 'components/Tracking'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 import StarIcon from 'mdi-react/StarIcon'
-import { useEffect, useMemo, useGlobal, useState } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useEffect, useMemo, useState } from 'react'
+import { useAppStore } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 
 export default StarredPage
 export { StarredPage as ArchivePage }
@@ -27,7 +28,7 @@ const sortByLS = localStorage.getItem(localStorageKey)
  * @param {ArchivePageProps} props
  */
 function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigningIn: boolean }) {
-    const [initialFiles] = useGlobal('initialFiles')
+    const initialFiles = useAppStore((s) => s.initialFiles)
     const starredFiles = useMemo(() => filterStarred(initialFiles), [initialFiles])
     const [sortBy, setSortBy] = useState(
         sortByLS &&

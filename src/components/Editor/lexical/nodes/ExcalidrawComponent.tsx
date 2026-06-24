@@ -21,8 +21,8 @@ import {
 	useState,
 	type JSX,
 } from 'react'
-import { useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useAppStore } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 import {
 	getSvgFileName,
 	resolveAndDownloadExcalidrawScene,
@@ -63,8 +63,11 @@ export default function ExcalidrawComponent({
 	const { fileId, previewVersions } = useExcalidrawEditor()
 	const previewVersion = previewVersions[nodeKey] ?? 0
 	const openModal = useOpenExcalidrawModal()
-	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
-	const [files, setFiles] = useGlobal('files')
+	const initialFiles = useAppStore((s) => s.initialFiles)
+	const files = useAppStore((s) => s.files)
+	const setInitialFiles = (value: IFile[]) =>
+		useAppStore.setState({ initialFiles: value })
+	const setFiles = (value: IFile[]) => useAppStore.setState({ files: value })
 	const [resolvedSceneJson, setResolvedSceneJson] = useState<string | null>(
 		sceneJson,
 	)

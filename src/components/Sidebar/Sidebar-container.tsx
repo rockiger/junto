@@ -1,6 +1,7 @@
 // @ts-nocheck
-import React from 'reactn'
 import { useLocation, useNavigate } from '@tanstack/react-router'
+import { useCallback } from 'react'
+import { getAppState, setAppState } from 'store/app-store'
 
 import {
     getPageId,
@@ -12,22 +13,23 @@ import { createFile, createNewWiki } from 'db'
 import { UNTITLEDFILE, EMPTYVALUE } from '../../lib/constants'
 import SidebarRenderer from './Sidebar-component'
 
-class Sidebar extends React.Component {
-    onClickNewButton = async ev => {
-        this.setGlobal({ isCreatingNewFile: true })
+function SidebarWithRouter() {
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const onClickNewButton = useCallback(async () => {
+        setAppState({ isCreatingNewFile: true })
         let parentFolderIdOfNewFile
-        console.log(isPage(this.props.location))
-        if (isPage(this.props.location)) {
-            const pageId = getPageId(this.props.location)
+        const { initialFiles, rootFolderId } = getAppState()
+        console.log(isPage(location))
+        if (isPage(location)) {
+            const pageId = getPageId(location)
             parentFolderIdOfNewFile = getParentFolderIdOfNewFile(
                 pageId,
-                this.global.initialFiles
+                initialFiles,
             )
             if (!parentFolderIdOfNewFile) {
-                const parentFolderId = getParentFolderId(
-                    pageId,
-                    this.global.initialFiles
-                )
+                const parentFolderId = getParentFolderId(pageId, initialFiles)
                 try {
                     parentFolderIdOfNewFile = await createNewWiki({
                         name: pageId,
@@ -35,42 +37,34 @@ class Sidebar extends React.Component {
                         isWikiRoot: false,
                     })
                 } catch (err) {
-                    this.setGlobal({ isCreatingNewFile: false })
+                    setAppState({ isCreatingNewFile: false })
                     console.log(err)
                 }
             }
         } else {
-            parentFolderIdOfNewFile = this.global.rootFolderId
+            parentFolderIdOfNewFile = rootFolderId
         }
 
         try {
-            this.setGlobal({
+            setAppState({
                 goToNewFile: true,
                 searchTerm: '',
             })
             const newFileId = await createFile(
                 UNTITLEDFILE,
                 parentFolderIdOfNewFile,
-                EMPTYVALUE
+                EMPTYVALUE,
             )
-            this.props.navigate({
+            navigate({
                 href: `/page/${newFileId}?edit`,
             })
         } catch (err) {
-            this.setGlobal({ isCreatingNewFile: false })
+            setAppState({ isCreatingNewFile: false })
             console.log(err)
         }
-    }
+    }, [location, navigate])
 
-    render() {
-        return <SidebarRenderer onClickNewButton={this.onClickNewButton} />
-    }
-}
-
-function SidebarWithRouter(props) {
-    const navigate = useNavigate()
-    const location = useLocation()
-    return <Sidebar {...props} navigate={navigate} location={location} />
+    return <SidebarRenderer onClickNewButton={onClickNewButton} />
 }
 
 export default SidebarWithRouter

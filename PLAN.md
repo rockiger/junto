@@ -66,7 +66,6 @@
 -- [x] Excalidraw
 ----------------------------------------------------------
 - [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
-
 ----------------------------------------------------------
 - [] Add more editor features
 -- [] Farben

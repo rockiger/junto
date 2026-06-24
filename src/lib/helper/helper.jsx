@@ -48,12 +48,12 @@ export function isMobileDevice() {
 	);
 }
 
-/** @param {import('reactn/default').IFile} file */
+/** @param {import('types/app-state').IFile} file */
 export function isFolder(file) {
 	return file.mimeType === "application/vnd.google-apps.folder";
 }
 
-/** @param {import('reactn/default').IFile} file */
+/** @param {import('types/app-state').IFile} file */
 export function isPage(file) {
 	return EXT === getExtFromFileName(file.name);
 }

@@ -1,5 +1,6 @@
-import React, { setGlobal } from 'reactn'
-import { IFile, IFileOrNull } from 'reactn/default'
+import React from 'react'
+import { resetAppStore } from '../../../store/app-store'
+import { IFile, IFileOrNull } from 'types/app-state'
 
 import { BreadcrumbsBar } from './Breadcrumbs'
 import { IProps } from './Breadcrumbs.d'
@@ -94,10 +95,9 @@ const props: IProps = { fileId: 'ifile4', files }
 
 describe('Breadcrumbs', () => {
     it('renders without crashing', () => {
-        setGlobal({ initialFiles: files }, () => {
-            const { unmount } = renderToDiv(<BreadcrumbsBar {...props} />)
-            unmount()
-        })
+        resetAppStore({ initialFiles: files })
+        const { unmount } = renderToDiv(<BreadcrumbsBar {...props} />)
+        unmount()
     })
 
     test('getMetaById', () => {

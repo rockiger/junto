@@ -1,4 +1,5 @@
-import React, { setGlobal } from 'reactn'
+import React from 'react'
+import { resetAppStore } from '../../../store/app-store'
 import ReactDOM from 'react-dom'
 import { render, fireEvent, cleanup } from '@testing-library/react'
 
@@ -23,7 +24,7 @@ const files = [
     { id: 'id5', name: 'File 5', modifiedByMeTime: date5.toISOString() },
 ]
 
-setGlobal({
+resetAppStore({
     isCreatingNewFile: false,
     rootFolderId: null,
     isFileListLoading: false,

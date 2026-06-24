@@ -1,15 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import StarredPage from 'components/Starred/StarredPage'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 export const Route = createFileRoute('/_app/_dashboard/starred')({
     component: StarredRoute,
 })
 
 function StarredRoute() {
-    const [isSignedIn] = useGlobal('isSignedIn')
-    const [isSigningIn] = useGlobal('isSigningIn')
+    const isSignedIn = useAppStore((s) => s.isSignedIn)
+    const isSigningIn = useAppStore((s) => s.isSigningIn)
 
     return <StarredPage isSignedIn={isSignedIn} isSigningIn={isSigningIn} />
 }

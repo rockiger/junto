@@ -11,8 +11,8 @@ import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
 import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
 import { useMemo } from 'react'
 import { GridList, GridListItem } from 'react-aria-components'
-import { useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useAppStore } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 
 /** RAC {@link GridListItem} als TanStack-Router-Link ([createLink](https://tanstack.com/router/latest/docs/guide/custom-link)). */
 const GridListItemLink = createLink(GridListItem)
@@ -30,8 +30,10 @@ interface WikiListProps {
  * A wiki-list component.
  */
 function WikiList({ files, isDashboard, orderBy = 'name' }: WikiListProps) {
-    const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
-    const [rootFolderId] = useGlobal('rootFolderId')
+    const isInitialFileListLoading = useAppStore(
+        (s) => s.isInitialFileListLoading,
+    )
+    const rootFolderId = useAppStore((s) => s.rootFolderId)
     const myFulcrum = useMemo(
         () => (rootFolderId ? getOverviewFile(files, rootFolderId) : null),
         [files, rootFolderId],

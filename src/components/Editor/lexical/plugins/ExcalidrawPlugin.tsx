@@ -14,8 +14,8 @@ import {
 	useState,
 	type ReactNode,
 } from 'react'
-import { useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useAppStore } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 import ExcalidrawModal, {
 	type ExcalidrawModalHandle,
 } from '../ExcalidrawModal'
@@ -55,8 +55,11 @@ export default function ExcalidrawPlugin({
 	syncWikiMarkdown?: () => void
 }) {
 	const [editor] = useLexicalComposerContext()
-	const [files, setFiles] = useGlobal('files')
-	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+	const files = useAppStore((s) => s.files)
+	const initialFiles = useAppStore((s) => s.initialFiles)
+	const setFiles = (value: IFile[]) => useAppStore.setState({ files: value })
+	const setInitialFiles = (value: IFile[]) =>
+		useAppStore.setState({ initialFiles: value })
 	const modalRef = useRef<ExcalidrawModalHandle>(null)
 	const [previewVersions, setPreviewVersions] = useState<
 		Record<string, number>

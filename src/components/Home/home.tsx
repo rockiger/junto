@@ -12,9 +12,9 @@ import { LOCALSTORAGE_NAME } from "lib/constants"
 import { filterIsNotArchived } from "lib/helper/globalStateHelper"
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import { useIsDesktop } from "lib/hooks/useMediaQuery"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { SelectionIndicator } from 'react-aria-components'
-import { useDispatch, useGlobal, useState } from "reactn"
+import { useAppStore } from "store/app-store"
 import FileList from "./FileList"
 import Search from 'components/app/header/search'
 import { navigateToSearch } from 'lib/search/navigate-to-search'
@@ -28,7 +28,7 @@ type SortBy = "modifiedByMeTime" | "viewedByMeTime" | "sharedWithMeTime"
 function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: boolean, isSigningIn: boolean, isCreatingNewFile: boolean }) {
 
 
-	const [initialFiles] = useGlobal("initialFiles")
+	const initialFiles = useAppStore((s) => s.initialFiles)
 	const isDesktop = useIsDesktop()
 	const notArchivedFiles = useMemo(
 		() => filterIsNotArchived(initialFiles),
@@ -43,10 +43,14 @@ function Home({ isSignedIn, isSigningIn, isCreatingNewFile }: { isSignedIn: bool
 
 
 	const navigate = useNavigate()
-	const [, setSearchTerm] = useGlobal("searchTerm")
-	const [, setIsSearchFieldActive] = useGlobal("isSearchFieldActive")
-	const [searchValue, setSearchValue] = useGlobal("searchValue")
-	const clearSearch = useDispatch("clearSearchComplete")
+	const setSearchTerm = (value: string) =>
+		useAppStore.setState({ searchTerm: value })
+	const setIsSearchFieldActive = (value: boolean) =>
+		useAppStore.setState({ isSearchFieldActive: value })
+	const searchValue = useAppStore((s) => s.searchValue)
+	const setSearchValue = (value: string) =>
+		useAppStore.setState({ searchValue: value })
+	const clearSearch = useAppStore((s) => s.clearSearchComplete)
 
 	useEffect(() => {
 		PageView({ pathname: "/home" })

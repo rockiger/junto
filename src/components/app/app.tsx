@@ -3,13 +3,13 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { MigrationProgress } from 'components/MigrationProgress'
 import { AppGoogleAuthProvider } from 'lib/googleAuth'
 import { SnackbarProvider } from 'notistack'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 import { router } from 'router'
 
 
 export default function App() {
-    const [_isSignedIn] = useGlobal('isSignedIn')
+    useAppStore((s) => s.isSignedIn)
 
     return (
         <div

@@ -1,8 +1,6 @@
 import { createRoot, hydrateRoot } from 'react-dom/client'
-import { addReducers, setGlobal } from 'reactn'
-import initReactnPersist from 'reactn-persist'
 import './lib/helper/globals'
-import type { State } from 'reactn/default'
+import './store/app-store'
 import './tailwind.css'
 import App from './components/app'
 import { initGA, setGA } from './components/Tracking'
@@ -11,8 +9,6 @@ import * as serviceWorker from './serviceWorker'
 initGA('UA-151325933-1')
 setGA({ anonymizeIp: true })
 
-// addReactNDevTools()
-
 // Remove console from production builds (import.meta.env.DEV is reliable under Vite)
 if (!import.meta.env.DEV) {
     function noop() { }
@@ -20,57 +16,6 @@ if (!import.meta.env.DEV) {
     console.warn = noop
     console.error = noop
 }
-
-addReducers({
-    clearSearchComplete: (_global, _dispatch) => ({
-        files: [],
-        isSearchFieldActive: false,
-        searchTerm: '',
-        searchValue: '',
-    }),
-    clearSearchFiles: (_global, _dispatch) => ({
-        files: [],
-    }),
-    clearSearchMeta: (_global, _dispatch) => ({
-        isSearchFieldActive: false,
-        searchTerm: '',
-        searchValue: '',
-    }),
-})
-
-const initialState: State = {
-    backgroundUpdate: false,
-    files: [],
-    goToNewFile: false,
-    hints: {},
-    hintsFileId: '',
-    hintCounter: 0,
-    initialFiles: [],
-    isCreatingNewFile: false,
-    isFileListLoading: false,
-    isInitialFileListLoading: false,
-    isSearchFieldActive: false,
-    isSignedIn: false,
-    isSigningIn: true,
-    migration: null,
-    redirect: false,
-    rootFolderId: null,
-    searchTerm: '',
-    searchValue: '', // The value in the searchfield
-    showSidebarOnMobile: false,
-    userId: '',
-}
-setGlobal(initialState)
-
-initReactnPersist({
-    // REQUIRED.
-    storage: localStorage, // localStorage, sessionStorage or any instance with Storage API interface support.
-    // Optional.
-    whitelist: ['hints', 'initialFiles', 'rootFolderId'], // List of top-level keys in global, like ['users', 'token']. Default [].
-    //debug: true,
-    key: '@reactn', // Key in storage. Default '@reactn'.
-    initialValue: initialState,
-})
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {

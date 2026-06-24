@@ -21,8 +21,9 @@ import { isArchived } from 'lib/helper'
 import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import { SelectionIndicator } from 'react-aria-components'
-import { useEffect, useMemo, useGlobal, useState } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useEffect, useMemo, useState } from 'react'
+import { useAppStore } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 const sortByLS = localStorage.getItem(localStorageKey)
@@ -34,7 +35,7 @@ function ArchivePage({
 	isSignedIn: boolean
 	isSigningIn: boolean
 }) {
-	const [initialFiles] = useGlobal('initialFiles')
+	const initialFiles = useAppStore((s) => s.initialFiles)
 	const isDesktop = useIsDesktop()
 	const archivedFiles = useMemo(
 		() => filterIsArchived(initialFiles),

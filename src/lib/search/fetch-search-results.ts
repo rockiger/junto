@@ -1,4 +1,4 @@
-import { getGlobal, setGlobal } from 'reactn'
+import { getAppState, setAppState } from 'store/app-store'
 import { listFilesChunked } from 'lib/gdrive'
 
 let activeRequestId = 0
@@ -12,26 +12,26 @@ export async function fetchSearchResults(query: string): Promise<void> {
     const requestId = ++activeRequestId
 
     if (!trimmed) {
-        setGlobal({
+        setAppState({
             files: [],
             isFileListLoading: false,
         })
         return
     }
 
-    const { isSignedIn } = getGlobal()
+    const { isSignedIn } = getAppState()
     if (!isSignedIn) {
         return
     }
 
-    setGlobal({ isFileListLoading: true })
+    setAppState({ isFileListLoading: true })
 
     try {
         const files = await listFilesChunked(trimmed)
         if (requestId !== activeRequestId) {
             return
         }
-        setGlobal({
+        setAppState({
             files,
             isFileListLoading: false,
         })
@@ -42,6 +42,6 @@ export async function fetchSearchResults(query: string): Promise<void> {
         const message = err instanceof Error ? err.message : String(err)
         alert(`Couldn't load search results: ${message}`)
         console.log({ err })
-        setGlobal({ isFileListLoading: false })
+        setAppState({ isFileListLoading: false })
     }
 }

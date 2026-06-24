@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 import { useLocation } from '@tanstack/react-router'
 import { isEmpty } from 'lodash'
 
@@ -11,7 +11,7 @@ import {
 } from './SidebarTree-helper'
 import Spinner from '../../gsuite-components/spinner'
 import { WikiSidebarTree } from './WikiSidebarTree'
-import type { IFile } from 'reactn/default'
+import type { IFile } from 'types/app-state'
 
 type SidebarTreeComponentProps = {
     rootFolderId: string | null
@@ -22,7 +22,9 @@ export const SidebarTreeComponent = ({
     rootFolderId,
     initialFiles,
 }: SidebarTreeComponentProps) => {
-    const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
+    const isInitialFileListLoading = useAppStore(
+        (s) => s.isInitialFileListLoading,
+    )
     const location = useLocation()
 
     const treeIndexes = useMemo(

@@ -22,11 +22,11 @@ import { Beforeunload } from 'react-beforeunload'
 import React, {
     useCallback,
     useEffect,
-    useGlobal,
     useMemo,
     useRef,
     useState,
-} from 'reactn'
+} from 'react'
+import { useAppStore } from 'store/app-store'
 import {
     convertFilesToAutocompletItems,
     initStorage,
@@ -51,8 +51,12 @@ const EditorLogic = React.forwardRef(
         },
         editorRef
     ) => {
-        const [files, setFiles] = useGlobal('files')
-        const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+        const files = useAppStore((s) => s.files)
+        const initialFiles = useAppStore((s) => s.initialFiles)
+        const setFiles = (value: typeof files) =>
+            useAppStore.setState({ files: value })
+        const setInitialFiles = (value: typeof initialFiles) =>
+            useAppStore.setState({ initialFiles: value })
         const { searchStr } = useLocation()
         const hasEdit =
             searchStr === '?edit' ||

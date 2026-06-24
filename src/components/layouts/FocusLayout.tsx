@@ -5,7 +5,7 @@ import Sidebar from 'components/app/sidebar'
 import { Hint } from 'components/gsuite-components/hint'
 import PlusIcon from 'mdi-react/PlusIcon'
 import type { ReactNode } from 'react'
-import { useDispatch, useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 import logo from '../../static/logo_48.svg'
 
 type FocusLayoutProps = {
@@ -16,8 +16,8 @@ type FocusLayoutProps = {
  * Page editor shell: mobile keeps minimal chrome; desktop matches DashboardLayout grid.
  */
 export default function FocusLayout({ children }: FocusLayoutProps) {
-    const [isSignedIn] = useGlobal('isSignedIn')
-    const clearSearch = useDispatch('clearSearchComplete')
+    const isSignedIn = useAppStore((s) => s.isSignedIn)
+    const clearSearch = useAppStore((s) => s.clearSearchComplete)
 
     return (
         <div

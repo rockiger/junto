@@ -13,7 +13,7 @@ import {
 	migrateGwikiFiles,
 } from 'lib/migration/migrateGwikiFiles'
 import { isUndefined } from 'lodash'
-import { getGlobal, setGlobal } from 'reactn'
+import { getAppState, setAppState } from 'store/app-store'
 
 import { getUserId } from './userInfo'
 
@@ -24,7 +24,7 @@ export function resetPostSignInInit() {
 }
 
 async function initFiles() {
-	setGlobal({
+	setAppState({
 		isFileListLoading: true,
 		isInitialFileListLoading: true,
 	})
@@ -34,7 +34,7 @@ async function initFiles() {
 		try {
 			let files = await listFiles()
 			files = await migrateLegacyGwikiFiles(files)
-			setGlobal({
+			setAppState({
 				files: [],
 				initialFiles: files,
 				isFileListLoading: false,
@@ -70,12 +70,12 @@ async function migrateLegacyGwikiFiles(
 	}
 
 	console.log(`Migrating ${targets.length} .gwiki file(s) to Markdown`)
-	setGlobal({
+	setAppState({
 		migration: { done: 0, running: true, total: targets.length },
 	})
 	try {
 		const result = await migrateGwikiFiles(targets, (done, total) =>
-			setGlobal({ migration: { done, running: true, total } }),
+			setAppState({ migration: { done, running: true, total } }),
 		)
 		if (result.failed.length > 0) {
 			alert(
@@ -85,7 +85,7 @@ async function migrateLegacyGwikiFiles(
 		// reload so names and mimeTypes reflect the migration
 		return await listFiles()
 	} finally {
-		setGlobal({ migration: null })
+		setAppState({ migration: null })
 	}
 }
 
@@ -103,12 +103,12 @@ async function initHints() {
 			throw new Error('Failed to create hints file')
 		}
 		await updateFile(hintsFileId, {}, false)
-		setGlobal({ hints, hintsFileId })
+		setAppState({ hints, hintsFileId })
 		return
 	}
 
 	const hintsAppData = JSON.parse(await downloadFile(hintsProps.id))
-	setGlobal({
+	setAppState({
 		hints: mergeHintData(hints, hintsAppData),
 		hintsFileId: hintsProps.id,
 	})
@@ -117,14 +117,14 @@ async function initHints() {
 function initUser() {
 	try {
 		const userId = getUserId()
-		setGlobal({ userId })
+		setAppState({ userId })
 	} catch (error) {
 		console.error("Couldn't get userId", error)
 	}
 }
 
 export async function runPostSignInInit() {
-	if (postSignInInitStarted || getGlobal().isFileListLoading) {
+	if (postSignInInitStarted || getAppState().isFileListLoading) {
 		return
 	}
 

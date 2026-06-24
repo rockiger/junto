@@ -1,11 +1,12 @@
 import _ from 'lib/helper/globals'
-import { useEffect, useGlobal, useState } from 'reactn'
-import { IFile, IFileOrNull } from 'reactn/default'
+import { useEffect, useState } from 'react'
+import { useAppStore } from 'store/app-store'
+import { IFile, IFileOrNull } from 'types/app-state'
 
 import { getChildren, getMetaById, getParents } from './Breadcrumbs-helper'
 
 export const useBreadcrumbs = (fileId: string) => {
-  const [files] = useGlobal('initialFiles')
+  const files = useAppStore((s) => s.initialFiles)
   const [childPages, setChildren] = useState<IFile[]>([])
   const [file, setFile] = useState<IFileOrNull>(null)
   const [parentPages, setParents] = useState<Array<{file: IFile, children: IFile[]}>>([])
@@ -29,7 +30,7 @@ export const useBreadcrumbs = (fileId: string) => {
   }, [file, files])
 
   useEffect(() => {
-    if (!_.isNull(file)) {
+    if (file) {
     setChildren(getChildren(file, files))
     }
   }, [file, files])

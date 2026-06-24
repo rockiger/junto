@@ -1,6 +1,6 @@
 // @ts-check
 import _ from "lib/helper/globals";
-import { useGlobal } from "reactn";
+import { useAppStore } from "store/app-store";
 
 import FileListComponent from "./fileList-component";
 
@@ -19,12 +19,12 @@ export default FileList;
  * @property {'h1'|'h2'|'h3'|'h4'|'h5'|'h6'} [header]
  * @property {boolean} [isLoading]
  * @property {boolean} [isScrollable]
- * @property {import('reactn/default').IFile[]} files
+ * @property {import('types/app-state').IFile[]} files
  * @property {SortBy | undefined} [sortBy]
  * @property {(sortBy: SortBy) => void} [setSortBy]
  * @property {string} [title]
  * @property {'reason-suggested' | 'date'} [tableMiddleColumn]
- * @property {import('reactn/default').IFile[]} [locationLookupFiles]
+ * @property {import('types/app-state').IFile[]} [locationLookupFiles]
  */
 
 /**
@@ -42,9 +42,11 @@ function FileList({
 	tableMiddleColumn = "reason-suggested",
 	locationLookupFiles,
 }) {
-	const [isFileListLoading] = useGlobal("isFileListLoading");
-	const [isInitialFileListLoading] = useGlobal("isInitialFileListLoading");
-	const [searchTerm] = useGlobal("searchTerm");
+	const isFileListLoading = useAppStore((s) => s.isFileListLoading);
+	const isInitialFileListLoading = useAppStore(
+		(s) => s.isInitialFileListLoading,
+	);
+	const searchTerm = useAppStore((s) => s.searchTerm);
 	const isLoading =
 		_.isEmpty(files) &&
 		(searchTerm ? isFileListLoading : isInitialFileListLoading);

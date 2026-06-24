@@ -6,7 +6,7 @@ import {
 	updateFileMultipart,
 	uploadBinaryFile,
 } from 'lib/gdrive'
-import type { IFile } from 'reactn/default'
+import type { IFile } from 'types/app-state'
 
 export function slugifyPageFileName(driveFileName: string): string {
 	const base = driveFileName.replace(/\.md$/i, '').trim()

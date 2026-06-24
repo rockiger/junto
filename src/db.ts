@@ -1,5 +1,5 @@
-import { getGlobal, setGlobal } from 'reactn'
-import { IFile, SimpleMap } from 'reactn/default'
+import { getAppState, setAppState } from 'store/app-store'
+import type { IFile, SimpleMap } from 'types/app-state'
 
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import {
@@ -16,15 +16,15 @@ import { filesUpdater } from 'lib/helper'
  * @return {Promise|void}
  */
 export const backgroundUpdateFiles = async () => {
-    setGlobal({ backgroundUpdate: true })
+    setAppState({ backgroundUpdate: true })
     try {
         const initialFiles = await listFilesChunked('')
-        setGlobal({
+        setAppState({
             backgroundUpdate: false,
             initialFiles,
         })
     } catch (err: unknown) {
-        setGlobal({ backgroundUpdate: false })
+        setAppState({ backgroundUpdate: false })
         const message = err instanceof Error ? err.message : String(err)
         alert(`Couldn't update files: ${message}`)
         console.log({ err })
@@ -54,15 +54,15 @@ export const createFile = async (
         })
         const result = await updateFileBase(newFileId, fileContent)
         console.log({ result })
-        const { initialFiles } = getGlobal()
-        setGlobal({
+        const { initialFiles } = getAppState()
+        setAppState({
             backgroundUpdate: true,
             initialFiles: [...initialFiles, result],
             isCreatingNewFile: false,
         })
         return newFileId
     } catch (err) {
-        setGlobal({ isCreatingNewFile: false })
+        setAppState({ isCreatingNewFile: false })
         console.log(err)
     }
 }
@@ -94,16 +94,16 @@ export const createNewWiki = async (opts: {
     try {
         const result = await createNewWikiBase(opts)
         console.log({ newWikiResult: result })
-        const { initialFiles } = getGlobal()
+        const { initialFiles } = getAppState()
         // Unlike create new file we don't need to reset the isCreatingNewFile
         // propery, because there should always be a new file created.
         const file = result as IFile
-        setGlobal({
+        setAppState({
             initialFiles: [...initialFiles, file],
         })
         return file.id
     } catch (err) {
-        setGlobal({ isCreatingNewFile: false })
+        setAppState({ isCreatingNewFile: false })
         console.log(err)
     }
 }
@@ -123,8 +123,8 @@ export const updateMetadata = async (
     metadata: SimpleMap,
     doBackgroundUpdate = false
 ) => {
-    const updatedFiles = filesUpdater(metadata, getGlobal(), fileId)
-    setGlobal({
+    const updatedFiles = filesUpdater(metadata, getAppState(), fileId)
+    setAppState({
         files: updatedFiles.files,
         initialFiles: updatedFiles.initialFiles,
     })

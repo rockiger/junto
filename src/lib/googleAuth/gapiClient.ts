@@ -4,15 +4,53 @@ import { ensureGapi, getGapi } from '../gdrive/ensureGapi'
 
 let gapiClientReady: Promise<void> | null = null
 
+function assertGoogleEnvConfig(): void {
+	if (!CLIENT_ID?.trim()) {
+		throw new Error(
+			'VITE_GOOGLE_CLIENT_ID is not set. Copy .env.example to .env.local, add your Google OAuth client ID, and restart the dev server.',
+		)
+	}
+	if (!API_KEY?.trim()) {
+		throw new Error(
+			'VITE_API_KEY is not set. Copy .env.example to .env.local, add your Google API key, and restart the dev server.',
+		)
+	}
+}
+
 export function getGapiAuthInstance() {
 	const auth2 = getGapi().auth2
 	if (!auth2) {
 		throw new Error('gapi auth2 is not loaded. Call ensureGapiClient() first.')
 	}
-	return auth2.getAuthInstance()
+	const authInstance = auth2.getAuthInstance()
+	if (!authInstance) {
+		throw new Error(
+			'gapi auth2 instance is not initialized. Call ensureGapiClient() first.',
+		)
+	}
+	return authInstance
+}
+
+async function ensureAuthInstance(): Promise<void> {
+	const auth2 = getGapi().auth2
+	if (!auth2) {
+		throw new Error('gapi auth2 is not available')
+	}
+	if (auth2.getAuthInstance()) {
+		return
+	}
+	await auth2.init({
+		client_id: CLIENT_ID,
+		scope: SCOPES,
+	})
+	if (!auth2.getAuthInstance()) {
+		throw new Error('gapi auth2 failed to initialize')
+	}
 }
 
 export function ensureGapiClient(): Promise<void> {
+	assertGoogleEnvConfig()
+
 	if (gapiClientReady) {
 		return gapiClientReady
 	}
@@ -33,6 +71,7 @@ export function ensureGapiClient(): Promise<void> {
 							discoveryDocs: DISCOVERY_DOCS,
 							scope: SCOPES,
 						})
+						.then(() => ensureAuthInstance())
 						.then(() => resolve(), reject)
 				})
 			}),

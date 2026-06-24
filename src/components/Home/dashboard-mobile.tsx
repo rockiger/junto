@@ -15,7 +15,7 @@ import ViewGridOutlineIcon from 'mdi-react/ViewGridOutlineIcon'
 import ViewListOutlineIcon from 'mdi-react/ViewListOutlineIcon'
 import { useEffect, useRef, useState } from 'react'
 import { ToggleButton, ToggleButtonGroup } from 'react-aria-components'
-import { useDispatch } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 const MOBILE_MQ = '(max-width: 949px)'
 const SCROLL_SHOW_HIDE_PX = 10
@@ -199,7 +199,7 @@ const NAV = [
  */
 export function DashboardMobileDock() {
     const { pathname } = useLocation()
-    const clearSearch = useDispatch('clearSearchComplete')
+    const clearSearch = useAppStore((s) => s.clearSearchComplete)
     const fabVisible = useScrollHideFabLinks()
 
     const linkActive = (to, exact) =>

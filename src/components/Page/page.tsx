@@ -33,8 +33,8 @@ import {
     useRef,
     useState,
 } from 'react'
-import { getGlobal, setGlobal, useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { getAppState, setAppState, useAppStore } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 
 // biome-ignore lint/suspicious/noExplicitAny: `Editor` is a JS `forwardRef` without exported props
 const EditorWithFileProps = Editor as any
@@ -57,7 +57,7 @@ export default function Page({
     const navigate = useNavigate()
     const router = useRouter()
     const params = useParams({ from: '/_app/page/$id' })
-    const [initialFiles] = useGlobal('initialFiles')
+    const initialFiles = useAppStore((s) => s.initialFiles)
 
     const [canEdit, setCanEdit] = useState(false)
     const [, setEditorDeltaState] = useState<Record<string, unknown>>({})
@@ -188,7 +188,7 @@ export default function Page({
     loadEditorContentRef.current = loadEditorContent
 
     useEffect(() => {
-        setGlobal({ goToNewFile: false })
+        setAppState({ goToNewFile: false })
         PageView({ pathname: '/page' })
     }, [])
 
@@ -207,7 +207,7 @@ export default function Page({
         if (prevParamsIdRef.current === params.id) return
 
         prevParamsIdRef.current = params.id
-        setGlobal({ goToNewFile: false })
+        setAppState({ goToNewFile: false })
         setFileId(params.id)
         setFileLoaded(false)
         document.getElementById('main-content')?.scrollTo({ top: 0 })
@@ -236,7 +236,7 @@ export default function Page({
             viewedByMe: true,
             viewedByMeTime: now,
         }
-        setGlobal(filesUpdater(change, getGlobal(), fileId))
+        setAppState(filesUpdater(change, getAppState(), fileId))
         updateMetadata(fileId, { viewedByMeTime: now })
     }, [
         isSignedIn,
@@ -283,7 +283,7 @@ export default function Page({
         const change = { name }
 
         setFileName(name)
-        setGlobal(filesUpdater(change, getGlobal(), id))
+        setAppState(filesUpdater(change, getAppState(), id))
         await renameFileInGdrive(fileId, name)
     }
 

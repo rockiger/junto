@@ -1,9 +1,9 @@
-import { setGlobal } from 'reactn'
+import { resetAppStore } from '../../../store/app-store'
 
 import { TestRouter } from '../../test-router'
 import { renderToDiv } from '../../test-utils/renderToDiv'
 
-setGlobal({
+resetAppStore({
     isCreatingNewFile: false,
     rootFolderId: null,
     isFileListLoading: false,

@@ -1,0 +1,256 @@
+$ tsc -b && vite build
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+vite v8.0.16 building client environment for production...
+[2Ktransforming...Browserslist: browsers data (caniuse-lite) is 20 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 4375 modules transformed.
+rendering chunks...
+computing gzip size...
+build/assets/instant-search-CzGQ9acB.png                   6.09 kB
+build/index.html                                           6.97 kB │ gzip:   2.53 kB
+build/assets/gsuite-integrations-WTB7CbuN.png              6.97 kB
+build/assets/googleDriveLogo-BiT1BF4y.svg                  8.82 kB │ gzip:   3.50 kB
+build/assets/Assistant-SemiBold-SCI4bEL9.woff2            20.21 kB
+build/assets/Assistant-Regular-DVxZuzxb.woff2             20.23 kB
+build/assets/Assistant-Medium-DrcxCXg3.woff2              20.32 kB
+build/assets/Assistant-Bold-gm-uSS1B.woff2                20.38 kB
+build/assets/metropolis-l96Tg8gy.woff2                    23.63 kB
+build/assets/metropolis-regular-italic-DYwOGfl-.woff2     24.88 kB
+build/assets/metropolis-medium-D9ULwEE-.woff2             25.79 kB
+build/assets/metropolis-semi-bold-P_leX8Du.woff2          25.96 kB
+build/assets/metropolis-bold-BXmJYEGX.woff2               26.00 kB
+build/assets/metropolis-bold-italic-R59DA5fb.woff2        27.11 kB
+build/assets/page01-D5GI6r-4.webp                         44.06 kB
+build/assets/assistant_small-CogpvpQR.webp                44.64 kB
+build/assets/page02-DyAisYOq.webp                         49.68 kB
+build/assets/CreateNewWiki1-D5A6DnJf.png                 120.78 kB
+build/assets/CreateNewWiki2-CSLJZt_r.png                 128.23 kB
+build/assets/_public-D3UMYZRz.css                          0.06 kB │ gzip:   0.07 kB
+build/assets/Footer-Dr85K7Ur.css                           0.24 kB │ gzip:   0.17 kB
+build/assets/button-DwLlcg7J.css                           0.39 kB │ gzip:   0.24 kB
+build/assets/gsuite-components-D0VoFYmT.css                1.45 kB │ gzip:   0.63 kB
+build/assets/page-plpeXK0F.css                            12.96 kB │ gzip:   3.52 kB
+build/assets/index-Cp0IliD9.css                          103.48 kB │ gzip:  17.81 kB
+build/assets/prod-DtRVLazd.css                           142.02 kB │ gzip:  22.37 kB
+build/assets/array-BifhSqXX.js                             0.10 kB │ gzip:   0.11 kB
+build/assets/channel-Dxi9eYLj.js                           0.11 kB │ gzip:   0.12 kB
+build/assets/pie-LRSECV5Y-Df0DouFS.js                      0.12 kB │ gzip:   0.12 kB
+build/assets/info-J43DQDTF-OpIjDbqo.js                     0.12 kB │ gzip:   0.12 kB
+build/assets/radar-GUYGQ44K-COacl7ih.js                    0.12 kB │ gzip:   0.12 kB
+build/assets/packet-YPE3B663-DFspTzeT.js                   0.12 kB │ gzip:   0.12 kB
+build/assets/treemap-LRROVOQU-BF_CcPUP.js                  0.12 kB │ gzip:   0.13 kB
+build/assets/wardley-L42UT6IY-DElbXQun.js                  0.12 kB │ gzip:   0.13 kB
+build/assets/gitGraph-WXDBUCRP-s1v0sZd0.js                 0.12 kB │ gzip:   0.13 kB
+build/assets/treeView-BLDUP644-DTRpxlmu.js                 0.12 kB │ gzip:   0.13 kB
+build/assets/architecture-7EHR7CIX-BJFSxe61.js             0.13 kB │ gzip:   0.13 kB
+build/assets/eventmodeling-FCH6USID-D4NjbTLQ.js            0.13 kB │ gzip:   0.13 kB
+build/assets/percentages-BXMCSKIN-Dv9Xj7Kx.js              0.13 kB │ gzip:   0.12 kB
+build/assets/init-D6jRqBbL.js                              0.14 kB │ gzip:   0.12 kB
+build/assets/image-GAAHSSAO-DfTbo86U.js                    0.14 kB │ gzip:   0.13 kB
+build/assets/chunk-QZHKN3VN-B0J7jJ9u.js                    0.18 kB │ gzip:   0.15 kB
+build/assets/subset-shared.chunk-CNg37Tu3.js               0.18 kB │ gzip:   0.15 kB
+build/assets/useLocation-ChKrx450.js                       0.19 kB │ gzip:   0.16 kB
+build/assets/chunk-4BX2VUAB-oycqjrJ0.js                    0.21 kB │ gzip:   0.16 kB
+build/assets/chunk-55IACEB6-lcBNBzWo.js                    0.22 kB │ gzip:   0.19 kB
+build/assets/chunk-WU5MYG2G-D_p8lbNS.js                    0.27 kB │ gzip:   0.23 kB
+build/assets/chunk-FMBD7UC4-BO0r-oE8.js                    0.35 kB │ gzip:   0.26 kB
+build/assets/subset-worker.chunk-DrNJInpI.js               0.36 kB │ gzip:   0.28 kB
+build/assets/terms-of-service-C2Jmb4vR.js                  0.40 kB │ gzip:   0.31 kB
+build/assets/faq-u9BFF9vV.js                               0.41 kB │ gzip:   0.31 kB
+build/assets/privacy-policy-B_lz2Rfc.js                    0.41 kB │ gzip:   0.31 kB
+build/assets/file-open-7c801643-DZtJT5zp.js                0.44 kB │ gzip:   0.31 kB
+build/assets/file-open-002ab408-BHUWm0Sh.js                0.52 kB │ gzip:   0.32 kB
+build/assets/chunk-2J33WTMH-0YpFYKEU.js                    0.53 kB │ gzip:   0.37 kB
+build/assets/drive-BHSTGnLe.js                             0.55 kB │ gzip:   0.39 kB
+build/assets/directory-open-01563666-D4xXyWb_.js           0.58 kB │ gzip:   0.36 kB
+build/assets/chunk-SRAX5OIU-BX-IuXrv.js                    0.58 kB │ gzip:   0.38 kB
+build/assets/infoDiagram-5YYISTIA-BLDgSupd.js              0.61 kB │ gzip:   0.40 kB
+build/assets/chunk-Z3N5DIM6-D9TMVU7m.js                    0.64 kB │ gzip:   0.42 kB
+build/assets/hints-CV9VNrAl.js                             0.64 kB │ gzip:   0.32 kB
+build/assets/stateDiagram-v2-BHNVJYJU-DhjEPXY_.js          0.67 kB │ gzip:   0.40 kB
+build/assets/Footer-N5ga6Dtr.js                            0.69 kB │ gzip:   0.39 kB
+build/assets/file-save-3189631c-CO9S4HFW.js                0.69 kB │ gzip:   0.44 kB
+build/assets/FileList-DUogm1wO.js                          0.69 kB │ gzip:   0.41 kB
+build/assets/classDiagram-4FO5ZUOK-DppPAMLc.js             0.74 kB │ gzip:   0.43 kB
+build/assets/classDiagram-v2-Q7XG4LA2-DppPAMLc.js          0.74 kB │ gzip:   0.43 kB
+build/assets/file-save-745eba88-Bwdfz6OZ.js                0.85 kB │ gzip:   0.49 kB
+build/assets/shim-hwxa3Ewl.js                              0.85 kB │ gzip:   0.46 kB
+build/assets/en-B4ZKOASM-1mn_Q-r2.js                       0.90 kB │ gzip:   0.48 kB
+build/assets/line-ChnORmIi.js                              0.94 kB │ gzip:   0.47 kB
+build/assets/with-selector-B-tkn4TI.js                     0.94 kB │ gzip:   0.52 kB
+build/assets/chunk-L5ZTLDWV-CfgsfYdP.js                    0.95 kB │ gzip:   0.58 kB
+build/assets/useNavigate-B3QxoYp2.js                       0.95 kB │ gzip:   0.50 kB
+build/assets/MagnifyIcon-CLai8vPU.js                       1.07 kB │ gzip:   0.64 kB
+build/assets/_app-D-wozmD2.js                              1.10 kB │ gzip:   0.69 kB
+build/assets/ordinal-CopWnP7w.js                           1.17 kB │ gzip:   0.57 kB
+build/assets/chunk-CMxvf4Kt.js                             1.21 kB │ gzip:   0.67 kB
+build/assets/_public-jIyNb4rg.js                           1.38 kB │ gzip:   0.65 kB
+build/assets/FileDocumentIcon-PWNd1lTi.js                  1.43 kB │ gzip:   0.85 kB
+build/assets/directory-open-4ed118d0-1i309Asm.js           1.51 kB │ gzip:   0.76 kB
+build/assets/chunk-ZUYEQ4TG-BzFOpW--.js                    1.57 kB │ gzip:   0.88 kB
+build/assets/googleLogin-DV301V8f.js                       1.59 kB │ gzip:   0.92 kB
+build/assets/starred-C3rqtjDZ.js                           1.80 kB │ gzip:   0.94 kB
+build/assets/chunk-NZK2D7GU-Co83N4QX.js                    1.83 kB │ gzip:   0.89 kB
+build/assets/shared-with-me-yy5H3s7u.js                    1.86 kB │ gzip:   0.96 kB
+build/assets/chunk-ND2GUHAM-Cu_8za5F.js                    1.93 kB │ gzip:   0.86 kB
+build/assets/chunk-BSJP7CBP-DElodJIy.js                    2.09 kB │ gzip:   0.81 kB
+build/assets/dist-J7qdLcP-.js                              2.16 kB │ gzip:   0.97 kB
+build/assets/path-BWPyau1x.js                              2.31 kB │ gzip:   0.99 kB
+build/assets/Form-D5uBbV5R.js                              2.68 kB │ gzip:   1.13 kB
+build/assets/ImageNode-HwUKEpKj.js                         2.70 kB │ gzip:   1.20 kB
+build/assets/useHasTabbableChild-ANl_SoL_.js               2.73 kB │ gzip:   1.14 kB
+build/assets/diagram-5GNKFQAL-Ctz2qb6N.js                  2.78 kB │ gzip:   1.35 kB
+build/assets/roundRect-D01gJrlt.js                         2.87 kB │ gzip:   0.99 kB
+build/assets/ImageComponent-Cih_Wy4k.js                    2.98 kB │ gzip:   1.68 kB
+build/assets/constants-CpTZgEN7.js                         3.43 kB │ gzip:   1.49 kB
+build/assets/arc-A6RHTD_C.js                               3.47 kB │ gzip:   1.46 kB
+build/assets/react-dom-CoZa9heH.js                         3.57 kB │ gzip:   1.36 kB
+build/assets/chunk-LZXEDZCA-D0SGKUA0.js                    3.59 kB │ gzip:   1.57 kB
+build/assets/ButtonMenu-Dq7ZkkBn.js                        3.62 kB │ gzip:   1.81 kB
+build/assets/useStore-fdDr_wVy.js                          3.76 kB │ gzip:   1.69 kB
+build/assets/ExcalidrawComponent-DZTNs_dC.js               3.91 kB │ gzip:   1.81 kB
+build/assets/diagram-LMA3HP47-OY0V1XpG.js                  4.24 kB │ gzip:   1.83 kB
+build/assets/search-BunbC6qd.js                            4.26 kB │ gzip:   2.08 kB
+build/assets/archive-YIS5PDos.js                           4.35 kB │ gzip:   1.64 kB
+build/assets/archive-menu-entry-BkYjjD_w.js                4.48 kB │ gzip:   1.67 kB
+build/assets/defaultLocale-C8Fc0cco.js                     4.64 kB │ gzip:   2.12 kB
+build/assets/home-BN2w756L.js                              4.86 kB │ gzip:   1.87 kB
+build/assets/history-dialog-BjF8cQtW.js                    5.16 kB │ gzip:   2.18 kB
+build/assets/pieDiagram-4H26LBE5-DnSAHyzk.js               5.22 kB │ gzip:   2.28 kB
+build/assets/new-DHUHApDf.js                               5.31 kB │ gzip:   2.42 kB
+build/assets/ImageResizer-CSjzpyn4.js                      5.39 kB │ gzip:   2.05 kB
+build/assets/linear-BXfSNJFo.js                            5.52 kB │ gzip:   2.25 kB
+build/assets/diagram-2AECGRRQ-Cvpm8SkL.js                  5.76 kB │ gzip:   2.39 kB
+build/assets/fulcrum-faq-OKHVg1qe.js                       6.19 kB │ gzip:   2.25 kB
+build/assets/disclosure-CU-HZ71a.js                        6.32 kB │ gzip:   2.47 kB
+build/assets/TextField-DfTHm4-Y.js                         6.68 kB │ gzip:   2.43 kB
+build/assets/ExcalidrawNode-Cr7Dmdxo.js                    6.84 kB │ gzip:   2.81 kB
+build/assets/button-eSHPi12f.js                            7.13 kB │ gzip:   3.07 kB
+build/assets/jsx-runtime-CWteFE1C.js                       7.88 kB │ gzip:   2.98 kB
+build/assets/si-LK-N5RQ5JYF-YMO98Cfm.js                    8.58 kB │ gzip:   3.36 kB
+build/assets/az-AZ-76LH7QW2-DSphbpx0.js                    8.61 kB │ gzip:   3.59 kB
+build/assets/zh-HK-E62DVLB3-_4KzD0-O.js                    9.08 kB │ gzip:   4.09 kB
+build/assets/search-D4CQoGlK.js                            9.13 kB │ gzip:   3.76 kB
+build/assets/Tabs-BWDl89sE.js                              9.27 kB │ gzip:   3.21 kB
+build/assets/logo_48-YEl3QNq5.js                           9.72 kB │ gzip:   3.67 kB
+build/assets/kk-KZ-P5N5QNE5-DlnCSyZh.js                   10.12 kB │ gzip:   4.19 kB
+build/assets/kaa-6HZHGXH3-nG4RGIAL.js                     10.17 kB │ gzip:   4.18 kB
+build/assets/stateDiagram-AJRCARHV-COI_PiZV.js            10.52 kB │ gzip:   3.68 kB
+build/assets/diagram-KO2AKTUF-CJD0CD3n.js                 10.62 kB │ gzip:   4.10 kB
+build/assets/mermaid-parser.core-DCm0ASek.js              10.63 kB │ gzip:   2.99 kB
+build/assets/dagre-BM42HDAG-BhZZU-7j.js                   11.24 kB │ gzip:   4.17 kB
+build/assets/help-dialog-UNW1QiZZ.js                      11.76 kB │ gzip:   2.18 kB
+build/assets/_dashboard-3C5y08PU.js                       12.38 kB │ gzip:   4.11 kB
+build/assets/lt-LT-XHIRWOB4-BxPrP7bc.js                   12.50 kB │ gzip:   5.37 kB
+build/assets/ClientOnly-BnK-a9-0.js                       13.18 kB │ gzip:   4.59 kB
+build/assets/vi-VN-M7AON7JQ-CCQM3ZYm.js                   13.86 kB │ gzip:   5.79 kB
+build/assets/da-DK-5WZEPLOC-BU8YeHbJ.js                   14.41 kB │ gzip:   6.08 kB
+build/assets/diagram-OG6HWLK6-vVZvx8wA.js                 15.52 kB │ gzip:   5.42 kB
+build/assets/th-TH-HPSO5L25-Ji4jWH6F.js                   15.52 kB │ gzip:   5.18 kB
+build/assets/nn-NO-6E72VCQL-BLPww22d.js                   15.95 kB │ gzip:   6.72 kB
+build/assets/nl-NL-IS3SIHDZ-Bo3ouHPV.js                   16.73 kB │ gzip:   6.92 kB
+build/assets/ishikawaDiagram-YF4QCWOH-CwwFsRm8.js         17.31 kB │ gzip:   6.51 kB
+build/assets/my-MM-5M5IBNSE-DtyzYaWJ.js                   17.57 kB │ gzip:   5.29 kB
+build/assets/hu-HU-A5ZG7DT2-CYzAbO7Z.js                   18.08 kB │ gzip:   7.58 kB
+build/assets/fi-FI-Z5N7JZ37-DmX4c4O9.js                   18.40 kB │ gzip:   7.53 kB
+build/assets/kab-KAB-ZGHBKWFO-CVA-q1Cp.js                 18.78 kB │ gzip:   7.55 kB
+build/assets/zh-TW-RAJ6MFWO-Dso6JMET.js                   18.99 kB │ gzip:   8.86 kB
+build/assets/zh-CN-LNUGB5OW-OaahDlKT.js                   19.05 kB │ gzip:   8.87 kB
+build/assets/lv-LV-5QDEKY6T-DgcsEVnS.js                   19.14 kB │ gzip:   7.79 kB
+build/assets/gl-ES-HMX3MZ6V-DHIiR_ES.js                   19.39 kB │ gzip:   7.73 kB
+build/assets/tr-TR-DEFEU3FU-BfHQr-ok.js                   19.51 kB │ gzip:   7.96 kB
+build/assets/cs-CZ-2BRQDIVT-C66esc7z.js                   19.52 kB │ gzip:   8.40 kB
+build/assets/pt-PT-UZXXM6DQ-D0ouk_oi.js                   19.65 kB │ gzip:   7.79 kB
+build/assets/id-ID-SAP4L64H-C7xYYzKi.js                   19.68 kB │ gzip:   7.68 kB
+build/assets/ca-ES-6MX7JW3Y-Duyi4JTS.js                   19.79 kB │ gzip:   7.90 kB
+build/assets/oc-FR-POXYY2M6-C8z1uSYN.js                   19.84 kB │ gzip:   7.80 kB
+build/assets/nb-NO-T6EIAALU-D6G1YDav.js                   20.10 kB │ gzip:   8.19 kB
+build/assets/kanban-definition-UN3LZRKU-Bq3nWs6d.js       20.22 kB │ gzip:   7.13 kB
+build/assets/he-IL-6SHJWFNN-CmGiHJb2.js                   20.32 kB │ gzip:   7.54 kB
+build/assets/bg-BG-XCXSNQG7-BRxFnG3F.js                   20.76 kB │ gzip:   7.39 kB
+build/assets/pt-BR-5N22H2LF-DgzfWY0u.js                   21.04 kB │ gzip:   8.21 kB
+build/assets/eu-ES-A7QVB2H4-DHHU6IwA.js                   21.20 kB │ gzip:   8.23 kB
+build/assets/es-ES-U4NZUMDT-BppWKJld.js                   21.35 kB │ gzip:   8.50 kB
+build/assets/sl-SI-NN7IZMDC-Dtv3rCXE.js                   21.36 kB │ gzip:   8.59 kB
+build/assets/sv-SE-XGPEYMSR-BjV2MDu2.js                   21.51 kB │ gzip:   8.56 kB
+build/assets/it-IT-JPQ66NNP-C-cA3F_o.js                   22.06 kB │ gzip:   8.58 kB
+build/assets/sk-SK-C5VTKIMK-BRwsdW1z.js                   22.31 kB │ gzip:   9.11 kB
+build/assets/chunk-6U3AYISY-C6-Mtja1.js                   22.44 kB │ gzip:   8.62 kB
+build/assets/pl-PL-T2D74RX3-xuJBEzg0.js                   22.50 kB │ gzip:   9.23 kB
+build/assets/sankeyDiagram-5OEKKPKP-DyTecAGS.js           22.78 kB │ gzip:   8.24 kB
+build/assets/ro-RO-JPDTUUEW-DJNI4KyQ.js                   23.15 kB │ gzip:   8.94 kB
+build/assets/journeyDiagram-JHISSGLW-EGDxZtnq.js          23.16 kB │ gzip:   8.16 kB
+build/assets/de-DE-XR44H4JA-DmFXfeBb.js                   23.34 kB │ gzip:   8.97 kB
+build/assets/ja-JP-DBVTYXUO-BoADUTZz.js                   23.40 kB │ gzip:   8.79 kB
+build/assets/mindmap-definition-RKZ34NQL-DNIWki80.js      23.41 kB │ gzip:   7.97 kB
+build/assets/fr-FR-RHASNOE6-sErcOFxs.js                   23.45 kB │ gzip:   8.87 kB
+build/assets/bn-BD-2XOGV67Q-Cu5lZ1KP.js                   23.60 kB │ gzip:   6.68 kB
+build/assets/wiki-list-DL0XCFHv.js                        23.85 kB │ gzip:   7.59 kB
+build/assets/ko-KR-MTYHY66A-uMjbmxvj.js                   23.88 kB │ gzip:   9.18 kB
+build/assets/graphlib-DfJ5AqY2.js                         23.92 kB │ gzip:   8.31 kB
+build/assets/fa-IR-HGAKTJCU-BN8ZrLG-.js                   24.24 kB │ gzip:   8.44 kB
+build/assets/wardleyDiagram-YWT4CUSO-DkRuzLVP.js          25.18 kB │ gzip:   6.52 kB
+build/assets/ar-SA-G6X2FPQ2-ApFe0CU-.js                   25.67 kB │ gzip:   9.12 kB
+build/assets/staticPages-D2Vh3-CA.js                      26.63 kB │ gzip:   8.11 kB
+build/assets/erDiagram-TEJ5UH35-Dob-r7gn.js               26.81 kB │ gzip:   9.33 kB
+build/assets/gsuite-components-CX9Iwzux.js                26.90 kB │ gzip:   8.20 kB
+build/assets/rough.esm-CSKSodPl.js                        27.10 kB │ gzip:   8.85 kB
+build/assets/pa-IN-N4M65BXN-rrCbqMY3.js                   27.98 kB │ gzip:   7.98 kB
+build/assets/gitGraphDiagram-PVQCEYII-D5PjAf-x.js         28.97 kB │ gzip:   8.56 kB
+build/assets/_public-MEPjMPgT.js                          29.07 kB │ gzip:  11.37 kB
+build/assets/ku-TR-6OUDTVRD-DwNSHP4Z.js                   29.32 kB │ gzip:   9.27 kB
+build/assets/el-GR-BZB4AONW-BSsedN11.js                   29.67 kB │ gzip:   9.61 kB
+build/assets/timeline-definition-PNZ67QCA-BdNWjHNQ.js     30.38 kB │ gzip:   9.97 kB
+build/assets/ru-RU-B4JR7IUQ-D8mEh_ln.js                   30.74 kB │ gzip:   9.87 kB
+build/assets/sidebar-DqUVwLJo.js                          30.83 kB │ gzip:  10.67 kB
+build/assets/chunk-5ZQYHXKU-BMgvqFDT.js                   30.84 kB │ gzip:   8.50 kB
+build/assets/requirementDiagram-4Y6WPE33-pfUo82UD.js      30.96 kB │ gzip:   9.76 kB
+build/assets/uk-UA-QMV73CPH-BleJyIMD.js                   31.64 kB │ gzip:  10.10 kB
+build/assets/pica-Dv4ejNpo.js                             32.09 kB │ gzip:  12.53 kB
+build/assets/hi-IN-IWLTKZ5I-CVklPvx5.js                   32.35 kB │ gzip:   9.08 kB
+build/assets/chunk-KSCS5N6A-BnX1Gitt.js                   33.33 kB │ gzip:   7.06 kB
+build/assets/quadrantDiagram-W4KKPZXB-CFb25_kL.js         33.51 kB │ gzip:   9.73 kB
+build/assets/ta-IN-2NMHFXQM-DS3aU8M4.js                   35.27 kB │ gzip:   8.50 kB
+build/assets/km-KH-HSX4SM5Z-B66Qi_tp.js                   36.65 kB │ gzip:   9.21 kB
+build/assets/chunk-AQP2D5EJ-Sw6njKbg.js                   36.71 kB │ gzip:  11.87 kB
+build/assets/dagre-DKcEhpvA.js                            36.86 kB │ gzip:  13.23 kB
+build/assets/xychartDiagram-2RQKCTM6-2vp4yjMS.js          40.04 kB │ gzip:  11.20 kB
+build/assets/vennDiagram-CIIHVFJN-C3rrjsRI.js             40.62 kB │ gzip:  14.89 kB
+build/assets/animation-BmcI7ECC.js                        40.89 kB │ gzip:  13.94 kB
+build/assets/chunk-XPW4576I-xFhin0DG.js                   41.85 kB │ gzip:  14.22 kB
+build/assets/mr-IN-CRQNXWMA-DCH6MYOP.js                   42.25 kB │ gzip:  10.67 kB
+build/assets/image-blob-reduce.esm-NzmDxm1v.js            45.46 kB │ gzip:  16.31 kB
+build/assets/src-Bqcx-NQG.js                              45.82 kB │ gzip:  16.05 kB
+build/assets/chunk-727SXJPM-krNrNM1Z.js                   48.57 kB │ gzip:  15.70 kB
+build/assets/StarIcon-DO-ZxSz6.js                         51.17 kB │ gzip:  14.90 kB
+build/assets/chunk-O5CBEL6O-DeT34M3M.js                   52.52 kB │ gzip:  17.14 kB
+build/assets/flowDiagram-I6XJVG4X-C2pPxcKr.js             60.23 kB │ gzip:  19.52 kB
+build/assets/c4Diagram-AAUBKEIU-qPkIH2F_.js               69.16 kB │ gzip:  19.33 kB
+build/assets/ganttDiagram-6RSMTGT7-BzU-aI2U.js            69.25 kB │ gzip:  22.70 kB
+build/assets/lodash-CWWuoA2g.js                           71.36 kB │ gzip:  26.10 kB
+build/assets/blockDiagram-GPEHLZMM-CmaZOOVq.js            72.67 kB │ gzip:  20.68 kB
+build/assets/fileList-component-B85Vh0wf.js               76.47 kB │ gzip:  23.56 kB
+build/assets/cose-bilkent-S5V4N54A-B7iT5wUP.js            81.39 kB │ gzip:  21.56 kB
+build/assets/dist-NZ6nKPfh.js                             86.35 kB │ gzip:  28.54 kB
+build/assets/chunk-3OPIFGDE-BiXGZ2mV.js                   98.84 kB │ gzip:  24.21 kB
+build/assets/spinner-CfROD9BK.js                         104.11 kB │ gzip:  32.69 kB
+build/assets/sequenceDiagram-3UESZ5HK-DFBz-EXZ.js        115.73 kB │ gzip:  30.54 kB
+build/assets/architectureDiagram-3BPJPVTR-Cmjx4meQ.js    146.92 kB │ gzip:  40.28 kB
+build/assets/LexicalUtils.prod-CE83U7M0.js               149.12 kB │ gzip:  48.50 kB
+build/assets/chunk-CSCIHK7Q-CCWKgrrE.js                  228.51 kB │ gzip:  36.52 kB
+build/assets/katex-Vhh-h91d.js                           258.88 kB │ gzip:  77.46 kB
+build/assets/index-DcKh2JU-.js                           333.82 kB │ gzip: 107.69 kB
+build/assets/cytoscape.esm-Cc75SF83.js                   435.42 kB │ gzip: 137.92 kB
+build/assets/chunk-K2UTITRG-BuM_-5PT.js                  533.70 kB │ gzip: 179.02 kB
+build/assets/page._id-DCmgM0DD.js                        538.19 kB │ gzip: 166.50 kB
+build/assets/prod-Trwazr5Z.js                            590.14 kB │ gzip: 180.14 kB
+build/assets/chunk-NNHCCRGN-CRzx8No4.js                  593.69 kB │ gzip: 137.74 kB
+build/assets/chunk-EIO257PC-_ECskw8j.js                1,821.04 kB │ gzip: 744.22 kB
+
+✓ built in 4.88s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

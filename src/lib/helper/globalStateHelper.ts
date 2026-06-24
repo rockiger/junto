@@ -1,4 +1,4 @@
-import { IFile, State } from 'reactn/default'
+import type { AppState, IFile } from 'types/app-state'
 import { OVERVIEW_NAME } from 'lib/constants'
 
 export {
@@ -16,7 +16,7 @@ export {
  * Interp. as a Global State with response of Google Drive as
  * properties 'files' and 'intialFiles' added to it.
  */
-type IGlobalState = State
+type IGlobalState = AppState
 
 /**
  * Interp. as the change to a files meta data.

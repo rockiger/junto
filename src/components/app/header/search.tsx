@@ -9,7 +9,7 @@ import { useIsDesktop } from "lib/hooks/useMediaQuery"
 import { useNavigate, useRouterState } from "@tanstack/react-router"
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Button } from 'react-aria-components'
-import { useGlobal } from "reactn"
+import { useAppStore } from "store/app-store"
 import SearchAutocomplete, {
     filterSearchAutocompleteFiles,
 } from "./search-autocomplete"
@@ -24,12 +24,14 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
     const navigate = useNavigate()
     const pathname = useRouterState({ select: (s) => s.location.pathname })
     const isDesktop = useIsDesktop()
-    const [initialFiles] = useGlobal("initialFiles")
-    const [isSearchFieldActive, setIsSearchFieldActive] = useGlobal(
-        "isSearchFieldActive",
-    )
+    const initialFiles = useAppStore((s) => s.initialFiles)
+    const isSearchFieldActive = useAppStore((s) => s.isSearchFieldActive)
+    const setIsSearchFieldActive = (value: boolean) =>
+        useAppStore.setState({ isSearchFieldActive: value })
     const [showSearch, setShowSearch] = useState(false)
-    const [searchValue, setSearchValue] = useGlobal("searchValue")
+    const searchValue = useAppStore((s) => s.searchValue)
+    const setSearchValue = (value: string) =>
+        useAppStore.setState({ searchValue: value })
 
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [submitSelected, setSubmitSelected] = useState(false)

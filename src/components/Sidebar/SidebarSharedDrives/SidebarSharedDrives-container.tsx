@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useLocation } from '@tanstack/react-router'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 import { getPageId, isPage } from '../Sidebar-helper'
 import { filterWikis, sortWikisBy } from 'components/wiki-list'
@@ -14,7 +14,7 @@ import {
 import { WikiSidebarTree } from '../SidebarTree/WikiSidebarTree'
 
 export function SidebarSharedDrives() {
-    const [initialFiles] = useGlobal('initialFiles')
+    const initialFiles = useAppStore((s) => s.initialFiles)
     const location = useLocation()
 
     const currentPageId = isPage(location) ? getPageId(location) : null

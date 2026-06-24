@@ -4,16 +4,16 @@ import { Spinner } from 'components/gsuite-components'
 import { filterSearchResultFiles } from 'lib/search/search-helper'
 import FileSearchIcon from 'mdi-react/FileSearchIcon'
 import { useMemo, useState } from 'react'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 export type SearchResultsPageProps = {
     query: string
 }
 
 export default function SearchResultsPage({ query }: SearchResultsPageProps) {
-    const [files] = useGlobal('files')
-    const [initialFiles] = useGlobal('initialFiles')
-    const [isFileListLoading] = useGlobal('isFileListLoading')
+    const files = useAppStore((s) => s.files)
+    const initialFiles = useAppStore((s) => s.initialFiles)
+    const isFileListLoading = useAppStore((s) => s.isFileListLoading)
     const [sortBy, setSortBy] = useState<SortBy>('modifiedByMeTime')
 
     const trimmedQuery = query.trim()

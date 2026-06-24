@@ -1,4 +1,4 @@
-import { setGlobal } from 'reactn'
+import { resetAppStore } from '../../../store/app-store'
 
 import { TestRouter } from '../../../test-router'
 import { renderToDiv } from '../../../test-utils/renderToDiv'
@@ -23,12 +23,12 @@ const baseGlobal = {
 
 describe('Nav', () => {
     it('renders without crashing', () => {
-        setGlobal({ ...baseGlobal })
+        resetAppStore({ ...baseGlobal })
         const { unmount } = renderToDiv(<TestRouter initialPath="/" />)
         unmount()
     })
     it('has no searchbar if not signed in', () => {
-        setGlobal({ ...baseGlobal, isSignedIn: false })
+        resetAppStore({ ...baseGlobal, isSignedIn: false })
         const { container, unmount } = renderToDiv(
             <TestRouter initialPath="/" />,
         )
@@ -37,7 +37,7 @@ describe('Nav', () => {
     })
 
     it('has a searchbar if signed in', () => {
-        setGlobal({
+        resetAppStore({
             ...baseGlobal,
             isSignedIn: true,
             isInitialFileListLoading: false,

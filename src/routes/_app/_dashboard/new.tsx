@@ -1,15 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { CreateNewWiki } from 'components/CreateNewWiki'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 export const Route = createFileRoute('/_app/_dashboard/new')({
     component: NewWikiRoute,
 })
 
 function NewWikiRoute() {
-    const [isSignedIn] = useGlobal('isSignedIn')
-    const [isSigningIn] = useGlobal('isSigningIn')
+    const isSignedIn = useAppStore((s) => s.isSignedIn)
+    const isSigningIn = useAppStore((s) => s.isSigningIn)
 
     return <CreateNewWiki isSignedIn={isSignedIn} isSigningIn={isSigningIn} />
 }

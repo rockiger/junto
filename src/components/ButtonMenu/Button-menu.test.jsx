@@ -1,4 +1,4 @@
-import React, { setGlobal } from 'reactn'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import { render, queryByAttribute } from '@testing-library/react'
 // NOTE: React Testing Library works with React Hooks _and_ classes just as well

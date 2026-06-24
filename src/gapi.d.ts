@@ -57,7 +57,11 @@ export interface GapiClient {
 		getToken: () => GapiAuthToken | null
 	}
 	auth2?: {
-		getAuthInstance: () => GapiAuth2Instance
+		init: (config: {
+			client_id: string
+			scope?: string
+		}) => Promise<GapiAuth2Instance>
+		getAuthInstance: () => GapiAuth2Instance | null
 	}
 	drive?: {
 		share?: {

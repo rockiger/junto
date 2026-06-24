@@ -91,8 +91,8 @@ import {
 	ToggleButton,
 	type ToggleButtonRenderProps,
 } from 'react-aria-components'
-import { useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useAppStore } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 import type { DriveImagePickerModalHandle } from '../drive-image-picker-modal'
 import { DriveImagePickerModal } from '../drive-image-picker-modal'
 import { getDocument } from '../gpicker'
@@ -184,8 +184,11 @@ export default function ToolbarPlugin({
 	readOnly,
 }: ToolbarPluginProps) {
 	const [editor] = useLexicalComposerContext()
-	const [files, setFiles] = useGlobal('files')
-	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+	const files = useAppStore((s) => s.files)
+	const initialFiles = useAppStore((s) => s.initialFiles)
+	const setFiles = (value: IFile[]) => useAppStore.setState({ files: value })
+	const setInitialFiles = (value: IFile[]) =>
+		useAppStore.setState({ initialFiles: value })
 	const modalRef = useRef<LinkModalHandle>(null)
 	const imageUrlModalRef = useRef<ImageUrlModalHandle>(null)
 	const driveImagePickerRef = useRef<DriveImagePickerModalHandle>(null)

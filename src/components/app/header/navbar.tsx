@@ -3,7 +3,8 @@ import clsx from "clsx"
 import IconButton from "components/gsuite-components/icon-button"
 import MenuIcon from "mdi-react/MenuIcon"
 import type { ReactNode } from "react"
-import { useDispatch, useEffect, useGlobal } from "reactn"
+import { useEffect } from "react"
+import { useAppStore } from "store/app-store"
 import { navigateToSearch } from "lib/search/navigate-to-search"
 import Search from "./search"
 
@@ -15,19 +16,24 @@ export type NavbarProps = {
 
 function Navbar({ isSignedIn, children }: NavbarProps) {
     const navigate = useNavigate()
-    const [, setIsSearchFieldActive] = useGlobal("isSearchFieldActive")
-    const [searchTerm, setSearchTerm] = useGlobal("searchTerm")
-    const [searchValue, setSearchValue] = useGlobal("searchValue")
-    const [showSidebarOnMobile, setShowSidebarOnMobile] = useGlobal(
-        "showSidebarOnMobile",
-    )
+    const searchTerm = useAppStore((s) => s.searchTerm)
+    const searchValue = useAppStore((s) => s.searchValue)
+    const showSidebarOnMobile = useAppStore((s) => s.showSidebarOnMobile)
+    const setIsSearchFieldActive = (value: boolean) =>
+        useAppStore.setState({ isSearchFieldActive: value })
+    const setSearchTerm = (value: string) =>
+        useAppStore.setState({ searchTerm: value })
+    const setSearchValue = (value: string) =>
+        useAppStore.setState({ searchValue: value })
+    const setShowSidebarOnMobile = (value: boolean) =>
+        useAppStore.setState({ showSidebarOnMobile: value })
     //! Check if this is needed
     const pathname = useRouterState({ select: (s) => s.location.pathname })
     const isHome =
         pathname === "/home" || pathname === "/" || pathname === "/search"
     const swapHeaderSearchOnDesktop = isHome && !searchTerm
 
-    const clearSearch = useDispatch("clearSearchComplete")
+    const clearSearch = useAppStore((s) => s.clearSearchComplete)
 
     useEffect(() => {
         if (searchValue !== searchTerm) setSearchValue(searchTerm)

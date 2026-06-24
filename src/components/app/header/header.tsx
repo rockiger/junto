@@ -3,13 +3,13 @@ import { Help } from 'components/help'
 import { FooterLink } from 'components/staticPages/Footer'
 import { isEmpty } from 'lodash'
 import SyncIcon from 'mdi-react/SyncIcon'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 import Navbar from './navbar'
 
 export default function Header() {
-    const [isSignedIn] = useGlobal('isSignedIn')
-    const [isInitialFileListLoading] = useGlobal('isInitialFileListLoading')
-    const [initialFiles] = useGlobal('initialFiles')
+    const isSignedIn = useAppStore((s) => s.isSignedIn)
+    const isInitialFileListLoading = useAppStore((s) => s.isInitialFileListLoading)
+    const initialFiles = useAppStore((s) => s.initialFiles)
 
     return (
         <div className="bg-surface-container px-2 lg:pl-0" style={{ gridArea: 'navigation' }}>

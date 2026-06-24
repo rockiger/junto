@@ -12,7 +12,7 @@ import {
     TextArea,
     TextField,
 } from 'react-aria-components'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 interface CreateNewWikiProps {
     isSignedIn: boolean
@@ -136,9 +136,9 @@ export function CreateNewWiki({
     isSignedIn,
     isSigningIn,
 }: CreateNewWikiProps) {
-    const [isCreatingNewFile, setIsCreatingNewFile] = useGlobal(
-        'isCreatingNewFile',
-    )
+    const isCreatingNewFile = useAppStore((s) => s.isCreatingNewFile)
+    const setIsCreatingNewFile = (value: boolean) =>
+        useAppStore.setState({ isCreatingNewFile: value })
     const navigate = useNavigate()
     const { searchStr } = useLocation()
 

@@ -3,7 +3,7 @@ import SearchResultsPage from 'components/Search/SearchResultsPage'
 import { fetchSearchResults } from 'lib/search/fetch-search-results'
 import { normalizeSearchQueryParam } from 'lib/search/search-helper'
 import { useEffect } from 'react'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 export const Route = createFileRoute('/_app/_dashboard/search')({
     validateSearch: (search: Record<string, unknown>) => ({
@@ -14,15 +14,12 @@ export const Route = createFileRoute('/_app/_dashboard/search')({
 
 function SearchRoute() {
     const { q } = Route.useSearch()
-    const [, setSearchTerm] = useGlobal('searchTerm')
-    const [, setSearchValue] = useGlobal('searchValue')
-    const [isSignedIn] = useGlobal('isSignedIn')
+    const isSignedIn = useAppStore((s) => s.isSignedIn)
 
     useEffect(() => {
         const query = normalizeSearchQueryParam(q)
-        setSearchValue(query)
-        setSearchTerm(query)
-    }, [q, setSearchTerm, setSearchValue])
+        useAppStore.setState({ searchValue: query, searchTerm: query })
+    }, [q])
 
     useEffect(() => {
         if (!isSignedIn) {

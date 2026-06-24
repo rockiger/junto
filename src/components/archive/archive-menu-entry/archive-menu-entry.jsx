@@ -1,5 +1,6 @@
 //@ts-check
-import { useGlobal, useState } from 'reactn'
+import { useState } from 'react'
+import { getAppState, useAppStore } from 'store/app-store'
 
 import ArchiveIconDown from 'mdi-react/ArchiveArrowDownOutlineIcon'
 import ArchiveIconUp from 'mdi-react/ArchiveArrowUpIcon'
@@ -31,9 +32,12 @@ export { ArchiveMenuEntry }
  * @param {ArchiveButtonProps} props
  */
 export function useArchiveMenuEntry({ fileId }) {
-    const [global] = useGlobal()
-    const [, setFiles] = useGlobal('files')
-    const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+    const initialFiles = useAppStore((s) => s.initialFiles)
+    /** @param {import('types/app-state').IFile[]} value */
+    const setFiles = (value) => useAppStore.setState({ files: value })
+    /** @param {import('types/app-state').IFile[]} value */
+    const setInitialFiles = (value) =>
+        useAppStore.setState({ initialFiles: value })
     const { enqueueSnackbar } = useSnackbar()
     const [alert, setAlert] = useState(initialAlert)
     const file = getMetaById(fileId, initialFiles)
@@ -139,7 +143,7 @@ export function useArchiveMenuEntry({ fileId }) {
         }
     }
 
-    /** @param {import('reactn/default').IFile} file */
+    /** @param {import('types/app-state').IFile} file */
     async function archiveSinglePageWithChildren(file) {
         // Change parent of children
         const newParentFolderId = file.parents ? file.parents[0] : null
@@ -152,7 +156,7 @@ export function useArchiveMenuEntry({ fileId }) {
                 f => f.parents && f.parents.includes(folder.id)
             )
             console.log(children)
-            let globalTmp = { ...global }
+            let globalTmp = { ...getAppState() }
             for (const child of children) {
                 const newParents = [newParentFolderId]
                 const updatedFiles = filesUpdater(
@@ -186,14 +190,14 @@ export function useArchiveMenuEntry({ fileId }) {
         }
     }
 
-    /** @param {import('reactn/default').IFile} file */
+    /** @param {import('types/app-state').IFile} file */
     async function archiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
         const newProperties = { ...properties, isArchived: 'true' }
         const updatedFiles = filesUpdater(
             { properties: newProperties },
-            global,
+            getAppState(),
             file.id
         )
         setFiles(updatedFiles.files)
@@ -204,14 +208,14 @@ export function useArchiveMenuEntry({ fileId }) {
         })
     }
 
-    /** @param {import('reactn/default').IFile} file */
+    /** @param {import('types/app-state').IFile} file */
     async function unArchiveSinglePageWithoutChilds(file) {
         console.log('archive page')
         const { properties } = file
         const newProperties = { ...properties, isArchived: false }
         const updatedFiles = filesUpdater(
             { properties: newProperties },
-            global,
+            getAppState(),
             file.id
         )
         setFiles(updatedFiles.files)

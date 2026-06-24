@@ -1,5 +1,6 @@
 // @ts-nocheck
-import React, { useEffect, useMemo, useGlobal } from 'reactn'
+import React, { useEffect, useMemo } from 'react'
+import { useAppStore } from 'store/app-store'
 import PropTypes from 'prop-types'
 import { Navigate } from '@tanstack/react-router'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
@@ -12,7 +13,7 @@ import { isArchived } from 'lib/helper'
 
 function SharedWithMe(props) {
     const { isSignedIn, isSigningIn } = props
-    const [initialFiles] = useGlobal('initialFiles')
+    const initialFiles = useAppStore((s) => s.initialFiles)
     const sharedFiles = useMemo(() => filterSharedWithMe(initialFiles), [initialFiles])
 
     useEffect(() => PageView({ pathname: '/shared-with-me' }), [])
