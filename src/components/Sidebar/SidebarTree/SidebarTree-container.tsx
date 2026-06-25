@@ -1,10 +1,10 @@
-import { useGlobal } from 'reactn'
+import { useFileTree, useRootFolderId } from 'lib/query/files-queries'
 
 import { SidebarTreeComponent } from './SidebarTree-component'
 
 export const SidebarTree = () => {
-    const [rootFolderId] = useGlobal('rootFolderId')
-    const [initialFiles] = useGlobal('initialFiles')
+    const rootFolderId = useRootFolderId()
+    const { data: initialFiles = [] } = useFileTree()
 
     return (
         <SidebarTreeComponent

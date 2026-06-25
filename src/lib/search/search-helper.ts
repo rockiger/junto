@@ -1,5 +1,5 @@
 import { EXT } from "lib/constants"
-import type { IFile } from "reactn/default"
+import type { IFile } from "types/app-state"
 
 const FOLDER_MIME = "application/vnd.google-apps.folder"
 

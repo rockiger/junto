@@ -1,11 +1,11 @@
 import { ProgressBar } from 'react-aria-components'
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 
 /**
  * Fixed banner showing the progress of the one-time .gwiki -> .md migration.
  */
 export function MigrationProgress() {
-	const [migration] = useGlobal('migration')
+	const migration = useAppStore((s) => s.migration)
 	if (!migration?.running) return null
 
 	const { done, total } = migration

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'reactn'
+import React, { useEffect, useReducer, useState } from 'react'
 import { format } from 'date-fns'
 import * as _ from 'lodash'
 import DotsVerticalIcon from 'mdi-react/DotsVerticalIcon'

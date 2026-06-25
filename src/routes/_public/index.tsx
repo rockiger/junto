@@ -5,11 +5,11 @@ import {
 } from '@tanstack/react-router'
 
 import FrontPage from 'components/Home/front-page'
-import { getGlobal, useGlobal } from 'reactn'
+import { useGoogleAuth } from 'lib/googleAuth'
 
 export const Route = createFileRoute('/_public/')({
-    beforeLoad: () => {
-        if (getGlobal().isSignedIn) {
+    beforeLoad: ({ context }) => {
+        if (context.auth.isSignedIn) {
             throw redirect({ to: '/home' })
         }
     },
@@ -18,7 +18,7 @@ export const Route = createFileRoute('/_public/')({
 
 /** Redirect after client-side sign-in; `beforeLoad` only runs on navigation. */
 function PublicIndex() {
-    const [isSignedIn] = useGlobal('isSignedIn')
+    const { isSignedIn } = useGoogleAuth()
 
     if (isSignedIn) {
         return <Navigate to="/home" replace />

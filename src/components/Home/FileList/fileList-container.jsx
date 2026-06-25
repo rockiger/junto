@@ -1,11 +1,12 @@
 // @ts-check
-import _ from "lib/helper/globals";
-import { useGlobal } from "reactn";
+import _ from 'lib/helper/globals'
+import { useFileTree } from 'lib/query/files-queries'
+import { useRouterState } from '@tanstack/react-router'
 
-import FileListComponent from "./fileList-component";
+import FileListComponent from './fileList-component'
 
-export { FileList };
-export default FileList;
+export { FileList }
+export default FileList
 
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
 
@@ -19,12 +20,12 @@ export default FileList;
  * @property {'h1'|'h2'|'h3'|'h4'|'h5'|'h6'} [header]
  * @property {boolean} [isLoading]
  * @property {boolean} [isScrollable]
- * @property {import('reactn/default').IFile[]} files
+ * @property {import('types/app-state').IFile[]} files
  * @property {SortBy | undefined} [sortBy]
  * @property {(sortBy: SortBy) => void} [setSortBy]
  * @property {string} [title]
  * @property {'reason-suggested' | 'date'} [tableMiddleColumn]
- * @property {import('reactn/default').IFile[]} [locationLookupFiles]
+ * @property {import('types/app-state').IFile[]} [locationLookupFiles]
  */
 
 /**
@@ -39,21 +40,24 @@ function FileList({
 	sortBy,
 	setSortBy,
 	title,
-	tableMiddleColumn = "reason-suggested",
+	tableMiddleColumn = 'reason-suggested',
 	locationLookupFiles,
 }) {
-	const [isFileListLoading] = useGlobal("isFileListLoading");
-	const [isInitialFileListLoading] = useGlobal("isInitialFileListLoading");
-	const [searchTerm] = useGlobal("searchTerm");
+	const { isFetching, data: treeData } = useFileTree()
+	const searchTerm = useRouterState({
+		select: (s) => {
+			const params = new URLSearchParams(s.location.searchStr)
+			return params.get('q')?.trim() ?? ''
+		},
+	})
 	const isLoading =
-		_.isEmpty(files) &&
-		(searchTerm ? isFileListLoading : isInitialFileListLoading);
+		_.isEmpty(files) && isFetching && !treeData?.length
 
 	return (
 		<FileListComponent
 			emptyIcon={emptyIcon}
 			emptyMessage={
-				searchTerm ? "None of your files matched this search." : emptyMessage
+				searchTerm ? 'None of your files matched this search.' : emptyMessage
 			}
 			emptySubline={emptySubline}
 			files={files}
@@ -66,5 +70,5 @@ function FileList({
 			title={title}
 			locationLookupFiles={locationLookupFiles}
 		/>
-	);
+	)
 }

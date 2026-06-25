@@ -3,20 +3,16 @@ import { vi } from 'vitest'
 
 import GoogleLogin from './googleLogin'
 
-vi.mock('reactn', () => ({
-	useGlobal: (key) => {
-		if (key === 'isSignedIn') {
-			return [mockIsSignedIn]
-		}
-		return [undefined]
-	},
-}))
+let mockIsSignedIn = false
 
 vi.mock('lib/googleAuth', () => ({
 	useGoogleAuth: () => ({
 		signIn: vi.fn(),
 		signOut: vi.fn(),
 		isReady: true,
+		isSignedIn: mockIsSignedIn,
+		isSigningIn: false,
+		userId: '',
 	}),
 }))
 

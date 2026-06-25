@@ -66,7 +66,6 @@
 -- [x] Excalidraw
 ----------------------------------------------------------
 - [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
-
 ----------------------------------------------------------
 - [] Add more editor features
 -- [] Farben
@@ -85,9 +84,12 @@
 - [] Performance
 -- [] Remove json->md Migrator
 -- [] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
+-- [x] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
 -- [] Remove sass
 -- [] Use route loaders to prefetch data
 -- [] Prerender static pages 
 - [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
-- Repair Tests
-- Repair Storybook
+- [] Repair Tests
+- [] Create e2e-Tests for the app
+- [] Repair Storybook
+- [] Create design system for the app (see Design System book)

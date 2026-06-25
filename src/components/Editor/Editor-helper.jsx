@@ -87,7 +87,7 @@ export async function save(fileId, initialValue) {
     }
 }
 
-/** @param {import('reactn/default').IFile[]} items @param {string} id @param {Record<string, unknown>} change */
+/** @param {import('types/app-state').IFile[]} items @param {string} id @param {Record<string, unknown>} change */
 const updateModifiedTimeItem = (items, id, change) =>
     items.map(item => {
         if (item.id === id) {
@@ -100,9 +100,9 @@ const updateModifiedTimeItem = (items, id, change) =>
 /**
  * @param {string} id
  * @param {string} modifiedByMeTime
- * @param {import('reactn/default').IFile[]} files
+ * @param {import('types/app-state').IFile[]} files
  * @param {function} setFiles
- * @param {import('reactn/default').IFile[]} initialFiles
+ * @param {import('types/app-state').IFile[]} initialFiles
  * @param {function} setInitialFiles
  */
 export const updateModifiedTimeInGlobalState = (

@@ -3,7 +3,7 @@ import { slate0ValueToMarkdown } from './slateToMarkdown.mjs'
 
 const GWIKI_EXT = /\.gwiki$/i
 
-/** @param {import('reactn/default').IFile[]} files */
+/** @param {import('types/app-state').IFile[]} files */
 export function findGwikiFiles(files) {
     if (!Array.isArray(files)) return []
     return files.filter(
@@ -20,7 +20,7 @@ export function findGwikiFiles(files) {
  * mimeType. The Drive file id stays stable, so internal `/page/{id}` links
  * keep working; the old Slate JSON remains available as a Drive revision.
  *
- * @param {import('reactn/default').IFile} file
+ * @param {import('types/app-state').IFile} file
  * @returns {Promise<object>} updated file description
  */
 export async function migrateGwikiFile(file) {
@@ -40,7 +40,7 @@ export async function migrateGwikiFile(file) {
  * Migrates all given .gwiki files sequentially. Failing files are skipped
  * and logged; they keep their .gwiki name so a reload retries them.
  *
- * @param {import('reactn/default').IFile[]} targets
+ * @param {import('types/app-state').IFile[]} targets
  * @param {(done: number, total: number) => void} [onProgress]
  */
 export async function migrateGwikiFiles(targets, onProgress) {

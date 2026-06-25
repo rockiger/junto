@@ -9,7 +9,10 @@ import { Event } from 'components/Tracking'
 import { isHotkey } from 'is-hotkey'
 import { API_KEY } from 'lib/constants'
 import { updateMetadata } from 'lib/gdrive'
-import { filesUpdater, getMetaById } from 'lib/helper'
+import { getMetaById } from 'lib/helper'
+import { patchFileCaches } from 'lib/query/files-cache'
+import { useFileTree } from 'lib/query/files-queries'
+import { queryClient } from 'lib/query/query-client'
 import {
     PAGE_WIDTH_FULL,
     PAGE_WIDTH_REDUCED,
@@ -22,11 +25,10 @@ import { Beforeunload } from 'react-beforeunload'
 import React, {
     useCallback,
     useEffect,
-    useGlobal,
     useMemo,
     useRef,
     useState,
-} from 'reactn'
+} from 'react'
 import {
     convertFilesToAutocompletItems,
     initStorage,
@@ -51,8 +53,7 @@ const EditorLogic = React.forwardRef(
         },
         editorRef
     ) => {
-        const [files, setFiles] = useGlobal('files')
-        const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+        const { data: initialFiles = [] } = useFileTree()
         const { searchStr } = useLocation()
         const hasEdit =
             searchStr === '?edit' ||
@@ -222,27 +223,13 @@ const EditorLogic = React.forwardRef(
 
         const star = async fileId => {
             console.log('star page')
-            const updatedFiles = filesUpdater(
-                { starred: true },
-                { files, initialFiles },
-                fileId
-            )
-            setFiles(updatedFiles.files)
-            setInitialFiles(updatedFiles.initialFiles)
-            //!
+            patchFileCaches(queryClient, { starred: true }, fileId)
             await updateMetadata(fileId, { starred: true })
         }
 
         const unstar = async fileId => {
             console.log('unstar page')
-            const updatedFiles = filesUpdater(
-                { starred: false },
-                { files, initialFiles },
-                fileId
-            )
-            setFiles(updatedFiles.files)
-            setInitialFiles(updatedFiles.initialFiles)
-            //!
+            patchFileCaches(queryClient, { starred: false }, fileId)
             await updateMetadata(fileId, { starred: false })
         }
 

@@ -21,8 +21,10 @@ import {
 	useState,
 	type JSX,
 } from 'react'
-import { useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useFileTree } from 'lib/query/files-queries'
+import { upsertFilesInTree } from 'lib/query/files-cache'
+import { queryClient } from 'lib/query/query-client'
+import type { IFile } from 'types/app-state'
 import {
 	getSvgFileName,
 	resolveAndDownloadExcalidrawScene,
@@ -63,8 +65,7 @@ export default function ExcalidrawComponent({
 	const { fileId, previewVersions } = useExcalidrawEditor()
 	const previewVersion = previewVersions[nodeKey] ?? 0
 	const openModal = useOpenExcalidrawModal()
-	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
-	const [files, setFiles] = useGlobal('files')
+	const { data: initialFiles = [] } = useFileTree()
 	const [resolvedSceneJson, setResolvedSceneJson] = useState<string | null>(
 		sceneJson,
 	)
@@ -85,19 +86,9 @@ export default function ExcalidrawComponent({
 		[editor, isSelected, nodeKey],
 	)
 
-	const allFiles = useMemo(
-		() => [
-			...((initialFiles ?? []) as IFile[]),
-			...((files ?? []) as IFile[]),
-		],
-		[files, initialFiles],
-	)
+	const allFiles = useMemo(() => initialFiles as IFile[], [initialFiles])
 	const allFilesRef = useRef(allFiles)
 	allFilesRef.current = allFiles
-	const filesRef = useRef(files)
-	filesRef.current = files
-	const initialFilesRef = useRef(initialFiles)
-	initialFilesRef.current = initialFiles
 
 	const cacheSceneOnNode = useCallback(
 		(jsonDriveId: string, json: string) => {
@@ -204,19 +195,7 @@ export default function ExcalidrawComponent({
 						})
 					svgDriveId = svgDriveFileId
 
-					const upsert = (list: IFile[]) => {
-						const idx = list.findIndex((f) => f.id === svgFile.id)
-						if (idx >= 0) {
-							const next = [...list]
-							next[idx] = svgFile
-							return next
-						}
-						return [...list, svgFile]
-					}
-					setFiles(upsert((filesRef.current ?? []) as IFile[]))
-					setInitialFiles(
-						upsert((initialFilesRef.current ?? []) as IFile[]),
-					)
+					upsertFilesInTree(queryClient, [svgFile])
 				}
 
 				if (!svgDriveId) {
@@ -245,7 +224,7 @@ export default function ExcalidrawComponent({
 			cancelled = true
 			if (objectUrl) URL.revokeObjectURL(objectUrl)
 		}
-	}, [cacheSceneOnNode, fileId, fileName, previewVersion, setFiles, setInitialFiles])
+	}, [cacheSceneOnNode, fileId, fileName, previewVersion])
 
 	useEffect(() => {
 		if (sceneJson) {

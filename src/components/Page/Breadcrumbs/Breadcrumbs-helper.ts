@@ -1,4 +1,4 @@
-import { IFile, IFileOrNull } from 'reactn/default'
+import { IFile, IFileOrNull } from 'types/app-state'
 import { EXT, FOLDER_NAME, OVERVIEW_NAME } from 'lib/constants'
 import { getMetaById, isArchived, isWikiRootFolder as isWikiRoot } from 'lib/helper'
 

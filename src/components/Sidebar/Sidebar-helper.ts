@@ -1,5 +1,5 @@
 import { OVERVIEW_NAME } from 'lib/constants'
-import type { IFile } from 'reactn/default'
+import type { IFile } from 'types/app-state'
 import type { ParsedLocation } from '@tanstack/react-router'
 
 export function isPage(location: ParsedLocation): boolean {

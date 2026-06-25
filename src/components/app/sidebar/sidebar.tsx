@@ -1,12 +1,12 @@
-import { useGlobal } from 'reactn'
+import { useAppStore } from 'store/app-store'
 import clsx from 'clsx'
 
 import SidebarContent from 'components/Sidebar'
 
 export default function Sidebar() {
-    const [showSidebarOnMobile, setShowSidebarOnMobile] = useGlobal(
-        'showSidebarOnMobile'
-    )
+    const showSidebarOnMobile = useAppStore((s) => s.showSidebarOnMobile)
+    const setShowSidebarOnMobile = (value: boolean) =>
+        useAppStore.setState({ showSidebarOnMobile: value })
     return (
         <>
             <div

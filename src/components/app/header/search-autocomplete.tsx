@@ -6,7 +6,7 @@ import { isWikiPageForSearch } from "lib/search/search-helper"
 import ArrowLeftIcon from "mdi-react/ArrowLeftIcon"
 import FileDocumentIcon from "mdi-react/FileDocumentIcon"
 import { type FC, type ReactNode, useEffect } from "react"
-import type { IFile } from "reactn/default"
+import type { IFile } from "types/app-state"
 
 export { isWikiPageForSearch } from "lib/search/search-helper"
 

@@ -26,7 +26,7 @@ import {
     TableBody,
     TableHeader,
 } from "react-aria-components"
-import type { IFile } from "reactn/default"
+import type { IFile } from "types/app-state"
 import { EmptyPlaceholder } from "./EmptyPlaceHolder"
 
 /** RAC {@link GridListItem} als TanStack-Router-Link ([createLink](https://tanstack.com/router/latest/docs/guide/custom-link)). */

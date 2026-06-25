@@ -1,8 +1,7 @@
-import { IFile, State } from 'reactn/default'
+import type { IFile } from 'types/app-state'
 import { OVERVIEW_NAME } from 'lib/constants'
 
 export {
-    filesUpdater,
     filesUpdaterHelper,
     filterIsNotArchived,
     getMetaById,
@@ -13,12 +12,6 @@ export {
 }
 
 /**
- * Interp. as a Global State with response of Google Drive as
- * properties 'files' and 'intialFiles' added to it.
- */
-type IGlobalState = State
-
-/**
  * Interp. as the change to a files meta data.
  * Change should consist of properties from IFile.
  */
@@ -27,7 +20,7 @@ type IChange = {
     mimeType?: 'application/vnd.google-apps.folder' | 'application/json'
     name?: string
     ownedByMe?: boolean
-    parents?: Array<string> // the id of the parrent of a file
+    parents?: Array<string>
     properties?: { [key: string]: any }
     shared?: boolean
     viewedByMe?: boolean
@@ -35,15 +28,15 @@ type IChange = {
 }
 
 /**
- * Helper function for filesUpdater
- *
- * @param change - the change of the file to update
- * @param files - an array of files, probably files or initialFiles from the global state
- * @param id - the file to update
+ * @deprecated Use patchFileCaches from lib/query/files-cache instead.
  */
-const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
+export const filesUpdater = (
+    change: IChange,
+    global: { initialFiles: IFile[]; files: IFile[] },
+    id: string,
+) => {
     const initialFiles = filesUpdaterHelper(change, global.initialFiles, id)
-    const hasFileInSearchResults = global.files.some(item => item.id === id)
+    const hasFileInSearchResults = global.files.some((item) => item.id === id)
     const files = hasFileInSearchResults
         ? filesUpdaterHelper(change, global.files, id)
         : global.files
@@ -61,7 +54,7 @@ const filesUpdater = (change: IChange, global: IGlobalState, id: string) => {
  * @param id - the file to update
  */
 const filesUpdaterHelper = (change: IChange, files: IFile[], id: string) => {
-    return files.map(item => {
+    return files.map((item) => {
         if (item.id === id) {
             const now = new Date().toISOString()
             return {
@@ -101,12 +94,12 @@ function getMetaById(fileId: String, files: Array<IFile>): IFile | null {
  * @param files - the files to check
  */
 function hasChildren(fileId: string, files: IFile[]) {
-    const folder = files.find(file => file.name === fileId)
+    const folder = files.find((file) => file.name === fileId)
     if (folder) {
         return Boolean(
             files.filter(
-                file => file.parents && file.parents.includes(folder.id)
-            ).length
+                (file) => file.parents && file.parents.includes(folder.id),
+            ).length,
         )
     }
     return false
@@ -116,7 +109,7 @@ function hasProperty(file: IFile, property: string, question: any = 'true') {
     return Boolean(
         file.properties &&
             file.properties[property] &&
-            file.properties[property] === question
+            file.properties[property] === question,
     )
 }
 

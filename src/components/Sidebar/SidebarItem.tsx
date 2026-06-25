@@ -1,6 +1,5 @@
 // @ts-nocheck
 //@ts-check
-import { useDispatch } from 'reactn'
 import { Link, useLocation } from '@tanstack/react-router'
 import { Tooltip } from 'components/gsuite-components'
 import clsx from 'clsx'
@@ -21,7 +20,6 @@ export const SidebarItem = ({
     tooltip,
     className,
 }: SidebarItemProps) => {
-    const clearSearch = useDispatch('clearSearchComplete')
     const location = useLocation()
 
     const { pathname } = location
@@ -36,7 +34,7 @@ export const SidebarItem = ({
                     isActive && 'bg-[#e8f0fe] text-accent',
                     className,
                 )}
-                onClick={clearSearch}
+                onClick={undefined}
                 to={path}
             >
                 <Icon

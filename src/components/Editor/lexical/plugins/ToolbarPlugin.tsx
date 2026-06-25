@@ -91,8 +91,10 @@ import {
 	ToggleButton,
 	type ToggleButtonRenderProps,
 } from 'react-aria-components'
-import { useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import type { IFile } from 'types/app-state'
+import { useFileTree } from 'lib/query/files-queries'
+import { appendToTree } from 'lib/query/files-cache'
+import { queryClient } from 'lib/query/query-client'
 import type { DriveImagePickerModalHandle } from '../drive-image-picker-modal'
 import { DriveImagePickerModal } from '../drive-image-picker-modal'
 import { getDocument } from '../gpicker'
@@ -184,8 +186,7 @@ export default function ToolbarPlugin({
 	readOnly,
 }: ToolbarPluginProps) {
 	const [editor] = useLexicalComposerContext()
-	const [files, setFiles] = useGlobal('files')
-	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+	const { data: initialFiles = [] } = useFileTree()
 	const modalRef = useRef<LinkModalHandle>(null)
 	const imageUrlModalRef = useRef<ImageUrlModalHandle>(null)
 	const driveImagePickerRef = useRef<DriveImagePickerModalHandle>(null)
@@ -374,12 +375,9 @@ export default function ToolbarPlugin({
 		}
 
 		try {
-			const parentId = getParentFolderId(fileId, initialFiles ?? [])
+			const parentId = getParentFolderId(fileId, initialFiles)
 			const uploaded = (await uploadBinaryFile({ file, parentId })) as IFile
-			const currentFiles = (files ?? []) as IFile[]
-			const currentInitialFiles = (initialFiles ?? []) as IFile[]
-			setFiles([...currentFiles, uploaded])
-			setInitialFiles([...currentInitialFiles, uploaded])
+			appendToTree(queryClient, uploaded)
 			editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
 				src: driveImageSrc(uploaded.id),
 				altText: uploaded.name || file.name,

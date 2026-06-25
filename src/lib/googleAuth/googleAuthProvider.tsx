@@ -4,9 +4,11 @@ import {
 	useContext,
 	useEffect,
 	useMemo,
+	useState,
 	type ReactNode,
 } from 'react'
-import { setGlobal } from 'reactn'
+import { queryClient } from 'lib/query/query-client'
+import { resetAppStore } from 'store/app-store'
 
 import {
 	applyTokenToGapiClient,
@@ -19,11 +21,16 @@ import {
 } from './postSignInInit'
 import { clearCachedUserInfo, fetchUserInfo } from './userInfo'
 
-type GoogleAuthContextValue = {
+export type AuthContext = {
+	isSignedIn: boolean
+	isSigningIn: boolean
+	userId: string
 	signIn: () => void
 	signOut: () => void
 	isReady: boolean
 }
+
+type GoogleAuthContextValue = AuthContext
 
 const GoogleAuthContext = createContext<GoogleAuthContextValue | null>(null)
 
@@ -40,35 +47,42 @@ type GoogleAuthProviderProps = {
 }
 
 export function GoogleAuthProvider({ children }: GoogleAuthProviderProps) {
-	const updateSignInStatus = useCallback(async (isSignedIn: boolean) => {
-		if (isSignedIn) {
+	const [isReady, setIsReady] = useState(false)
+	const [isSignedIn, setIsSignedIn] = useState(false)
+	const [isSigningIn, setIsSigningIn] = useState(true)
+	const [userId, setUserId] = useState('')
+
+	const updateSignInStatus = useCallback(async (signedIn: boolean) => {
+		if (signedIn) {
 			try {
 				const authResponse = getGapiAuthInstance()
 					.currentUser.get()
 					.getAuthResponse()
 				applyTokenToGapiClient(authResponse.access_token)
 				const userInfo = await fetchUserInfo(authResponse.access_token)
-				setGlobal({
-					isSignedIn: true,
-					isSigningIn: false,
-					userId: userInfo.sub,
-				})
+				setIsSignedIn(true)
+				setIsSigningIn(false)
+				setUserId(userInfo.sub)
 				await runPostSignInInit()
 			} catch (error) {
 				console.error(error)
-				setGlobal({ isSignedIn: false, isSigningIn: false })
+				setIsSignedIn(false)
+				setIsSigningIn(false)
+				setUserId('')
 			}
 			return
 		}
 
-		setGlobal({ isSignedIn: false, isSigningIn: false })
+		setIsSignedIn(false)
+		setIsSigningIn(false)
+		setUserId('')
 	}, [])
 
 	useEffect(() => {
 		let cancelled = false
 
 		async function initializeAuth() {
-			setGlobal({ isSigningIn: true })
+			setIsSigningIn(true)
 
 			try {
 				await ensureGapiClient()
@@ -86,10 +100,14 @@ export function GoogleAuthProvider({ children }: GoogleAuthProviderProps) {
 				}
 
 				await updateSignInStatus(authInstance.isSignedIn.get())
+				setIsReady(true)
 			} catch (error) {
 				if (!cancelled) {
 					console.error(error)
-					setGlobal({ isSignedIn: false, isSigningIn: false })
+					setIsSignedIn(false)
+					setIsSigningIn(false)
+					setUserId('')
+					setIsReady(false)
 				}
 			}
 		}
@@ -102,11 +120,11 @@ export function GoogleAuthProvider({ children }: GoogleAuthProviderProps) {
 	}, [updateSignInStatus])
 
 	const signIn = useCallback(() => {
-		setGlobal({ isSigningIn: true })
-		getGapiAuthInstance()
-			.signIn()
+		setIsSigningIn(true)
+		void ensureGapiClient()
+			.then(() => getGapiAuthInstance().signIn())
 			.catch(() => {
-				setGlobal({ isSigningIn: false })
+				setIsSigningIn(false)
 			})
 	}, [])
 
@@ -114,21 +132,28 @@ export function GoogleAuthProvider({ children }: GoogleAuthProviderProps) {
 		clearCachedUserInfo()
 		resetPostSignInInit()
 		applyTokenToGapiClient(null)
-		void getGapiAuthInstance().signOut()
-		setGlobal({
-			isSignedIn: false,
-			isSigningIn: false,
-			userId: '',
-		})
+		void ensureGapiClient()
+			.then(() => getGapiAuthInstance().signOut())
+			.catch((error) => {
+				console.error(error)
+			})
+		setIsSignedIn(false)
+		setIsSigningIn(false)
+		setUserId('')
+		queryClient.clear()
+		resetAppStore()
 	}, [])
 
 	const value = useMemo(
 		() => ({
 			signIn,
 			signOut,
-			isReady: true,
+			isReady,
+			isSignedIn,
+			isSigningIn,
+			userId,
 		}),
-		[signIn, signOut],
+		[signIn, signOut, isReady, isSignedIn, isSigningIn, userId],
 	)
 
 	return (

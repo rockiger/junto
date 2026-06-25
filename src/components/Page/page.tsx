@@ -21,7 +21,11 @@ import {
     renameFile as renameFileInGdrive,
     updateMetadata,
 } from 'lib/gdrive'
-import { filesUpdater, getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
+import { getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
+import { useGoogleAuth } from 'lib/googleAuth'
+import { useFileTree } from 'lib/query/files-queries'
+import { patchFileCaches } from 'lib/query/files-cache'
+import { queryClient } from 'lib/query/query-client'
 import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 import { getPageById, putPage } from 'lib/localDB'
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
@@ -33,8 +37,8 @@ import {
     useRef,
     useState,
 } from 'react'
-import { getGlobal, setGlobal, useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { setAppState } from 'store/app-store'
+import type { IFile } from 'types/app-state'
 
 // biome-ignore lint/suspicious/noExplicitAny: `Editor` is a JS `forwardRef` without exported props
 const EditorWithFileProps = Editor as any
@@ -42,22 +46,19 @@ const EditorWithFileProps = Editor as any
 const FlexInputField = FlexInput as any
 
 type PageProps = {
-    isSignedIn: boolean
-    isSigningIn: boolean
     isCreatingNewFile: boolean
     setGoToNewFile: (v: boolean) => void
 }
 
 export default function Page({
-    isSignedIn,
-    isSigningIn,
     isCreatingNewFile,
     setGoToNewFile: _setGoToNewFile,
 }: PageProps) {
+    const { isSignedIn, isSigningIn } = useGoogleAuth()
     const navigate = useNavigate()
     const router = useRouter()
     const params = useParams({ from: '/_app/page/$id' })
-    const [initialFiles] = useGlobal('initialFiles')
+    const { data: initialFiles = [] } = useFileTree()
 
     const [canEdit, setCanEdit] = useState(false)
     const [, setEditorDeltaState] = useState<Record<string, unknown>>({})
@@ -188,7 +189,7 @@ export default function Page({
     loadEditorContentRef.current = loadEditorContent
 
     useEffect(() => {
-        setGlobal({ goToNewFile: false })
+        setAppState({ goToNewFile: false })
         PageView({ pathname: '/page' })
     }, [])
 
@@ -207,7 +208,7 @@ export default function Page({
         if (prevParamsIdRef.current === params.id) return
 
         prevParamsIdRef.current = params.id
-        setGlobal({ goToNewFile: false })
+        setAppState({ goToNewFile: false })
         setFileId(params.id)
         setFileLoaded(false)
         document.getElementById('main-content')?.scrollTo({ top: 0 })
@@ -236,7 +237,7 @@ export default function Page({
             viewedByMe: true,
             viewedByMeTime: now,
         }
-        setGlobal(filesUpdater(change, getGlobal(), fileId))
+        patchFileCaches(queryClient, change, fileId)
         updateMetadata(fileId, { viewedByMeTime: now })
     }, [
         isSignedIn,
@@ -283,7 +284,7 @@ export default function Page({
         const change = { name }
 
         setFileName(name)
-        setGlobal(filesUpdater(change, getGlobal(), id))
+        patchFileCaches(queryClient, change, id)
         await renameFileInGdrive(fileId, name)
     }
 

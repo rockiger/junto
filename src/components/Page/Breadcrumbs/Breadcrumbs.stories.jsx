@@ -1,4 +1,5 @@
-import React, { setGlobal } from 'reactn'
+import React from 'react'
+import { resetAppStore } from '../../../store/app-store'
 import { storiesOf } from '@storybook/react'
 
 import { OVERVIEW_NAME, FOLDER_NAME } from 'lib/constants'

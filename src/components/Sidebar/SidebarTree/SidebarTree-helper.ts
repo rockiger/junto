@@ -1,6 +1,6 @@
 import { EXT, MYHOME, OVERVIEW_NAME } from 'lib/constants'
 import { getTitleFromFile, isArchived, isPage } from 'lib/helper'
-import type { IFile } from 'reactn/default'
+import type { IFile } from 'types/app-state'
 import type { WikiTreeNode } from './SidebarTree-types'
 
 export type SidebarTreeIndexes = {

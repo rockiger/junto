@@ -6,38 +6,34 @@ import FileList from 'components/Home/FileList'
 import type { SortBy } from 'components/Home/FileList/fileList-component'
 import { PageView } from 'components/Tracking'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
+import { useGoogleAuth } from 'lib/googleAuth'
+import { useFileTree } from 'lib/query/files-queries'
 import StarIcon from 'mdi-react/StarIcon'
-import { useEffect, useMemo, useGlobal, useState } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useEffect, useMemo, useState } from 'react'
+import type { IFile } from 'types/app-state'
 
 export default StarredPage
 export { StarredPage as ArchivePage }
 
-/**
- * @typedef ArchivePageProps
- * @property {boolean} isSignedIn
- * @property {boolean} isSigningIn
- */
-
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 const sortByLS = localStorage.getItem(localStorageKey)
 
-/**
- * A archive-page component.
- * @param {ArchivePageProps} props
- */
-function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigningIn: boolean }) {
-    const [initialFiles] = useGlobal('initialFiles')
-    const starredFiles = useMemo(() => filterStarred(initialFiles), [initialFiles])
+function StarredPage() {
+    const { isSignedIn, isSigningIn } = useGoogleAuth()
+    const { data: initialFiles = [] } = useFileTree()
+    const starredFiles = useMemo(
+        () => filterStarred(initialFiles),
+        [initialFiles],
+    )
     const [sortBy, setSortBy] = useState(
         sortByLS &&
-            (sortByLS === "modifiedByMeTime" || sortByLS === "viewedByMeTime")
+            (sortByLS === 'modifiedByMeTime' || sortByLS === 'viewedByMeTime')
             ? sortByLS
-            : "modifiedByMeTime",
+            : 'modifiedByMeTime',
     )
-    const setSortByAndLocalStorage = (sortBy: SortBy) => {
-        setSortBy(sortBy)
-        localStorage.setItem(localStorageKey, sortBy)
+    const setSortByAndLocalStorage = (nextSortBy: SortBy) => {
+        setSortBy(nextSortBy)
+        localStorage.setItem(localStorageKey, nextSortBy)
     }
 
     useEffect(() => {
@@ -68,7 +64,7 @@ function StarredPage({ isSignedIn, isSigningIn }: { isSignedIn: boolean, isSigni
 }
 
 export function filterStarred(files: IFile[]) {
-    const filtered = files.filter(file => {
+    const filtered = files.filter((file) => {
         return file.starred
     })
     return filtered

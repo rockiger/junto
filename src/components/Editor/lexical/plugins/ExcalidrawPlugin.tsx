@@ -14,8 +14,10 @@ import {
 	useState,
 	type ReactNode,
 } from 'react'
-import { useGlobal } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useFileTree } from 'lib/query/files-queries'
+import { upsertFilesInTree } from 'lib/query/files-cache'
+import { queryClient } from 'lib/query/query-client'
+import type { IFile } from 'types/app-state'
 import ExcalidrawModal, {
 	type ExcalidrawModalHandle,
 } from '../ExcalidrawModal'
@@ -55,8 +57,7 @@ export default function ExcalidrawPlugin({
 	syncWikiMarkdown?: () => void
 }) {
 	const [editor] = useLexicalComposerContext()
-	const [files, setFiles] = useGlobal('files')
-	const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+	const { data: initialFiles = [] } = useFileTree()
 	const modalRef = useRef<ExcalidrawModalHandle>(null)
 	const [previewVersions, setPreviewVersions] = useState<
 		Record<string, number>
@@ -86,10 +87,7 @@ export default function ExcalidrawPlugin({
 				(pageFileName
 					? generateExcalidrawFileName(pageFileName)
 					: generateExcalidrawFileName('page'))
-			const allFiles = [
-				...((initialFiles ?? []) as IFile[]),
-				...((files ?? []) as IFile[]),
-			]
+			const allFiles = initialFiles as IFile[]
 
 			try {
 				const svg = await sceneJsonToSvgString(state.sceneJson)
@@ -114,22 +112,7 @@ export default function ExcalidrawPlugin({
 						svgDriveFileId,
 					})
 
-				const currentFiles = (files ?? []) as IFile[]
-				const currentInitialFiles = (initialFiles ?? []) as IFile[]
-				const upsert = (list: IFile[]) => {
-					let next = [...list]
-					for (const file of [jsonFile, svgFile]) {
-						const idx = next.findIndex((f) => f.id === file.id)
-						if (idx >= 0) {
-							next[idx] = file
-						} else {
-							next = [...next, file]
-						}
-					}
-					return next
-				}
-				setFiles(upsert(currentFiles))
-				setInitialFiles(upsert(currentInitialFiles))
+				upsertFilesInTree(queryClient, [jsonFile, svgFile])
 
 				editor.update(
 					() => {
@@ -164,11 +147,8 @@ export default function ExcalidrawPlugin({
 			bumpPreviewRefresh,
 			editor,
 			fileId,
-			files,
 			initialFiles,
 			pageFileName,
-			setFiles,
-			setInitialFiles,
 			syncWikiMarkdown,
 		],
 	)

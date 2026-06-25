@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { useMemo } from 'react'
-import { addReducers } from 'reactn'
 import {
     Outlet,
     RouterProvider,
@@ -13,15 +12,6 @@ import { storiesOf } from '@storybook/react'
 
 import { SidebarTreeComponent } from './SidebarTree-component'
 import testState from './testState'
-
-addReducers({
-    clearSearchComplete: (_global, _dispatch) => ({
-        files: [],
-        isSearchFieldActive: false,
-        searchTerm: '',
-        searchValue: '',
-    }),
-})
 
 const rootRoute = createRootRoute({
     component: StoryShell,

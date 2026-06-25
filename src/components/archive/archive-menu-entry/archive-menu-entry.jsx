@@ -1,5 +1,5 @@
 //@ts-check
-import { useGlobal, useState } from 'reactn'
+import { useState } from 'react'
 
 import ArchiveIconDown from 'mdi-react/ArchiveArrowDownOutlineIcon'
 import ArchiveIconUp from 'mdi-react/ArchiveArrowUpIcon'
@@ -10,12 +10,14 @@ import {
     emptyAlert as initialAlert,
 } from 'components/gsuite-components/alert'
 import {
-    filesUpdater,
     getMetaById,
     hasChildren,
     isArchived,
     isWikiRootFile,
 } from 'lib/helper'
+import { patchFileCaches } from 'lib/query/files-cache'
+import { queryClient } from 'lib/query/query-client'
+import { useFileTree } from 'lib/query/files-queries'
 
 import { updateMetadata, moveFile } from 'lib/gdrive'
 
@@ -31,9 +33,7 @@ export { ArchiveMenuEntry }
  * @param {ArchiveButtonProps} props
  */
 export function useArchiveMenuEntry({ fileId }) {
-    const [global] = useGlobal()
-    const [, setFiles] = useGlobal('files')
-    const [initialFiles, setInitialFiles] = useGlobal('initialFiles')
+    const { data: initialFiles = [] } = useFileTree()
     const { enqueueSnackbar } = useSnackbar()
     const [alert, setAlert] = useState(initialAlert)
     const file = getMetaById(fileId, initialFiles)
@@ -64,9 +64,9 @@ export function useArchiveMenuEntry({ fileId }) {
     }
 
     function onClickArchiveButton() {
-        const file = getMetaById(fileId, initialFiles)
-        if (!file) return //something went wrong
-        if (isWikiRootFile(file)) {
+        const currentFile = getMetaById(fileId, initialFiles)
+        if (!currentFile) return
+        if (isWikiRootFile(currentFile)) {
             setAlert({
                 buttonText: 'Archive wiki',
                 content: (
@@ -88,7 +88,7 @@ export function useArchiveMenuEntry({ fileId }) {
                 ),
                 isOpen: true,
                 onOk: () => {
-                    archiveSinglePageWithoutChilds(file)
+                    archiveSinglePageWithoutChilds(currentFile)
                     setAlert(initialAlert)
                 },
                 title: 'Archive whole wiki?',
@@ -100,27 +100,27 @@ export function useArchiveMenuEntry({ fileId }) {
                 hierachy. They will not be archived. This movement of children can not be undone.`,
                 isOpen: true,
                 onOk: () => {
-                    archiveSinglePageWithChildren(file)
+                    archiveSinglePageWithChildren(currentFile)
                     setAlert(initialAlert)
                 },
                 title: 'Archive page with children?',
             })
         } else {
-            archiveSinglePageWithoutChilds(file)
+            archiveSinglePageWithoutChilds(currentFile)
         }
     }
 
     function onClickUnArchiveButton() {
-        const file = getMetaById(fileId, initialFiles)
-        if (!file) return //something went wrong
-        if (isWikiRootFile(file)) {
+        const currentFile = getMetaById(fileId, initialFiles)
+        if (!currentFile) return
+        if (isWikiRootFile(currentFile)) {
             setAlert({
                 buttonText: 'Restore wiki',
                 content:
                     'Do you want to restore this wiki? All pages in this wiki will be restored, unless they were archived seperately.',
                 isOpen: true,
                 onOk: () => {
-                    unArchiveSinglePageWithoutChilds(file)
+                    unArchiveSinglePageWithoutChilds(currentFile)
                     setAlert(initialAlert)
                 },
                 title: 'Restore whole wiki?',
@@ -131,43 +131,28 @@ export function useArchiveMenuEntry({ fileId }) {
                 content: `All pages below this page will move one step up in the page
                 hierachy. They will not be archived. This movement of children can not be undone.`,
                 isOpen: true,
-                onOk: () => {}, //!
+                onOk: () => {},
                 title: 'Archive page?',
             })
         } else {
-            unArchiveSinglePageWithoutChilds(file)
+            unArchiveSinglePageWithoutChilds(currentFile)
         }
     }
 
-    /** @param {import('reactn/default').IFile} file */
-    async function archiveSinglePageWithChildren(file) {
-        // Change parent of children
-        const newParentFolderId = file.parents ? file.parents[0] : null
+    /** @param {import('types/app-state').IFile} archiveFile */
+    async function archiveSinglePageWithChildren(archiveFile) {
+        const newParentFolderId = archiveFile.parents ? archiveFile.parents[0] : null
         if (!newParentFolderId) return
 
-        const folder = initialFiles.find(f => f.name === file.id)
-        console.log(folder)
+        const folder = initialFiles.find((f) => f.name === archiveFile.id)
         if (folder) {
             const children = initialFiles.filter(
-                f => f.parents && f.parents.includes(folder.id)
+                (f) => f.parents && f.parents.includes(folder.id),
             )
-            console.log(children)
-            let globalTmp = { ...global }
             for (const child of children) {
                 const newParents = [newParentFolderId]
-                const updatedFiles = filesUpdater(
-                    { parents: newParents },
-                    globalTmp,
-                    child.id
-                )
-                globalTmp = {
-                    ...globalTmp,
-                    files: updatedFiles.files,
-                    initialFiles: updatedFiles.initialFiles,
-                }
+                patchFileCaches(queryClient, { parents: newParents }, child.id)
             }
-            setFiles(globalTmp.files)
-            setInitialFiles(globalTmp.initialFiles)
 
             for (const child of children) {
                 const currentParentFolder = child.parents
@@ -177,46 +162,39 @@ export function useArchiveMenuEntry({ fileId }) {
                     await moveFile(
                         child.id,
                         currentParentFolder,
-                        newParentFolderId
+                        newParentFolderId,
                     )
                 }
             }
-            // Archive SinglePage
-            archiveSinglePageWithoutChilds(file)
+            archiveSinglePageWithoutChilds(archiveFile)
         }
     }
 
-    /** @param {import('reactn/default').IFile} file */
-    async function archiveSinglePageWithoutChilds(file) {
-        console.log('archive page')
-        const { properties } = file
+    /** @param {import('types/app-state').IFile} archiveFile */
+    async function archiveSinglePageWithoutChilds(archiveFile) {
+        const { properties } = archiveFile
         const newProperties = { ...properties, isArchived: 'true' }
-        const updatedFiles = filesUpdater(
+        patchFileCaches(
+            queryClient,
             { properties: newProperties },
-            global,
-            file.id
+            archiveFile.id,
         )
-        setFiles(updatedFiles.files)
-        setInitialFiles(updatedFiles.initialFiles)
-        await updateMetadata(file.id, { properties: newProperties })
+        await updateMetadata(archiveFile.id, { properties: newProperties })
         enqueueSnackbar('Page archived.', {
             autoHideDuration: 5000,
         })
     }
 
-    /** @param {import('reactn/default').IFile} file */
-    async function unArchiveSinglePageWithoutChilds(file) {
-        console.log('archive page')
-        const { properties } = file
+    /** @param {import('types/app-state').IFile} archiveFile */
+    async function unArchiveSinglePageWithoutChilds(archiveFile) {
+        const { properties } = archiveFile
         const newProperties = { ...properties, isArchived: false }
-        const updatedFiles = filesUpdater(
+        patchFileCaches(
+            queryClient,
             { properties: newProperties },
-            global,
-            file.id
+            archiveFile.id,
         )
-        setFiles(updatedFiles.files)
-        setInitialFiles(updatedFiles.initialFiles)
-        await updateMetadata(file.id, { properties: newProperties })
+        await updateMetadata(archiveFile.id, { properties: newProperties })
         enqueueSnackbar('Page restored.', {
             autoHideDuration: 5000,
         })
@@ -234,7 +212,3 @@ export function useArchiveMenuEntry({ fileId }) {
 function ArchiveMenuEntry(props) {
     return useArchiveMenuEntry(props)
 }
-
-// Warning if has child pages
-/* Diese Seite hat untergeordnete Seiten
-Alle unter "Child 2" geschachtelten Seiten bleiben in der Seitenhierarchie erhalten. */

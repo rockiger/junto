@@ -18,23 +18,20 @@ import { PageView } from 'components/Tracking'
 import { WikiList } from 'components/wiki-list'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 import { isArchived } from 'lib/helper'
+import { useGoogleAuth } from 'lib/googleAuth'
+import { useFileTree } from 'lib/query/files-queries'
 import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import { SelectionIndicator } from 'react-aria-components'
-import { useEffect, useMemo, useGlobal, useState } from 'reactn'
-import type { IFile } from 'reactn/default'
+import { useEffect, useMemo, useState } from 'react'
+import type { IFile } from 'types/app-state'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
 const sortByLS = localStorage.getItem(localStorageKey)
 
-function ArchivePage({
-	isSignedIn,
-	isSigningIn,
-}: {
-	isSignedIn: boolean
-	isSigningIn: boolean
-}) {
-	const [initialFiles] = useGlobal('initialFiles')
+function ArchivePage() {
+	const { isSignedIn, isSigningIn } = useGoogleAuth()
+	const { data: initialFiles = [] } = useFileTree()
 	const isDesktop = useIsDesktop()
 	const archivedFiles = useMemo(
 		() => filterIsArchived(initialFiles),
