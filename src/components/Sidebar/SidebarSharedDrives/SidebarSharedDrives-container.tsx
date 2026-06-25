@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useLocation } from '@tanstack/react-router'
-import { useAppStore } from 'store/app-store'
+import { useFileTree } from 'lib/query/files-queries'
 
 import { getPageId, isPage } from '../Sidebar-helper'
 import { filterWikis, sortWikisBy } from 'components/wiki-list'
@@ -14,7 +14,7 @@ import {
 import { WikiSidebarTree } from '../SidebarTree/WikiSidebarTree'
 
 export function SidebarSharedDrives() {
-    const initialFiles = useAppStore((s) => s.initialFiles)
+    const { data: initialFiles = [] } = useFileTree()
     const location = useLocation()
 
     const currentPageId = isPage(location) ? getPageId(location) : null

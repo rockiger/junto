@@ -1,9 +1,14 @@
 import { createRouter } from '@tanstack/react-router'
+import type { AuthContext } from 'lib/googleAuth/googleAuthProvider'
+
 import { routeTree } from './routeTree.gen'
 
 export const router = createRouter({
     routeTree,
     trailingSlash: 'preserve',
+    context: {
+        auth: undefined! as AuthContext,
+    },
     defaultOnCatch: (error, errorInfo) => {
         console.error('[Router] Uncaught route error:', error)
         if (error.stack) {

@@ -9,14 +9,6 @@ export const Route = createFileRoute('/_app/_dashboard/home')({
 
 function HomeRoute() {
     const isCreatingNewFile = useAppStore((s) => s.isCreatingNewFile)
-    const isSignedIn = useAppStore((s) => s.isSignedIn)
-    const isSigningIn = useAppStore((s) => s.isSigningIn)
 
-    return (
-        <Home
-            isCreatingNewFile={isCreatingNewFile}
-            isSignedIn={isSignedIn}
-            isSigningIn={isSigningIn}
-        />
-    )
+    return <Home isCreatingNewFile={isCreatingNewFile} />
 }

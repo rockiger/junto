@@ -21,7 +21,11 @@ import {
     renameFile as renameFileInGdrive,
     updateMetadata,
 } from 'lib/gdrive'
-import { filesUpdater, getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
+import { getFileNameFromTitle, getTitleFromFile } from 'lib/helper'
+import { useGoogleAuth } from 'lib/googleAuth'
+import { useFileTree } from 'lib/query/files-queries'
+import { patchFileCaches } from 'lib/query/files-cache'
+import { queryClient } from 'lib/query/query-client'
 import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 import { getPageById, putPage } from 'lib/localDB'
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
@@ -33,7 +37,7 @@ import {
     useRef,
     useState,
 } from 'react'
-import { getAppState, setAppState, useAppStore } from 'store/app-store'
+import { setAppState } from 'store/app-store'
 import type { IFile } from 'types/app-state'
 
 // biome-ignore lint/suspicious/noExplicitAny: `Editor` is a JS `forwardRef` without exported props
@@ -42,22 +46,19 @@ const EditorWithFileProps = Editor as any
 const FlexInputField = FlexInput as any
 
 type PageProps = {
-    isSignedIn: boolean
-    isSigningIn: boolean
     isCreatingNewFile: boolean
     setGoToNewFile: (v: boolean) => void
 }
 
 export default function Page({
-    isSignedIn,
-    isSigningIn,
     isCreatingNewFile,
     setGoToNewFile: _setGoToNewFile,
 }: PageProps) {
+    const { isSignedIn, isSigningIn } = useGoogleAuth()
     const navigate = useNavigate()
     const router = useRouter()
     const params = useParams({ from: '/_app/page/$id' })
-    const initialFiles = useAppStore((s) => s.initialFiles)
+    const { data: initialFiles = [] } = useFileTree()
 
     const [canEdit, setCanEdit] = useState(false)
     const [, setEditorDeltaState] = useState<Record<string, unknown>>({})
@@ -236,7 +237,7 @@ export default function Page({
             viewedByMe: true,
             viewedByMeTime: now,
         }
-        setAppState(filesUpdater(change, getAppState(), fileId))
+        patchFileCaches(queryClient, change, fileId)
         updateMetadata(fileId, { viewedByMeTime: now })
     }, [
         isSignedIn,
@@ -283,7 +284,7 @@ export default function Page({
         const change = { name }
 
         setFileName(name)
-        setAppState(filesUpdater(change, getAppState(), id))
+        patchFileCaches(queryClient, change, id)
         await renameFileInGdrive(fileId, name)
     }
 

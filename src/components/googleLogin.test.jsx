@@ -5,16 +5,14 @@ import GoogleLogin from './googleLogin'
 
 let mockIsSignedIn = false
 
-vi.mock('store/app-store', () => ({
-	useAppStore: (selector) =>
-		selector({ isSignedIn: mockIsSignedIn }),
-}))
-
 vi.mock('lib/googleAuth', () => ({
 	useGoogleAuth: () => ({
 		signIn: vi.fn(),
 		signOut: vi.fn(),
 		isReady: true,
+		isSignedIn: mockIsSignedIn,
+		isSigningIn: false,
+		userId: '',
 	}),
 }))
 

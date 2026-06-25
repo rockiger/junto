@@ -3,9 +3,9 @@ import clsx from 'clsx'
 import Header from 'components/app/header'
 import Sidebar from 'components/app/sidebar'
 import { Hint } from 'components/gsuite-components/hint'
+import { useGoogleAuth } from 'lib/googleAuth'
 import PlusIcon from 'mdi-react/PlusIcon'
 import type { ReactNode } from 'react'
-import { useAppStore } from 'store/app-store'
 import logo from '../../static/logo_48.svg'
 
 type FocusLayoutProps = {
@@ -16,8 +16,7 @@ type FocusLayoutProps = {
  * Page editor shell: mobile keeps minimal chrome; desktop matches DashboardLayout grid.
  */
 export default function FocusLayout({ children }: FocusLayoutProps) {
-    const isSignedIn = useAppStore((s) => s.isSignedIn)
-    const clearSearch = useAppStore((s) => s.clearSearchComplete)
+    const { isSignedIn } = useGoogleAuth()
 
     return (
         <div
@@ -50,7 +49,6 @@ export default function FocusLayout({ children }: FocusLayoutProps) {
             >
                 <Hint id="new_page" scope="dashboard">
                     <Link
-                        onClick={() => clearSearch()}
                         className="inline-flex items-center justify-center gap-3 rounded-2xl bg-surface-paper px-4 py-4 font-medium shadow-md/50 text-sm outline-none hover:bg-surface-hover focus-visible:ring-4 focus-visible:ring-accent-light"
                         aria-label="New wiki or page"
                         to="/new"

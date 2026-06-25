@@ -1,4 +1,3 @@
-import { useAppStore } from 'store/app-store'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import {
     Collection,
@@ -22,7 +21,6 @@ export function WikiSidebarTree({
     routeExpandedKeys,
     'aria-label': ariaLabel,
 }: WikiSidebarTreeProps) {
-    const clearSearch = useAppStore((s) => s.clearSearchComplete)
     const navigate = useNavigate()
     const location = useLocation()
     const currentPageId = isPage(location) ? getPageId(location) : null
@@ -63,7 +61,6 @@ export function WikiSidebarTree({
             expandedKeys={expandedKeys}
             items={items}
             onAction={key => {
-                clearSearch()
                 navigate({
                     to: '/page/$id',
                     params: { id: String(key) },

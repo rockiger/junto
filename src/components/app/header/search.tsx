@@ -1,18 +1,19 @@
-import clsx from "clsx"
-import IconButton from "components/gsuite-components/icon-button"
-import { Event } from "components/Tracking"
-
-import ArrowLeftIcon from "mdi-react/ArrowLeftIcon"
-import CloseIcon from "mdi-react/CloseIcon"
-import SearchIcon from "mdi-react/MagnifyIcon"
-import { useIsDesktop } from "lib/hooks/useMediaQuery"
-import { useNavigate, useRouterState } from "@tanstack/react-router"
-import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import clsx from 'clsx'
+import IconButton from 'components/gsuite-components/icon-button'
+import { Event } from 'components/Tracking'
+import { useIsDesktop } from 'lib/hooks/useMediaQuery'
+import { useFileTree } from 'lib/query/files-queries'
+import { normalizeSearchQueryParam } from 'lib/search/search-helper'
+import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
+import CloseIcon from 'mdi-react/CloseIcon'
+import SearchIcon from 'mdi-react/MagnifyIcon'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
+import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
-import { useAppStore } from "store/app-store"
 import SearchAutocomplete, {
     filterSearchAutocompleteFiles,
-} from "./search-autocomplete"
+} from './search-autocomplete'
+import { useSearchUI } from './search-ui-context'
 
 export type SearchProps = {
     clearSearch: () => void
@@ -23,16 +24,21 @@ export type SearchProps = {
 export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
     const navigate = useNavigate()
     const pathname = useRouterState({ select: (s) => s.location.pathname })
+    const routeQ = useRouterState({
+        select: (s) => {
+            const params = new URLSearchParams(s.location.searchStr)
+            return normalizeSearchQueryParam(params.get('q') ?? '')
+        },
+    })
     const isDesktop = useIsDesktop()
-    const initialFiles = useAppStore((s) => s.initialFiles)
-    const isSearchFieldActive = useAppStore((s) => s.isSearchFieldActive)
-    const setIsSearchFieldActive = (value: boolean) =>
-        useAppStore.setState({ isSearchFieldActive: value })
+    const { data: initialFiles = [] } = useFileTree()
+    const {
+        searchValue,
+        setSearchValue,
+        isSearchFieldActive,
+        setIsSearchFieldActive,
+    } = useSearchUI()
     const [showSearch, setShowSearch] = useState(false)
-    const searchValue = useAppStore((s) => s.searchValue)
-    const setSearchValue = (value: string) =>
-        useAppStore.setState({ searchValue: value })
-
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [submitSelected, setSubmitSelected] = useState(false)
     const filteredFiles = useMemo(
@@ -42,21 +48,30 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
 
     const inputRef = useRef<HTMLInputElement>(null)
 
+    useEffect(() => {
+        if (pathname === '/search') {
+            setSearchValue(routeQ)
+        }
+    }, [pathname, routeQ, setSearchValue])
+
     const clearSearchOnPage = useCallback(() => {
         clearSearch()
-        if (pathname === "/search") {
-            void navigate({ to: "/search", search: { q: "" } })
+        if (pathname === '/search') {
+            void navigate({ to: '/search', search: { q: '' } })
         }
     }, [clearSearch, navigate, pathname])
 
-    const activateSearch = useCallback((kind: string) => {
-        setIsSearchFieldActive(true)
-        setShowSearch(true)
-        setTimeout(() => {
-            inputRef.current?.focus()
-        }, 100)
-        Event("Search", "Activate search", kind)
-    }, [setIsSearchFieldActive])
+    const activateSearch = useCallback(
+        (kind: string) => {
+            setIsSearchFieldActive(true)
+            setShowSearch(true)
+            setTimeout(() => {
+                inputRef.current?.focus()
+            }, 100)
+            Event('Search', 'Activate search', kind)
+        },
+        [setIsSearchFieldActive],
+    )
 
     useEffect(() => {
         if (!isSearchFieldActive) setSelectedRow(null)
@@ -64,30 +79,29 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
 
     useEffect(() => {
         function onKeyDown(ev: KeyboardEvent) {
-            if (ev.key === "/" && !isSearchFieldActive) {
+            if (ev.key === '/' && !isSearchFieldActive) {
                 ev.stopPropagation()
                 ev.preventDefault()
-                activateSearch("keydown /")
+                activateSearch('keydown /')
                 inputRef.current?.focus()
             }
         }
-        window.addEventListener("keydown", onKeyDown)
+        window.addEventListener('keydown', onKeyDown)
 
         return function cleanup() {
-            window.removeEventListener("keydown", onKeyDown)
+            window.removeEventListener('keydown', onKeyDown)
         }
     }, [activateSearch, isSearchFieldActive])
-
 
     if (!isDesktop && !showSearch) {
         return (
             <Button
                 aria-label="Open search"
                 className={clsx(
-                    "bg-search-bg font-normal rounded-full text-base text-search-placeholder w-full h-13",
+                    'bg-search-bg font-normal rounded-full text-base text-search-placeholder w-full h-13',
                     className,
                 )}
-                onPress={() => activateSearch("click")}
+                onPress={() => activateSearch('click')}
             >
                 <div className="translate-y-[2px]">Search in Fulcrum</div>
             </Button>
@@ -100,10 +114,10 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
         <div
             id="search-container"
             className={clsx(
-                "flex flex-1",
+                'flex flex-1',
                 desktopSearchActive
-                    ? "lg:relative lg:flex-col lg:w-full lg:max-w-[832px] lg:bg-surface-paper   "
-                    : "absolute left-0 w-full z-20 bg-surface-container lg:relative lg:h-12 lg:w-full lg:max-w-[832px] lg:items-center lg:rounded-full lg:bg-search-bg lg:px-2",
+                    ? 'lg:relative lg:flex-col lg:w-full lg:max-w-[832px] lg:bg-surface-paper   '
+                    : 'absolute left-0 w-full z-20 bg-surface-container lg:relative lg:h-12 lg:w-full lg:max-w-[832px] lg:items-center lg:rounded-full lg:bg-search-bg lg:px-2',
                 className,
             )}
         >
@@ -112,7 +126,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                     ariaLabel="Clear search"
                     className=""
                     onClick={() => {
-                        setSearchValue("")
+                        setSearchValue('')
                         setShowSearch(false)
                     }}
                 >
@@ -121,30 +135,33 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
             </div>
             <div
                 className={clsx(
-                    "flex flex-1 items-center",
-                    desktopSearchActive && "lg:gap-3 lg:px-2 lg:py-3 lg:border lg:border-b-0 lg:border-edge-strong lg:rounded-t-3xl lg:shadow-md",
+                    'flex flex-1 items-center',
+                    desktopSearchActive &&
+                        'lg:gap-3 lg:px-2 lg:py-3 lg:border lg:border-b-0 lg:border-edge-strong lg:rounded-t-3xl lg:shadow-md',
                 )}
-            ><IconButton
-                ariaLabel="Clear search"
-                className="hidden lg:flex"
-                onClick={() => {
-                    submitSearch("click")
-                }}
             >
+                <IconButton
+                    ariaLabel="Clear search"
+                    className="hidden lg:flex"
+                    onClick={() => {
+                        submitSearch('click')
+                    }}
+                >
                     <SearchIcon
                         aria-hidden
                         className="hidden shrink-0 text-search-placeholder lg:block"
-                    /></IconButton>
+                    />
+                </IconButton>
                 <input
                     autoComplete="off"
                     name="search-input"
                     aria-label="Search in Fulcrum"
                     placeholder="Search in Fulcrum"
                     className={clsx(
-                        "w-full flex-1 border-0 bg-transparent p-0 font-inherit placeholder-search-placeholder text-base text-fg-default outline-none pt-2.5 lg:pt-0",
+                        'w-full flex-1 border-0 bg-transparent p-0 font-inherit placeholder-search-placeholder text-base text-fg-default outline-none pt-2.5 lg:pt-0',
                     )}
-                    onClick={() => activateSearch("click")}
-                    onFocus={() => activateSearch("focus")}
+                    onClick={() => activateSearch('click')}
+                    onFocus={() => activateSearch('focus')}
                     onBlur={() =>
                         setTimeout(() => setIsSearchFieldActive(false), 100)
                     }
@@ -154,18 +171,18 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                     }}
                     onKeyDown={(ev) => {
                         const border = Math.min(6, filteredFiles.length - 1)
-                        if (ev.key === "Enter") {
+                        if (ev.key === 'Enter') {
                             ev.preventDefault()
                             if (selectedRow === null) {
-                                submitSearch("keydown Enter")
+                                submitSearch('keydown Enter')
                             } else {
                                 setSubmitSelected(true)
                             }
-                        } else if (ev.key === "Escape") {
+                        } else if (ev.key === 'Escape') {
                             ev.preventDefault()
                             clearSearchOnPage()
                             setShowSearch(false)
-                        } else if (ev.key === "ArrowDown") {
+                        } else if (ev.key === 'ArrowDown') {
                             ev.preventDefault()
                             if (filteredFiles.length < 1) {
                                 setSelectedRow(null)
@@ -176,7 +193,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                             } else {
                                 setSelectedRow(selectedRow + 1)
                             }
-                        } else if (ev.key === "ArrowUp") {
+                        } else if (ev.key === 'ArrowUp') {
                             ev.preventDefault()
                             if (filteredFiles.length < 1) {
                                 setSelectedRow(null)
@@ -201,7 +218,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                         className="hidden lg:flex"
                         onClick={() => {
                             clearSearchOnPage()
-                            setSearchValue("")
+                            setSearchValue('')
                             inputRef.current?.focus()
                         }}
                     >
@@ -213,12 +230,12 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                 {searchValue ? (
                     <IconButton
                         ariaLabel="Clear search"
-                        onClick={() => setTimeout(() => {
-                            clearSearchOnPage()
-                            setSearchValue("")
-                            inputRef.current?.focus()
-
-                        }, 100)
+                        onClick={() =>
+                            setTimeout(() => {
+                                clearSearchOnPage()
+                                setSearchValue('')
+                                inputRef.current?.focus()
+                            }, 100)
                         }
                     >
                         <CloseIcon />
@@ -228,7 +245,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
             {!isDesktop && isSearchFieldActive ? (
                 <div
                     className={clsx(
-                        "pointer-events-none absolute top-14 left-0 h-[calc(100vh-56px)] w-screen bg-surface",
+                        'pointer-events-none absolute top-14 left-0 h-[calc(100vh-56px)] w-screen bg-surface',
                     )}
                 />
             ) : null}
@@ -236,7 +253,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                 <SearchAutocomplete
                     clearSearch={clearSearch}
                     filteredFiles={filteredFiles}
-                    onSubmitSearch={() => submitSearch("footer")}
+                    onSubmitSearch={() => submitSearch('footer')}
                     searchValue={searchValue}
                     selectedRow={selectedRow}
                     setSubmitSelected={setSubmitSelected}
@@ -248,7 +265,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
 
     function submitSearch(kind: string) {
         submit()
-        Event("Search", "Submit search", kind)
+        Event('Search', 'Submit search', kind)
     }
 }
 

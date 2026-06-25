@@ -10,8 +10,6 @@ export const Route = createFileRoute('/_app/page/$id')({
 
 function PageRoute() {
     const isCreatingNewFile = useAppStore((s) => s.isCreatingNewFile)
-    const isSignedIn = useAppStore((s) => s.isSignedIn)
-    const isSigningIn = useAppStore((s) => s.isSigningIn)
     const setGoToNewFile = (goToNewFile: boolean) =>
         useAppStore.setState({ goToNewFile })
 
@@ -19,8 +17,6 @@ function PageRoute() {
         <FocusLayout>
             <Page
                 isCreatingNewFile={isCreatingNewFile}
-                isSignedIn={isSignedIn}
-                isSigningIn={isSigningIn}
                 setGoToNewFile={setGoToNewFile}
             />
         </FocusLayout>

@@ -5,13 +5,7 @@ import { initialAppState } from './initial-state'
 
 const PERSIST_KEY = '@reactn'
 
-type AppActions = {
-    clearSearchComplete: () => void
-    clearSearchFiles: () => void
-    clearSearchMeta: () => void
-}
-
-export type AppStore = AppState & AppActions
+export type AppStore = AppState
 
 function migrateLegacyPersistValue(raw: string | null): string | null {
     if (!raw) return raw
@@ -41,42 +35,21 @@ const legacyAwareStorage = createJSONStorage(() => ({
 
 export const useAppStore = create<AppStore>()(
     persist(
-        (set) => ({
+        () => ({
             ...initialAppState,
-            clearSearchComplete: () =>
-                set({
-                    files: [],
-                    isSearchFieldActive: false,
-                    searchTerm: '',
-                    searchValue: '',
-                }),
-            clearSearchFiles: () => set({ files: [] }),
-            clearSearchMeta: () =>
-                set({
-                    isSearchFieldActive: false,
-                    searchTerm: '',
-                    searchValue: '',
-                }),
         }),
         {
             name: PERSIST_KEY,
             storage: legacyAwareStorage,
             partialize: (state) => ({
                 hints: state.hints,
-                initialFiles: state.initialFiles,
-                rootFolderId: state.rootFolderId,
             }),
         },
     ),
 )
 
 export function getAppState(): AppState {
-    const { clearSearchComplete, clearSearchFiles, clearSearchMeta, ...state } =
-        useAppStore.getState()
-    void clearSearchComplete
-    void clearSearchFiles
-    void clearSearchMeta
-    return state
+    return useAppStore.getState()
 }
 
 export function setAppState(partial: Partial<AppState>): void {

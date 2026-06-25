@@ -1,10 +1,10 @@
-import { useAppStore } from 'store/app-store'
+import { useFileTree, useRootFolderId } from 'lib/query/files-queries'
 
 import { SidebarTreeComponent } from './SidebarTree-component'
 
 export const SidebarTree = () => {
-    const rootFolderId = useAppStore((s) => s.rootFolderId)
-    const initialFiles = useAppStore((s) => s.initialFiles)
+    const rootFolderId = useRootFolderId()
+    const { data: initialFiles = [] } = useFileTree()
 
     return (
         <SidebarTreeComponent

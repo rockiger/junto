@@ -6,14 +6,12 @@ import {
     useMatch,
     useNavigate,
 } from '@tanstack/react-router'
+import { useGoogleAuth } from 'lib/googleAuth'
 import { useEffect } from 'react'
-import { getAppState, useAppStore } from 'store/app-store'
 
 export const Route = createFileRoute('/_app')({
-    beforeLoad: () => {
-        const { isSignedIn, isSigningIn } = getAppState()
-        // `isSignedIn` ist bis GAPI-Init false; währenddessen `isSigningIn` true.
-        // Nur nach geklärter Session Gäste zur Landing schicken (sonst /page/$id → / → /home).
+    beforeLoad: ({ context }) => {
+        const { isSignedIn, isSigningIn } = context.auth
         if (!isSignedIn && !isSigningIn) {
             throw redirect({ to: '/' })
         }
@@ -23,9 +21,7 @@ export const Route = createFileRoute('/_app')({
 
 function AppShell() {
     const navigate = useNavigate()
-    const isSignedIn = useAppStore((s) => s.isSignedIn)
-    const isSigningIn = useAppStore((s) => s.isSigningIn)
-    /** Page-Editor ohne Dashboard-Header: dort läuft sonst kein GoogleLogin → kein GAPI, kein Datei-Load. */
+    const { isSignedIn, isSigningIn } = useGoogleAuth()
     const isPageEditor = useMatch({
         from: '/_app/page/$id',
         shouldThrow: false,

@@ -1,13 +1,14 @@
 import { useCallback } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useAppStore } from 'store/app-store'
+import { useFileTree } from 'lib/query/files-queries'
 
 import { createFile, createNewWiki } from 'db'
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import { getParentFolderId } from '../Sidebar-helper'
 
 export function useWikiTreeAddChild() {
-    const initialFiles = useAppStore((s) => s.initialFiles)
+    const { data: initialFiles = [] } = useFileTree()
     const navigate = useNavigate()
 
     return useCallback(
@@ -17,13 +18,13 @@ export function useWikiTreeAddChild() {
                 parentFolderId ?? undefined
             try {
                 if (!parentFolderIdOfNewFile) {
-                    const parentFolderId = getParentFolderId(
+                    const resolvedParentFolderId = getParentFolderId(
                         pageId,
                         initialFiles,
                     )
                     parentFolderIdOfNewFile = await createNewWiki({
                         name: pageId,
-                        parentId: parentFolderId,
+                        parentId: resolvedParentFolderId,
                         isWikiRoot: false,
                     })
                 }

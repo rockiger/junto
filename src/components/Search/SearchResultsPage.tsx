@@ -2,18 +2,17 @@ import FileListComponent from 'components/Home/FileList/fileList-component'
 import type { SortBy } from 'components/Home/FileList/fileList-component'
 import { Spinner } from 'components/gsuite-components'
 import { filterSearchResultFiles } from 'lib/search/search-helper'
+import { useFileTree, useSearchFiles } from 'lib/query/files-queries'
 import FileSearchIcon from 'mdi-react/FileSearchIcon'
 import { useMemo, useState } from 'react'
-import { useAppStore } from 'store/app-store'
 
 export type SearchResultsPageProps = {
     query: string
 }
 
 export default function SearchResultsPage({ query }: SearchResultsPageProps) {
-    const files = useAppStore((s) => s.files)
-    const initialFiles = useAppStore((s) => s.initialFiles)
-    const isFileListLoading = useAppStore((s) => s.isFileListLoading)
+    const { data: initialFiles = [] } = useFileTree()
+    const { data: files = [], isFetching } = useSearchFiles(query)
     const [sortBy, setSortBy] = useState<SortBy>('modifiedByMeTime')
 
     const trimmedQuery = query.trim()
@@ -22,7 +21,7 @@ export default function SearchResultsPage({ query }: SearchResultsPageProps) {
         [files],
     )
 
-    const isLoading = trimmedQuery.length > 0 && isFileListLoading
+    const isLoading = trimmedQuery.length > 0 && isFetching
 
     if (!trimmedQuery) {
         return (

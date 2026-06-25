@@ -1,7 +1,10 @@
 // @ts-nocheck
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useCallback } from 'react'
-import { getAppState, setAppState } from 'store/app-store'
+import { setAppState } from 'store/app-store'
+import { getFileTree } from 'lib/query/files-cache'
+import { queryClient } from 'lib/query/query-client'
+import { queryKeys } from 'lib/query/query-keys'
 
 import {
     getPageId,
@@ -20,7 +23,9 @@ function SidebarWithRouter() {
     const onClickNewButton = useCallback(async () => {
         setAppState({ isCreatingNewFile: true })
         let parentFolderIdOfNewFile
-        const { initialFiles, rootFolderId } = getAppState()
+        const initialFiles = getFileTree(queryClient)
+        const rootFolderId =
+            queryClient.getQueryData(queryKeys.rootFolderId) ?? null
         console.log(isPage(location))
         if (isPage(location)) {
             const pageId = getPageId(location)
@@ -46,10 +51,7 @@ function SidebarWithRouter() {
         }
 
         try {
-            setAppState({
-                goToNewFile: true,
-                searchTerm: '',
-            })
+            setAppState({ goToNewFile: true })
             const newFileId = await createFile(
                 UNTITLEDFILE,
                 parentFolderIdOfNewFile,

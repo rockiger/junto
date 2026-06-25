@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { useAppStore } from 'store/app-store'
 import { useLocation } from '@tanstack/react-router'
 import { isEmpty } from 'lodash'
+import { useFileTree } from 'lib/query/files-queries'
 
 import { getPageId, isPage } from '../Sidebar-helper'
 import {
@@ -22,9 +22,7 @@ export const SidebarTreeComponent = ({
     rootFolderId,
     initialFiles,
 }: SidebarTreeComponentProps) => {
-    const isInitialFileListLoading = useAppStore(
-        (s) => s.isInitialFileListLoading,
-    )
+    const { isFetching } = useFileTree()
     const location = useLocation()
 
     const treeIndexes = useMemo(
@@ -52,17 +50,16 @@ export const SidebarTreeComponent = ({
 
     return (
         <>
-            {isEmpty(initialFiles) && isInitialFileListLoading && (
+            {isEmpty(initialFiles) && isFetching && (
                 <Spinner style={{ marginTop: '2rem' }} />
             )}
-            {(!isEmpty(initialFiles) || !isInitialFileListLoading) &&
-                myHomeRoot && (
-                    <WikiSidebarTree
-                        aria-label="My wiki pages"
-                        items={[myHomeRoot]}
-                        routeExpandedKeys={expandedPageIds}
-                    />
-                )}
+            {(!isEmpty(initialFiles) || !isFetching) && myHomeRoot && (
+                <WikiSidebarTree
+                    aria-label="My wiki pages"
+                    items={[myHomeRoot]}
+                    routeExpandedKeys={expandedPageIds}
+                />
+            )}
         </>
     )
 }

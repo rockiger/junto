@@ -3,6 +3,7 @@ import { DialogModal } from 'components/gsuite-components/modal/dialog-modal'
 import Spinner from 'components/gsuite-components/spinner'
 import { createFile, createNewWiki } from 'db'
 import { OVERVIEW_NAME, OVERVIEW_VALUE } from 'lib/constants'
+import { useGoogleAuth } from 'lib/googleAuth'
 import { type FormEvent, useEffect, useState } from 'react'
 import {
     Button,
@@ -13,11 +14,6 @@ import {
     TextField,
 } from 'react-aria-components'
 import { useAppStore } from 'store/app-store'
-
-interface CreateNewWikiProps {
-    isSignedIn: boolean
-    isSigningIn: boolean
-}
 
 export interface CreateNewWikiDialogProps {
     isOpen: boolean
@@ -132,10 +128,8 @@ export function CreateNewWikiDialog({
     )
 }
 
-export function CreateNewWiki({
-    isSignedIn,
-    isSigningIn,
-}: CreateNewWikiProps) {
+export function CreateNewWiki() {
+    const { isSignedIn, isSigningIn } = useGoogleAuth()
     const isCreatingNewFile = useAppStore((s) => s.isCreatingNewFile)
     const setIsCreatingNewFile = (value: boolean) =>
         useAppStore.setState({ isCreatingNewFile: value })

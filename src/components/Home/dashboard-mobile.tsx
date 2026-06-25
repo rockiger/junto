@@ -15,7 +15,6 @@ import ViewGridOutlineIcon from 'mdi-react/ViewGridOutlineIcon'
 import ViewListOutlineIcon from 'mdi-react/ViewListOutlineIcon'
 import { useEffect, useRef, useState } from 'react'
 import { ToggleButton, ToggleButtonGroup } from 'react-aria-components'
-import { useAppStore } from 'store/app-store'
 
 const MOBILE_MQ = '(max-width: 949px)'
 const SCROLL_SHOW_HIDE_PX = 10
@@ -199,7 +198,6 @@ const NAV = [
  */
 export function DashboardMobileDock() {
     const { pathname } = useLocation()
-    const clearSearch = useAppStore((s) => s.clearSearchComplete)
     const fabVisible = useScrollHideFabLinks()
 
     const linkActive = (to, exact) =>
@@ -218,7 +216,6 @@ export function DashboardMobileDock() {
                 aria-hidden={!fabVisible}
             >
                 <Link
-                    onClick={() => clearSearch()}
                     className="flex size-20 items-center justify-center rounded-2xl bg-icon-blue-light text-icon-blue shadow-lg/30 outline-none transition-transform active:scale-95 focus-visible:ring-4 focus-visible:ring-accent-light"
                     aria-label="New wiki or page"
                     to="/new"
@@ -237,7 +234,6 @@ export function DashboardMobileDock() {
                     return (
                         <Link
                             key={to}
-                            onClick={() => clearSearch()}
                             to={to}
                             className={clsx(
                                 'flex max-w-19 min-w-15 flex-1 flex-col items-center gap-0.5 py-2',

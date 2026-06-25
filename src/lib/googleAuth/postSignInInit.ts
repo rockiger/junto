@@ -12,10 +12,10 @@ import {
 	findGwikiFiles,
 	migrateGwikiFiles,
 } from 'lib/migration/migrateGwikiFiles'
+import { queryClient } from 'lib/query/query-client'
+import { queryKeys } from 'lib/query/query-keys'
 import { isUndefined } from 'lodash'
-import { getAppState, setAppState } from 'store/app-store'
-
-import { getUserId } from './userInfo'
+import { setAppState } from 'store/app-store'
 
 let postSignInInitStarted = false
 
@@ -24,23 +24,13 @@ export function resetPostSignInInit() {
 }
 
 async function initFiles() {
-	setAppState({
-		isFileListLoading: true,
-		isInitialFileListLoading: true,
-	})
-
 	const rootFolderId = await getFolderId()
 	if (rootFolderId) {
 		try {
 			let files = await listFiles()
 			files = await migrateLegacyGwikiFiles(files)
-			setAppState({
-				files: [],
-				initialFiles: files,
-				isFileListLoading: false,
-				rootFolderId,
-				isInitialFileListLoading: false,
-			})
+			queryClient.setQueryData(queryKeys.filesTree, files)
+			queryClient.setQueryData(queryKeys.rootFolderId, rootFolderId)
 		} catch (err: unknown) {
 			const message = err instanceof Error ? err.message : String(err)
 			alert(`Couldn't load files: ${message}`)
@@ -82,7 +72,6 @@ async function migrateLegacyGwikiFiles(
 				`${result.failed.length} page(s) couldn't be converted to Markdown. They were skipped – reloading the page will retry.`,
 			)
 		}
-		// reload so names and mimeTypes reflect the migration
 		return await listFiles()
 	} finally {
 		setAppState({ migration: null })
@@ -114,24 +103,14 @@ async function initHints() {
 	})
 }
 
-function initUser() {
-	try {
-		const userId = getUserId()
-		setAppState({ userId })
-	} catch (error) {
-		console.error("Couldn't get userId", error)
-	}
-}
-
 export async function runPostSignInInit() {
-	if (postSignInInitStarted || getAppState().isFileListLoading) {
+	if (postSignInInitStarted) {
 		return
 	}
 
 	postSignInInitStarted = true
 
 	try {
-		initUser()
 		await initFiles()
 		await initHints()
 	} catch (error) {

@@ -1,5 +1,7 @@
-import { getAppState, setAppState } from 'store/app-store'
+import { queryClient } from 'lib/query/query-client'
+import { appendToTree, patchFileCaches, setFileTree } from 'lib/query/files-cache'
 import type { IFile, SimpleMap } from 'types/app-state'
+import { setAppState } from 'store/app-store'
 
 import { EMPTYVALUE, UNTITLEDFILE } from 'lib/constants'
 import {
@@ -9,7 +11,6 @@ import {
     updateFile as updateFileBase,
     updateMetadata as updateMetadataBase,
 } from 'lib/gdrive'
-import { filesUpdater } from 'lib/helper'
 
 /**
  * Silently update the the files metadata for the current state.
@@ -18,11 +19,9 @@ import { filesUpdater } from 'lib/helper'
 export const backgroundUpdateFiles = async () => {
     setAppState({ backgroundUpdate: true })
     try {
-        const initialFiles = await listFilesChunked('')
-        setAppState({
-            backgroundUpdate: false,
-            initialFiles,
-        })
+        const files = await listFilesChunked('')
+        setFileTree(queryClient, files)
+        setAppState({ backgroundUpdate: false })
     } catch (err: unknown) {
         setAppState({ backgroundUpdate: false })
         const message = err instanceof Error ? err.message : String(err)
@@ -34,7 +33,7 @@ export const backgroundUpdateFiles = async () => {
 /**
  * Creates a new file with the given file name and the givent parent,
  * with the given content.
- * Updates the global state.
+ * Updates the query cache.
  * @param fileName
  * @param fileParentId
  * @param fileContent a stringifyd JSON object object
@@ -54,10 +53,9 @@ export const createFile = async (
         })
         const result = await updateFileBase(newFileId, fileContent)
         console.log({ result })
-        const { initialFiles } = getAppState()
+        appendToTree(queryClient, result as IFile)
         setAppState({
             backgroundUpdate: true,
-            initialFiles: [...initialFiles, result],
             isCreatingNewFile: false,
         })
         return newFileId
@@ -77,7 +75,7 @@ export const createFile = async (
  */
 /**
  * Creates a new (wiki) folder in the base directory
- * Updates the global state.
+ * Updates the query cache.
  *
  * @method createNewWiki
  * @param {CreateNewWikiParams} [opts]
@@ -94,13 +92,8 @@ export const createNewWiki = async (opts: {
     try {
         const result = await createNewWikiBase(opts)
         console.log({ newWikiResult: result })
-        const { initialFiles } = getAppState()
-        // Unlike create new file we don't need to reset the isCreatingNewFile
-        // propery, because there should always be a new file created.
         const file = result as IFile
-        setAppState({
-            initialFiles: [...initialFiles, file],
-        })
+        appendToTree(queryClient, file)
         return file.id
     } catch (err) {
         setAppState({ isCreatingNewFile: false })
@@ -109,9 +102,8 @@ export const createNewWiki = async (opts: {
 }
 
 /**
- * Changes the metadata of the given file in the global state in files
- * and initialFiles and on Google Drive. Updates the global state
- * optimistically and after the promise is finished.
+ * Changes the metadata of the given file in the query cache and on Google Drive.
+ * Updates the cache optimistically and after the promise is finished.
  *
  * @method updateMetadata
  * @param {String} driveId Google Drive file identifier
@@ -123,11 +115,7 @@ export const updateMetadata = async (
     metadata: SimpleMap,
     doBackgroundUpdate = false
 ) => {
-    const updatedFiles = filesUpdater(metadata, getAppState(), fileId)
-    setAppState({
-        files: updatedFiles.files,
-        initialFiles: updatedFiles.initialFiles,
-    })
+    patchFileCaches(queryClient, metadata, fileId)
     await updateMetadataBase(fileId, metadata)
     if (doBackgroundUpdate) await backgroundUpdateFiles()
 }

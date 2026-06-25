@@ -4,7 +4,6 @@ import { useGoogleAuth } from 'lib/googleAuth'
 import LogoutIcon from 'mdi-react/LogoutIcon'
 import PropTypes from 'prop-types'
 import type { ComponentType, MouseEvent } from 'react'
-import { useAppStore } from 'store/app-store'
 
 import { Event } from './Tracking'
 
@@ -15,8 +14,7 @@ type GoogleLoginProps = {
 }
 
 export default function GoogleLogin({ buttonText = 'Login with Google' }: GoogleLoginProps) {
-	const isSignedIn = useAppStore((s) => s.isSignedIn)
-	const { signIn, signOut, isReady } = useGoogleAuth()
+	const { isSignedIn, signIn, signOut, isReady } = useGoogleAuth()
 
 	const handleAuthClick = () => {
 		signIn()

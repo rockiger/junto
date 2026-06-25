@@ -5,23 +5,10 @@ export interface AppState {
     hintsFileId: string
     hintCounter: number
     isCreatingNewFile: boolean
-    rootFolderId: null | string
-    isFileListLoading: boolean
-    isSearchFieldActive: boolean
-    isSignedIn: boolean
-    isSigningIn: boolean
     goToNewFile: boolean
     redirect: boolean
-    searchTerm: '' | string
-    searchValue: '' | string
     showSidebarOnMobile: boolean
-    /** Drive full-text search results; empty when not on /search. */
-    files: IFile[]
-    /** Canonical file tree after login and incremental CRUD updates. */
-    initialFiles: IFile[]
-    isInitialFileListLoading: boolean
     backgroundUpdate: boolean
-    userId: string
     /** Progress of the one-time .gwiki -> .md migration; null when idle. */
     migration: null | { done: number; running: boolean; total: number }
 }

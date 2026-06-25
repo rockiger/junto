@@ -8,6 +8,9 @@ vi.mock('lib/googleAuth', async () => {
 			signIn: vi.fn(),
 			signOut: vi.fn(),
 			isReady: true,
+			isSignedIn: false,
+			isSigningIn: false,
+			userId: '',
 		}),
 		AppGoogleAuthProvider: ({ children }) => children,
 	}

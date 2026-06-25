@@ -1,11 +1,12 @@
 // @ts-check
-import _ from "lib/helper/globals";
-import { useAppStore } from "store/app-store";
+import _ from 'lib/helper/globals'
+import { useFileTree } from 'lib/query/files-queries'
+import { useRouterState } from '@tanstack/react-router'
 
-import FileListComponent from "./fileList-component";
+import FileListComponent from './fileList-component'
 
-export { FileList };
-export default FileList;
+export { FileList }
+export default FileList
 
 /** @typedef {'viewedByMeTime' | 'modifiedByMeTime' | 'sharedWithMeTime'} SortBy */
 
@@ -39,23 +40,24 @@ function FileList({
 	sortBy,
 	setSortBy,
 	title,
-	tableMiddleColumn = "reason-suggested",
+	tableMiddleColumn = 'reason-suggested',
 	locationLookupFiles,
 }) {
-	const isFileListLoading = useAppStore((s) => s.isFileListLoading);
-	const isInitialFileListLoading = useAppStore(
-		(s) => s.isInitialFileListLoading,
-	);
-	const searchTerm = useAppStore((s) => s.searchTerm);
+	const { isFetching, data: treeData } = useFileTree()
+	const searchTerm = useRouterState({
+		select: (s) => {
+			const params = new URLSearchParams(s.location.searchStr)
+			return params.get('q')?.trim() ?? ''
+		},
+	})
 	const isLoading =
-		_.isEmpty(files) &&
-		(searchTerm ? isFileListLoading : isInitialFileListLoading);
+		_.isEmpty(files) && isFetching && !treeData?.length
 
 	return (
 		<FileListComponent
 			emptyIcon={emptyIcon}
 			emptyMessage={
-				searchTerm ? "None of your files matched this search." : emptyMessage
+				searchTerm ? 'None of your files matched this search.' : emptyMessage
 			}
 			emptySubline={emptySubline}
 			files={files}
@@ -68,5 +70,5 @@ function FileList({
 			title={title}
 			locationLookupFiles={locationLookupFiles}
 		/>
-	);
+	)
 }

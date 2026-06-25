@@ -9,9 +9,9 @@ import { sortBy } from 'lodash'
 import _ from 'lib/helper/globals'
 import FolderAccountIcon from 'mdi-react/FolderAccountIcon'
 import FolderGoogleDriveIcon from 'mdi-react/FolderGoogleDriveIcon'
+import { useFileTree, useRootFolderId } from 'lib/query/files-queries'
 import { useMemo } from 'react'
 import { GridList, GridListItem } from 'react-aria-components'
-import { useAppStore } from 'store/app-store'
 import type { IFile } from 'types/app-state'
 
 /** RAC {@link GridListItem} als TanStack-Router-Link ([createLink](https://tanstack.com/router/latest/docs/guide/custom-link)). */
@@ -30,10 +30,8 @@ interface WikiListProps {
  * A wiki-list component.
  */
 function WikiList({ files, isDashboard, orderBy = 'name' }: WikiListProps) {
-    const isInitialFileListLoading = useAppStore(
-        (s) => s.isInitialFileListLoading,
-    )
-    const rootFolderId = useAppStore((s) => s.rootFolderId)
+    const { isFetching } = useFileTree()
+    const rootFolderId = useRootFolderId()
     const myFulcrum = useMemo(
         () => (rootFolderId ? getOverviewFile(files, rootFolderId) : null),
         [files, rootFolderId],
@@ -47,7 +45,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }: WikiListProps) {
     }, [files, orderBy, myFulcrum])
     return (
         <div className="w-full">
-            {(!_.isEmpty(files) || !isInitialFileListLoading) &&
+            {(!_.isEmpty(files) || !isFetching) &&
                 !myFulcrum &&
                 wikis.length === 0 &&
                 (isDashboard ? (
@@ -55,7 +53,7 @@ function WikiList({ files, isDashboard, orderBy = 'name' }: WikiListProps) {
                 ) : (
                     <h2>You don't have any archived wikis.</h2>
                 ))}
-            {_.isEmpty(files) && isInitialFileListLoading && <Spinner />}
+            {_.isEmpty(files) && isFetching && <Spinner />}
             {(isDashboard && myFulcrum) || wikis.length ? (
                 <GridList
                     aria-label="Wiki pages"

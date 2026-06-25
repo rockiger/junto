@@ -1,6 +1,11 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
+import type { AuthContext } from 'lib/googleAuth/googleAuthProvider'
 
-export const Route = createRootRoute({
+export type RouterContext = {
+    auth: AuthContext
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
     component: RootLayout,
 })
 
