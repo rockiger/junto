@@ -13,7 +13,7 @@ export default function Help(_props) {
 		<>
 			<IconButton
 				id="HelpButton"
-				className="hidden md:block"
+				className="hidden md:flex"
 				onClick={toggle}
 				selected={isOpen}
 				tooltip="Show Help"

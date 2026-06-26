@@ -93,3 +93,4 @@
 - [] Create e2e-Tests for the app
 - [] Repair Storybook
 - [] Create design system for the app (see Design System book)
+- [] Scopes optional machen

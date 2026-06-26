@@ -49,8 +49,11 @@ import {
 	type TextFormatType,
 } from 'lexical'
 import { driveImageSrc, uploadBinaryFile } from 'lib/gdrive'
-import DrawIcon from 'mdi-react/DrawIcon'
+import { appendToTree } from 'lib/query/files-cache'
+import { useFileTree } from 'lib/query/files-queries'
+import { queryClient } from 'lib/query/query-client'
 import CodeTagsIcon from 'mdi-react/CodeTagsIcon'
+import DrawIcon from 'mdi-react/DrawIcon'
 import FormatBoldIcon from 'mdi-react/FormatBoldIcon'
 import FormatHeader2Icon from 'mdi-react/FormatHeader2Icon'
 import FormatHeader3Icon from 'mdi-react/FormatHeader3Icon'
@@ -92,21 +95,18 @@ import {
 	type ToggleButtonRenderProps,
 } from 'react-aria-components'
 import type { IFile } from 'types/app-state'
-import { useFileTree } from 'lib/query/files-queries'
-import { appendToTree } from 'lib/query/files-cache'
-import { queryClient } from 'lib/query/query-client'
 import type { DriveImagePickerModalHandle } from '../drive-image-picker-modal'
 import { DriveImagePickerModal } from '../drive-image-picker-modal'
 import { getDocument } from '../gpicker'
 import type { ImageUrlModalHandle } from '../image-url-modal'
 import { ImageUrlModal } from '../image-url-modal'
+import { LAYOUT_PRESETS } from '../layoutPresets'
 import type { LinkItem, LinkModalHandle } from '../link-modal'
 import { LinkModal } from '../link-modal'
 import { $createWikiLinkNode } from '../nodes/WikiLinkNode'
-import { INSERT_IMAGE_COMMAND } from './ImagesPlugin'
 import { INSERT_EXCALIDRAW_COMMAND } from './ExcalidrawPlugin'
+import { INSERT_IMAGE_COMMAND } from './ImagesPlugin'
 import { INSERT_LAYOUT_COMMAND } from './LayoutPlugin'
-import { LAYOUT_PRESETS } from '../layoutPresets'
 
 const ICON_CLASS = 'size-[18px]'
 const MENU_ICON_CLASS = 'size-5 shrink-0'
@@ -116,7 +116,7 @@ const toolbarToggleClass = ({
 	isPressed,
 }: ToggleButtonRenderProps) =>
 	clsx(
-		'flex size-6 items-center justify-center rounded-sm outline-none transition-colors',
+		'flex size-9 items-center justify-center rounded-md outline-none transition-colors lg:size-6 lg:rounded-sm',
 		'focus-visible:ring-2 focus-visible:ring-accent',
 		isSelected
 			? 'bg-icon-blue-lighter text-accent'
@@ -129,16 +129,34 @@ const menuItemClass =
 
 function EditorToolbar({ children, readOnly }: { children: ReactNode, readOnly: boolean }) {
 	return (
-		<div className="bg-white border-b border-edge-strong sticky top-0 z-10 lg:top-14">
-			{!readOnly && <div className="bg-surface-container flex max-w-100vw mb-4 mx-4 overflow-auto p-2 pl-5 rounded-full">
-				{children}
-			</div>}
+		<div className="sticky top-0 z-10 border-b border-edge-strong bg-surface-container lg:top-14 lg:bg-white">
+			{!readOnly && (
+				<div
+					className={clsx(
+						'flex w-full min-w-0 gap-1 overflow-x-auto overscroll-x-contain px-2 py-1.5',
+						'[-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+						'lg:mx-4 lg:mb-4 lg:max-w-[calc(100%-2rem)] lg:gap-0 lg:overflow-auto lg:rounded-full lg:bg-surface-container lg:px-5 lg:py-2',
+					)}
+				>
+					{children}
+				</div>
+			)}
 		</div>
 	)
 }
 
 function ToolbarGroup({ children }: { children: ReactNode }) {
-	return <div className="mr-4 flex items-center gap-0.5">{children}</div>
+	return (
+		<div
+			className={clsx(
+				'flex shrink-0 items-center gap-0.5',
+				'max-lg:border-r max-lg:border-edge-strong max-lg:px-1 max-lg:last:border-r-0',
+				'lg:mr-4 lg:last:mr-0',
+			)}
+		>
+			{children}
+		</div>
+	)
 }
 
 type ToolbarButtonProps = Omit<
