@@ -1,18 +1,17 @@
 //@ts-check
-import React, { useEffect } from 'react'
-import { PageView } from 'components/Tracking'
 
+import { PageView } from 'components/Tracking'
+import { useEffect } from 'react'
+import GoogleDriveLogo from 'static/googleDriveLogo.svg'
+import gsuiteIntegrations from 'static/img/gsuite-integrations.png'
+import instantSearch from 'static/img/instant-search.png'
+import page01 from 'static/img/page01.png'
+import page02 from 'static/img/page02.png'
 import { AndEndsInSuccess } from './AndEndsInSuccess'
 import { GoogleButton } from './GoogleButton'
 import { HasAPlan } from './HasAPlan'
 import { HasAProblem } from './HasAProblem'
 import { Testimonials } from './Testimonials'
-
-import gsuiteIntegrations from 'static/img/gsuite-integrations.png'
-import instantSearch from 'static/img/instant-search.png'
-import page01 from 'static/img/page01.png'
-import page02 from 'static/img/page02.png'
-import GoogleDriveLogo from 'static/googleDriveLogo.svg'
 
 import './front-page.scss'
 import { Event } from 'components/Tracking'
@@ -148,7 +147,7 @@ export default function FrontPage() {
                             important work instantly.
                         </p>
                         <p>
-                            <strong>Don't waste your time</strong>
+                            <strong>Don't waste your time</strong>{' '}
                             searching. Find what you are looking for with a
                             powerful search - just like you expect from any
                             other Google product.

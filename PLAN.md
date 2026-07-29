@@ -65,6 +65,23 @@
 -- [x] Layout-Weite
 -- [x] Excalidraw
 ----------------------------------------------------------
+- [x] Update the front page
+-- [x] Update the Style
+-- [x] Add a KI-Section, that the content is especially easier für jede KI zu verstehen weil es Markdown files sind.
+-- [x] Update screenshots 
+-- [] evtl. noch Google Markdown Format integrieren
+- [ ] Add basic tracking. Google Analytics or similar. (https://developers.google.com/workspace/marketplace/use-analytics)
+- [ ] Update the Workspace extension entry
+- [ ] Add secondary button for Mailing-List signin (Create free pdf how use karpaty method)
+- [ ] Linkes padding in Moblie View raus, damit der Content zentriert ist
+- [ ] Update page on refocus, to have a kind of real-time update. Maybe diff things to not loose content if editing
+- [ ] View height when editing on mobile
+----------------------------------------------------------
+- [ ] Improve the new button to create a new page and a new wiki
+- [ ] Reactivate the hints
+- [ ] Silent Reload-Page on focus as simple sync.
+- [ ] Speicherung und Verschieben innerhalb der Layout. Checkliste ist komplett weg.
+----------------------------------------------------------
 - [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
 ----------------------------------------------------------
 - [] Add more editor features
@@ -76,14 +93,13 @@
 - [] Repair Hints
 - [] Repair Tests
 ----------------------------------------------------------
-- [] Remove Reactn
-- [] Deploy to Hostinger
+- [x] Remove Reactn
+- [x] Deploy to Hostinger
 - [] Read Hints to guide users
 - [] Background color of Front-page
 - [] Star a file in the file list
 - [] Performance
 -- [] Remove json->md Migrator
--- [] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
 -- [x] Evaluate if TanStack Query is a good fit for data fetching and caching or we stick to Router caching
 -- [] Remove sass
 -- [] Use route loaders to prefetch data

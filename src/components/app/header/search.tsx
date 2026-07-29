@@ -1,3 +1,4 @@
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import clsx from 'clsx'
 import IconButton from 'components/gsuite-components/icon-button'
 import { Event } from 'components/Tracking'
@@ -7,7 +8,6 @@ import { normalizeSearchQueryParam } from 'lib/search/search-helper'
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon'
 import CloseIcon from 'mdi-react/CloseIcon'
 import SearchIcon from 'mdi-react/MagnifyIcon'
-import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
 import SearchAutocomplete, {
@@ -137,7 +137,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
                 className={clsx(
                     'flex flex-1 items-center',
                     desktopSearchActive &&
-                        'lg:gap-3 lg:px-2 lg:py-3 lg:border lg:border-b-0 lg:border-edge-strong lg:rounded-t-3xl lg:shadow-md',
+                    'lg:gap-3 lg:px-2 lg:py-3 lg:border lg:border-b-0 lg:border-edge-strong lg:rounded-t-3xl lg:shadow-md',
                 )}
             >
                 <IconButton

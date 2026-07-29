@@ -1,4 +1,5 @@
 @import "./static/fonts/metropolis/metropolis.css";
+@import "./styles/public-theme.css";
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -11,7 +12,28 @@
 	--font-sans:
 		Metropolis, Roboto, "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
-	/* Mobile surface container (tabs, header, dock) */
+	/*
+	 * Typography unit: 17px at 16px root (1.0625rem).
+	 * All text-* sizes are multiples of this; spacing/radius stay on the 16px rem grid.
+	 */
+	--text-unit: 1.0625rem;
+
+	--text-xs: calc(var(--text-unit) * 0.75);
+	--text-sm: calc(var(--text-unit) * 0.875);
+	--text-base: var(--text-unit);
+	--text-lg: calc(var(--text-unit) * 1.125);
+	--text-xl: calc(var(--text-unit) * 1.25);
+	--text-2xl: calc(var(--text-unit) * 1.5);
+	--text-3xl: calc(var(--text-unit) * 1.875);
+	--text-4xl: calc(var(--text-unit) * 2.25);
+	--text-5xl: calc(var(--text-unit) * 3);
+	--text-6xl: calc(var(--text-unit) * 3.75);
+	--text-7xl: calc(var(--text-unit) * 4.5);
+	--text-8xl: calc(var(--text-unit) * 6);
+	--text-9xl: calc(var(--text-unit) * 8);
+
+	/* Body letter-spacing: 0.2px @ 17px unit (equiv. to former 0.0125rem) */
+	--tracking-body: calc(var(--text-unit) * 0.2 / 17);
 	--color-surface-container: hsl(249.99998, 33%, 96%);
 	--color-search-bg: hsl(247.5, 20%, 92%);
 	--color-search-placeholder: hsl(223.84615, 13%, 39%);
@@ -23,11 +45,10 @@
 	--color-text-default: hsl(230.00002, 10%, 11%);
 	--color-text-muted: hsl(240, 7%, 29%);
 
-
 	/* Accent / brand (primary-* from palette) */
-	--color-accent: #4285f4;
-	--color-accent-light: rgb(103 157 246);
-	--color-accent-dark: rgb(46 93 170);
+	--color-accent: hsl(214.2029, 82%, 51%);
+	--color-accent-light: hsl(214.2029, 82%, 90%);
+	--color-accent-dark: hsl(214.2029, 82%, 43%);
 	--color-on-accent: #fff;
 
 	/* Foreground / text (text-* from palette) */
@@ -77,78 +98,80 @@
 
 	--shadow-focus: 0 0 0 2px rgb(66 133 244 / 0.35);
 
-    /* Stacking (fixed chrome above content) */
-    --z-1000: 1000;
+	/* Stacking (fixed chrome above content) */
+	--z-1000: 1000;
 }
 
 /* Desktop search bar swap: toggled synchronously via #dashboard-layout[data-main-scrolled] */
 @media (min-width: 1024px) {
-    #dashboard-layout {
-        --dashboard-scroll-fade-duration: 200ms;
-    }
+	#dashboard-layout {
+		--dashboard-scroll-fade-duration: 200ms;
+	}
 
-    .dashboard-inline-search,
-    .dashboard-header-search--swappable {
-        transition:
-            opacity var(--dashboard-scroll-fade-duration) ease,
-            visibility var(--dashboard-scroll-fade-duration) ease;
-        opacity: 1;
-        visibility: visible;
-    }
+	.dashboard-inline-search,
+	.dashboard-header-search--swappable {
+		transition:
+			opacity var(--dashboard-scroll-fade-duration) ease,
+			visibility var(--dashboard-scroll-fade-duration) ease;
+		opacity: 1;
+		visibility: visible;
+	}
 
-    #dashboard-layout[data-main-scrolled="true"] .dashboard-inline-search {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
+	#dashboard-layout[data-main-scrolled="true"] .dashboard-inline-search {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+	}
 
-    #dashboard-layout:not([data-main-scrolled="true"]) .dashboard-header-search--swappable {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
+	#dashboard-layout:not([data-main-scrolled="true"])
+		.dashboard-header-search--swappable {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+	}
 
-    .dashboard-headline {
-        position: relative;
-    }
+	.dashboard-headline {
+		position: relative;
+	}
 
-    .dashboard-headline__center,
-    .dashboard-headline__left {
-        transition: opacity var(--dashboard-scroll-fade-duration) ease;
-    }
+	.dashboard-headline__center,
+	.dashboard-headline__left {
+		transition: opacity var(--dashboard-scroll-fade-duration) ease;
+	}
 
-    .dashboard-headline__center {
-        display: block;
-        text-align: center;
-        opacity: 1;
-    }
+	.dashboard-headline__center {
+		display: block;
+		text-align: center;
+		opacity: 1;
+	}
 
-    .dashboard-headline__left {
-        position: absolute;
-        inset: 0;
-        text-align: left;
-        opacity: 0;
-    }
+	.dashboard-headline__left {
+		position: absolute;
+		inset: 0;
+		text-align: left;
+		opacity: 0;
+	}
 
-    #dashboard-layout[data-main-scrolled="true"] .dashboard-headline__center {
-        opacity: 0;
-    }
+	#dashboard-layout[data-main-scrolled="true"] .dashboard-headline__center {
+		opacity: 0;
+	}
 
-    #dashboard-layout[data-main-scrolled="true"] .dashboard-headline__left {
-        opacity: 1;
-    }
+	#dashboard-layout[data-main-scrolled="true"] .dashboard-headline__left {
+		opacity: 1;
+	}
 }
 
 /* Changed colors for screen size >= lg */
-	@media (min-width: 1024px) {
-		@theme {
+@media (min-width: 1024px) {
+	@theme {
 		--color-surface-container: hsl(216, 56%, 98%);
 		--color-search-bg: hsl(216.92308, 42%, 94%);
-	}}
+	}
+}
 
 @layer base {
 	body {
-		@apply font-sans antialiased;
+		@apply font-sans text-base antialiased tracking-body;
 	}
 
 	* {
@@ -195,5 +218,6 @@
 }
 
 html {
+	font-size: 100%;
 	@apply text-text-default;
 }

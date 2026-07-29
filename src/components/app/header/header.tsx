@@ -12,7 +12,7 @@ export default function Header() {
     const { data: initialFiles, isFetching } = useFileTree()
 
     return (
-        <div className="bg-surface-container px-2 lg:pl-0" style={{ gridArea: 'navigation' }}>
+        <div className="px-2 lg:pl-0" style={{ gridArea: 'navigation' }}>
             <Navbar isSignedIn={isSignedIn}>
                 {isSignedIn &&
                     isFetching &&

@@ -1,16 +1,18 @@
-import { useCallback, useEffect } from "react"
 import { Event, PageView } from "components/Tracking"
 import { useGoogleAuth } from "lib/googleAuth"
+import { useCallback, useEffect } from "react"
 import GoogleDriveLogo from "static/googleDriveLogo.svg"
 import gsuiteIntegrations from "static/img/gsuite-integrations.png"
 import instantSearch from "static/img/instant-search.png"
 import page01 from "static/img/page01.webp"
 import page02 from "static/img/page02.webp"
+import logo from 'static/logo_48.svg'
 import { AndEndsInSuccess } from "./AndEndsInSuccess"
 import { GoogleButton } from "./GoogleButton"
 import { HasAPlan } from "./HasAPlan"
 import { HasAProblem } from "./HasAProblem"
 import { Testimonials } from "./Testimonials"
+
 
 const imgShadow =
 	"w-full max-w-full rounded-lg border border-[#eee] shadow-[0px_1px_8px_0px_rgba(0,0,0,0.2),0px_3px_4px_0px_rgba(0,0,0,0.14),0px_3px_3px_-2px_rgba(0,0,0,0.12)]"
@@ -28,7 +30,7 @@ export default function FrontPage() {
 
 	useEffect(() => {
 		const prevTitle = document.title
-		document.title = "Fulcrum.wiki - The knowledge base made for Google Drive"
+		document.title = "Fulcrum.wiki - A knowledge base for you and your AI-agents"
 
 		const body = document.body
 		const prevOverflow = body.style.overflow
@@ -56,42 +58,48 @@ export default function FrontPage() {
 		<>
 			<div
 				id="front-page-hero"
-				className="-mt-2 bg-[#f7f7f7] py-12 px-8 sm:py-20 sm:px-[6%]"
+				className="py-12 px-8 text-center sm:py-20 sm:px-[6%] lg:text-left"
 			>
-				<div className="block mx-auto lg:-mx-6 lg:-mt-6 xl:flex lg:flex-row">
+				<div className="block mx-auto lg:-mx-6 lg:-mt-6 lg:flex lg:flex-row">
 					<div className="col mx-auto flex flex-1 flex-col justify-center pb-6 space-y-6 lg:px-6">
-						<h1 className="frontpage-header text-4xl my-6 leading-tight font-semibold">
-							Effortless.
-							<br />
-							Organized.
-							<br />
+
+						<div
+							id="product-logo"
+							className="flex h-full items-center gap-2 mb-0 mx-auto text-fg-default no-underline lg:mx-0"
+						>
 							<img
-								alt=""
+								className="block size-10 shrink-0 md:size-10"
+								src={logo}
+								alt="App logo"
+							/>
+							<div className="font-semibold leading-none pt-1 text-2xl">Fulcrum Wiki</div>
+						</div>
+						<h1 className="frontpage-header text-4xl mb-6 mt-4 leading-tight font-semibold max-w-2xl mx-auto text-center lg:text-left">
+							Knowledge base for you and AI-agents,
+							On <img
+								alt="Google Drive"
 								className="bottom-px h-[40px] inline relative"
 								src={GoogleDriveLogo}
 							/>
 							.
 						</h1>
 						<p>
-							<b>Capture</b> knowledge. <b>Find</b> information faster.{" "}
-							<b>Share</b> your ideas with others.
+							<b>Capture</b> knowledge. <b>Find and remember</b> information faster.{" "}
+							<b>Update</b> your ideas automatically.
 						</p>
 						<p>
-							Projects, Meeting notes, marketing plans - everything{" "}
+							Personal notes, research, business knowledge - everything{" "}
 							<b>saved in your Google Drive</b>.
 						</p>
-						<p className="lg:hidden">
-							<img alt="Fulcrum Page" className={imgShadow} src={page01} />
-						</p>
-						<div className="flex items-center">
+						<div className="flex items-center justify-center mb-16 lg:justify-start">
 							<GoogleButton
 								signIn={false}
 								onClick={() => handleFrontpageSignIn("First")}
 							/>
 							<strong className="ml-1.5">- it&apos;s free!</strong>
 						</div>
-						<p>
-							<b>Disclaimer:</b> We are still in beta.
+						<p className="lg:hidden">
+							<img alt="Fulcrum Page" className={imgShadow} src={page01} />
 						</p>
 					</div>
 					<div className="col mx-auto hidden flex-1 flex-col justify-center px-6 py-6 lg:flex lg:px-6">
@@ -136,8 +144,7 @@ export default function FrontPage() {
 			</div>
 			<div className="my-12 px-[6%] sm:my-32">
 				<div
-					style={{ marginLeft: "auto", marginRight: "auto" }}
-					className="mx-auto flex max-w-7xl flex-col lg:-mx-6 lg:-mt-6 lg:flex-row"
+					className="mx-auto flex flex-col lg:-mx-6 lg:-mt-6 lg:flex-row lg:max-w-full"
 				>
 					<div className="col mx-auto flex flex-1 flex-col justify-center px-6 py-6 space-y-4 lg:px-6">
 						<h2 className="frontpage-header max-w-180 text-3xl leading-tight font-medium max-sm:text-3xl">
@@ -149,13 +156,13 @@ export default function FrontPage() {
 							your work. Access your most recent and important work instantly.
 						</p>
 						<p>
-							<strong>Don&apos;t waste your time</strong>
+							<strong>Don&apos;t waste your time</strong>{' '}
 							searching. Find what you are looking for with a powerful search -
 							just like you expect from any other Google product.
 						</p>
 						<img
 							alt="Search"
-							className="max-w-[645px] w-full"
+							className={`max-w-161.25 w-full ${imgShadow}`}
 							src={instantSearch}
 						/>
 					</div>
@@ -178,7 +185,7 @@ export default function FrontPage() {
 
 						<img
 							alt="Share pages"
-							className={`max-w-[643px] ${imgShadow}`}
+							className={`max-w-160.75 ${imgShadow}`}
 							src={gsuiteIntegrations}
 						/>
 					</div>

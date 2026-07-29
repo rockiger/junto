@@ -1,14 +1,14 @@
-import RayStartArrowIcon from "mdi-react/RayStartArrowIcon";
-import type { ReactNode } from "react";
+import RayStartArrowIcon from "mdi-react/RayStartArrowIcon"
+import type { ReactNode } from "react"
 
 function Step({
 	children,
 	headline,
 	position,
 }: {
-	children: ReactNode;
-	headline: string;
-	position: string;
+	children: ReactNode
+	headline: string
+	position: string
 }) {
 	return (
 		<div className="col flex flex-1 flex-col items-center justify-start px-6 py-6 lg:px-6">
@@ -19,10 +19,10 @@ function Step({
 			<p className="mt-2 text-center">{children}</p>
 			<RayStartArrowIcon
 				aria-hidden
-				className="mt-4 h-8 w-8 shrink-0 text-[#4285F4] lg:-rotate-90"
+				className="mt-4 h-8 w-8 rotate-90 shrink-0 text-[#4285F4] lg:rotate-0"
 			/>
 		</div>
-	);
+	)
 }
 
 export function HasAPlan() {
@@ -53,5 +53,5 @@ export function HasAPlan() {
 				</div>
 			</div>
 		</div>
-	);
+	)
 }

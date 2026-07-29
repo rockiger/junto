@@ -1,0 +1,262 @@
+/**
+ * Public / logged-out design system — sole token source for marketing UI.
+ *
+ * Hybrid brief: Digital Modernism (8dp grid, Metropolis, MD3 cards) +
+ * luminous AI gradient aesthetic (aurora, glass, interactive glow).
+ *
+ * Usage (Tailwind v4 utilities):
+ *   bg-pub-background, text-pub-foreground, bg-pub-primary
+ *   text-pub-display, text-pub-heading, text-pub-body
+ *   p-pub-4, gap-pub-6, rounded-pub-card, shadow-pub-glow-md
+ *   bg-pub-aurora, duration-pub, ease-pub-standard, scale-pub-hover
+ *
+ * Composed primitives (components layer):
+ *   pub-aurora-bg, pub-glass, pub-glow-card, pub-interactive
+ *
+ * Rule: no raw hex or one-off pixel values in public-page components.
+ */
+@theme {
+	/* ── Color: 60-30-10 (neutral + primary structure) ─────────────────── */
+
+	/* 60% — dominant neutrals (page canvas) */
+	--color-pub-background: #ffffff;
+	--color-pub-surface: #f8f9fa;
+
+	/* 30% — structure (type, borders) */
+	--color-pub-foreground: #202124;
+	--color-pub-muted: #5f6368;
+	--color-pub-border: #dadce0;
+
+	/* 10% — accent (CTAs, links, focus) */
+	--color-pub-primary: #1a73e8;
+	--color-pub-accent: #e8f0fe;
+
+	/* Contrast pairs */
+	--color-pub-on-primary: #ffffff;
+	--color-pub-on-destructive: #ffffff;
+
+	/* Semantic */
+	--color-pub-success: #188038;
+	--color-pub-warning: #f9ab00;
+	--color-pub-destructive: #d93025;
+
+	/* ── AI luminous spectrum (aurora, glows, glass — never raw in UI) ─ */
+
+	/* Deep tech base */
+	--color-pub-tech: #13154a;
+	--color-pub-tech-purple: #5e35b1;
+
+	/* Vibrant glow accents */
+	--color-pub-glow-cyan: #22d3ee;
+	--color-pub-glow-magenta: #e879f9;
+	--color-pub-glow-yellow: #fde047;
+
+	/* Pre-mixed glow alphas for gradients & shadows */
+	--color-pub-glow-cyan-soft: rgb(34 211 238 / 0.35);
+	--color-pub-glow-magenta-soft: rgb(232 121 249 / 0.3);
+	--color-pub-glow-yellow-soft: rgb(253 224 71 / 0.28);
+	--color-pub-tech-soft: rgb(19 21 74 / 0.12);
+	--color-pub-tech-purple-soft: rgb(94 53 177 / 0.18);
+
+	/* Glass surfaces */
+	--color-pub-glass: rgb(255 255 255 / 0.72);
+	--color-pub-glass-border: rgb(255 255 255 / 0.45);
+	--color-pub-glass-on-dark: rgb(255 255 255 / 0.08);
+
+	/* ── Typography — Metropolis, scale from --text-unit (17px @ 16px root) ─ */
+
+	--font-pub: Metropolis, ui-sans-serif, system-ui, sans-serif;
+
+	--text-pub-body: var(--text-unit);
+	--text-pub-body--line-height: 1.6;
+	--text-pub-body--font-weight: 400;
+
+	--text-pub-heading: calc(var(--text-unit) * 32 / 17);
+	--text-pub-heading--line-height: 1.25;
+	--text-pub-heading--font-weight: 600;
+
+	--text-pub-display: calc(var(--text-unit) * 48 / 17);
+	--text-pub-display--line-height: 1.15;
+	--text-pub-display--font-weight: 700;
+
+	/* ── Spacing — 8dp grid (multiples of 8px) ────────────────────────── */
+
+	--spacing-pub-0: 0;
+	--spacing-pub-1: 0.5rem; /* 8px */
+	--spacing-pub-2: 1rem; /* 16px */
+	--spacing-pub-3: 1.5rem; /* 24px */
+	--spacing-pub-4: 2rem; /* 32px */
+	--spacing-pub-5: 2.5rem; /* 40px */
+	--spacing-pub-6: 3rem; /* 48px */
+	--spacing-pub-7: 3.5rem; /* 56px */
+	--spacing-pub-8: 4rem; /* 64px */
+	--spacing-pub-9: 4.5rem; /* 72px */
+	--spacing-pub-10: 5rem; /* 80px */
+	--spacing-pub-12: 6rem; /* 96px */
+	--spacing-pub-16: 8rem; /* 128px */
+
+	/* ── Radius — controls vs MD3 cards (16–28px) ─────────────────────── */
+
+	--radius-pub-sm: 0.25rem; /* 4px — buttons, inputs */
+	--radius-pub-md: 0.5rem; /* 8px — chips, tags */
+	--radius-pub-card: 1rem; /* 16px — default card */
+	--radius-pub-card-md: 1.25rem; /* 20px */
+	--radius-pub-card-lg: 1.5rem; /* 24px */
+	--radius-pub-card-xl: 1.75rem; /* 28px — hero panels */
+	--radius-pub-full: 9999px;
+
+	/* ── Shadow — elevation + luminous glow ────────────────────────────── */
+
+	--shadow-pub-sm: 0 2px 8px rgb(0 0 0 / 0.06);
+	--shadow-pub-md: 0 4px 16px rgb(0 0 0 / 0.08);
+	--shadow-pub-focus: 0 0 0 3px rgb(26 115 232 / 0.35);
+
+	--shadow-pub-glow-sm:
+		inset 0 0 var(--spacing-pub-6) var(--color-pub-glow-cyan-soft),
+		inset 0 0 var(--spacing-pub-8) var(--color-pub-glow-magenta-soft);
+	--shadow-pub-glow-md:
+		0 0 var(--spacing-pub-6) var(--color-pub-glow-cyan-soft),
+		0 0 var(--spacing-pub-8) var(--color-pub-glow-magenta-soft);
+	--shadow-pub-glow-border:
+		0 0 0 1px var(--color-pub-glass-border),
+		0 0 var(--spacing-pub-5) var(--color-pub-glow-cyan-soft),
+		0 0 var(--spacing-pub-6) var(--color-pub-glow-magenta-soft);
+
+	/* ── Blur — glass / aurora depth ─────────────────────────────────── */
+
+	--blur-pub-glass: 12px;
+	--blur-pub-aurora: 40px;
+
+	/* ── Aurora gradients (stacked radial + conic — no linear harshness) */
+
+	--background-image-pub-aurora:
+		radial-gradient(
+			ellipse 80% 60% at 18% 28%,
+			var(--color-pub-glow-cyan-soft) 0%,
+			transparent 70%
+		),
+		radial-gradient(
+			ellipse 70% 55% at 82% 18%,
+			var(--color-pub-glow-magenta-soft) 0%,
+			transparent 65%
+		),
+		radial-gradient(
+			ellipse 65% 70% at 58% 82%,
+			var(--color-pub-glow-yellow-soft) 0%,
+			transparent 60%
+		),
+		conic-gradient(
+			from 200deg at 50% 50%,
+			var(--color-pub-tech-purple-soft),
+			var(--color-pub-glow-cyan-soft),
+			var(--color-pub-glow-magenta-soft),
+			var(--color-pub-tech-soft),
+			var(--color-pub-tech-purple-soft)
+		);
+
+	--background-image-pub-aurora-subtle:
+		radial-gradient(
+			ellipse 60% 50% at 25% 35%,
+			var(--color-pub-glow-cyan-soft) 0%,
+			transparent 70%
+		),
+		radial-gradient(
+			ellipse 55% 45% at 75% 25%,
+			var(--color-pub-glow-magenta-soft) 0%,
+			transparent 65%
+		);
+
+	/* ── Motion — Material standard easing, tactile hover ─────────────── */
+
+	--transition-duration-pub: 300ms;
+	--ease-pub-standard: cubic-bezier(0.2, 0, 0, 1);
+	--scale-pub-hover: 1.02;
+	--opacity-pub-glow: 0.55;
+	--opacity-pub-glow-hover: 1;
+
+	/* ── Layout ──────────────────────────────────────────────────────── */
+
+	--width-pub-container: 75rem; /* 1200px */
+}
+
+@layer base {
+	.pub-theme {	
+		font-family: var(--font-pub);
+		font-size: var(--text-pub-body);
+		line-height: var(--text-pub-body--line-height);
+		font-weight: var(--text-pub-body--font-weight);
+		color: var(--color-pub-foreground);
+		background-color: var(--color-pub-background);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		/* Maybe we should add this to the base font-family? */
+		letter-spacing: var(--tracking-body);
+		text-rendering: optimizeLegibility;
+	}
+}
+
+@layer components {
+	/* Full-bleed aurora wash — hero / AI feature sections */
+	.pub-aurora-bg {
+		position: relative;
+		background-color: var(--color-pub-background);
+		background-image: var(--background-image-pub-aurora);
+		background-size: cover;
+		background-position: center;
+	}
+
+	.pub-aurora-bg::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-image: var(--background-image-pub-aurora);
+		filter: blur(var(--blur-pub-aurora));
+		opacity: var(--opacity-pub-glow);
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.pub-aurora-bg > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Frosted glass panel */
+	.pub-glass {
+		background-color: var(--color-pub-glass);
+		border: 1px solid var(--color-pub-glass-border);
+		backdrop-filter: blur(var(--blur-pub-glass));
+		-webkit-backdrop-filter: blur(var(--blur-pub-glass));
+	}
+
+	/* MD3 card with inner aurora glow */
+	.pub-glow-card {
+		border-radius: var(--radius-pub-card);
+		background-color: var(--color-pub-background);
+		border: 1px solid var(--color-pub-border);
+		box-shadow: var(--shadow-pub-sm), var(--shadow-pub-glow-sm);
+		overflow: hidden;
+	}
+
+	/* Tactile hover: scale + intensified glow (never linear easing) */
+	.pub-interactive {
+		transition:
+			transform var(--transition-duration-pub) var(--ease-pub-standard),
+			box-shadow var(--transition-duration-pub) var(--ease-pub-standard),
+			opacity var(--transition-duration-pub) var(--ease-pub-standard);
+	}
+
+	.pub-interactive:hover {
+		transform: scale(var(--scale-pub-hover));
+		box-shadow: var(--shadow-pub-md), var(--shadow-pub-glow-md);
+	}
+
+	.pub-interactive.pub-aurora-bg::after,
+	.pub-interactive:hover.pub-aurora-bg::after {
+		transition: opacity var(--transition-duration-pub) var(--ease-pub-standard);
+	}
+
+	.pub-interactive:hover.pub-aurora-bg::after {
+		opacity: var(--opacity-pub-glow-hover);
+	}
+}

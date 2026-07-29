@@ -10,9 +10,6 @@ import { isHotkey } from 'is-hotkey'
 import { API_KEY } from 'lib/constants'
 import { updateMetadata } from 'lib/gdrive'
 import { getMetaById } from 'lib/helper'
-import { patchFileCaches } from 'lib/query/files-cache'
-import { useFileTree } from 'lib/query/files-queries'
-import { queryClient } from 'lib/query/query-client'
 import {
     PAGE_WIDTH_FULL,
     PAGE_WIDTH_REDUCED,
@@ -20,8 +17,10 @@ import {
     parsePageContent,
     serializePageContent,
 } from 'lib/pageWidth'
+import { patchFileCaches } from 'lib/query/files-cache'
+import { useFileTree } from 'lib/query/files-queries'
+import { queryClient } from 'lib/query/query-client'
 import { debounce } from 'lodash'
-import { Beforeunload } from 'react-beforeunload'
 import React, {
     useCallback,
     useEffect,
@@ -29,6 +28,7 @@ import React, {
     useRef,
     useState,
 } from 'react'
+import { Beforeunload } from 'react-beforeunload'
 import {
     convertFilesToAutocompletItems,
     initStorage,
@@ -290,7 +290,7 @@ const EditorLogic = React.forwardRef(
                     style={{
                         fontSize: '1rem',
                         //! height,
-                        padding: "0 1.25rem",
+                        padding: "2rem 1.25rem",
                         overflowY: 'auto',
                     }}
                 />
