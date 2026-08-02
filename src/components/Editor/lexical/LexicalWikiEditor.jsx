@@ -127,14 +127,7 @@ function WikiEditorInner({
 				readOnly={readOnly}
 			/>
 			<div className="lexical-editor-scroller">
-				<div
-					className={
-						canEdit
-							? "lexical-editor-anchor lexical-editor-anchor--gutter"
-							: "lexical-editor-anchor"
-					}
-					ref={onAnchorRef}
-				>
+				<div className="lexical-editor-anchor lg:pl-2" ref={onAnchorRef}>
 					<RichTextPlugin
 						contentEditable={
 							<ContentEditable

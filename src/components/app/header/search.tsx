@@ -245,7 +245,7 @@ export const Search: FC<SearchProps> = ({ clearSearch, submit, className }) => {
             {!isDesktop && isSearchFieldActive ? (
                 <div
                     className={clsx(
-                        'pointer-events-none absolute top-14 left-0 h-[calc(100vh-56px)] w-screen bg-surface',
+                        'pointer-events-none absolute top-14 left-0 h-[calc(100dvh-56px)] w-screen bg-surface',
                     )}
                 />
             ) : null}

@@ -1,4 +1,4 @@
-import { Event, PageView } from "components/Tracking"
+import { Event } from "components/Tracking"
 import { useGoogleAuth } from "lib/googleAuth"
 import { useCallback, useEffect } from "react"
 import GoogleDriveLogo from "static/googleDriveLogo.svg"
@@ -41,8 +41,6 @@ export default function FrontPage() {
 		const appMain = document.querySelector<HTMLElement>(".App-main")
 		const prevAppMainPadding = appMain?.style.padding
 		if (appMain) appMain.style.padding = "0"
-
-		PageView({ pathname: "/frontpage" })
 
 		return () => {
 			document.title = prevTitle

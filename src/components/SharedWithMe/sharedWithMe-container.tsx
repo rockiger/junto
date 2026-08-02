@@ -1,12 +1,11 @@
 // @ts-nocheck
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Navigate } from '@tanstack/react-router'
 import AccountMultipleOutlineIcon from 'mdi-react/AccountMultipleOutlineIcon'
 
 import Spinner from 'components/gsuite-components/spinner'
 import FileList from 'components/Home/FileList'
-import { PageView } from 'components/Tracking'
 import { useGoogleAuth } from 'lib/googleAuth'
 import { useFileTree } from 'lib/query/files-queries'
 
@@ -20,8 +19,6 @@ function SharedWithMe(props) {
         () => filterSharedWithMe(initialFiles),
         [initialFiles],
     )
-
-    useEffect(() => PageView({ pathname: '/shared-with-me' }), [])
 
     if (isSignedIn && !isSigningIn && !isCreatingNewFile) {
         return (

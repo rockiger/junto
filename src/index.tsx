@@ -3,11 +3,10 @@ import './lib/helper/globals'
 import './store/app-store'
 import './tailwind.css'
 import App from './components/app'
-import { initGA, setGA } from './components/Tracking'
+import { initGA } from './components/Tracking'
 import * as serviceWorker from './serviceWorker'
 
-initGA('UA-151325933-1')
-setGA({ anonymizeIp: true })
+initGA()
 
 // Remove console from production builds (import.meta.env.DEV is reliable under Vite)
 if (!import.meta.env.DEV) {

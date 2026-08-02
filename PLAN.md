@@ -69,18 +69,20 @@
 -- [x] Update the Style
 -- [x] Add a KI-Section, that the content is especially easier für jede KI zu verstehen weil es Markdown files sind.
 -- [x] Update screenshots 
--- [] evtl. noch Google Markdown Format integrieren
-- [ ] Add basic tracking. Google Analytics or similar. (https://developers.google.com/workspace/marketplace/use-analytics)
-- [ ] Update the Workspace extension entry
-- [ ] Add secondary button for Mailing-List signin (Create free pdf how use karpaty method)
-- [ ] Linkes padding in Moblie View raus, damit der Content zentriert ist
+- [x] Add basic tracking. Google Analytics or similar. (https://developers.google.com/workspace/marketplace/use-analytics)
+- [x] Linkes padding in Moblie View raus, damit der Content zentriert ist
+- [x] View height when editing on mobile
 - [ ] Update page on refocus, to have a kind of real-time update. Maybe diff things to not loose content if editing
-- [ ] View height when editing on mobile
+- [ ] Update the Workspace extension entry
 ----------------------------------------------------------
+- [ ] Check if Analyics is working
+- [ ] Add secondary button for Mailing-List signin (Create free pdf how use karpaty method)
+- [ ] evtl. noch Google Markdown Format integrieren
 - [ ] Improve the new button to create a new page and a new wiki
 - [ ] Reactivate the hints
 - [ ] Silent Reload-Page on focus as simple sync.
 - [ ] Speicherung und Verschieben innerhalb der Layout. Checkliste ist komplett weg.
+- [ ] Maintain Linux Google Drive Client
 ----------------------------------------------------------
 - [] Integrate Google Tasks to the app, that tasks can be integrated into pages. Similar how Confluence integrates jira tasks.
 ----------------------------------------------------------

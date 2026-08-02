@@ -6,7 +6,6 @@ import {
     TabPanels,
     Tabs,
 } from 'components/gsuite-components/tabs'
-import { PageView } from 'components/Tracking'
 import WikiList from 'components/wiki-list'
 import Search from 'components/app/header/search'
 import { useSearchUI } from 'components/app/header/search-ui-context'
@@ -18,7 +17,7 @@ import { navigateToSearch } from 'lib/search/navigate-to-search'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 import { useNavigate } from '@tanstack/react-router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { SelectionIndicator } from 'react-aria-components'
 import {
     Disclosure,
@@ -49,10 +48,6 @@ function Home({ isCreatingNewFile }: { isCreatingNewFile: boolean }) {
 
     const navigate = useNavigate()
     const { searchValue, resetSearchUI, setIsSearchFieldActive } = useSearchUI()
-
-    useEffect(() => {
-        PageView({ pathname: '/home' })
-    }, [])
 
     const setSortByAndLocalStorage = (nextSortBy: SortBy) => {
         setSortBy(nextSortBy)

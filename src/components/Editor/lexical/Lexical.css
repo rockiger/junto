@@ -31,10 +31,6 @@
 	position: relative;
 }
 
-.lexical-editor-anchor--gutter {
-	padding-left: 0.5rem;
-}
-
 .lexical-quote {
 	border-left: 2px solid #ddd;
 	margin-left: 0;

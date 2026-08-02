@@ -22,7 +22,7 @@ export default function Sidebar() {
                 className={clsx(
                     '[grid-area:sidebar] p-4 lg:py-0',
                     'fixed z-1000 h-screen w-[calc(100vw-56px)] overflow-auto bg-surface-paper transition-[left] duration-300 ease-out',
-                    'lg:static lg:h-[calc(100vh-148px)] lg:w-auto lg:overflow-x-clip lg:overflow-y-auto lg:scrollbar-gutter-stable lg:bg-transparent',
+                    'lg:static lg:h-[calc(100dvh-148px)] lg:w-auto lg:overflow-x-clip lg:overflow-y-auto lg:scrollbar-gutter-stable lg:bg-transparent',
                     showSidebarOnMobile
                         ? 'left-0'
                         : 'left-[calc(-100vw-56px)]'

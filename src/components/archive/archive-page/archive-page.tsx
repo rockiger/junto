@@ -14,7 +14,6 @@ import {
 } from 'components/gsuite-components/disclosure'
 import FileList from 'components/Home/FileList'
 import type { SortBy } from 'components/Home/FileList/fileList-component'
-import { PageView } from 'components/Tracking'
 import { WikiList } from 'components/wiki-list'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 import { isArchived } from 'lib/helper'
@@ -23,7 +22,7 @@ import { useFileTree } from 'lib/query/files-queries'
 import { useIsDesktop } from 'lib/hooks/useMediaQuery'
 import FileDocumentIcon from 'mdi-react/FileDocumentIcon'
 import { SelectionIndicator } from 'react-aria-components'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { IFile } from 'types/app-state'
 
 const localStorageKey = `${LOCALSTORAGE_NAME}-sortBy`
@@ -48,8 +47,6 @@ function ArchivePage() {
 		setSortBy(nextSortBy)
 		localStorage.setItem(localStorageKey, nextSortBy)
 	}
-
-	useEffect(() => PageView({ pathname: '/archive' }), [])
 
 	if (isSignedIn && !isSigningIn) {
 		return (

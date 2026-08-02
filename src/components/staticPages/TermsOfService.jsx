@@ -1,9 +1,5 @@
-import React, { useEffect } from 'react'
-import { PageView } from 'components/Tracking'
-
 export function TermsOfService() {
     document.title = 'Terms Of Service - Fulcrum.wiki'
-    useEffect(() => PageView(), [])
 
     return (
         <>

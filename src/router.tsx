@@ -1,4 +1,5 @@
 import { createRouter } from '@tanstack/react-router'
+import { setupRouterPageTracking } from 'components/Tracking'
 import type { AuthContext } from 'lib/googleAuth/googleAuthProvider'
 
 import { routeTree } from './routeTree.gen'
@@ -23,6 +24,8 @@ export const router = createRouter({
         return <div>Error: {error.message}</div>
     }
 })
+
+setupRouterPageTracking(router)
 
 declare module '@tanstack/react-router' {
     interface Register {

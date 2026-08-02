@@ -3,7 +3,7 @@
 .FileList_content {
     &__scrollable {
         overflow-y: auto;
-        height: calc((100vh - 65px) - 56px);
+        height: calc((100dvh - 65px) - 56px);
     }
 
     @media (max-width: $md-max) {

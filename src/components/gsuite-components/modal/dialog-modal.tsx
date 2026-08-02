@@ -62,7 +62,7 @@ export function DialogModal({
             <Modal
                 className={`w-full ${maxWidthClassName[maxWidth]} rounded-lg bg-surface-container shadow-lg outline-none ${className ?? ''}`}
             >
-                <Dialog className="flex max-h-[min(90vh,48rem)] flex-col outline-none">
+                <Dialog className="flex max-h-[min(90dvh,48rem)] flex-col outline-none">
                     {({ close }) => (
                         <>
                             <div className="flex shrink-0 items-center justify-between px-6 pt-6 pb-4">

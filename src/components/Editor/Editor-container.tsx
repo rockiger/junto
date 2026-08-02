@@ -60,7 +60,7 @@ const EditorLogic = React.forwardRef(
             (searchStr.startsWith('?') &&
                 new URLSearchParams(searchStr.slice(1)).has('edit'))
         const [readOnly, setReadOnly] = useState(!hasEdit)
-        const [_height, setHeight] = useState('calc(100vh - 65px - 57px)')
+        const [_height, setHeight] = useState('calc(100dvh - 65px - 57px)')
         const [{ body: initialBody, pageWidth: initialPageWidth }] = useState(
             () => parsePageContent(initialValue)
         )
@@ -96,9 +96,9 @@ const EditorLogic = React.forwardRef(
             window.addEventListener('keydown', onKeyDown)
 
             if (readOnly) {
-                setHeight(`calc(100vh - 65px - 40px`)
+                setHeight(`calc(100dvh - 65px - 40px`)
             } else {
-                setHeight(`calc(100vh - 65px - 40px - 43px)`)
+                setHeight(`calc(100dvh - 65px - 40px - 43px)`)
                 setTimeout(() => {
                     if (editorRef.current) editorRef.current.focus()
                 }, 100)

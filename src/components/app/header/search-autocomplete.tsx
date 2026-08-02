@@ -143,7 +143,7 @@ export const SearchAutocomplete: FC<SearchAutocompleteProps> = ({
     return (
         <div
             className={clsx(
-                "fixed left-0 top-16 w-full h-[calc(100vh-64px)]",
+                "fixed left-0 top-16 w-full h-[calc(100dvh-64px)]",
                 "lg:absolute lg:top-full lg:left-0 lg:z-50 lg:h-auto lg:max-h-none lg:w-full",
             )}
         >

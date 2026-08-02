@@ -4,12 +4,11 @@ import { Navigate } from '@tanstack/react-router'
 import { Spinner } from 'components/gsuite-components/'
 import FileList from 'components/Home/FileList'
 import type { SortBy } from 'components/Home/FileList/fileList-component'
-import { PageView } from 'components/Tracking'
 import { LOCALSTORAGE_NAME } from 'lib/constants'
 import { useGoogleAuth } from 'lib/googleAuth'
 import { useFileTree } from 'lib/query/files-queries'
 import StarIcon from 'mdi-react/StarIcon'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { IFile } from 'types/app-state'
 
 export default StarredPage
@@ -35,10 +34,6 @@ function StarredPage() {
         setSortBy(nextSortBy)
         localStorage.setItem(localStorageKey, nextSortBy)
     }
-
-    useEffect(() => {
-        PageView({ pathname: '/starred' })
-    }, [])
 
     if (isSignedIn && !isSigningIn) {
         return (

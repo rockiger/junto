@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from "vitest"
 import FrontPage from "./front-page"
 
 vi.mock("components/Tracking", () => ({
-	PageView: vi.fn(),
 	Event: vi.fn(),
 }))
 

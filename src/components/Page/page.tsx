@@ -12,7 +12,6 @@ import { FlexInput } from 'components/FlexInput'
 import IconButton from 'components/gsuite-components/icon-button'
 import Spinner from 'components/gsuite-components/spinner'
 import { BreadcrumbsBar } from 'components/Page/Breadcrumbs'
-import { PageView } from 'components/Tracking'
 import { OVERVIEW_NAME, UNTITLEDFILE, UNTITLEDNAME } from 'lib/constants'
 import {
     downloadFile,
@@ -190,7 +189,6 @@ export default function Page({
 
     useEffect(() => {
         setAppState({ goToNewFile: false })
-        PageView({ pathname: '/page' })
     }, [])
 
     useEffect(() => {
