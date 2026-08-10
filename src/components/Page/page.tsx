@@ -69,6 +69,9 @@ export default function Page({
     const [initialContent, setInitialContent] = useState<string | undefined>(
         undefined
     )
+    const [contentReloadKey, setContentReloadKey] = useState(0)
+
+    const knownRemoteModifiedTimeRef = useRef('')
 
     const editorRef = useRef<{ focus?: () => void } | null>(null)
     const inputRef = useRef<HTMLInputElement | null>(null)
@@ -175,6 +178,8 @@ export default function Page({
                     modifiedTime: remoteModified,
                 })
             }
+            knownRemoteModifiedTimeRef.current = remoteModified
+
             setCanEdit(Boolean(fileDescription.capabilities?.canEdit))
             setInitialContent(fileContent ? fileContent : '')
             setFileLoaded(true)
@@ -186,6 +191,49 @@ export default function Page({
     )
 
     loadEditorContentRef.current = loadEditorContent
+
+    const checkRemoteUpdate = useCallback(async () => {
+        if (!fileId) return false
+
+        const fileDescription = (await getFileDescription(
+            fileId
+        )) as IFile | undefined
+        const remoteModified = fileDescription?.modifiedTime ?? ''
+
+        if (
+            !remoteModified ||
+            remoteModified <= knownRemoteModifiedTimeRef.current
+        ) {
+            return false
+        }
+
+        return true
+    }, [fileId])
+
+    const reloadFromRemote = useCallback(async () => {
+        if (!fileId) return false
+
+        const fileContent = await downloadFileContent(fileId)
+        if (fileContent === undefined) return false
+
+        const fileDescription = (await getFileDescription(
+            fileId
+        )) as IFile
+        const remoteModified = fileDescription?.modifiedTime ?? ''
+
+        await putPage({
+            id: fileId,
+            content: fileContent,
+            editedTime: remoteModified,
+            modifiedTime: remoteModified,
+        })
+
+        knownRemoteModifiedTimeRef.current = remoteModified
+        setInitialContent(fileContent)
+        setContentReloadKey(key => key + 1)
+
+        return true
+    }, [downloadFileContent, fileId])
 
     useEffect(() => {
         setAppState({ goToNewFile: false })
@@ -208,6 +256,8 @@ export default function Page({
         prevParamsIdRef.current = params.id
         setAppState({ goToNewFile: false })
         setFileId(params.id)
+        setContentReloadKey(0)
+        knownRemoteModifiedTimeRef.current = ''
         setFileLoaded(false)
         document.getElementById('main-content')?.scrollTo({ top: 0 })
         window.scrollTo({ top: 0 })
@@ -289,11 +339,15 @@ export default function Page({
     const editor = (
         <EditorWithFileProps
             canEdit={canEdit}
+            checkRemoteUpdate={checkRemoteUpdate}
+            contentReloadKey={contentReloadKey}
             fileId={fileId}
             fileLoaded={fileLoaded}
             fileName={fileName}
             initialValue={initialContent ?? ''}
             inputRef={inputRef}
+            knownRemoteModifiedTimeRef={knownRemoteModifiedTimeRef}
+            onReloadFromRemote={reloadFromRemote}
             ref={editorRef}
             setEditorDelta={setEditorDelta}
         />

@@ -8,7 +8,7 @@ import {
 	type SerializedLexicalNode,
 	type Spread,
 } from 'lexical'
-import { lazy, Suspense, type CSSProperties, type JSX } from 'react'
+import { type CSSProperties, type JSX, lazy, Suspense } from 'react'
 
 const ExcalidrawComponent = lazy(() => import('./ExcalidrawComponent'))
 

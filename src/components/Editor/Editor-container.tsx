@@ -2,6 +2,7 @@
 
 import { useLocation } from '@tanstack/react-router'
 import { Hint } from 'components/gsuite-components/hint'
+import Alert from 'components/gsuite-components/alert/alert'
 import { PageButtons, ToggleReadOnlyButton } from 'components/pageButtons'
 import { PageMenu } from 'components/pageButtons/PageMenu'
 import { ToggleStarredButton } from 'components/pageButtons/ToggleStarredButton'
@@ -21,6 +22,7 @@ import { patchFileCaches } from 'lib/query/files-cache'
 import { useFileTree } from 'lib/query/files-queries'
 import { queryClient } from 'lib/query/query-client'
 import { debounce } from 'lodash'
+import { useSnackbar } from 'notistack'
 import React, {
     useCallback,
     useEffect,
@@ -33,7 +35,6 @@ import {
     convertFilesToAutocompletItems,
     initStorage,
     save,
-    updateModifiedTimeInGlobalState,
 } from './Editor-helper'
 import LexicalWikiEditor from './lexical'
 
@@ -43,30 +44,45 @@ const EditorLogic = React.forwardRef(
     (
         {
             canEdit,
+            checkRemoteUpdate,
+            contentReloadKey = 0,
             fileId,
             fileLoaded,
             fileName,
             initialValue,
             inputRef,
+            knownRemoteModifiedTimeRef,
+            onReloadFromRemote,
             setEditorDelta,
             ...props
         },
         editorRef
     ) => {
         const { data: initialFiles = [] } = useFileTree()
+        const { enqueueSnackbar } = useSnackbar()
         const { searchStr } = useLocation()
         const hasEdit =
             searchStr === '?edit' ||
             (searchStr.startsWith('?') &&
                 new URLSearchParams(searchStr.slice(1)).has('edit'))
         const [readOnly, setReadOnly] = useState(!hasEdit)
+        const [reloadConfirmOpen, setReloadConfirmOpen] = useState(false)
         const [_height, setHeight] = useState('calc(100dvh - 65px - 57px)')
-        const [{ body: initialBody, pageWidth: initialPageWidth }] = useState(
+        const [{ pageWidth: initialPageWidth }] = useState(
             () => parsePageContent(initialValue)
         )
         const [pageWidth, setPageWidth] = useState<PageWidth>(initialPageWidth)
         const pageWidthRef = useRef(pageWidth)
+        const checkingRemoteUpdateRef = useRef(false)
+        const lastRemoteCheckRef = useRef(0)
+        const readOnlyRef = useRef(readOnly)
         //const editorRef = useRef(null)
+
+        useEffect(() => {
+            readOnlyRef.current = readOnly
+        }, [readOnly])
+
+        const editorBody = parsePageContent(initialValue).body
 
         useEffect(() => {
             pageWidthRef.current = pageWidth
@@ -129,14 +145,10 @@ const EditorLogic = React.forwardRef(
                 initialValue
             )
             if (modifiedTime) {
-                updateModifiedTimeInGlobalState(
-                    fileId,
-                    modifiedTime,
-                    files,
-                    setFiles,
-                    initialFiles,
-                    setInitialFiles
-                )
+                if (knownRemoteModifiedTimeRef) {
+                    knownRemoteModifiedTimeRef.current = modifiedTime
+                }
+                patchFileCaches(queryClient, {}, fileId)
             }
         }
         async function onClickToggleButton(ev) {
@@ -174,6 +186,73 @@ const EditorLogic = React.forwardRef(
                 }, 300),
             [fileId]
         )
+
+        useEffect(() => {
+            if (contentReloadKey === 0) return
+            initStorage(initialValue, fileId)
+            onChangeMarkdown.cancel()
+            saveChecklistChanges.cancel()
+        }, [contentReloadKey, fileId, initialValue, onChangeMarkdown, saveChecklistChanges])
+
+        useEffect(() => {
+            if (!fileLoaded || !checkRemoteUpdate || !onReloadFromRemote) {
+                return
+            }
+
+            const handleRefocus = async () => {
+                if (document.visibilityState !== 'visible') return
+                if (reloadConfirmOpen) return
+
+                const now = Date.now()
+                if (now - lastRemoteCheckRef.current < 1000) return
+                if (checkingRemoteUpdateRef.current) return
+
+                checkingRemoteUpdateRef.current = true
+                lastRemoteCheckRef.current = now
+
+                try {
+                    const hasUpdate = await checkRemoteUpdate()
+                    if (!hasUpdate) return
+
+                    if (readOnlyRef.current) {
+                        const reloaded = await onReloadFromRemote()
+                        if (reloaded) {
+                            enqueueSnackbar('Page updated.', {
+                                autoHideDuration: 3000,
+                            })
+                        }
+                    } else {
+                        setReloadConfirmOpen(true)
+                    }
+                } finally {
+                    checkingRemoteUpdateRef.current = false
+                }
+            }
+
+            document.addEventListener('visibilitychange', handleRefocus)
+            window.addEventListener('focus', handleRefocus)
+
+            return () => {
+                document.removeEventListener('visibilitychange', handleRefocus)
+                window.removeEventListener('focus', handleRefocus)
+            }
+        }, [
+            checkRemoteUpdate,
+            enqueueSnackbar,
+            fileLoaded,
+            onReloadFromRemote,
+            reloadConfirmOpen,
+        ])
+
+        const confirmRemoteReload = async () => {
+            onChangeMarkdown.flush()
+            saveChecklistChanges.cancel()
+            const reloaded = await onReloadFromRemote()
+            if (reloaded) {
+                setReadOnly(true)
+            }
+            setReloadConfirmOpen(false)
+        }
 
         const handleMarkdownChange = useCallback(
             markdown => {
@@ -276,11 +355,11 @@ const EditorLogic = React.forwardRef(
                     </Hint>
                 </PageButtons>
                 <LexicalWikiEditor
-                    key={fileId}
+                    key={`${fileId}-${contentReloadKey}`}
                     apiKey={API_KEY}
                     canEdit={canEdit}
                     fileId={fileId}
-                    initialValue={initialBody}
+                    initialValue={editorBody}
                     items={convertFilesToAutocompletItems(initialFiles)}
                     onChangeMarkdown={handleMarkdownChange}
                     pageFileName={fileName}
@@ -303,6 +382,18 @@ const EditorLogic = React.forwardRef(
                         }}
                     />
                 )}
+                <Alert
+                    isOpen={reloadConfirmOpen}
+                    title="Page updated"
+                    onClose={() => setReloadConfirmOpen(false)}
+                    onOk={confirmRemoteReload}
+                    okLabel="Reload"
+                    cancelLabel="Keep editing"
+                    maxWidth="sm"
+                >
+                    This page was updated elsewhere. Reload the latest version?
+                    Unsaved changes will be lost.
+                </Alert>
             </div>
         )
     }
