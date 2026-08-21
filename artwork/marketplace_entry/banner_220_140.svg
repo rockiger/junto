@@ -2,23 +2,23 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="220"
    height="140"
    viewBox="0 0 58.208332 37.041668"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
    sodipodi:docname="banner_220_140.svg"
-   inkscape:export-filename="/home/macco/Listings/junto/artwork/marketplace_entry/banner_220_140.png"
+   inkscape:export-filename="banner_220_140.png"
    inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <inkscape:path-effect
@@ -34,18 +34,21 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="86.69277"
-     inkscape:cy="54.052293"
+     inkscape:cx="86.620581"
+     inkscape:cy="110.48544"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      showguides="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     inkscape:window-x="1920"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1" />
+     inkscape:window-height="1131"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -54,7 +57,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -73,28 +76,28 @@
     <g
        id="layer1-9"
        transform="matrix(0.34866308,0,0,0.34866308,4.5919068,243.04957)"
-       style="stroke-width:2.86809826">
+       style="stroke-width:2.8681">
       <g
          id="g7479"
          transform="matrix(0.96680663,0,0,0.69032131,-31.44062,-20.614603)"
-         style="stroke-width:3.51073933">
+         style="stroke-width:3.51074">
         <path
-           style="fill:#ea4335;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.92888302px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           style="fill:#ea4335;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.928883px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 79.37905,150.9372 50.64757,-33.54233 -15.63526,34.87868 z"
            id="path7471"
            inkscape:connector-curvature="0" />
         <path
-           style="fill:#4285f4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.92888302px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           style="fill:#4285f4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.928883px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 105.78338,170.98242 25.31232,18.70886 -1.06907,-72.43004 z"
            id="path7473"
            inkscape:connector-curvature="0" />
         <path
-           style="fill:#34a853;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.92888302px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           style="fill:#34a853;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.928883px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="M 131.0957,189.69128 99.88724,166.65075 97.553378,189.69128 Z"
            id="path7475"
            inkscape:connector-curvature="0" />
         <path
-           style="fill:#fbbc05;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.92888302px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           style="fill:#fbbc05;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.928883px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 79.37905,150.9372 22.62342,0.84095 -4.449092,37.91313 z"
            id="path7477"
            inkscape:connector-curvature="0" />
@@ -102,14 +105,14 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.96583414px;line-height:0px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:0.54;"
-       x="11.898504"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.96583px;line-height:0px;font-family:'TeX Gyre Heros';-inkscape-font-specification:'TeX Gyre Heros, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.54;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="10.884523"
        y="290.70526"
        id="text880"><tspan
          sodipodi:role="line"
          id="tspan878"
-         x="11.898504"
+         x="10.884523"
          y="290.70526"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.96583414px;font-family:Roboto;-inkscape-font-specification:'Roboto, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke-width:0.26458332px;">Fulcrum Wiki</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:5.96583px;font-family:Metropolis;-inkscape-font-specification:'Metropolis, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke-width:0.264583px">Fulcrum Wiki</tspan></text>
   </g>
 </svg>
