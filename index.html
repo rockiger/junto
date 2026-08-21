@@ -10,6 +10,26 @@
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
         />
         <meta name="theme-color" content="#000000" />
+        <!-- Official gtag snippet (classic script). Must not go through the Vite module
+             pipeline — gtag.js requires a real `Arguments` object on dataLayer.push. -->
+        <script>
+            (function () {
+                if ("%MODE%" !== "production") return;
+                var id = "%VITE_GA_MEASUREMENT_ID%";
+                if (!id || id.indexOf("G-") !== 0) return;
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = function gtag() {
+                    window.dataLayer.push(arguments);
+                };
+                var script = document.createElement("script");
+                script.async = true;
+                script.src =
+                    "https://www.googletagmanager.com/gtag/js?id=" + id;
+                document.head.appendChild(script);
+                window.gtag("js", new Date());
+                window.gtag("config", id, { anonymize_ip: true });
+            })();
+        </script>
         <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/

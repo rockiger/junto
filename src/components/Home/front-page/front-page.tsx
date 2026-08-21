@@ -72,7 +72,7 @@ export default function FrontPage() {
 							/>
 							<div className="font-semibold leading-none pt-1 text-2xl">Fulcrum Wiki</div>
 						</div>
-						<h1 className="frontpage-header text-4xl mb-6 mt-4 leading-tight font-semibold max-w-2xl mx-auto text-center lg:text-left">
+						<h1 className="frontpage-header text-4xl mb-6 mt-4 leading-tight font-semibold mx-auto text-center lg:text-left">
 							Knowledge base for you and AI-agents,
 							On <img
 								alt="Google Drive"

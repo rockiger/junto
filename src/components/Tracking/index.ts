@@ -1,37 +1,19 @@
 import type { RegisteredRouter } from "@tanstack/react-router";
 
-const MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID ?? "";
-
 function isTrackingEnabled() {
-	return Boolean(MEASUREMENT_ID) && !import.meta.env.DEV;
+	return !import.meta.env.DEV && typeof window.gtag === "function";
 }
 
 function gtag(...args: unknown[]) {
-	window.dataLayer?.push(args);
-}
-
-export function initGA() {
-	if (!isTrackingEnabled()) return;
-
-	const script = document.createElement("script");
-	script.async = true;
-	script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
-	document.head.appendChild(script);
-
-	window.dataLayer = window.dataLayer ?? [];
-	window.gtag = gtag;
-
-	gtag("js", new Date());
-	gtag("config", MEASUREMENT_ID, {
-		anonymize_ip: true,
-		send_page_view: false,
-	});
+	window.gtag?.(...args);
 }
 
 export function pageView(path: string) {
 	if (!isTrackingEnabled()) return;
 
 	gtag("event", "page_view", {
+		page_title: document.title,
+		page_location: window.location.href,
 		page_path: path,
 	});
 }
@@ -51,17 +33,11 @@ export function Event(category: string, action: string, label?: string) {
 export function setupRouterPageTracking(router: RegisteredRouter) {
 	if (!isTrackingEnabled()) return () => {};
 
-	const trackCurrentLocation = () => {
-		const { pathname, searchStr } = router.state.location
-		pageView(`${pathname}${searchStr}`)
-	}
-
-	trackCurrentLocation()
-
+	// Initial page_view is sent by the gtag `config` call in index.html.
 	return router.subscribe("onResolved", (event) => {
 		if (event.pathChanged) {
-			const { pathname, searchStr } = event.toLocation
-			pageView(`${pathname}${searchStr}`)
+			const { pathname, searchStr } = event.toLocation;
+			pageView(`${pathname}${searchStr}`);
 		}
-	})
+	});
 }

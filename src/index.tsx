@@ -3,10 +3,7 @@ import './lib/helper/globals'
 import './store/app-store'
 import './tailwind.css'
 import App from './components/app'
-import { initGA } from './components/Tracking'
 import * as serviceWorker from './serviceWorker'
-
-initGA()
 
 // Remove console from production builds (import.meta.env.DEV is reliable under Vite)
 if (!import.meta.env.DEV) {

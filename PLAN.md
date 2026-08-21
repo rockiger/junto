@@ -72,7 +72,7 @@
 - [x] Add basic tracking. Google Analytics or similar. (https://developers.google.com/workspace/marketplace/use-analytics)
 - [x] Linkes padding in Moblie View raus, damit der Content zentriert ist
 - [x] View height when editing on mobile
-- [ ] Update page on refocus, to have a kind of real-time update. Maybe diff things to not loose content if editing
+- [x] Update page on refocus, to have a kind of real-time update. Maybe diff things to not loose content if editing
 - [ ] Update the Workspace extension entry
 ----------------------------------------------------------
 - [ ] Check if Analyics is working
